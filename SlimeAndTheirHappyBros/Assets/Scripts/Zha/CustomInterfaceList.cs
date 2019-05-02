@@ -9,7 +9,7 @@ public interface IAniEventUser
 
 public interface IEnemyUnit
 {
-    void Init();
+    void Init(Transform t);
     void Update();
     void DecideState();
     void StateMachine();

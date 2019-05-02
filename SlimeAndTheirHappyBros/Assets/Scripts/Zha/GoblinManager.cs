@@ -17,6 +17,7 @@ public class GoblinManager : MonoBehaviour
         for (int i = 0; i < goblins.childCount; i++) {
             goblin = goblins.GetChild(i);
             normalGoblins.Add(goblin.GetComponent<NormalGoblin>());
+            normalGoblins[i].init
         }
     }
     void Start()

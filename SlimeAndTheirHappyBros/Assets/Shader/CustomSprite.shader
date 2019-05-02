@@ -25,7 +25,7 @@
 			Cull Off
 			Lighting Off
 			ZWrite Off
-			//ZTest Greater
+			ZTest Off
 			Blend One OneMinusSrcAlpha
 
 			Pass
@@ -39,11 +39,39 @@
 				#pragma multi_compile _ ETC1_EXTERNAL_ALPHA
 				#include "UnitySprites.cginc"
 
+			 struct fragmentOutput
+			{
+				half4 color : COLOR;
+				float depth : DEPTH;
+			};
+
+
+			v2f SpriteVert2(appdata_t IN)
+			{
+				v2f OUT;
+
+				UNITY_SETUP_INSTANCE_ID(IN);
+				UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(OUT);
+
+				OUT.vertex = UnityFlipSprite(IN.vertex, _Flip);
+				OUT.vertex = UnityObjectToClipPos(OUT.vertex);
+				OUT.texcoord = IN.texcoord;
+				OUT.color = IN.color * _Color * _RendererColor;
+
+				#ifdef PIXELSNAP_ON
+					OUT.vertex = UnityPixelSnap(OUT.vertex);
+				#endif
+
+				return OUT;
+		}
+
 			fixed4 SpriteFrag2(v2f IN) : SV_Target
 			{
+
+
 				fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
 				c.rgb *= c.a;
-
+				//c.depth = 0.0f;
 				//fixed4 c = fixed4(1.0,1.0,1.0,1.0);
 
 				return c;
