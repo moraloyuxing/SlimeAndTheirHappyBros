@@ -21,6 +21,7 @@ public interface IEnemyUnit
     void Die();
     void OnGetHurt(int value);
     void ResetUnit();
+    void SubCallback(System.Action<IEnemyUnit> cbk);
 }
 
 public interface IHurtSystem {

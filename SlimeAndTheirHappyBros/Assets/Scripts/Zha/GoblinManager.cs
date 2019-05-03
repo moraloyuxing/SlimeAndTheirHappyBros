@@ -17,7 +17,8 @@ public class GoblinManager : MonoBehaviour
         for (int i = 0; i < goblins.childCount; i++) {
             goblin = goblins.GetChild(i);
             normalGoblins.Add(goblin.GetComponent<NormalGoblin>());
-            normalGoblins[i].init
+            normalGoblins[i].Init(goblin);
+            normalGoblins[i].SubCallback(Recycle);
         }
     }
     void Start()
@@ -30,4 +31,9 @@ public class GoblinManager : MonoBehaviour
     {
         
     }
+
+    public void Recycle(NormalGoblin goblin) {
+
+    }
+
 }
