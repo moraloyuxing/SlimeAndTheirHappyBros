@@ -18,7 +18,7 @@ public class GoblinManager : MonoBehaviour
             goblin = goblins.GetChild(i);
             normalGoblins.Add(goblin.GetComponent<NormalGoblin>());
             normalGoblins[i].Init(goblin);
-            normalGoblins[i].SubCallback(Recycle);
+            //normalGoblins[i].SubCallback(Recycle);
         }
     }
     void Start()
