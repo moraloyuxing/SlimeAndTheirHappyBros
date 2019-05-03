@@ -5,7 +5,9 @@ using System;
 
 public class NormalGoblin: IEnemyUnit
 {
-
+    int hp;
+    float deltaTime, inStateTime;
+    Vector3 selfPos;
     Action<IEnemyUnit> recycleCbk;
 
     Transform transform;
@@ -17,25 +19,28 @@ public class NormalGoblin: IEnemyUnit
         animator = t.GetComponent<Animator>();
     }
 
-    public void SubCallback(Action<IEnemyUnit> cbk) {
+    public void SubCallback(Action<IEnemyUnit> cbk)
+    {
         recycleCbk = cbk;
     }
 
-    public void SubCallback<T>(T jj)
-    {
-        //recycleCbk = jj;
+    public void Spawn(Vector2 pos) {
+
     }
+
     // Update is called once per frame
     public void Update()
     {
-        
+        deltaTime = Time.deltaTime;
+        DecideState();
+        StateMachine();
     }
 
     public void DecideState() {
 
     }
     public void StateMachine() {
-
+        inStateTime += deltaTime;
     }
     public void Idle() {
 
@@ -59,7 +64,7 @@ public class NormalGoblin: IEnemyUnit
 
     }
     public void ResetUnit() {
-
+        recycleCbk(this);
     }
 }
 

@@ -10,6 +10,7 @@ public interface IAniEventUser
 public interface IEnemyUnit
 {
     void Init(Transform t);
+    void Spawn(Vector2 pos);
     void Update();
     void DecideState();
     void StateMachine();

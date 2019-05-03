@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GoblinManager : MonoBehaviour
 {
-    List<NormalGoblin>normalGoblins;
+    List<NormalGoblin> freeNormalGoblins, UsedNormalGoblins;
 
 
     // Start is called before the first frame update
@@ -13,12 +13,12 @@ public class GoblinManager : MonoBehaviour
         Transform goblin;
         Transform goblins;
         goblins = transform.Find("NormalGoblins");
-        normalGoblins = new List<NormalGoblin>();
+        freeNormalGoblins = new List<NormalGoblin>();
         for (int i = 0; i < goblins.childCount; i++) {
             goblin = goblins.GetChild(i);
-            normalGoblins.Add(goblin.GetComponent<NormalGoblin>());
-            normalGoblins[i].Init(goblin);
-            //normalGoblins[i].SubCallback(Recycle);
+            freeNormalGoblins.Add(goblin.GetComponent<NormalGoblin>());
+            freeNormalGoblins[i].Init(goblin);
+            freeNormalGoblins[i].SubCallback(Recycle);
         }
     }
     void Start()
@@ -32,8 +32,11 @@ public class GoblinManager : MonoBehaviour
         
     }
 
-    public void Recycle(NormalGoblin goblin) {
-
+    public void Recycle<T>(T goblin) where T : IEnemyUnit {
+        if (goblin is NormalGoblin) {
+            freeNormalGoblins.Add(goblin as NormalGoblin);
+        }
+        
     }
 
 }
