@@ -5,12 +5,13 @@ using UnityEngine;
 public class Player_Control : MonoBehaviour{
 
     //確定為第幾位玩家
-    public GameObject Pigment_Manager;
+    public GameObject Player_Manager;
     int Player_Number=0;
     int Color_Number = 0;
     string WhichPlayer;
 
     //移動
+    public GameObject Player_Icon;
     public float xAix, zAix;
     Ray ray_horizontal;
     Ray ray_vertical;
@@ -40,10 +41,10 @@ public class Player_Control : MonoBehaviour{
     public GameObject Merge_Hint;
     float[] Player_Distance = new float[3];
     public GameObject Merge_Target;
-    float shortest_one = 1000.0f;
-    bool Can_Merge = false;
-    bool a_button = false;
-    int Target_Color_Number;
+    //float shortest_one = 1000.0f;
+    //bool Can_Merge = false;
+    //bool a_button = false;
+    //int Target_Color_Number;
 
     //血量
     public GameObject[] Personal_HP = new GameObject[3];
@@ -63,8 +64,17 @@ public class Player_Control : MonoBehaviour{
         xAix = Input.GetAxis(WhichPlayer + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
 
+        if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f) {
+            GetComponent<Animator>().Play("Slime_Walk");
+            Player_Manager.SendMessage(WhichPlayer + "rePos",transform.position);
+        } 
+        else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
+
         if (xAix > 0.0f) {
-            //家個轉向
+            //加個轉向
+            transform.localScale = new Vector3(1.25f, 1.25f, 1.25f);
+            Player_Icon.transform.localPosition = new Vector3(0.5f, 0.4f, 0.0f);
+            Player_Icon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
             Left_CanMove = false;
             ray_horizontal = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.0f)) {
@@ -76,6 +86,9 @@ public class Player_Control : MonoBehaviour{
         }
 
         if (xAix < 0.0f) {
+            transform.localScale = new Vector3(-1.25f, 1.25f, 1.25f);
+            Player_Icon.transform.localPosition = new Vector3(-0.5f, 0.4f, 0.0f);
+            Player_Icon.transform.localScale = new Vector3(-0.2f, 0.2f, 0.2f);
             Right_CanMove = false;
             ray_horizontal = new Ray(transform.position, new Vector3(-2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.0f)){
@@ -138,19 +151,20 @@ public class Player_Control : MonoBehaviour{
                 else if(i==1 && Color_Number ==0) Color_Number = 1;
                 else if (i == 2 && Color_Number == 0) Color_Number = 2;
                 else if (i == 3 && Color_Number == 0) Color_Number = 4;
-                Pigment_Manager.GetComponent<Pigment_Manager>().Change_Base_Color(Player_Number, Color_Number);
+                Player_Manager.GetComponent<Pigment_Manager>().Change_Base_Color(Player_Number, Color_Number);
+                Player_Manager.GetComponent<Player_Manager>().SetPlayerColor(Player_Number, Color_Number);
             }
         }
 
         //偵測是否有其他玩家在附近
-        Check_Player_Distance();
+        //Check_Player_Distance();
 
         //融合
-        a_button = Input.GetButtonDown(WhichPlayer + "Merge");
-        if (a_button && Can_Merge == true) {
-            //抓取對方染色編號
-            Pigment_Manager.GetComponent<Pigment_Manager>().Change_Advanced_Color(gameObject, Merge_Target, Color_Number + Target_Color_Number);
-        }
+        //a_button = Input.GetButtonDown(WhichPlayer + "Merge");
+        //if (a_button && Can_Merge == true) {
+        //    //抓取對方染色編號
+        //    Player_Manager.GetComponent<Pigment_Manager>().Change_Advanced_Color(gameObject, Merge_Target, Color_Number + Target_Color_Number);
+        //}
 
     }
 
@@ -165,54 +179,62 @@ public class Player_Control : MonoBehaviour{
 
     }
 
-    void SetUp_Number(int x) {
+    void SetUp_Number(int x){
         Player_Number = x;
     }
 
-    void Check_Player_Distance() {
+    //void Check_Player_Distance() {
 
-        for (int i = 0; i < 3; i++) {
-            Player_Distance[i] = Mathf.Sqrt(Mathf.Pow(transform.position.x - Other_Player[i].transform.position.x, 2) + Mathf.Pow(transform.position.z - Other_Player[i].transform.position.z, 2));
-        }
+    //    for (int i = 0; i < 3; i++) {
+    //        Player_Distance[i] = Mathf.Sqrt(Mathf.Pow(transform.position.x - Other_Player[i].transform.position.x, 2) + Mathf.Pow(transform.position.z - Other_Player[i].transform.position.z, 2));
+    //    }
 
-        if (Player_Distance[0] < Player_Distance[1]){
-            if (Player_Distance[0] < Player_Distance[2]){
-                Merge_Target = Other_Player[0];
-                shortest_one = Player_Distance[0];
-            }
-            else {
-                Merge_Target = Other_Player[2];
-                shortest_one = Player_Distance[2];
-            }
-        }
+    //    if (Player_Distance[0] < Player_Distance[1]){
+    //        if (Player_Distance[0] < Player_Distance[2]){
+    //            Merge_Target = Other_Player[0];
+    //            shortest_one = Player_Distance[0];
+    //        }
+    //        else {
+    //            Merge_Target = Other_Player[2];
+    //            shortest_one = Player_Distance[2];
+    //        }
+    //    }
 
-        else {
-            if (Player_Distance[1] < Player_Distance[2]) {
-                Merge_Target = Other_Player[1];
-                shortest_one = Player_Distance[1];
-            } 
-            else {
-                Merge_Target = Other_Player[2];
-                shortest_one = Player_Distance[2];
-            }
-        }
+    //    else {
+    //        if (Player_Distance[1] < Player_Distance[2]) {
+    //            Merge_Target = Other_Player[1];
+    //            shortest_one = Player_Distance[1];
+    //        } 
+    //        else {
+    //            Merge_Target = Other_Player[2];
+    //            shortest_one = Player_Distance[2];
+    //        }
+    //    }
 
-        Target_Color_Number = Merge_Target.GetComponent<Player_Control>().Get_Player_Color_Number();
+    //    Target_Color_Number = Merge_Target.GetComponent<Player_Control>().Get_Player_Color_Number();
 
-        //混合條件有三：距離接近、己方&對方當前色不得為0(洗白狀態)、雙方染色編號不同(不同色)
-        if (shortest_one < 2.5f && Target_Color_Number !=0 && Color_Number!=0 &&Target_Color_Number != Color_Number){
-            Merge_Hint.SetActive(true);
-            Can_Merge = true;
-        }
-        else {
-            Merge_Hint.SetActive(false);
-            Can_Merge = false;
-        }
+    //    //混合條件有三：距離接近、己方&對方當前色不得為0(洗白狀態)、雙方染色編號不同(不同色)
+    //    if (shortest_one < 2.5f && Target_Color_Number !=0 && Color_Number!=0 &&Target_Color_Number != Color_Number){
+    //        Merge_Hint.SetActive(true);
+    //        Can_Merge = true;
+    //    }
+    //    else {
+    //        Merge_Hint.SetActive(false);
+    //        Can_Merge = false;
+    //    }
 
-    }
+    //}
 
     public int Get_Player_Color_Number() {
         return Color_Number;
+    }
+
+    void Show_Merge_Hint() {
+        Merge_Hint.SetActive(true);
+    }
+
+    void Hide_Merge_Hint() {
+        Merge_Hint.SetActive(false);
     }
 
     //合體狀態被擊殺

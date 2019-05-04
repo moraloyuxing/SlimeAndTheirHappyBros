@@ -46,11 +46,9 @@ public class Merge_Control : MonoBehaviour{
     //倒數計時
     //整數倒數 → 隔秒呼叫；計量條 → Time.deltaTime
     float Timer_float = 10.0f;
-    bool flicker_hint = false;
-
     float Merge_Moment;
-    //float color_a = -0.05f;
-    //float Current_Color = 1.0f;
+    float flicker = -0.5f;
+    Color Current_Color;
 
     //血量
     public GameObject[] Merge_HP = new GameObject[3];
@@ -88,7 +86,13 @@ public class Merge_Control : MonoBehaviour{
         xAix = Input.GetAxis(WhichPlayer_Moving + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer_Moving + "Vertical");
 
+
+        if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f) Merge_Sprite.GetComponent<Animator>().Play("Slime_Walk");
+        else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) Merge_Sprite.GetComponent<Animator>().Play("Slime_Idle");
+
         if (xAix > 0.0f){
+            transform.localScale = new Vector3(1.25f, 1.25f, 1.25f);
+            if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
             Left_CanMove = false;
             ray_horizontal = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal, 2.0f)){
@@ -100,6 +104,8 @@ public class Merge_Control : MonoBehaviour{
         }
 
         if (xAix < 0.0f){
+            transform.localScale = new Vector3(-1.25f, 1.25f, 1.25f);
+            if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.4f, 0.4f, 0.4f);
             Right_CanMove = false;
             ray_horizontal = new Ray(transform.position, new Vector3(-2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal, 2.0f)){
@@ -153,16 +159,7 @@ public class Merge_Control : MonoBehaviour{
         //攻擊
         right_bumper = Input.GetButtonDown(WhichPlayer_Shooting + "Attack");
         if (right_bumper == true) Attack_Arrow.SendMessage("ShootBullet",Attack_Direction);
-
-        //平順亮暗版倒數計時
-        //if (Time.time > Merge_Moment + 7.0f) {
-        //    GetComponent<SpriteRenderer>().color = new Color(Current_Color, Current_Color, Current_Color, 1.0f);
-        //    Current_Color += color_a;
-        //    if (Current_Color < 0.6f || Current_Color>1.0f) color_a = color_a * -1.0f;
-        //}
-        //if (Time.time > Merge_Moment + 10.0f) Spilt_toOriginal();
     }
-
 
     public void Decide_TwoPlayer_Control(GameObject PlayerA,GameObject PlayerB) {
 
@@ -217,11 +214,7 @@ public class Merge_Control : MonoBehaviour{
 
 
     void Start_CountDown() {
-        //01閃爍版
         InvokeRepeating("Merge_Timer", 1, 0.15f);
-
-        //平順亮暗版
-        //Merge_Moment = Time.time;
 
         Hint_Moment = Time.time;
         Hint_Activate = true;
@@ -231,18 +224,16 @@ public class Merge_Control : MonoBehaviour{
         Timer_float -= 0.15f;
 
         if (Timer_float < 3.0f) {
-            flicker_hint = !flicker_hint;
-            if (flicker_hint == true) Merge_Sprite.GetComponent<SpriteRenderer>().color = new Color(0.6f, 0.6f, 0.6f, 1.0f);
-            else Merge_Sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            Current_Color.a = Current_Color.a + flicker;
+            flicker = flicker * -1.0f;
+            Merge_Sprite.GetComponent<SpriteRenderer>().color = Current_Color;
         }
-
 
         if (Timer_float < 0) {
             Spilt_toOriginal();
             CancelInvoke("Merge_Timer");
         }
     }
-
 
     //觸發相關(損血......等)
     void OnTriggerEnter2D(Collider2D collision){
@@ -263,8 +254,9 @@ public class Merge_Control : MonoBehaviour{
     }
 
     //混色確認
-    public void SetUp_DyeingColor(Sprite x) {
-        Merge_Sprite.GetComponent<SpriteRenderer>().sprite = x;
+    public void SetUp_DyeingColor(Color x) {
+        Merge_Sprite.GetComponent<SpriteRenderer>().color = x;
+        Current_Color = x;
     }
 
 }

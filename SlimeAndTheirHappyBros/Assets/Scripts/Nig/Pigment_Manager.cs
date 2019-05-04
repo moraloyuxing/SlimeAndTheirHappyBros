@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class Pigment_Manager : MonoBehaviour{
 
-    public Sprite[] Dyeing_Type = new Sprite[7];
+    //public Sprite[] Dyeing_Type = new Sprite[7];
     public GameObject[] Player_Array = new GameObject[4];
     public GameObject Merge_Slime;
     public GameObject ObjectPool;
+    public Color[] Dyeing_Type = new Color[6];
 
     void Awake(){
         Set_Player_Number();
@@ -18,7 +19,7 @@ public class Pigment_Manager : MonoBehaviour{
     }
 
     public void Change_Base_Color(int xP,int dyeing_type) {
-        Player_Array[xP].GetComponent<SpriteRenderer>().sprite = Dyeing_Type[dyeing_type];
+        Player_Array[xP].GetComponent<SpriteRenderer>().color = Dyeing_Type[dyeing_type];
     }
 
     public void Change_Advanced_Color(GameObject PlayerA,GameObject PlayerB,int dyeing_type) {

@@ -62,7 +62,7 @@ public class Object_Pool : MonoBehaviour{
     }
 
     //合體史萊姆
-    public void MSlime_Reuse(Vector3 position, Quaternion rotation,Sprite Dyeing_Color,GameObject PlayerA,GameObject PlayerB) {
+    public void MSlime_Reuse(Vector3 position, Quaternion rotation,Color Dyeing_Color,  GameObject PlayerA,GameObject PlayerB) {
         if (_MSlimepool.Count > 0){
             GameObject MSlime_reuse = _MSlimepool.Dequeue();
             MSlime_reuse.transform.position = position;
@@ -76,7 +76,7 @@ public class Object_Pool : MonoBehaviour{
             GameObject clone_MSlime = Instantiate(prefabMergeSlime) as GameObject;
             clone_MSlime.transform.position = position;
             clone_MSlime.transform.rotation = rotation;
-            clone_MSlime.GetComponent<SpriteRenderer>().sprite = Dyeing_Color;
+            clone_MSlime.GetComponent<Merge_Control>().SetUp_DyeingColor(Dyeing_Color);
             clone_MSlime.GetComponent<Merge_Control>().Decide_TwoPlayer_Control(PlayerA, PlayerB);
         }
     }
