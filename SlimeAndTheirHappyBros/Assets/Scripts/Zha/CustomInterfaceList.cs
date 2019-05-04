@@ -9,7 +9,8 @@ public interface IAniEventUser
 
 public interface IEnemyUnit
 {
-    void Init(Transform t);
+    void Init(Transform t, GoblinManager.GoblinInfo info, Player_Manager playerManager);
+    void TestInit(Transform t, GoblinManager.GoblinInfo info, Transform p);
     void Spawn(Vector2 pos);
     void Update();
     void DecideState();
