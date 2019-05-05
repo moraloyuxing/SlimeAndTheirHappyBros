@@ -5,7 +5,7 @@ using System;
 
 public class ArcherGoblin : IEnemyUnit
 {
-    int hp, atkValue;
+    int hp, atkValue, color;
     float deltaTime, inStateTime;
     float speed, atkDist, sightDist;
     Vector3 selfPos;
@@ -13,9 +13,10 @@ public class ArcherGoblin : IEnemyUnit
 
     Transform transform;
     Animator animator;
+    SpriteRenderer renderer;
 
-
-    Transform testPlayer;
+    TestPlayerManager playerManager;
+    //Player_Manager playerManager;
 
     // Start is called before the first frame update
     public void Init(Transform t, GoblinManager.GoblinInfo info, Player_Manager playerManager)
@@ -29,7 +30,7 @@ public class ArcherGoblin : IEnemyUnit
         atkDist = info.atkDist;
     }
 
-    public void TestInit(Transform t, GoblinManager.GoblinInfo info, Transform p)
+    public void TestInit(Transform t, GoblinManager.GoblinInfo info, TestPlayerManager pManager)
     {
         transform = t;
         animator = t.GetComponent<Animator>();
@@ -39,7 +40,7 @@ public class ArcherGoblin : IEnemyUnit
         sightDist = info.sighDist;
         atkDist = info.atkDist;
 
-        testPlayer = p;
+        playerManager = pManager;
     }
 
     public void SubCallback(Action<IEnemyUnit> cbk)
@@ -47,10 +48,11 @@ public class ArcherGoblin : IEnemyUnit
         recycleCbk = cbk;
     }
 
-    public void Spawn(Vector2 pos)
+    public void Spawn(Vector2 pos, int col)
     {
         transform.gameObject.SetActive(true);
         transform.position = new Vector3(pos.x, 2, pos.y);
+        color = col;
     }
 
     // Update is called once per frame

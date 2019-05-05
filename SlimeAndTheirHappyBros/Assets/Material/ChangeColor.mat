@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: YellowSprite
-  m_Shader: {fileID: 4800000, guid: 390a725c3e4819e47838c214b6d3049c, type: 3}
+  m_Name: ChangeColor
+  m_Shader: {fileID: 4800000, guid: 1eab7e23d381ab747953bfa92eefd6c6, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -78,9 +78,17 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
+    - _colorID: 6
     - _diffTrans: 0.08
     m_Colors:
-    - _Color: {r: 0.9622642, g: 0.87634385, b: 0.12255252, a: 1}
+    - _BlueColor: {r: 0.15873085, g: 0.49005702, b: 0.8207547, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
+    - _GreenColor: {r: 0.08690815, g: 0.5943396, b: 0.08690815, a: 1}
+    - _OrangeColor: {r: 1, g: 0.58513945, b: 0, a: 1}
+    - _PurpleColor: {r: 0.6429719, g: 0.32079923, b: 0.764151, a: 1}
+    - _RedColor: {r: 0.8584906, g: 0.23891956, b: 0.23891956, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _WhiteColor: {r: 1, g: 1, b: 1, a: 1}
+    - _YellowColor: {r: 0.9433962, g: 0.8992935, b: 0, a: 1}
