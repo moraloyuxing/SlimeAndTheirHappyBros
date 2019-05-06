@@ -7,7 +7,21 @@ public class GoblinManager : MonoBehaviour
     int index = 0;
     float time;
 
-    TestPlayerManager playerManager;
+    bool[] playerMove = new bool[4] { false, false, false, false };
+    public bool[] PlayersMove {
+        get { return playerMove; }
+    }
+    Vector3[] playerPos = new Vector3[4];
+    public Vector3[] PlayerPos {
+        get {
+            return playerPos;
+        }
+        set {
+            playerPos = value;
+        }
+    }
+
+    public TestPlayerManager playerManager;
     //Player_Manager playerManager;
 
     List<NormalGoblin> freeNormalGoblins, usedNormalGoblins;
@@ -21,6 +35,7 @@ public class GoblinManager : MonoBehaviour
         public int hp;
         public int atkValue;
         public float speed;
+        public float spawnHeight;
     }
 
     public GoblinInfo[] goblinInfo;
@@ -38,9 +53,8 @@ public class GoblinManager : MonoBehaviour
         for (int i = 0; i < goblins.childCount; i++) {
             goblin = goblins.GetChild(i);
             freeNormalGoblins.Add(new NormalGoblin());
-            freeNormalGoblins[i].TestInit(goblin, goblinInfo[0], playerManager);
-            //freeNormalGoblins[i].Init(goblin, goblinInfo[0], playerManager);
-            freeNormalGoblins[i].SubCallback(Recycle);
+            freeNormalGoblins[i].TestInit(goblin, goblinInfo[0], this);
+            //freeNormalGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblin.gameObject.SetActive(false);
         }
 
@@ -51,9 +65,8 @@ public class GoblinManager : MonoBehaviour
         {
             goblin = goblins.GetChild(i);
             freeArcherGoblins.Add(new ArcherGoblin());
-            freeArcherGoblins[i].TestInit(goblin, goblinInfo[0], playerManager);
-            //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager);
-            freeArcherGoblins[i].SubCallback(Recycle);
+            freeArcherGoblins[i].TestInit(goblin, goblinInfo[0], this);
+            //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblin.gameObject.SetActive(false);
         }
     }
@@ -73,7 +86,7 @@ public class GoblinManager : MonoBehaviour
         }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
-            usedNormalGoblins[index].Update();
+            usedNormalGoblins[index].Update();  
         }
         for (index = 0; index < usedArcherGoblins.Count; index++)
         {
@@ -113,6 +126,12 @@ public class GoblinManager : MonoBehaviour
             freeArcherGoblins.Add(goblin as ArcherGoblin);
             Debug.Log(freeArcherGoblins.Count);
         }
+    }
+
+
+    public void SetPlayersMove(int id, Vector3 pos) {
+        playerMove[id] = true;
+        playerPos[id] = pos;
     }
 
 }

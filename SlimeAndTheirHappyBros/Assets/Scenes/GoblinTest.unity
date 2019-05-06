@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44564444, g: 0.49533802, b: 0.57419705, a: 1}
+  m_IndirectSpecularColor: {r: 0.44564384, g: 0.49533713, b: 0.5741961, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -151,7 +151,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 146313752}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.59, y: 2, z: 0}
+  m_LocalPosition: {x: 0, y: 2, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1830218827}
@@ -573,8 +573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ba6d8cd8b3863640b729bc11b62d399, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testPlayer: {fileID: 0}
-  colorMaterial: []
+  playerManager: {fileID: 0}
   goblinInfo:
   - typeName: normal
     sighDist: 0
@@ -582,18 +581,21 @@ MonoBehaviour:
     hp: 0
     atkValue: 0
     speed: 0
+    spawnHeight: 0
   - typeName: archer
     sighDist: 0
     atkDist: 0
     hp: 0
     atkValue: 0
     speed: 0
-  - typeName: 
+    spawnHeight: 0
+  - typeName: Hob
     sighDist: 0
     atkDist: 0
     hp: 0
     atkValue: 0
     speed: 0
+    spawnHeight: 0
 --- !u!1 &412872796
 GameObject:
   m_ObjectHideFlags: 0
