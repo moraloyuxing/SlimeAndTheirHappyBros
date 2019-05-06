@@ -133,7 +133,7 @@ public class Player_Manager : MonoBehaviour {
     void Player4_rePos(Vector3 pos) {
         //更新自己位置跟色況
         FourPlayer[3].transform.position = pos;
-
+        
         //更新與其他玩家位置
         Player_Distance[2] = Mathf.Sqrt(Mathf.Pow(FourPlayer[3].transform.position.x - FourPlayer[0].transform.position.x, 2) + Mathf.Pow(FourPlayer[3].transform.position.z - FourPlayer[0].transform.position.z, 2));//與1
         Player_Distance[4] = Mathf.Sqrt(Mathf.Pow(FourPlayer[3].transform.position.x - FourPlayer[1].transform.position.x, 2) + Mathf.Pow(FourPlayer[3].transform.position.z - FourPlayer[1].transform.position.z, 2));//與2

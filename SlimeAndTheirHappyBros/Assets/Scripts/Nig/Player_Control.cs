@@ -29,6 +29,7 @@ public class Player_Control : MonoBehaviour{
     float angle_toLerp;
     Vector3 current_angle;
     Vector3 Attack_Direction = new Vector3(0.0f,0.0f,1.0f);
+    float testrot = 1.0f;
 
     //攻擊
     bool right_bumper = false;
@@ -131,10 +132,12 @@ public class Player_Control : MonoBehaviour{
         zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
         if (xAtk != 0.0f || zAtk != 0.0f) {
+            if (xAix > 0.0f) testrot = 1.0f;
+            else if(xAix < 0.0f)testrot = -1.0f;
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
-            Attack_Arrow.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle_toLerp);
+            Attack_Arrow.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle_toLerp * testrot);
         }
 
         //攻擊
