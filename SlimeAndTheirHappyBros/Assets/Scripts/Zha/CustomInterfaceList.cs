@@ -9,21 +9,25 @@ public interface IAniEventUser
 
 public interface IEnemyUnit
 {
-    void Init(Transform t, GoblinManager.GoblinInfo info, Player_Manager playerManager);
-    void TestInit(Transform t, GoblinManager.GoblinInfo info, Transform p);
-    void Spawn(Vector2 pos);
+    void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager);
+    void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager);
+    void Spawn(Vector2 pos, int col);
     void Update();
-    void DecideState();
-    void StateMachine();
-    void Idle();
-    void Ramble();
-    void Chase();
-    void Attack();
-    void GetHurt();
-    void Die();
-    void OnGetHurt(int value);
     void ResetUnit();
-    void SubCallback(System.Action<IEnemyUnit> cbk);
+
+    //void Spawn(Vector2 pos, int col);
+    //void UpdatePlayerPos(int id);
+    //void DecideState();
+    //void StateMachine();
+    //void Idle();
+    //void Ramble();
+    //void Chase();
+    //void Attack();
+    //void GetHurt();
+    //void Die();
+    //void OnGetHurt(int value);
+
+
 }
 
 public interface IHurtSystem {

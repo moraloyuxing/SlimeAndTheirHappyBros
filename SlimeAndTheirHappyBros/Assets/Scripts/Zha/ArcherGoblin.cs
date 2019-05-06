@@ -3,22 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class ArcherGoblin : IEnemyUnit
+public class ArcherGoblin : GoblinBase, IEnemyUnit
 {
-    int hp, atkValue;
-    float deltaTime, inStateTime;
-    float speed, atkDist, sightDist;
-    Vector3 selfPos;
-    Action<IEnemyUnit> recycleCbk;
-
-    Transform transform;
-    Animator animator;
-
-
-    Transform testPlayer;
+    
 
     // Start is called before the first frame update
-    public void Init(Transform t, GoblinManager.GoblinInfo info, Player_Manager playerManager)
+    public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
     {
         transform = t;
         animator = t.GetComponent<Animator>();
@@ -27,77 +17,53 @@ public class ArcherGoblin : IEnemyUnit
         speed = info.speed;
         sightDist = info.sighDist;
         atkDist = info.atkDist;
+        spawnHeight = info.spawnHeight;
+        goblinManager = manager;
     }
 
-    public void TestInit(Transform t, GoblinManager.GoblinInfo info, Transform p)
+    public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
     {
         transform = t;
         animator = t.GetComponent<Animator>();
+        renderer = t.GetComponent<SpriteRenderer>();
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
         atkDist = info.atkDist;
+        spawnHeight = info.spawnHeight;
+        goblinManager = manager;
 
-        testPlayer = p;
+        //playerManager = pManager;
     }
 
-    public void SubCallback(Action<IEnemyUnit> cbk)
-    {
-        recycleCbk = cbk;
-    }
-
-    public void Spawn(Vector2 pos)
+    public void Spawn(Vector2 pos, int col)
     {
         transform.gameObject.SetActive(true);
-        transform.position = new Vector3(pos.x, 2, pos.y);
+        transform.position = new Vector3(pos.x, spawnHeight, pos.y);
+        color = col;
     }
 
     // Update is called once per frame
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.X)) ResetUnit();
-    }
 
-    public void DecideState()
-    {
+        deltaTime = Time.deltaTime;
+        selfPos = transform.position;
+        for (int i = 0; i < 4; i++)
+        {
+            if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
+        }
 
-    }
-    public void StateMachine()
-    {
-
-    }
-    public void Idle()
-    {
+        StateMachine();
 
     }
-    public void Ramble()
-    {
 
-    }
-    public void Chase()
-    {
-
-    }
-    public void Attack()
-    {
-
-    }
-    public void GetHurt()
-    {
-
-    }
-    public void Die()
-    {
-
-    }
-    public void OnGetHurt(int value)
-    {
-
-    }
+   
     public void ResetUnit()
     {
-        recycleCbk(this);
+        goblinManager.Recycle(this);
         transform.gameObject.SetActive(false);
     }
 }
