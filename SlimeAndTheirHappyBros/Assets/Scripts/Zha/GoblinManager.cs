@@ -27,6 +27,8 @@ public class GoblinManager : MonoBehaviour
     List<NormalGoblin> freeNormalGoblins, usedNormalGoblins;
     List<ArcherGoblin> freeArcherGoblins, usedArcherGoblins;
 
+    public Vector2 mapBorder;
+
     [System.Serializable]
     public struct GoblinInfo {
         public string typeName;
@@ -38,6 +40,7 @@ public class GoblinManager : MonoBehaviour
         public float spawnHeight;
 
         public float turnDist;
+        public float stopDist;
     }
 
     public GoblinInfo[] goblinInfo;

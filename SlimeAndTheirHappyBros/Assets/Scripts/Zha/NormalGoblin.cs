@@ -14,6 +14,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
         transform = t;
         animator = t.GetComponent<Animator>();
+        renderer = t.GetComponent<SpriteRenderer>();
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -21,6 +22,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         atkDist = info.atkDist;
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
+        turnDist = info.turnDist;
     }
 
     public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
