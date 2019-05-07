@@ -13,13 +13,14 @@ public class GoblinBase
     protected float nearstPlayerDist = 5000;
     protected float[] playerDist = new float[4] { 5000, 5000, 5000, 5000 };
 
-    protected Vector3 selfPos, moveFwdDir;
+    protected Vector3 selfPos, moveFwdDir, oldTargetPos;
 
 
     protected Transform transform;
     protected Animator animator;
     protected SpriteRenderer renderer;
 
+    Path path;
     protected GoblinManager goblinManager;
 
     public enum GoblinState
@@ -41,6 +42,7 @@ public class GoblinBase
         if (playerDist[id] < nearstPlayerDist)
         {
             nearstPlayerDist = playerDist[id];
+            targetPlayer = id;
         }
     }
 
@@ -132,7 +134,8 @@ public class GoblinBase
                     if (Physics.Raycast(selfPos, moveFwdDir, 3.0f, LayerMask.NameToLayer("barrier")))
                     {
                         hitCatch++;
-                        moveFwdDir = -1.0f * moveFwdDir;
+                        float degree = Random.Range(135.0f, 225.0f);
+                        moveFwdDir = Quaternion.AngleAxis(degree,Vector3.up) * moveFwdDir;
                     }
                 }
                 else {
@@ -145,7 +148,39 @@ public class GoblinBase
     }
     public virtual void Chase()
     {
-
+        if (firstInState)
+        {
+            PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+        }
+        else {
+            if (inStateTime < 0.2f)
+            {
+                inStateTime += deltaTime;
+            }
+            else {
+                if (goblinManager.PlayersMove[targetPlayer])
+                {
+                    PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+                    inStateTime = 0.0f;
+                }
+            }
+        }
+    }
+    void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
+    {
+        if (pathSuccessful)
+        {
+            path = new Path(waypoints, transform.position, turnDst, stoppingDst);
+            followingPath = true;
+            pathIndex = 0;
+            lastLookIndex = -1;
+            //StopCoroutine("FollowPath");
+            //StartCoroutine("FollowPath");
+        }
+        else
+        {
+            Debug.Log("Can't Find");
+        }
     }
     public virtual void Attack()
     {

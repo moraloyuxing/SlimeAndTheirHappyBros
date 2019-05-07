@@ -78,17 +78,17 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _colorID: 6
+    - _colorID: 5
     - _diffTrans: 0.08
     m_Colors:
-    - _BlueColor: {r: 0.15873085, g: 0.49005702, b: 0.8207547, a: 1}
+    - _BlueColor: {r: 0.2460395, g: 0.5825462, b: 0.9150943, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _GreenColor: {r: 0.08690815, g: 0.5943396, b: 0.08690815, a: 1}
-    - _OrangeColor: {r: 1, g: 0.58513945, b: 0, a: 1}
-    - _PurpleColor: {r: 0.6429719, g: 0.32079923, b: 0.764151, a: 1}
-    - _RedColor: {r: 0.8584906, g: 0.23891956, b: 0.23891956, a: 1}
+    - _GreenColor: {r: 0.40997687, g: 0.7830189, b: 0.40997687, a: 1}
+    - _OrangeColor: {r: 1, g: 0.5497599, b: 0.11792451, a: 1}
+    - _PurpleColor: {r: 0.70073867, g: 0.38327694, b: 0.8207547, a: 1}
+    - _RedColor: {r: 0.8207547, g: 0.29036134, b: 0.29036134, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _WhiteColor: {r: 1, g: 1, b: 1, a: 1}
-    - _YellowColor: {r: 0.9433962, g: 0.8992935, b: 0, a: 1}
+    - _YellowColor: {r: 0.9528302, g: 0.9127715, b: 0.14831792, a: 1}

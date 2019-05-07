@@ -69,7 +69,8 @@ public class PathFinding : MonoBehaviour {
                     if (!neighbour.walkable || closedSet.Contains(neighbour))
                     {
                         //Debug.Log("continue  (" + neighbour.gridX + "," + neighbour.gridY + ")");
-                        if (!neighbour.walkable && neighbour == targetNode)
+
+                        if (neighbour == targetNode) //!neighbour.walkable && 
                         {
                             pathSuccess = true;
                             targetNode = currentNode;

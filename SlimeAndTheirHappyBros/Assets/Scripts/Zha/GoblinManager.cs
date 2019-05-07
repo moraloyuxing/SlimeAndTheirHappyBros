@@ -86,7 +86,7 @@ public class GoblinManager : MonoBehaviour
         }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
-            usedNormalGoblins[index].Update();  
+            usedNormalGoblins[index].Update();
         }
         for (index = 0; index < usedArcherGoblins.Count; index++)
         {
