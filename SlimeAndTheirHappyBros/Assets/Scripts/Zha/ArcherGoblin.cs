@@ -19,6 +19,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         atkDist = info.atkDist;
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
+        turnDist = info.turnDist;
     }
 
     public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)

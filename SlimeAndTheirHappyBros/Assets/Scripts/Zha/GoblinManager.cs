@@ -36,6 +36,8 @@ public class GoblinManager : MonoBehaviour
         public int atkValue;
         public float speed;
         public float spawnHeight;
+
+        public float turnDist;
     }
 
     public GoblinInfo[] goblinInfo;

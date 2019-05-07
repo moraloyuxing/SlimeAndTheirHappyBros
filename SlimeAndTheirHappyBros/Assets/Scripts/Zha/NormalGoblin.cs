@@ -35,7 +35,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         atkDist = info.atkDist;
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
-
+        turnDist = info.turnDist;
         //playerManager = pManager;
     }
 

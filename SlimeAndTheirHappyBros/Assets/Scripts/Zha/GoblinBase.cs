@@ -7,7 +7,7 @@ public class GoblinBase
     protected bool firstInState = false;
     protected int hp, atkValue, color, hitCatch;
     protected float deltaTime, inStateTime, totalTime;
-    protected float speed, atkDist, sightDist, spawnHeight;
+    protected float speed, atkDist, sightDist, spawnHeight, turnDist;
 
     protected int targetPlayer = -1;
     protected float nearstPlayerDist = 5000;
@@ -170,7 +170,7 @@ public class GoblinBase
     {
         if (pathSuccessful)
         {
-            path = new Path(waypoints, transform.position, turnDst, stoppingDst);
+            path = new Path(waypoints, transform.position, turnDist, stoppingDst);
             followingPath = true;
             pathIndex = 0;
             lastLookIndex = -1;
