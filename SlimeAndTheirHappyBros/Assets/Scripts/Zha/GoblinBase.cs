@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class GoblinBase
 {
-    protected bool firstInState = false;
-    protected int hp, atkValue, color, hitCatch;
+    protected bool firstInState = false, followingPath = false;
+    protected int hp, atkValue, color, hitCatch, pathIndex;
     protected float deltaTime, inStateTime, totalTime;
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
 
@@ -170,10 +170,10 @@ public class GoblinBase
     {
         if (pathSuccessful)
         {
-            path = new Path(waypoints, transform.position, turnDist, stoppingDst);
+
+            path = new Path(waypoints, transform.position, turnDist);
             followingPath = true;
             pathIndex = 0;
-            lastLookIndex = -1;
             //StopCoroutine("FollowPath");
             //StartCoroutine("FollowPath");
         }
