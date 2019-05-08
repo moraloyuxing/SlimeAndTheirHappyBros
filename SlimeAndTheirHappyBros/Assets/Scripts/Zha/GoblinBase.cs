@@ -5,7 +5,7 @@ using UnityEngine;
 public class GoblinBase
 {
     protected bool firstInState = false, followingPath = false;
-    protected int hp, atkValue, color, hitCatch, pathIndex;
+    protected int hp, atkValue, color, pathIndex;
     protected float deltaTime, inStateTime, totalTime;
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
 
@@ -25,7 +25,7 @@ public class GoblinBase
 
     public enum GoblinState
     {
-        moveIn, idle, ramble, chase, attack, hurt, die
+        moveIn, idle, ramble, chase, attack, hurt, die, erroeCatch
     }
     protected GoblinState curState = GoblinState.moveIn;
 
@@ -35,10 +35,6 @@ public class GoblinBase
     {
 
         playerDist[id] = Mathf.Abs(goblinManager.PlayerPos[id].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[id].z - selfPos.z);
-        if (id == targetPlayer)
-        {
-
-        }
         if (playerDist[id] < nearstPlayerDist)
         {
             nearstPlayerDist = playerDist[id];
@@ -72,16 +68,25 @@ public class GoblinBase
                 MoveIn();
                 break;
             case GoblinState.idle:
+                DetectChaseAttack();
+                Idle();
                 break;
             case GoblinState.ramble:
+                DetectChaseAttack();
+                Ramble();
                 break;
             case GoblinState.chase:
+                DetectChaseAttack();
+                Chase();
                 break;
             case GoblinState.attack:
+                Attack();
                 break;
             case GoblinState.hurt:
                 break;
             case GoblinState.die:
+                break;
+            case GoblinState.erroeCatch:
                 break;
 
         }
@@ -91,8 +96,8 @@ public class GoblinBase
 
     public virtual void DetectChaseAttack() {
         float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
-        if (diff <= sightDist) {
-            if (diff <= atkDist) SetState(GoblinState.chase);
+        if (diff <= sightDist*sightDist) {
+            if (diff <= atkDist*atkDist) SetState(GoblinState.chase);
             else SetState(GoblinState.attack);
         }
     }
@@ -125,21 +130,22 @@ public class GoblinBase
         {
             totalTime = Random.Range(0.5f, 1.5f);
             Vector3 playerPos = goblinManager.PlayerPos[Random.Range(0, 3)] + new Vector3(Random.Range(-3,3),0, Random.Range(-3, 3));
+            if (Mathf.Abs(playerPos.x) > 70) playerPos.x = Mathf.Sign(playerPos.x) * 70.0f;
+            if(Mathf.Abs(playerPos.y) > 70) playerPos.y = Mathf.Sign(playerPos.y) * 70.0f;
             moveFwdDir = new Vector3(playerPos.x - selfPos.x, 0, playerPos.z - selfPos.z).normalized;
         }
         else {
             if (inStateTime < totalTime) {
-                if (hitCatch <= 5)
+                if (Mathf.Abs(selfPos.x) <= 71 && Mathf.Abs(selfPos.y) <= 74)
                 {
                     if (Physics.Raycast(selfPos, moveFwdDir, 3.0f, LayerMask.NameToLayer("barrier")))
                     {
-                        hitCatch++;
                         float degree = Random.Range(135.0f, 225.0f);
                         moveFwdDir = Quaternion.AngleAxis(degree,Vector3.up) * moveFwdDir;
                     }
                 }
                 else {
-                    moveFwdDir = new Vector3(0 - selfPos.x, 0, 0 - selfPos.z).normalized;
+                    SetState(GoblinState.erroeCatch);
                 }
                 transform.position += speed * moveFwdDir;
             }
@@ -164,6 +170,21 @@ public class GoblinBase
                     inStateTime = 0.0f;
                 }
             }
+            if (followingPath) {
+                Vector2 pos2D = new Vector2(selfPos.x, selfPos.z);
+                if (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
+                {
+                    if (pathIndex == path.finishLineIndex) //|| pathIndex >= path.canAttckIndex
+                    {
+                        followingPath = false;
+                        SetState(GoblinState.attack);
+                    }
+                    else
+                    {
+                        pathIndex++;
+                    }
+                }
+            }
         }
     }
     void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
@@ -171,7 +192,7 @@ public class GoblinBase
         if (pathSuccessful)
         {
 
-            path = new Path(waypoints, transform.position, turnDist);
+            path = new Path(waypoints, transform.position, turnDist); 
             followingPath = true;
             pathIndex = 0;
             //StopCoroutine("FollowPath");
@@ -184,7 +205,9 @@ public class GoblinBase
     }
     public virtual void Attack()
     {
+        if (firstInState) {
 
+        }
     }
     public virtual void GetHurt()
     {
@@ -197,6 +220,17 @@ public class GoblinBase
     public virtual void OnGetHurt(int value)
     {
 
+    }
+
+    public void ErroeCatch() {
+        if (firstInState)
+        {
+            moveFwdDir = new Vector3(0 - selfPos.x, 0, 0 - selfPos.z).normalized;
+        }
+        else {
+            transform.position += speed * moveFwdDir;
+            if (inStateTime > 1.0f) SetState();
+        }
     }
 
 }

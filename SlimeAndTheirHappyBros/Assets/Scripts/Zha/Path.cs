@@ -6,6 +6,7 @@ public class Path  {
     public readonly Vector3[] lookPoints;
     public readonly Line[] turnBoundaries;
     public readonly int finishLineIndex;
+    //public readonly int canAttckIndex;
 
     //public readonly int slowDownIndex;
 
@@ -32,7 +33,7 @@ public class Path  {
         //    dstFromEndPoint += Vector3.Distance(lookPoints[i], lookPoints[i - 1]);
         //    if (dstFromEndPoint > stoppingDst)
         //    {
-        //        slowDownIndex = i;
+        //        canAttckIndex = i;
         //        break;
         //    }
         //}
