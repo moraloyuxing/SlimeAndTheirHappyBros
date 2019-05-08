@@ -38,10 +38,10 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         //playerManager = pManager;
     }
 
-    public void Spawn(Vector2 pos, int col)
+    public void Spawn(Vector3 pos, int col)
     {
         transform.gameObject.SetActive(true);
-        transform.position = new Vector3(pos.x, spawnHeight, pos.y);
+        transform.position = new Vector3(pos.x, spawnHeight, pos.z);
         color = col;
     }
 

@@ -11,7 +11,7 @@ public interface IEnemyUnit
 {
     void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager);
     void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager);
-    void Spawn(Vector2 pos, int col);
+    void Spawn(Vector3 pos, int col);
     void Update();
     void ResetUnit();
 

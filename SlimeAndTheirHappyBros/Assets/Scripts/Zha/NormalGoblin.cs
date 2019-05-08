@@ -14,7 +14,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
         transform = t;
         animator = t.GetComponent<Animator>();
-        renderer = t.GetComponent<SpriteRenderer>();
+        renderer = t.Find("image").GetComponent<SpriteRenderer>();
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -29,7 +29,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         transform = t;
         animator = t.GetComponent<Animator>();
-        renderer = t.GetComponent<SpriteRenderer>();
+        renderer = t.Find("image").GetComponent<SpriteRenderer>();
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -42,10 +42,13 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     }
 
 
-    public void Spawn(Vector2 pos, int col)
+    public void Spawn(Vector3 pos, int col)
     {
+        Debug.Log(pos);
         transform.gameObject.SetActive(true);
-        transform.position = new Vector3(pos.x, spawnHeight, pos.y);
+        transform.position = new Vector3(pos.x, spawnHeight, pos.z);
+        selfPos = transform.position;
+        renderer.material.SetInt("_colorID", col);
         color = col;
     }
 
@@ -56,6 +59,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
         deltaTime = Time.deltaTime;
         selfPos = transform.position;
+
         for (int i = 0; i < 4; i++)
         {
             if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
