@@ -7,6 +7,8 @@ public class GoblinManager : MonoBehaviour
     int index = 0;
     float time;
 
+    public Vector3[] spawnPos;
+
     bool[] playerMove = new bool[4] { false, false, false, false };
     public bool[] PlayersMove {
         get { return playerMove; }
@@ -27,6 +29,8 @@ public class GoblinManager : MonoBehaviour
     List<NormalGoblin> freeNormalGoblins, usedNormalGoblins;
     List<ArcherGoblin> freeArcherGoblins, usedArcherGoblins;
 
+    public Vector2 mapBorder;
+
     [System.Serializable]
     public struct GoblinInfo {
         public string typeName;
@@ -38,6 +42,7 @@ public class GoblinManager : MonoBehaviour
         public float spawnHeight;
 
         public float turnDist;
+        public float stopDist;
     }
 
     public GoblinInfo[] goblinInfo;
@@ -71,17 +76,23 @@ public class GoblinManager : MonoBehaviour
             //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblin.gameObject.SetActive(false);
         }
+
+        Transform locs = transform.Find("SpawnLocs");
+        spawnPos = new Vector3[locs.childCount];
+        for (int i = 0; i < spawnPos.Length; i++) {
+            spawnPos[i] = locs.GetChild(i).position;
+        }
     }
     void Start()
     {
-        
+        mapBorder =  0.5f * GameObject.Find("PathFinding").GetComponent<PathFindGrid>().gridWorldSize;
     }
 
     // Update is called once per frame
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.A)) {
-            SpawnNormalGoblin(Vector3.zero, 1);
+            SpawnNormalGoblinRandomPos(1);
         }
         if (Input.GetKeyDown(KeyCode.Z)) {
             SpawnArcherGoblin(new Vector3(1,1,1),0);
@@ -95,16 +106,33 @@ public class GoblinManager : MonoBehaviour
             usedArcherGoblins[index].Update();
         }
 
+        playerMove[0] = false;
+        playerMove[1] = false;
+        playerMove[2] = false;
+        playerMove[3] = false;
     }
 
-    void SpawnNormalGoblin(Vector3 pos, int col) {
+    void SpawnNormalGoblinRandomPos(int col)
+    {
+        if (freeNormalGoblins.Count <= 0) return;
+        NormalGoblin goblin = freeNormalGoblins[0];
+        usedNormalGoblins.Add(goblin);
+        Vector3 pos = spawnPos[Random.Range(0,13)];
+        goblin.Spawn(pos, col);
+        goblin.UpdateAllPlayerPos();
+        freeNormalGoblins.RemoveAt(0);
+        Debug.Log(freeNormalGoblins.Count);
+    }
+    void SpawnNormalGoblinSpecificPos(Vector3 pos, int col) {
         if (freeNormalGoblins.Count <= 0) return;
         NormalGoblin goblin = freeNormalGoblins[0];
         usedNormalGoblins.Add(goblin);
         goblin.Spawn(pos, col);
+        goblin.UpdateAllPlayerPos();
         freeNormalGoblins.RemoveAt(0);
         Debug.Log(freeNormalGoblins.Count);
     }
+
     void SpawnArcherGoblin(Vector3 pos, int col)
     {
         if (freeArcherGoblins.Count <= 0) return;
