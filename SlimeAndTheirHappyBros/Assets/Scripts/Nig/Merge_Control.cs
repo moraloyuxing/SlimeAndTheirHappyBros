@@ -84,7 +84,7 @@ public class Merge_Control : MonoBehaviour{
         //相當於數據初始化
         Merge_Control_Hint.SetActive(true);
         Merge_Sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        Timer_float = 20.0f;
+        Timer_float = 10.0f;
         flicker = -0.5f;
     }
 
