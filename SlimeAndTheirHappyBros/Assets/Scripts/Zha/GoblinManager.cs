@@ -95,7 +95,8 @@ public class GoblinManager : MonoBehaviour
             SpawnNormalGoblinRandomPos(1);
         }
         if (Input.GetKeyDown(KeyCode.Z)) {
-            SpawnArcherGoblin(new Vector3(1,1,1),0);
+            SpawnNormalGoblinRandomPos(2);
+            //SpawnArcherGoblin(new Vector3(1,1,1),0);
         }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
@@ -121,7 +122,6 @@ public class GoblinManager : MonoBehaviour
         goblin.Spawn(pos, col);
         goblin.UpdateAllPlayerPos();
         freeNormalGoblins.RemoveAt(0);
-        Debug.Log(freeNormalGoblins.Count);
     }
     void SpawnNormalGoblinSpecificPos(Vector3 pos, int col) {
         if (freeNormalGoblins.Count <= 0) return;
@@ -130,7 +130,6 @@ public class GoblinManager : MonoBehaviour
         goblin.Spawn(pos, col);
         goblin.UpdateAllPlayerPos();
         freeNormalGoblins.RemoveAt(0);
-        Debug.Log(freeNormalGoblins.Count);
     }
 
     void SpawnArcherGoblin(Vector3 pos, int col)

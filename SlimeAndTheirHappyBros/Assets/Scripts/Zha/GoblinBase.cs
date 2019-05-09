@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class GoblinBase
 {
-    protected bool firstInState = true, followingPath = false;
+    protected bool firstInState = true, followingPath = false, getAniInfo = false;
     protected int hp, atkValue, color, pathIndex;
-    protected float deltaTime, inStateTime, totalTime;
+    protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
 
     protected int targetPlayer = -1;
@@ -16,8 +16,9 @@ public class GoblinBase
     protected Vector3 selfPos, moveFwdDir, oldTargetPos;
 
 
-    protected Transform transform;
+    protected Transform transform, image, damageCol;
     protected Animator animator;
+    protected AnimatorStateInfo aniInfo;
     protected SpriteRenderer renderer;
 
     Path path;
@@ -34,7 +35,6 @@ public class GoblinBase
     public void UpdateAllPlayerPos() {
         for (int i = 0; i < 4; i++) {
             playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
-            Debug.Log("nearst: " + nearstPlayerDist + "    cur:" + playerDist[i]);
             if (playerDist[i] < nearstPlayerDist)
             {
                 
@@ -76,36 +76,37 @@ public class GoblinBase
     public virtual void StateMachine()
     {
         inStateTime += deltaTime;
-        Debug.Log("State:  " + curState);
         switch (curState)
         {
             case GoblinState.moveIn:
-                DetectAttack();
                 MoveIn();
+                DetectAttack();
                 break;
             case GoblinState.idle:
-                DetectChaseAttack();
                 Idle();
+                DetectChaseAttack();
                 break;
             case GoblinState.ramble:
-                if (OutBorder()) break;
-                DetectChaseAttack();
                 Ramble();
+                DetectChaseAttack();
+                if (OutBorder()) break;
                 break;
             case GoblinState.chase:
-                if (OutBorder()) break;
-                DetectAttack();
                 Chase();
+                DetectAttack();
+                if (OutBorder()) break;
                 break;
             case GoblinState.attack:
                 Attack();
                 break;
             case GoblinState.hurt:
+                GetHurt();
                 break;
             case GoblinState.die:
                 break;
             case GoblinState.erroeCatch:
                 ErroeCatch();
+                DetectAttack();
                 break;
 
         }
@@ -123,8 +124,16 @@ public class GoblinBase
     }
     public virtual void DetectAttack() {
         float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
-        if (diff <= atkDist * atkDist) SetState(GoblinState.attack);
+        if (diff <= atkDist * atkDist) {
+            SetState(GoblinState.attack);
+        } 
     }
+    public virtual void OverAttackDetectDist() {
+        float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
+        if (diff <= atkDist * atkDist) SetState(GoblinState.attack);
+        else SetState(GoblinState.chase);
+    }
+
 
 
     public virtual void MoveIn()
@@ -134,12 +143,10 @@ public class GoblinBase
             animator.SetInteger("state", 1);
             firstInState = false;
             moveFwdDir = new Vector3(-selfPos.x, 0, -selfPos.z).normalized;
-            Debug.Log("slef pos " + selfPos);
         }
         else {
             transform.position += deltaTime * speed * moveFwdDir;
-            Debug.Log(moveFwdDir);
-            if (inStateTime > 1.0f) SetState(GoblinState.chase);
+            if (inStateTime > 1.0f) SetState(GoblinState.ramble);
         }
     }
 
@@ -157,7 +164,7 @@ public class GoblinBase
     }
 
     public bool OutBorder() {
-        if (Mathf.Abs(selfPos.x) > goblinManager.mapBorder.x || Mathf.Abs(selfPos.y) > goblinManager.mapBorder.y)
+        if (Mathf.Abs(selfPos.x) > goblinManager.mapBorder.x || Mathf.Abs(selfPos.z) > goblinManager.mapBorder.y)
         {
             SetState(GoblinState.erroeCatch);
             return true;
@@ -186,7 +193,6 @@ public class GoblinBase
                     float degree = Random.Range(135.0f, 225.0f);
                     moveFwdDir = Quaternion.AngleAxis(degree, Vector3.up) * moveFwdDir;
                 }
-                Debug.Log("Ramble dir " + moveFwdDir);
                 transform.position += deltaTime * speed * moveFwdDir;
             }
             else SetState();
@@ -196,19 +202,22 @@ public class GoblinBase
     {
         if (firstInState)
         {
+            Debug.Log("start chase");
             animator.SetInteger("state", 1);
-            animator.speed = 1.0f;
+            animator.speed = 2.0f;
             firstInState = false;
+            followingPath = false;
             PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
         }
         else {
-            if (inStateTime < 0.2f)
+            if (inStateTime < 0.3f)
             {
                 inStateTime += deltaTime;
             }
             else {
                 if (goblinManager.PlayersMove[targetPlayer])
                 {
+                    Debug.Log("request path find");
                     PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
                     inStateTime = 0.0f;
                 }
@@ -219,6 +228,7 @@ public class GoblinBase
                 {
                     if (pathIndex == path.finishLineIndex) //|| pathIndex >= path.canAttckIndex
                     {
+                        Debug.Log("reach path goal");
                         followingPath = false;
                         SetState(GoblinState.attack);
                     }
@@ -230,8 +240,7 @@ public class GoblinBase
                         transform.localScale = new Vector3(scaleX, 1, 1);
                     }
                 }
-                Debug.Log("chase  " + moveFwdDir);
-                transform.position += deltaTime * speed * 1.5f * moveFwdDir;
+                transform.position += deltaTime * speed * 2.0f * moveFwdDir;
 
             }
         }
@@ -260,33 +269,59 @@ public class GoblinBase
     {
         if (firstInState)
         {
+            Debug.Log("start attack");
             animator.SetInteger("state", 2);
             animator.speed = 1.0f;
             firstInState = false;
-
+            
             moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
             float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
             transform.localScale = new Vector3(scaleX, 1, 1);
         }
         else {
-            if (inStateTime > 0.6f && inStateTime < 1.0f) {
-
-                float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, LayerMask.NameToLayer("barrier")))?.0f: speed * 3.0f;
-                transform.position += deltaTime * atkSpeed * 1.5f * moveFwdDir;
-            } 
-            else if (inStateTime > 1.3f) {
-                DetectChaseAttack();
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("attack")) {
+                if (aniInfo.normalizedTime >= 0.46f && aniInfo.normalizedTime < 0.77f)
+                {
+                    //Debug.DrawRay(selfPos,moveFwdDir, Color.red, 3.0f);
+                    float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f : speed * 3.0f;
+                    transform.position += deltaTime * atkSpeed * moveFwdDir;
+                }
+                else if (aniInfo.normalizedTime >= 0.95f)
+                {
+                    OverAttackDetectDist();
+                }
             }
         }
     }
 
-    public virtual void DetectGethurt() {
 
+    public virtual void DetectGethurt() {
+        Collider[]colliders =  Physics.OverlapBox(image.position, new Vector3(0.4f, 2.9f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
+        int i = 0;
+        while (i < colliders.Length) {
+            if (i == 0 && curState != GoblinState.hurt) {
+                SetState(GoblinState.hurt);
+                moveFwdDir = -Vector3.forward;
+            }
+            Debug.Log(colliders[i].name);
+            i++;
+        }
     }
 
     public virtual void GetHurt()
     {
-
+        if (firstInState)
+        {
+            firstInState = false;
+            animator.SetTrigger("hurt");
+        }
+        else {
+            transform.position += 10.0f * deltaTime * moveFwdDir;
+            if (inStateTime >= 0.45f) {
+                OverAttackDetectDist();
+            }
+        }
     }
     public virtual void Die()
     {
