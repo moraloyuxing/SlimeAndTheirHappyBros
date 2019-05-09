@@ -164,7 +164,7 @@ public class GoblinBase
     }
 
     public bool OutBorder() {
-        if (Mathf.Abs(selfPos.x) > goblinManager.mapBorder.x || Mathf.Abs(selfPos.y) > goblinManager.mapBorder.y)
+        if (Mathf.Abs(selfPos.x) > goblinManager.mapBorder.x || Mathf.Abs(selfPos.z) > goblinManager.mapBorder.y)
         {
             SetState(GoblinState.erroeCatch);
             return true;

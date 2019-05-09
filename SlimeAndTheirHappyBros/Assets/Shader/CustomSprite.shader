@@ -25,7 +25,7 @@
 			Cull Off
 			Lighting Off
 			ZWrite Off
-			ZTest Off
+			//ZTest Off
 			Blend One OneMinusSrcAlpha
 
 			Pass
