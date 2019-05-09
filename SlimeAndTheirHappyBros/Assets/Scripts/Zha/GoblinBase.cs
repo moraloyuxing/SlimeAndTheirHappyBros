@@ -16,7 +16,7 @@ public class GoblinBase
     protected Vector3 selfPos, moveFwdDir, oldTargetPos;
 
 
-    protected Transform transform;
+    protected Transform transform, image, damageCol;
     protected Animator animator;
     protected AnimatorStateInfo aniInfo;
     protected SpriteRenderer renderer;
@@ -100,6 +100,7 @@ public class GoblinBase
                 Attack();
                 break;
             case GoblinState.hurt:
+                GetHurt();
                 break;
             case GoblinState.die:
                 break;
@@ -128,7 +129,6 @@ public class GoblinBase
         } 
     }
     public virtual void OverAttackDetectDist() {
-        Debug.Log(selfPos + "   " + goblinManager.PlayerPos[targetPlayer]);
         float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
         if (diff <= atkDist * atkDist) SetState(GoblinState.attack);
         else SetState(GoblinState.chase);
@@ -297,12 +297,31 @@ public class GoblinBase
 
 
     public virtual void DetectGethurt() {
-
+        Collider[]colliders =  Physics.OverlapBox(image.position, new Vector3(0.4f, 2.9f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
+        int i = 0;
+        while (i < colliders.Length) {
+            if (i == 0 && curState != GoblinState.hurt) {
+                SetState(GoblinState.hurt);
+                moveFwdDir = -Vector3.forward;
+            }
+            Debug.Log(colliders[i].name);
+            i++;
+        }
     }
 
     public virtual void GetHurt()
     {
-
+        if (firstInState)
+        {
+            firstInState = false;
+            animator.SetTrigger("hurt");
+        }
+        else {
+            transform.position += 10.0f * deltaTime * moveFwdDir;
+            if (inStateTime >= 0.45f) {
+                OverAttackDetectDist();
+            }
+        }
     }
     public virtual void Die()
     {

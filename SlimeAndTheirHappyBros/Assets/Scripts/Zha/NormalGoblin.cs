@@ -14,7 +14,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
         transform = t;
         animator = t.GetComponent<Animator>();
-        renderer = t.Find("image").GetComponent<SpriteRenderer>();
+        image = t.Find("image");
+        renderer = image.GetComponent<SpriteRenderer>();
+        damageCol = t.Find("DamageColider");
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -29,7 +31,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         transform = t;
         animator = t.GetComponent<Animator>();
-        renderer = t.Find("image").GetComponent<SpriteRenderer>();
+        image = t.Find("image");
+        renderer = image.GetComponent<SpriteRenderer>();
+        damageCol = t.Find("DamageColider");
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -69,7 +73,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             }
             //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
-
+        DetectGethurt();
         StateMachine();
     }
 
