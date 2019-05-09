@@ -4,11 +4,20 @@ using UnityEngine;
 
 public class Player_Control : MonoBehaviour{
 
-    //確定為第幾位玩家
+    //確定為第幾位玩家&動畫優先權
     public GameObject Player_Manager;
+    public GameObject Player_Sprite;
+    public GameObject SplashEffect;
     int Player_Number=0;
     int Color_Number = 0;
     string WhichPlayer;
+
+    //優先權、無敵時間等等
+    bool AttackPriority = false;
+    bool ExtraPriority = false;//適用範圍：受傷、跳池塘、洗白
+    bool DeathPriority = false;
+    bool StopDetect = false;
+    float musouTime = 0.0f; //無敵時間：受傷後、染色時
 
     //移動
     public GameObject Player_Icon;
@@ -39,17 +48,21 @@ public class Player_Control : MonoBehaviour{
 
     //雙人混色偵測
     public GameObject[] Other_Player = new GameObject[3];
-    public GameObject Merge_Hint;
     float[] Player_Distance = new float[3];
     public GameObject Merge_Target;
-    //float shortest_one = 1000.0f;
-    //bool Can_Merge = false;
-    //bool a_button = false;
-    //int Target_Color_Number;
+
+    //頭頂提示
+    public GameObject Hint;
 
     //血量
     public GameObject[] Personal_HP = new GameObject[3];
     int Damage_Count = 0;
+    int rescue_count = 0;
+
+    //短衝刺
+    bool left_bumper = false;
+    bool OnDash = false;
+    public float DashSpeed = 1.0f;
 
     void Start(){
         WhichPlayer = gameObject.name;
@@ -61,41 +74,71 @@ public class Player_Control : MonoBehaviour{
         Debug.DrawRay(ray_horizontal.origin,ray_horizontal.direction,Color.cyan);
         Debug.DrawRay(ray_vertical.origin, ray_vertical.direction, Color.cyan);
 
-        //移動
+        //移動&短衝刺
         xAix = Input.GetAxis(WhichPlayer + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
+        left_bumper = Input.GetButtonDown(WhichPlayer + "Dash");
+        if (left_bumper == true){
+            DashSpeed = 2.5f;
+            OnDash = true;
+        }
 
-        if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f) {
-            GetComponent<Animator>().Play("Slime_Walk");
-            Player_Manager.SendMessage(WhichPlayer + "rePos",transform.position);
-        } 
-        else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
+        if (AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
+            if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f){
+                if (OnDash == false) {GetComponent<Animator>().Play("Slime_Walk");} 
+                else if (OnDash == true){
+                    if (Mathf.Abs(xAix) >= Mathf.Abs(zAix)) GetComponent<Animator>().Play("Slime_DashFoward");
+                    else if (Mathf.Abs(xAix) < Mathf.Abs(zAix)){
+                        if (zAix >= 0) GetComponent<Animator>().Play("Slime_DashUp");
+                        else GetComponent<Animator>().Play("Slime_DashDown");
+                    }
+                }
+                Player_Manager.SendMessage(WhichPlayer + "rePos", transform.position);
+            }
+            //else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
+        }
 
         if (xAix > 0.0f) {
             //加個轉向
-            transform.localScale = new Vector3(1.25f, 1.25f, 1.25f);
-            Player_Icon.transform.localPosition = new Vector3(0.5f, 0.4f, 0.0f);
-            Player_Icon.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
+            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+            Player_Icon.transform.localPosition = new Vector3(0.85f, 0.5f, 0.0f);
+            Player_Icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+            Hint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
             Left_CanMove = false;
             ray_horizontal = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.0f)) {
-                if (hit_horizontal.transform.tag == "Attack"){
+                if (hit_horizontal.transform.tag == "Border"){
                     Right_CanMove = false;
                 }
+
+                else if (hit_horizontal.transform.tag == "Attack" && StopDetect == false){
+                    Destroy(hit_horizontal.transform.gameObject);
+                    GetComponent<Animator>().Play("Slime_Hurt");
+                    HurtPriorityOn();
+                }
+
             }
             else { Right_CanMove = true; }
         }
 
         if (xAix < 0.0f) {
-            transform.localScale = new Vector3(-1.25f, 1.25f, 1.25f);
-            Player_Icon.transform.localPosition = new Vector3(-0.5f, 0.4f, 0.0f);
-            Player_Icon.transform.localScale = new Vector3(-0.2f, 0.2f, 0.2f);
+            transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+            Player_Icon.transform.localPosition = new Vector3(-0.85f, 0.5f, 0.0f);
+            Player_Icon.transform.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
+            Hint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
             Right_CanMove = false;
             ray_horizontal = new Ray(transform.position, new Vector3(-2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.0f)){
-                if (hit_horizontal.transform.tag == "Attack"){
+                if (hit_horizontal.transform.tag == "Border"){
                     Left_CanMove = false;
                 }
+
+                else if (hit_horizontal.transform.tag == "Attack" && StopDetect == false){
+                    Destroy(hit_horizontal.transform.gameObject);
+                    GetComponent<Animator>().Play("Slime_Hurt");
+                    HurtPriorityOn();
+                }
+
             }
             else { Left_CanMove = true; }
         }
@@ -104,8 +147,14 @@ public class Player_Control : MonoBehaviour{
             Down_CanMove = false;
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical, 2.0f)){
-                if (hit_vertical.transform.tag == "Attack"){
+                if (hit_vertical.transform.tag == "Border"){
                     Up_CanMove = false;
+                }
+
+                else if (hit_vertical.transform.tag == "Attack" && StopDetect  == false){
+                    Destroy(hit_vertical.transform.gameObject);
+                    GetComponent<Animator>().Play("Slime_Hurt");
+                    HurtPriorityOn();
                 }
             }
             else {Up_CanMove = true;}
@@ -115,17 +164,35 @@ public class Player_Control : MonoBehaviour{
             Up_CanMove = false;
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical,2.0f)){
-                if (hit_vertical.transform.tag == "Attack"){
+                if (hit_vertical.transform.tag == "Border"){
                     Down_CanMove = false;
                 }
+
+                else if (hit_vertical.transform.tag == "Attack" && StopDetect == false) {
+                    Destroy(hit_vertical.transform.gameObject);
+                    GetComponent<Animator>().Play("Slime_Hurt");
+                    HurtPriorityOn();
+                }
+
             }
             else {Down_CanMove = true;}
         }
 
-        if(Up_CanMove)transform.position = new Vector3(transform.position.x , transform.position.y, transform.position.z + zAix * 0.1f);
-        if (Down_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f);
-        if (Left_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f, transform.position.y, transform.position.z);
-        if (Right_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f, transform.position.y, transform.position.z);
+        if (ExtraPriority == false && DeathPriority == false) {
+            if (Up_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f * DashSpeed);
+            if (Down_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f * DashSpeed);
+            if (Left_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f * DashSpeed, transform.position.y, transform.position.z);
+            if (Right_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f * DashSpeed, transform.position.y, transform.position.z);
+        }
+
+        //衝刺遞減
+        if (DashSpeed > 1.0f) {
+            DashSpeed = DashSpeed - Time.deltaTime;
+            if (DashSpeed < 1.0f) {
+                OnDash = false;
+                DashSpeed = 1.0f;
+            }
+        }
 
         //攻擊方向旋轉
         xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
@@ -142,109 +209,149 @@ public class Player_Control : MonoBehaviour{
 
         //攻擊
         right_bumper = Input.GetButtonDown(WhichPlayer + "Attack");
-        if (right_bumper == true) {
+        if (right_bumper == true && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
+            GetComponent<Animator>().Play("Slime_Attack");
             Attack_Arrow.SendMessage("ShootBullet", Attack_Direction);
         }
 
         //單人染色偵測(by距離)
-
-        for (int i = 0; i < 4; i++) {
-            if (Mathf.Abs(transform.position.x - Four_Pigment[i].position.x) < 1.7f && Mathf.Abs(transform.position.z - Four_Pigment[i].position.z) < 1.8f) {
-                if(i==0 && Color_Number != 0) Color_Number = 0;
-                else if(i==1 && Color_Number ==0) Color_Number = 1;
-                else if (i == 2 && Color_Number == 0) Color_Number = 2;
-                else if (i == 3 && Color_Number == 0) Color_Number = 4;
-                Player_Manager.GetComponent<Pigment_Manager>().Change_Base_Color(Player_Number, Color_Number);
-                Player_Manager.GetComponent<Player_Manager>().SetPlayerColor(Player_Number, Color_Number);
+        if (ExtraPriority == false && DeathPriority == false) {
+            for (int i = 1; i < 4; i++){
+                if (Mathf.Abs(transform.position.x - Four_Pigment[i].position.x) < 1.7f && Mathf.Abs(transform.position.z - Four_Pigment[i].position.z) < 1.8f){
+                    if (Color_Number == 0) {
+                        if (i == 1) Color_Number = 1;
+                        else if(i==2) Color_Number = 2;
+                        else if (i == 3) Color_Number = 4;
+                        //跳池動畫
+                        ExtraPriority = true;
+                        musouTime = Time.time;
+                        StopDetect = true;
+                        GetComponent<Animator>().Play("Slime_JumpinPond");
+                    }
+                }
             }
         }
 
-        //偵測是否有其他玩家在附近
-        //Check_Player_Distance();
-
-        //融合
-        //a_button = Input.GetButtonDown(WhichPlayer + "Merge");
-        //if (a_button && Can_Merge == true) {
-        //    //抓取對方染色編號
-        //    Player_Manager.GetComponent<Pigment_Manager>().Change_Advanced_Color(gameObject, Merge_Target, Color_Number + Target_Color_Number);
-        //}
-
+        //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)
+        if (Time.time > musouTime + 2.5f && StopDetect == true) { StopDetect = false; }
     }
 
-    void OnTriggerEnter2D(Collider2D collision){
-
-        //損傷
-        if (collision.gameObject.tag == "Attack") {
-            Damage_Count++;
-            for (int i = 0; i < Damage_Count; i++) { Personal_HP[i].SetActive(false); }
-            if (Damage_Count == 3) Destroy(gameObject);
-        }
-
-    }
-
+    //設置玩家編號
     void SetUp_Number(int x){
         Player_Number = x;
     }
 
-    //void Check_Player_Distance() {
-
-    //    for (int i = 0; i < 3; i++) {
-    //        Player_Distance[i] = Mathf.Sqrt(Mathf.Pow(transform.position.x - Other_Player[i].transform.position.x, 2) + Mathf.Pow(transform.position.z - Other_Player[i].transform.position.z, 2));
-    //    }
-
-    //    if (Player_Distance[0] < Player_Distance[1]){
-    //        if (Player_Distance[0] < Player_Distance[2]){
-    //            Merge_Target = Other_Player[0];
-    //            shortest_one = Player_Distance[0];
-    //        }
-    //        else {
-    //            Merge_Target = Other_Player[2];
-    //            shortest_one = Player_Distance[2];
-    //        }
-    //    }
-
-    //    else {
-    //        if (Player_Distance[1] < Player_Distance[2]) {
-    //            Merge_Target = Other_Player[1];
-    //            shortest_one = Player_Distance[1];
-    //        } 
-    //        else {
-    //            Merge_Target = Other_Player[2];
-    //            shortest_one = Player_Distance[2];
-    //        }
-    //    }
-
-    //    Target_Color_Number = Merge_Target.GetComponent<Player_Control>().Get_Player_Color_Number();
-
-    //    //混合條件有三：距離接近、己方&對方當前色不得為0(洗白狀態)、雙方染色編號不同(不同色)
-    //    if (shortest_one < 2.5f && Target_Color_Number !=0 && Color_Number!=0 &&Target_Color_Number != Color_Number){
-    //        Merge_Hint.SetActive(true);
-    //        Can_Merge = true;
-    //    }
-    //    else {
-    //        Merge_Hint.SetActive(false);
-    //        Can_Merge = false;
-    //    }
-
-    //}
-
+    //設置/取得玩家當前顏色
     public int Get_Player_Color_Number() {
         return Color_Number;
     }
 
-    void Show_Merge_Hint() {
-        Merge_Hint.SetActive(true);
+    public void ChangeColorCalling() {
+        GetComponent<Animator>().Play("Slime_JumpinPondEffect");
+        Player_Manager.GetComponent<Pigment_Manager>().Change_Base_Color(Player_Number, Color_Number);
+        Player_Manager.GetComponent<Player_Manager>().SetPlayerColor(Player_Number, Color_Number);
     }
 
-    void Hide_Merge_Hint() {
-        Merge_Hint.SetActive(false);
+
+    //顯示/隱藏混合提示
+    void Show_Hint(Sprite HintSprite) {
+        Hint.SetActive(true);
+        Hint.GetComponent<SpriteRenderer>().sprite = HintSprite;
+    }
+
+    void Hide_Hint() {
+        Hint.SetActive(false);
+    }
+
+    //設置攻擊最高優先權
+    public void AttackPriorityOn() {
+        AttackPriority = true;
+    }
+
+    public void AttackPriorityOff(){
+        AttackPriority = false;
+        if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
+    }
+
+    //設置受傷&死亡最高優先權
+    public void HurtPriorityOn() {
+        ExtraPriority = true;
+        StopDetect = true;
+        musouTime = Time.time;
+        Damage_Count++;
+        for (int i = 0; i < Damage_Count; i++) { Personal_HP[i].SetActive(false); }
+        if (Damage_Count == 3) {
+            DeathPriority = true;
+            ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
+            GetComponent<Animator>().Play("Slime_Death");
+        }
+    }
+
+    public void HurtPriorityOff(){
+        ExtraPriority = false;
+        AttackPriority = false;
+    }
+
+
+    //呼叫水花濺起
+    public void PondEffect() {
+        Player_Sprite.GetComponent<SpriteRenderer>().color = SplashEffect.GetComponent<SpriteRenderer>().color;
+    }
+
+    public void HideSplash() {
+        SplashEffect.GetComponent<SpriteRenderer>().sprite = null;
+    }
+
+    //復活相關
+    public void GetRescued() {
+        GetComponent<Animator>().Play("Slime_CureEffect");
+        rescue_count++;
+
+        if (rescue_count >= 5) {
+            rescue_count = 0;
+            for (int i = 0; i < Damage_Count; i++) { Personal_HP[i].SetActive(true); }
+            Damage_Count = 0;
+            GetComponent<Animator>().Play("Slime_Revive");
+        }
+
+    }
+
+    public void DeathPriorityOff(){
+        DeathPriority = false;
+        AttackPriority = false;
+    }
+
+    //死亡的數值reset等等
+    public void CancelColor() {
+        Color_Number = 0;
+        Player_Manager.GetComponent<Pigment_Manager>().Change_Base_Color(Player_Number, Color_Number);
+        Player_Manager.GetComponent<Player_Manager>().SetPlayerColor(Player_Number, Color_Number);
+        Player_Sprite.GetComponent<SpriteRenderer>().color = SplashEffect.GetComponent<SpriteRenderer>().color;
     }
 
     //合體狀態被擊殺
-    void Die_InMergeState() {
+    void Die_InMergeState(){
         Damage_Count = 3;
         for (int i = 0; i < Damage_Count; i++) { Personal_HP[i].SetActive(false); }
+        CancelColor();
+        DeathPriority = true;
+        ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
+        Hide_Hint();
+        GetComponent<Animator>().Play("Slime_GrassIdle");
     }
 
+    //洗白相關
+    void WashOutColor() {
+        ExtraPriority = true;
+        Color_Number = 0;
+        GetComponent<Animator>().Play("Slime_Wash");
+    }
+
+    public void FinishClean() {
+        ExtraPriority = false;
+        musouTime = Time.time;
+        StopDetect = true;
+    }
 
 }
+

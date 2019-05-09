@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Pigment_Pond
   - Attack
+  - Border
   layers:
   - Default
   - TransparentFX

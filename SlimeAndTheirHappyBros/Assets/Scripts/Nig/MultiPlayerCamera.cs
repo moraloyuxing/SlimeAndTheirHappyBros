@@ -45,7 +45,7 @@ public class MultiPlayerCamera : MonoBehaviour{
 
         var bounds = new Bounds(AllPlayers[0].position, Vector3.zero);
         for (int i = 0; i < AllPlayers.Count; i++) {
-            bounds.Encapsulate(AllPlayers[i].position);
+            if(AllPlayers[i].gameObject.activeSelf) bounds.Encapsulate(AllPlayers[i].position);
         }
 
         return bounds.center;
