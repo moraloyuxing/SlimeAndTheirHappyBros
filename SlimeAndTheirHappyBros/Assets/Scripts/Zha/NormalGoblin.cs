@@ -44,7 +44,6 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
     public void Spawn(Vector3 pos, int col)
     {
-        Debug.Log(pos);
         transform.gameObject.SetActive(true);
         transform.position = new Vector3(pos.x, spawnHeight, pos.z);
         selfPos = transform.position;
@@ -60,9 +59,15 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         deltaTime = Time.deltaTime;
         selfPos = transform.position;
 
-        for (int i = 0; i < 4; i++)
-        {
-            if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
+        nearstPlayerDist = 500.0f;
+        for (int i = 0; i < 4; i++) {
+            playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
+            if (playerDist[i] < nearstPlayerDist)
+            {
+                nearstPlayerDist = playerDist[i];
+                targetPlayer = i;
+            }
+            //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
 
         StateMachine();
