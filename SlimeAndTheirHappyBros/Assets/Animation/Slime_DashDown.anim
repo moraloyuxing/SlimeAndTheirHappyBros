@@ -21,33 +21,33 @@ AnimationClip:
   - curve:
     - time: 0
       value: {fileID: 21300000, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.06666667
+    - time: 0.0625
       value: {fileID: 21300002, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.13333334
+    - time: 0.125
       value: {fileID: 21300004, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.2
+    - time: 0.1875
       value: {fileID: 21300006, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.26666668
+    - time: 0.25
       value: {fileID: 21300008, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.33333334
+    - time: 0.3125
       value: {fileID: 21300010, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.4
+    - time: 0.375
       value: {fileID: 21300012, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.46666667
+    - time: 0.4375
       value: {fileID: 21300014, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.53333336
+    - time: 0.5
       value: {fileID: 21300016, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.6
+    - time: 0.5625
       value: {fileID: 21300018, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.6666667
+    - time: 0.625
       value: {fileID: 21300020, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
-    - time: 0.73333335
+    - time: 0.6875
       value: {fileID: 21300022, guid: 8ae73323e40f547888221a6339b5459c, type: 3}
     attribute: m_Sprite
     path: Slime_Sprite
     classID: 212
     script: {fileID: 0}
-  m_SampleRate: 60
+  m_SampleRate: 16
   m_WrapMode: 0
   m_Bounds:
     m_Center: {x: 0, y: 0, z: 0}
