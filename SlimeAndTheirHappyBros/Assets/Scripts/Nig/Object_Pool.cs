@@ -14,6 +14,7 @@ public class Object_Pool : MonoBehaviour{
     private Queue<GameObject> _pool = new Queue<GameObject>();
 
     //合體史萊姆
+    public MultiPlayerCamera CameraFocus;
     public GameObject prefabMergeSlime;
     int ini = 2;
     private Queue<GameObject> _MSlimepool = new Queue<GameObject>();
@@ -34,6 +35,8 @@ public class Object_Pool : MonoBehaviour{
             clone_MergeSlime.GetComponent<Merge_Control>().SetMSlimePool(this);
             _MSlimepool.Enqueue(clone_MergeSlime);
             clone_MergeSlime.transform.SetParent(Group_MergeSlime.transform);
+            //推入攝影機
+            CameraFocus.AllPlayers.Add(clone_MergeSlime.transform);
             clone_MergeSlime.SetActive(false);
         }
 

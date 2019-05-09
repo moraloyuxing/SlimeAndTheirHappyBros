@@ -17,6 +17,25 @@ TextureImporter:
     21300024: "\u5FA9\u6D3B_12"
     21300026: "\u5FA9\u6D3B_13"
     21300028: "\u5FA9\u6D3B_14"
+    21300030: Revive_0
+    21300032: Revive_1
+    21300034: Revive_2
+    21300036: Revive_3
+    21300038: Revive_4
+    21300040: Revive_5
+    21300042: Revive_6
+    21300044: Revive_7
+    21300046: Revive_8
+    21300048: Revive_9
+    21300050: Revive_10
+    21300052: Revive_11
+    21300054: Revive_12
+    21300056: Revive_13
+    21300058: Revive_14
+    21300060: Revive_15
+    21300062: Revive_16
+    21300064: Revive_17
+    21300066: Revive_18
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -121,13 +140,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_0"
+      name: Revive_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 586.6666
+        y: 660
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -135,19 +154,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 61b77d17b6595422f820a3bf7274ec95
+      spriteID: d8717585dafabe3409e022358a99cfa0
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_1"
+      name: Revive_1
       rect:
         serializedVersion: 2
         x: 360
-        y: 586.6666
+        y: 660
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,19 +174,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8fefc452353354a109a6cf9970769dfb
+      spriteID: 172a1648fad31ba4eb7831667af22eda
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_2"
+      name: Revive_2
       rect:
         serializedVersion: 2
         x: 720
-        y: 586.6666
+        y: 660
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -175,19 +194,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a0a20013c1909479795219fd7b1a9bea
+      spriteID: 10f96079d0e0c78488238f89e0607c5a
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_3"
+      name: Revive_3
       rect:
         serializedVersion: 2
         x: 1080
-        y: 586.6666
+        y: 660
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -195,19 +214,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e0d99f5a5ebc74ddbb584cb21e57ad5d
+      spriteID: 38feea43ee07e2e4c87c29dce716f091
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_4"
+      name: Revive_4
       rect:
         serializedVersion: 2
         x: 1440
-        y: 586.6666
+        y: 660
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -215,19 +234,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3d121f58ed3214679b7e5aa4daa63de5
+      spriteID: 47f71b8bc1313a846a2b1445c37c7f7b
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_5"
+      name: Revive_5
       rect:
         serializedVersion: 2
         x: 0
-        y: 293.66666
+        y: 440
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -235,19 +254,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: db381c0705efb42a390710e8fa425e32
+      spriteID: 5595cd13e7add4348ae1fe16ca6d5e97
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_6"
+      name: Revive_6
       rect:
         serializedVersion: 2
         x: 360
-        y: 293.66666
+        y: 440
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -255,19 +274,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d8a10471a212842e3831d9a923ada058
+      spriteID: f272d46dc9952a443a38b2ad18c872ca
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_7"
+      name: Revive_7
       rect:
         serializedVersion: 2
         x: 720
-        y: 293.66666
+        y: 440
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -275,19 +294,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8f3f2cbdfc1cd48d7984daf611d004ed
+      spriteID: 1e0fceb91bd1b6c45a812f389d18f955
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_8"
+      name: Revive_8
       rect:
         serializedVersion: 2
         x: 1080
-        y: 293.66666
+        y: 440
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -295,19 +314,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 40e92ccc7b8824bc8aaacfb61e59cff6
+      spriteID: b3aadf1cab7c01843b261f2ee47c6877
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_9"
+      name: Revive_9
       rect:
         serializedVersion: 2
         x: 1440
-        y: 293.66666
+        y: 441
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -315,19 +334,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ea1f0f09a41974667a44ef2e9c1604d7
+      spriteID: 7c6809b39db3c9947a393b4ac8b70f00
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_10"
+      name: Revive_10
       rect:
         serializedVersion: 2
         x: 0
-        y: 0.6666565
+        y: 220
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -335,19 +354,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 51b06ec3139394d86879b06a425dfb20
+      spriteID: 6ead517fbb60bce40a25d966725721b4
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_11"
+      name: Revive_11
       rect:
         serializedVersion: 2
         x: 360
-        y: 0.6666565
+        y: 220
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -355,19 +374,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b9c6abd5f96144fd3a0861389f221985
+      spriteID: 1d3d0d0649621854390630b369729696
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_12"
+      name: Revive_12
       rect:
         serializedVersion: 2
         x: 720
-        y: 0.6666565
+        y: 220
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -375,19 +394,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d22668b0df24448738e91872b10fb83c
+      spriteID: c322e60fd483717498afa26d21fcb255
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_13"
+      name: Revive_13
       rect:
         serializedVersion: 2
         x: 1080
-        y: 0.6666565
+        y: 220
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -395,19 +414,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2bb477e184288438cb36f57e68db8f80
+      spriteID: b646b99963b70e44c8ab437fcc6ac15d
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: "\u5FA9\u6D3B_14"
+      name: Revive_14
       rect:
         serializedVersion: 2
         x: 1440
-        y: 0.6666565
+        y: 220
         width: 360
-        height: 293.33334
+        height: 220
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -415,7 +434,87 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9e1bb460809ef4b139ff7d1ffbad6dca
+      spriteID: 4a49c42eef38952439acc0a5dd1c3b00
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive_15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 360
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 29fa6e493ab04334cb5ba296648cef8b
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive_16
+      rect:
+        serializedVersion: 2
+        x: 360
+        y: 0
+        width: 360
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 483cfb14b924f0f4db89f02fabd38307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive_17
+      rect:
+        serializedVersion: 2
+        x: 720
+        y: 0
+        width: 360
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4cde973ccc7775347a00e83838687390
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Revive_18
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 0
+        width: 360
+        height: 220
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 579c2cb962424884a9985bb86cbc30eb
       vertices: []
       indices: 
       edges: []
