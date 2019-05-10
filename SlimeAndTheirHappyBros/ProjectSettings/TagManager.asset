@@ -7,6 +7,8 @@ TagManager:
   - Pigment_Pond
   - Attack
   - Border
+  - GoblinMelee
+  - GoblinArrow
   layers:
   - Default
   - TransparentFX
