@@ -23,12 +23,14 @@ public class GoblinManager : MonoBehaviour
         }
     }
 
-    public TestPlayerManager playerManager;
-    //Player_Manager playerManager;
-
     List<NormalGoblin> freeNormalGoblins, usedNormalGoblins;
     List<ArcherGoblin> freeArcherGoblins, usedArcherGoblins;
 
+    Dictionary<string, GoblinArrow> goblinArrowsDic;
+    List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
+
+    public TestPlayerManager playerManager;
+    //Player_Manager playerManager;
     public Vector2 mapBorder;
 
     [System.Serializable]
@@ -44,9 +46,14 @@ public class GoblinManager : MonoBehaviour
         public float turnDist;
         public float stopDist;
     }
-
     public GoblinInfo[] goblinInfo;
 
+    [System.Serializable]
+    public struct PoolUnitInfo {
+        public string typeName;
+        public float speed;
+    }
+    public PoolUnitInfo[] poolUnitInfo;
 
     // Start is called before the first frame update
     private void Awake()
@@ -81,6 +88,18 @@ public class GoblinManager : MonoBehaviour
         spawnPos = new Vector3[locs.childCount];
         for (int i = 0; i < spawnPos.Length; i++) {
             spawnPos[i] = locs.GetChild(i).position;
+        }
+
+        goblins = transform.Find("GoblinArrows");
+        freeGoblinArrows = new List<GoblinArrow>();
+        usedGoblinArrows = new List<GoblinArrow>();
+        goblinArrowsDic = new Dictionary<string, GoblinArrow>();
+        for (int i = 0; i < goblins.childCount; i++)
+        {
+            goblin = goblins.GetChild(i);
+            freeGoblinArrows.Add(new GoblinArrow());
+            freeGoblinArrows[i].Init(goblin, this);
+            goblinArrowsDic.Add(goblin.name, freeGoblinArrows[i]);
         }
     }
     void Start()
@@ -152,7 +171,7 @@ public class GoblinManager : MonoBehaviour
         freeArcherGoblins.RemoveAt(0);
     }
 
-    public void Recycle<T>(T goblin) where T : IEnemyUnit {
+    public void RecycleGoblin<T>(T goblin) where T : IEnemyUnit {
         if (goblin is NormalGoblin)
         {
             usedNormalGoblins.Remove(goblin as NormalGoblin);

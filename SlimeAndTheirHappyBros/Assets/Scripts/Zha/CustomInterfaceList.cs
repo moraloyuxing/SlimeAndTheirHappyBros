@@ -35,18 +35,28 @@ public interface IHurtSystem {
     void OnGetHurt(int _value);
 }
 
+public interface IEnemyObjectPoolUnit
+{
+    void Init(Transform init, GoblinManager manager);
+    void Update();
+    void ToActive(float _speed, Vector3 _pos, Vector3 _dir);
+    void ResetUnit();
+
+}
+
 public interface IObjectPool
 {
+
     void GoUsing(Vector3 _pos, Vector3 _dir);
-    void RecycleObject(IObjectPoolUnit _unit);
+    void RecycleObjec<T>(T _unit) where T : IObjectPoolUnit;
     IObjectPoolUnit GetObjectByID(int _id);
     IObjectPoolUnit GetFirstObject();
-    int GetDamageValue();
 }
 
 public interface IObjectPoolUnit
 {
     void SetManager(IObjectPool _manager);
+    void Update();
     void ToReset();
     void ToActive(float _speed, Vector3 _pos, Vector3 _dir);
     void DisableSelf();

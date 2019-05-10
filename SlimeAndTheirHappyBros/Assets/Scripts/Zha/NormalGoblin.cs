@@ -120,7 +120,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     }
 
     public void ResetUnit() {
-        goblinManager.Recycle(this);
+        goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }
 }
