@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
+//using System;
 
 public class NormalGoblin: GoblinBase, IEnemyUnit
 {
-
+    float atkColOffset;
+    Transform atkCol;
 
     //TestPlayerManager playerManager;
     //Player_Manager playerManager;
@@ -16,7 +17,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         animator = t.GetComponent<Animator>();
         image = t.Find("image");
         renderer = image.GetComponent<SpriteRenderer>();
-        damageCol = t.Find("DamageColider");
+        atkCol = t.Find("AtkCollider");
+        imgScale = image.localScale.x;
+        atkColOffset = atkCol.localPosition.x;
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -33,7 +36,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         animator = t.GetComponent<Animator>();
         image = t.Find("image");
         renderer = image.GetComponent<SpriteRenderer>();
-        damageCol = t.Find("DamageColider");
+        atkCol = t.Find("AtkCollider");
+        imgScale = image.localScale.x;
+        atkColOffset = atkCol.localPosition.x;
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -48,6 +53,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
     public void Spawn(Vector3 pos, int col)
     {
+        if (col <= 0) {
+            col = Random.Range(1, 6);
+        }
         transform.gameObject.SetActive(true);
         transform.position = new Vector3(pos.x, spawnHeight, pos.z);
         selfPos = transform.position;
@@ -77,7 +85,40 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         StateMachine();
     }
 
-    
+
+    public override void Attack()
+    {
+        if (firstInState)
+        {
+            Debug.Log("start attack");
+            animator.SetInteger("state", 2);
+            animator.speed = 1.0f;
+            firstInState = false;
+
+            moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
+            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+            atkCol.localPosition = new Vector3(scaleX * atkColOffset, atkCol.localPosition.y, atkCol.localPosition.z);
+        }
+        else
+        {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("attack"))
+            {
+                if (aniInfo.normalizedTime >= 0.46f && aniInfo.normalizedTime < 0.77f)
+                {
+                    //Debug.DrawRay(selfPos,moveFwdDir, Color.red, 3.0f);
+                    float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f : speed * 3.0f;
+                    transform.position += deltaTime * atkSpeed * moveFwdDir;
+                }
+                else if (aniInfo.normalizedTime >= 0.95f)
+                {
+                    OverAttackDetectDist();
+                }
+            }
+        }
+    }
+
     public void ResetUnit() {
         goblinManager.Recycle(this);
         transform.gameObject.SetActive(false);

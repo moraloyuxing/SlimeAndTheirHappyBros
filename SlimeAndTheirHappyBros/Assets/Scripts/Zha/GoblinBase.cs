@@ -8,6 +8,7 @@ public class GoblinBase
     protected int hp, atkValue, color, pathIndex;
     protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
+    protected float imgScale;
 
     protected int targetPlayer = -1;
     protected float nearstPlayerDist = 5000;
@@ -16,7 +17,7 @@ public class GoblinBase
     protected Vector3 selfPos, moveFwdDir, oldTargetPos;
 
 
-    protected Transform transform, image, damageCol;
+    protected Transform transform, image;
     protected Animator animator;
     protected AnimatorStateInfo aniInfo;
     protected SpriteRenderer renderer;
@@ -143,6 +144,8 @@ public class GoblinBase
             animator.SetInteger("state", 1);
             firstInState = false;
             moveFwdDir = new Vector3(-selfPos.x, 0, -selfPos.z).normalized;
+            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
         }
         else {
             transform.position += deltaTime * speed * moveFwdDir;
@@ -184,7 +187,7 @@ public class GoblinBase
             if(Mathf.Abs(playerPos.y) > 70) playerPos.y = Mathf.Sign(playerPos.y) * 70.0f;
             moveFwdDir = new Vector3(playerPos.x - selfPos.x, 0, playerPos.z - selfPos.z).normalized;
             float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-            transform.localScale = new Vector3(scaleX, 1, 1);
+            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
         }
         else {
             if (inStateTime < totalTime) {
@@ -237,7 +240,7 @@ public class GoblinBase
                         pathIndex++;
                         moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
                         float scaleX = (moveFwdDir.x > .0f)?-1.0f:1.0f;
-                        transform.localScale = new Vector3(scaleX, 1, 1);
+                        image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                     }
                 }
                 transform.position += deltaTime * speed * 2.0f * moveFwdDir;
@@ -255,7 +258,7 @@ public class GoblinBase
             pathIndex = 0;
             moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
             float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-            transform.localScale = new Vector3(scaleX, 1, 1);
+            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
 
             //StopCoroutine("FollowPath");
             //StartCoroutine("FollowPath");
@@ -267,32 +270,7 @@ public class GoblinBase
     }
     public virtual void Attack()
     {
-        if (firstInState)
-        {
-            Debug.Log("start attack");
-            animator.SetInteger("state", 2);
-            animator.speed = 1.0f;
-            firstInState = false;
-            
-            moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
-            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-            transform.localScale = new Vector3(scaleX, 1, 1);
-        }
-        else {
-            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsName("attack")) {
-                if (aniInfo.normalizedTime >= 0.46f && aniInfo.normalizedTime < 0.77f)
-                {
-                    //Debug.DrawRay(selfPos,moveFwdDir, Color.red, 3.0f);
-                    float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f : speed * 3.0f;
-                    transform.position += deltaTime * atkSpeed * moveFwdDir;
-                }
-                else if (aniInfo.normalizedTime >= 0.95f)
-                {
-                    OverAttackDetectDist();
-                }
-            }
-        }
+        
     }
 
 

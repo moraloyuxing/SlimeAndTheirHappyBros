@@ -78,7 +78,7 @@ Material:
     - _SrcBlend: 1
     - _UVSec: 0
     - _ZWrite: 1
-    - _colorID: 6
+    - _colorID: 2
     - _diffTrans: 0.08
     m_Colors:
     - _BlueColor: {r: 0.42114633, g: 0.70345324, b: 0.9811321, a: 1}

@@ -72,7 +72,7 @@ public class GoblinManager : MonoBehaviour
         {
             goblin = goblins.GetChild(i);
             freeArcherGoblins.Add(new ArcherGoblin());
-            freeArcherGoblins[i].TestInit(goblin, goblinInfo[0], this);
+            freeArcherGoblins[i].TestInit(goblin, goblinInfo[1], this);
             //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblin.gameObject.SetActive(false);
         }
@@ -92,11 +92,11 @@ public class GoblinManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.A)) {
-            SpawnNormalGoblinRandomPos(1);
+            SpawnNormalGoblinRandomPos(-1);
         }
         if (Input.GetKeyDown(KeyCode.Z)) {
-            SpawnNormalGoblinRandomPos(2);
-            //SpawnArcherGoblin(new Vector3(1,1,1),0);
+            //SpawnNormalGoblinRandomPos(-1);
+            SpawnArcherGoblininRandomPos(-1);
         }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
@@ -132,16 +132,25 @@ public class GoblinManager : MonoBehaviour
         freeNormalGoblins.RemoveAt(0);
     }
 
-    void SpawnArcherGoblin(Vector3 pos, int col)
+    void SpawnArcherGoblininRandomPos(int col)
     {
         if (freeArcherGoblins.Count <= 0) return;
         ArcherGoblin goblin = freeArcherGoblins[0];
         usedArcherGoblins.Add(goblin);
+        Vector3 pos = spawnPos[Random.Range(0, 13)];
         goblin.Spawn(pos, col);
+        goblin.UpdateAllPlayerPos();
         freeArcherGoblins.RemoveAt(0);
-        Debug.Log(freeArcherGoblins.Count);
     }
-
+    void SpawnNormalArcherSpecificPos(Vector3 pos, int col)
+    {
+        if (freeNormalGoblins.Count <= 0) return;
+        ArcherGoblin goblin = freeArcherGoblins[0];
+        usedArcherGoblins.Add(goblin);
+        goblin.Spawn(pos, col);
+        goblin.UpdateAllPlayerPos();
+        freeArcherGoblins.RemoveAt(0);
+    }
 
     public void Recycle<T>(T goblin) where T : IEnemyUnit {
         if (goblin is NormalGoblin)
@@ -162,5 +171,6 @@ public class GoblinManager : MonoBehaviour
         playerMove[id] = true;
         playerPos[id] = pos;
     }
+
 
 }
