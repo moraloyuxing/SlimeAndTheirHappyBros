@@ -64,11 +64,11 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     }
 
     // Update is called once per frame
-    public void Update()
+    public void Update(float dt)
     {
         if (Input.GetKeyDown(KeyCode.S)) ResetUnit();
 
-        deltaTime = Time.deltaTime;
+        deltaTime = dt;
         selfPos = transform.position;
 
         nearstPlayerDist = 500.0f;
@@ -113,6 +113,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                 }
                 else if (aniInfo.normalizedTime >= 0.95f)
                 {
+                    Debug.Log("end attackkkkkk");
                     OverAttackDetectDist();
                 }
             }

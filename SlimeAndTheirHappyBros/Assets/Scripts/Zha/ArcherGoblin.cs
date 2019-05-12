@@ -5,7 +5,11 @@ using UnityEngine;
 
 public class ArcherGoblin : GoblinBase, IEnemyUnit
 {
-    Transform shootPos;
+    bool hasShoot = false;
+    int delayShoot = 0;
+    float scaleX;
+    Vector3 shootPos;
+    Transform shootLauncher;
 
     // Start is called before the first frame update
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -14,7 +18,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         animator = t.GetComponent<Animator>();
         image = t.Find("image");
         renderer = image.GetComponent<SpriteRenderer>();
-        shootPos = t.Find("shootPos");
+        shootLauncher = t.Find("shootPos");
         imgScale = image.localScale.x;
         hp = info.hp;
         atkValue = info.atkValue;
@@ -32,7 +36,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         animator = t.GetComponent<Animator>();
         image = t.Find("image");
         renderer = image.GetComponent<SpriteRenderer>();
-        shootPos = t.Find("shootPos");
+        shootLauncher = t.Find("shootPos");
         imgScale = image.localScale.x;
         hp = info.hp;
         atkValue = info.atkValue;
@@ -59,7 +63,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     }
 
     // Update is called once per frame
-    public void Update()
+    public void Update(float dt)
     {
         if (Input.GetKeyDown(KeyCode.S)) ResetUnit();
 
@@ -85,36 +89,53 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
 
     public override void Attack()
     {
-        if (firstInState)
-        {
-            Debug.Log("start attack");
-            animator.SetInteger("state", 2);
-            animator.speed = 1.0f;
-            firstInState = false;
 
-            moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
-            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-            int dir = 0;
-            if (moveFwdDir.z < -0.6f) dir = 0;
-            else if (moveFwdDir.z > 0.6f) dir = 2;
-            else dir = 1;
-            animator.SetInteger("shootDir", dir);
-            //atkCol.localPosition = new Vector3(scaleX * atkColOffset, atkCol.localPosition.y, atkCol.localPosition.z);
+
+        if (firstInState )
+        {
+
+            if (delayShoot == 0) {
+                Debug.Log("sssstart attack ");
+                moveFwdDir = (goblinManager.PlayerPos[targetPlayer] - selfPos).normalized;
+                scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                Debug.Log("scale   " + scaleX);
+                image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                int dir = 0;
+                if (moveFwdDir.z < -0.6f) dir = 0;
+                else if (moveFwdDir.z > 0.6f) dir = 2;
+                else dir = 1;
+
+                animator.speed = 1.0f;
+                animator.SetInteger("shootDir", dir);
+                animator.SetInteger("state", 2);
+                animator.SetTrigger("attackOver");
+            } 
+            else if (delayShoot == 2) {
+                Debug.Log("first oooover ");
+                shootPos = new Vector3(scaleX * shootLauncher.localPosition.x, shootLauncher.localPosition.y, shootLauncher.localPosition.z);
+                moveFwdDir = goblinManager.PlayerPos[targetPlayer] - (selfPos + shootPos);
+                hasShoot = false;
+                firstInState = false;
+
+            }
+            Debug.Log("delayyyyy plus");
+            delayShoot++;
         }
         else
         {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsName("DownAttack") || aniInfo.IsName("ForwardAttack") || aniInfo.IsName("UpAttack"))
+            if (aniInfo.IsTag("attack"))
             {
-                //if (aniInfo.normalizedTime >= 0.46f && aniInfo.normalizedTime < 0.77f)
-                //{
-                //    //Debug.DrawRay(selfPos,moveFwdDir, Color.red, 3.0f);
-                //    float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f : speed * 3.0f;
-                //    transform.position += deltaTime * atkSpeed * moveFwdDir;
-                //}
-                if (aniInfo.normalizedTime >= 0.95f)
+
+                if (!hasShoot && aniInfo.normalizedTime > 0.64f) {
+                    Debug.Log("start sssssssssssshooot");
+                    hasShoot = true;
+                    goblinManager.UseArrow(transform.position + shootPos, moveFwdDir);
+                }
+                if (aniInfo.normalizedTime >= 0.99f)
                 {
+                    Debug.Log("verrrrrr attack");
+                    delayShoot = 0;
                     OverAttackDetectDist();
                 }
             }

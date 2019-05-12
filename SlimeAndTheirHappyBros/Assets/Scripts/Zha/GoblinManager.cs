@@ -52,6 +52,7 @@ public class GoblinManager : MonoBehaviour
     public struct PoolUnitInfo {
         public string typeName;
         public float speed;
+        public float height;
     }
     public PoolUnitInfo[] poolUnitInfo;
 
@@ -98,8 +99,9 @@ public class GoblinManager : MonoBehaviour
         {
             goblin = goblins.GetChild(i);
             freeGoblinArrows.Add(new GoblinArrow());
-            freeGoblinArrows[i].Init(goblin, this);
+            freeGoblinArrows[i].Init(goblin, this, poolUnitInfo[0]);
             goblinArrowsDic.Add(goblin.name, freeGoblinArrows[i]);
+            goblin.gameObject.SetActive(false);
         }
     }
     void Start()
@@ -110,6 +112,8 @@ public class GoblinManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float dt = Time.deltaTime;
+
         if (Input.GetKeyDown(KeyCode.A)) {
             SpawnNormalGoblinRandomPos(-1);
         }
@@ -119,12 +123,26 @@ public class GoblinManager : MonoBehaviour
         }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
-            usedNormalGoblins[index].Update();
+            usedNormalGoblins[index].Update(dt);
         }
         for (index = 0; index < usedArcherGoblins.Count; index++)
         {
-            usedArcherGoblins[index].Update();
+            usedArcherGoblins[index].Update(dt);
         }
+
+        if (Input.GetKeyDown(KeyCode.X)) {
+            if (freeGoblinArrows.Count <= 0) return;
+            Debug.Log("spawn arrow");
+            GoblinArrow arrow = freeGoblinArrows[0];
+            usedGoblinArrows.Add(arrow);
+            arrow.ToActive(new Vector3(-14.0f, 1.65f, -18.0f), new Vector3(0,0,-1).normalized);
+            freeGoblinArrows.Remove(arrow);
+        }
+
+        for (index = 0; index < usedGoblinArrows.Count; index++) {
+            usedGoblinArrows[index].Update(dt);
+        }
+
 
         playerMove[0] = false;
         playerMove[1] = false;
@@ -183,6 +201,20 @@ public class GoblinManager : MonoBehaviour
             freeArcherGoblins.Add(goblin as ArcherGoblin);
             Debug.Log(freeArcherGoblins.Count);
         }
+    }
+
+    public void UseArrow(Vector3 pos, Vector3 dir) {
+        if (freeGoblinArrows.Count <= 0) return;
+        GoblinArrow arrow = freeGoblinArrows[0];
+        usedGoblinArrows.Add(arrow);
+        arrow.ToActive(pos, dir);
+        freeGoblinArrows.Remove(arrow);
+    }
+
+    public void RecycleArrow(GoblinArrow arrow) {
+        freeGoblinArrows.Add(arrow);
+        usedGoblinArrows.Remove(arrow);
+        
     }
 
 

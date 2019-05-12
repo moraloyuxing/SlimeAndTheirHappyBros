@@ -12,7 +12,7 @@ public interface IEnemyUnit
     void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager);
     void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager);
     void Spawn(Vector3 pos, int col);
-    void Update();
+    void Update(float dt);
     void ResetUnit();
 
     //void Spawn(Vector2 pos, int col);
@@ -37,9 +37,9 @@ public interface IHurtSystem {
 
 public interface IEnemyObjectPoolUnit
 {
-    void Init(Transform init, GoblinManager manager);
-    void Update();
-    void ToActive(float _speed, Vector3 _pos, Vector3 _dir);
+    void Init(Transform t, GoblinManager manager,GoblinManager.PoolUnitInfo info);
+    void Update(float dt);
+    void ToActive(Vector3 _pos, Vector3 _dir);
     void ResetUnit();
 
 }
