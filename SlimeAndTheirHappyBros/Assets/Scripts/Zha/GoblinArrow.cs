@@ -6,7 +6,7 @@ public class GoblinArrow : IEnemyObjectPoolUnit
 {
     bool fallGround = false;
     float time,flyTime, lifeTime = 3.0f, deltaTime;
-    float speed, addSpeed = 3.0f, height, degree;
+    float speed, addSpeed = 3.0f, degree, length;
     Vector3 moveDir;
     Collider collider;
     Transform transform;
@@ -19,8 +19,7 @@ public class GoblinArrow : IEnemyObjectPoolUnit
         transform = t;
         goblinManager = manager;
         speed = info.speed;
-        height = info.height;
-        flyTime = Mathf.Sqrt((2.0f * height) / addSpeed);
+        length = info.length;
         collider = transform.GetComponent<Collider>();
         
     }
@@ -28,11 +27,16 @@ public class GoblinArrow : IEnemyObjectPoolUnit
     {
         transform.gameObject.SetActive(true);
         transform.position = pos;
-        moveDir = dir;
-        degree = (Mathf.Atan2(moveDir.z, moveDir.x) ) * Mathf.Rad2Deg + 90.0f;
+        moveDir = dir.normalized;
+        Vector3 rot = new Vector3(dir.x, 0, dir.z).normalized;
+        float baseD = -20.0f * (1.0f-Mathf.Abs(rot.x - rot.z));
+        if (Mathf.Sign(rot.x * rot.z) < .0f) baseD += 5.0f;
+        degree = (Mathf.Atan2(rot.z, rot.x) ) * Mathf.Rad2Deg + 90.0f + baseD;
         transform.localRotation = Quaternion.Euler(25,0,degree);
         collider.enabled = true;
 
+        float offset = (Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
+        flyTime =Mathf.Sqrt( dir.x * dir.x + dir.z * dir.z)* length + offset;
     }
     public void Update(float dt) {
         deltaTime = dt;
@@ -43,7 +47,7 @@ public class GoblinArrow : IEnemyObjectPoolUnit
             //transform.position += deltaTime * new Vector3(moveDir.x * speed, yOffset, moveDir.z * speed);
             //transform.localRotation = Quaternion.Euler(25 + yOffset * -Mathf.Abs(moveDir.z) * 15.0f, 0, degree + yOffset * moveDir.x * 15.0f); //拋物線角度
 
-            transform.position += deltaTime* moveDir;
+            transform.position += deltaTime* moveDir*speed;
 
             //if (moveDir.x < .0f) yOffset *= -1.0f;
             //transform.localRotation = Quaternion.Euler(25, 0, degree + yOffset*moveDir.x*15.0f);
@@ -51,11 +55,6 @@ public class GoblinArrow : IEnemyObjectPoolUnit
 
 
 
-            //if (time > 0.5f*lifeTime) {
-            //    if (moveDir.x < .0f) degree += 150.0f*moveDir.x*deltaTime;
-            //    else degree -= 150.0f*moveDir.x*deltaTime;
-            //    transform.localRotation = Quaternion.Euler(25, 0, degree);
-            //}
             //if (time > 0.5f * lifeTime)
             //{
             //    if (moveDir.x < .0f) degree += 200.0f * moveDir.x * deltaTime;

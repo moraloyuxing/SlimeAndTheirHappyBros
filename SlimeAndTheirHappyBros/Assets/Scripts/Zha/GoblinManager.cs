@@ -52,7 +52,7 @@ public class GoblinManager : MonoBehaviour
     public struct PoolUnitInfo {
         public string typeName;
         public float speed;
-        public float height;
+        public float length;
     }
     public PoolUnitInfo[] poolUnitInfo;
 

@@ -86,6 +86,27 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
 
     }
 
+    public override void SetState()
+    {
+        delayShoot = 0;
+        inStateTime = 0.0f;
+        firstInState = true;
+        float opp = Random.Range(.0f, 10.0f);
+        if (opp > 7.0f)
+        {
+            if (curState == GoblinState.idle) curState = GoblinState.ramble;
+            else if (curState == GoblinState.ramble) curState = GoblinState.idle;
+            else curState = GoblinState.idle;
+        }
+    }
+    public override void SetState(GoblinState state)
+    {
+        delayShoot = 0;
+        inStateTime = 0.0f;
+        firstInState = true;
+        curState = state;
+    }
+
 
     public override void Attack()
     {
@@ -95,10 +116,10 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         {
 
             if (delayShoot == 0) {
-                Debug.Log("sssstart attack ");
+                //Debug.Log("sssstart attack ");
                 moveFwdDir = (goblinManager.PlayerPos[targetPlayer] - selfPos).normalized;
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-                Debug.Log("scale   " + scaleX);
+                //Debug.Log("scale   " + scaleX);
                 image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                 int dir = 0;
                 if (moveFwdDir.z < -0.6f) dir = 0;
@@ -111,14 +132,14 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
                 animator.SetTrigger("attackOver");
             } 
             else if (delayShoot == 2) {
-                Debug.Log("first oooover ");
+                //Debug.Log("first oooover ");
                 shootPos = new Vector3(scaleX * shootLauncher.localPosition.x, shootLauncher.localPosition.y, shootLauncher.localPosition.z);
                 moveFwdDir = goblinManager.PlayerPos[targetPlayer] - (selfPos + shootPos);
                 hasShoot = false;
                 firstInState = false;
 
             }
-            Debug.Log("delayyyyy plus");
+            //Debug.Log("delayyyyy plus");
             delayShoot++;
         }
         else
@@ -128,13 +149,13 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
             {
 
                 if (!hasShoot && aniInfo.normalizedTime > 0.64f) {
-                    Debug.Log("start sssssssssssshooot");
+                    //Debug.Log("start sssssssssssshooot");
                     hasShoot = true;
                     goblinManager.UseArrow(transform.position + shootPos, moveFwdDir);
                 }
                 if (aniInfo.normalizedTime >= 0.99f)
                 {
-                    Debug.Log("verrrrrr attack");
+                    //Debug.Log("verrrrrr attack");
                     delayShoot = 0;
                     OverAttackDetectDist();
                 }

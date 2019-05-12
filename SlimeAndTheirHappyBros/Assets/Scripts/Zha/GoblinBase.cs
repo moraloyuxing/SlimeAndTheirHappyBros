@@ -56,7 +56,7 @@ public class GoblinBase
         }
     }
 
-    public void SetState()
+    public virtual void SetState()
     {
         inStateTime = 0.0f;
         firstInState = true;
@@ -68,7 +68,7 @@ public class GoblinBase
             else curState = GoblinState.idle;
         }
     }
-    public void SetState(GoblinState state) {
+    public virtual void SetState(GoblinState state) {
         inStateTime = 0.0f;
         firstInState = true;
         curState = state;
@@ -282,7 +282,7 @@ public class GoblinBase
                 SetState(GoblinState.hurt);
                 moveFwdDir = -Vector3.forward;
             }
-            Debug.Log(colliders[i].name);
+            //Debug.Log(colliders[i].name);
             i++;
         }
     }
@@ -291,12 +291,18 @@ public class GoblinBase
     {
         if (firstInState)
         {
+            Debug.Log("ggggggeeeet hurt");
             firstInState = false;
-            animator.SetTrigger("hurt");
+            //animator.SetTrigger("hurt");
+            animator.Play("hurt");
+            animator.SetInteger("state",3);
         }
         else {
             transform.position += 10.0f * deltaTime * moveFwdDir;
-            if (inStateTime >= 0.45f) {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
+            if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f) {
+                Debug.Log("hurrrrt  over");
                 OverAttackDetectDist();
             }
         }

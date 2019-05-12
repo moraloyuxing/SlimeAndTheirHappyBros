@@ -90,8 +90,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            Debug.Log("start attack");
             animator.SetInteger("state", 2);
+
             animator.speed = 1.0f;
             firstInState = false;
 
@@ -111,9 +111,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                     float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f : speed * 3.0f;
                     transform.position += deltaTime * atkSpeed * moveFwdDir;
                 }
-                else if (aniInfo.normalizedTime >= 0.95f)
+                else if (aniInfo.normalizedTime >= 0.99f)
                 {
-                    Debug.Log("end attackkkkkk");
+                    animator.SetTrigger("attackOver");
                     OverAttackDetectDist();
                 }
             }
