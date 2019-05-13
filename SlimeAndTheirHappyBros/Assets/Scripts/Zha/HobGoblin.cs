@@ -1,25 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using System;
 
-public class NormalGoblin: GoblinBase, IEnemyUnit
+public class HobGoblin : GoblinBase, IEnemyUnit
 {
-    float atkColOffset;
-    Transform atkCol;
+    float[] atkColOffset = new float[2];
+    Transform[] atkCol = new Transform[2];
 
-    //TestPlayerManager playerManager;
-    //Player_Manager playerManager;
 
     // Start is called before the first frame update
-    public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
+    public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
+    {
         transform = t;
         animator = t.GetComponent<Animator>();
         image = t.Find("image");
         renderer = image.GetComponent<SpriteRenderer>();
-        atkCol = t.Find("AtkCollider");
+        atkCol[0] = t.Find("AtkCollider");
+        atkCol[1] = t.Find("AtkCollider (1)");
         imgScale = image.localScale.x;
-        atkColOffset = atkCol.localPosition.x;
+        atkColOffset[0] = atkCol[0].localPosition.x;
+        atkColOffset[1] = atkCol[1].localPosition.x;
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -36,9 +36,11 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         animator = t.GetComponent<Animator>();
         image = t.Find("image");
         renderer = image.GetComponent<SpriteRenderer>();
-        atkCol = t.Find("AtkCollider");
+        atkCol[0] = t.Find("AtkCollider");
+        atkCol[1] = t.Find("AtkCollider (1)");
         imgScale = image.localScale.x;
-        atkColOffset = atkCol.localPosition.x;
+        atkColOffset[0] = atkCol[0].localPosition.x;
+        atkColOffset[1] = atkCol[1].localPosition.x;
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -53,7 +55,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
     public void Spawn(Vector3 pos, int col)
     {
-        if (col <= 0) {
+        if (col <= 0)
+        {
             col = Random.Range(1, 6);
         }
         transform.gameObject.SetActive(true);
@@ -72,7 +75,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         selfPos = transform.position;
 
         nearstPlayerDist = 500.0f;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 4; i++)
+        {
             playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
             if (playerDist[i] < nearstPlayerDist)
             {
@@ -81,8 +85,24 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             }
             //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
-        if(hp > 0)DetectGethurt();
+        DetectGethurt();
         StateMachine();
+    }
+
+    public override void DetectGethurt()
+    {
+        Collider[] colliders = Physics.OverlapBox(image.position, new Vector3(0.4f, 2.9f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
+        int i = 0;
+        while (i < colliders.Length)
+        {
+            if (i == 0 && curState != GoblinState.hurt && curState != GoblinState.attack)
+            {
+                SetState(GoblinState.hurt);
+                moveFwdDir = -Vector3.forward;
+            }
+            //Debug.Log(colliders[i].name);
+            i++;
+        }
     }
 
 
@@ -98,7 +118,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
             float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
             image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-            atkCol.localPosition = new Vector3(scaleX * atkColOffset, atkCol.localPosition.y, atkCol.localPosition.z);
+            atkCol[0].localPosition = new Vector3(scaleX * atkColOffset[0], atkCol[0].localPosition.y, atkCol[0].localPosition.z);
         }
         else
         {
@@ -120,9 +140,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         }
     }
 
-    public void ResetUnit() {
+    public void ResetUnit()
+    {
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }
 }
-

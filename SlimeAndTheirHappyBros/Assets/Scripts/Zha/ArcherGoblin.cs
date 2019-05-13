@@ -81,7 +81,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
             }
             //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
-        DetectGethurt();
+        if (hp > 0) DetectGethurt();
         StateMachine();
 
     }

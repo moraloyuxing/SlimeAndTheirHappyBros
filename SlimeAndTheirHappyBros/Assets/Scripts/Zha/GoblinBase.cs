@@ -205,7 +205,6 @@ public class GoblinBase
     {
         if (firstInState)
         {
-            Debug.Log("start chase");
             animator.SetInteger("state", 1);
             animator.speed = 2.0f;
             firstInState = false;
