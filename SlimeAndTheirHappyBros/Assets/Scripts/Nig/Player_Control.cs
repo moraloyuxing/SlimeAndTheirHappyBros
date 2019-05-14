@@ -73,8 +73,8 @@ public class Player_Control : MonoBehaviour{
 
     void Start(){
         WhichPlayer = gameObject.name;
-        ray_horizontal = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
-        ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.0f));
+        ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
+        ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
         anim = GetComponent<Animator>();
     }
 
@@ -85,7 +85,7 @@ public class Player_Control : MonoBehaviour{
         anim.SetBool("Walking", Walking);
 
         //受傷判定
-        SlimeGetHurt();
+        if(StopDetect == false)SlimeGetHurt();
 
         //移動&短衝刺
         xAix = Input.GetAxis(WhichPlayer + "Horizontal");
@@ -118,25 +118,19 @@ public class Player_Control : MonoBehaviour{
             //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
-                Player_Icon.transform.localPosition = new Vector3(0.85f, 0.5f, 0.0f);
+                Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
                 Hint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
             }
             //Left_CanMove = false;
-            Right_CanMove = true;
-            ray_horizontal = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.0f)) {
+            //Right_CanMove = true;
+            Left_CanMove = true;
+
+            ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal,3.0f)) {
                 if (hit_horizontal.transform.tag == "Border"){
                     Right_CanMove = false;
                 }
-
-                //待移除
-                else if (hit_horizontal.transform.tag == "Attack" && StopDetect == false){
-                    Destroy(hit_horizontal.transform.gameObject);
-                    GetComponent<Animator>().Play("Slime_Hurt");
-                    HurtPriorityOn();
-                }
-
             }
             else { Right_CanMove = true; }
         }
@@ -145,73 +139,48 @@ public class Player_Control : MonoBehaviour{
             //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(-1.3f, 1.3f, 1.3f);
-                Player_Icon.transform.localPosition = new Vector3(-0.85f, 0.5f, 0.0f);
+                Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(-0.55f, 0.55f, 0.55f);
                 Hint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
             }
 
             //Right_CanMove = false;
-            Left_CanMove = true;
-            ray_horizontal = new Ray(transform.position, new Vector3(-2.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.0f)){
+            //Left_CanMove = true;
+            Right_CanMove = true;
+            ray_horizontal = new Ray(transform.position, new Vector3(-3.0f, 0.0f, 0.0f));
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal,3.0f)){
                 if (hit_horizontal.transform.tag == "Border"){
                     Left_CanMove = false;
                 }
-
-                //待移除
-                else if (hit_horizontal.transform.tag == "Attack" && StopDetect == false){
-                    Destroy(hit_horizontal.transform.gameObject);
-                    GetComponent<Animator>().Play("Slime_Hurt");
-                    HurtPriorityOn();
-                }
-
             }
             else { Left_CanMove = true; }
         }
 
         if (zAix > 0.0f) {
-            Up_CanMove = true;
+            Down_CanMove = true;
             //Down_CanMove = false;
-            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.0f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical, 2.0f)){
+            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
+            if (Physics.Raycast(ray_vertical, out hit_vertical, 3.0f)){
                 if (hit_vertical.transform.tag == "Border"){
                     Up_CanMove = false;
-                }
-
-                //待移除
-                else if (hit_vertical.transform.tag == "Attack" && StopDetect  == false){
-                    Destroy(hit_vertical.transform.gameObject);
-                    GetComponent<Animator>().Play("Slime_Hurt");
-                    HurtPriorityOn();
                 }
             }
             else {Up_CanMove = true;}
         }
 
         if (zAix < 0.0f) {
-            Down_CanMove = true;
+            Up_CanMove = true;
             //Up_CanMove = false;
-            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.0f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical,2.0f)){
+            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -3.0f));
+            if (Physics.Raycast(ray_vertical, out hit_vertical,3.0f)){
                 if (hit_vertical.transform.tag == "Border"){
                     Down_CanMove = false;
-                }
-
-                //待移除
-                else if (hit_vertical.transform.tag == "Attack" && StopDetect == false) {
-                    Destroy(hit_vertical.transform.gameObject);
-                    GetComponent<Animator>().Play("Slime_Hurt");
-                    HurtPriorityOn();
                 }
             }
             else {Down_CanMove = true;}
         }
 
         if (ExtraPriority == false && DeathPriority == false) {
-            //if (Up_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f * DashSpeed);
-            //if (Down_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f * DashSpeed);
-            //if (Left_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f * DashSpeed, transform.position.y, transform.position.z);
-            //if (Right_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f * DashSpeed, transform.position.y, transform.position.z);
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
             if (!Left_CanMove || !Right_CanMove) xAix = .0f;
             transform.position += new Vector3(xAix, 0, zAix).normalized * DashSpeed*Time.deltaTime * 5.0f;
@@ -220,16 +189,7 @@ public class Player_Control : MonoBehaviour{
         //衝刺遞減
         if (DuringDashLerp == true) {
             DashSpeed = Mathf.Lerp(DashSpeed, 0.5f, testlerp);
-            Debug.Log(DashSpeed);
         }
-
-        //if (DashSpeed > 1.0f){
-        //    DashSpeed = DashSpeed - Time.deltaTime;
-        //    if (DashSpeed < 0.5f){
-        //        OnDash = false;
-        //        DashSpeed = 1.0f;
-        //    }
-        //}
 
         //攻擊方向旋轉
         xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
@@ -241,7 +201,7 @@ public class Player_Control : MonoBehaviour{
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
-            Attack_Arrow.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle_toLerp * testrot);
+            Attack_Arrow.transform.localEulerAngles = new Vector3(65.0f, 0.0f, angle_toLerp * testrot);
         }
 
         //攻擊
@@ -312,7 +272,7 @@ public class Player_Control : MonoBehaviour{
 
     //設置受傷&死亡最高優先權
     public void SlimeGetHurt() {
-        Collider[]colliders = Physics.OverlapBox(Player_Sprite.transform.position, new Vector3(0.4f, 2.9f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
+        Collider[]colliders = Physics.OverlapBox(Player_Sprite.transform.position, new Vector3(2.3f, 1.7f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
         int i = 0;
         while (i < colliders.Length) {
             if (i == 0) {
@@ -364,7 +324,7 @@ public class Player_Control : MonoBehaviour{
     //呼叫水花濺起
     public void PondEffect() {
         //Player_Sprite.GetComponent<SpriteRenderer>().color = SplashEffect.GetComponent<SpriteRenderer>().color;
-
+        Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
     }
 
