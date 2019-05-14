@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Player_Control : MonoBehaviour{
 
+    public float testlerp = 0.1f;
+
     //確定為第幾位玩家&動畫優先權
     public GameObject Player_Manager;
     public GameObject Player_Sprite;
@@ -30,6 +32,7 @@ public class Player_Control : MonoBehaviour{
     bool Down_CanMove = true;
     bool Left_CanMove = true;
     bool Right_CanMove = true;
+    bool Walking = false;
 
     //攻擊方向旋轉
     public GameObject Attack_Arrow;
@@ -63,54 +66,71 @@ public class Player_Control : MonoBehaviour{
     bool left_bumper = false;
     bool OnDash = false;
     public float DashSpeed = 1.0f;
+    bool DuringDashLerp = false;
+
+    //動畫插斷
+    Animator anim;
 
     void Start(){
         WhichPlayer = gameObject.name;
         ray_horizontal = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.0f));
+        anim = GetComponent<Animator>();
     }
 
     void Update(){
         Debug.DrawRay(ray_horizontal.origin,ray_horizontal.direction,Color.cyan);
         Debug.DrawRay(ray_vertical.origin, ray_vertical.direction, Color.cyan);
 
+        anim.SetBool("Walking", Walking);
+
+        //受傷判定
+        SlimeGetHurt();
+
         //移動&短衝刺
         xAix = Input.GetAxis(WhichPlayer + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
         left_bumper = Input.GetButtonDown(WhichPlayer + "Dash");
-        if (left_bumper == true){
-            DashSpeed = 2.5f;
+        if (left_bumper == true && OnDash == false){
+            DashSpeed = 6.0f;
             OnDash = true;
+            DuringDashLerp = true;
         }
 
         if (AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
             if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f){
-                if (OnDash == false) {GetComponent<Animator>().Play("Slime_Walk");} 
+                if (OnDash == false && DashSpeed!=2.5f) {/*GetComponent<Animator>().Play("Slime_Walk");*/ Walking = true; } 
                 else if (OnDash == true){
+                    Walking = false;
                     if (Mathf.Abs(xAix) >= Mathf.Abs(zAix)) GetComponent<Animator>().Play("Slime_DashFoward");
                     else if (Mathf.Abs(xAix) < Mathf.Abs(zAix)){
                         if (zAix >= 0) GetComponent<Animator>().Play("Slime_DashUp");
                         else GetComponent<Animator>().Play("Slime_DashDown");
                     }
+                    OnDash = false;
                 }
                 Player_Manager.SendMessage(WhichPlayer + "rePos", transform.position);
             }
-            //else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
+            else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) /*GetComponent<Animator>().Play("Slime_Idle")*/Walking = false;
         }
 
         if (xAix > 0.0f) {
-            //加個轉向
-            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            Player_Icon.transform.localPosition = new Vector3(0.85f, 0.5f, 0.0f);
-            Player_Icon.transform.localScale = new Vector3(0.25f, 0.25f, 0.25f);
-            Hint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
-            Left_CanMove = false;
+            //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
+            if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
+                transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+                Player_Icon.transform.localPosition = new Vector3(0.85f, 0.5f, 0.0f);
+                Player_Icon.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
+                Hint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
+            }
+            //Left_CanMove = false;
+            Right_CanMove = true;
             ray_horizontal = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.0f)) {
                 if (hit_horizontal.transform.tag == "Border"){
                     Right_CanMove = false;
                 }
 
+                //待移除
                 else if (hit_horizontal.transform.tag == "Attack" && StopDetect == false){
                     Destroy(hit_horizontal.transform.gameObject);
                     GetComponent<Animator>().Play("Slime_Hurt");
@@ -122,17 +142,23 @@ public class Player_Control : MonoBehaviour{
         }
 
         if (xAix < 0.0f) {
-            transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
-            Player_Icon.transform.localPosition = new Vector3(-0.85f, 0.5f, 0.0f);
-            Player_Icon.transform.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
-            Hint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
-            Right_CanMove = false;
+            //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
+            if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
+                transform.localScale = new Vector3(-1.3f, 1.3f, 1.3f);
+                Player_Icon.transform.localPosition = new Vector3(-0.85f, 0.5f, 0.0f);
+                Player_Icon.transform.localScale = new Vector3(-0.55f, 0.55f, 0.55f);
+                Hint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
+            }
+
+            //Right_CanMove = false;
+            Left_CanMove = true;
             ray_horizontal = new Ray(transform.position, new Vector3(-2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.0f)){
                 if (hit_horizontal.transform.tag == "Border"){
                     Left_CanMove = false;
                 }
 
+                //待移除
                 else if (hit_horizontal.transform.tag == "Attack" && StopDetect == false){
                     Destroy(hit_horizontal.transform.gameObject);
                     GetComponent<Animator>().Play("Slime_Hurt");
@@ -144,13 +170,15 @@ public class Player_Control : MonoBehaviour{
         }
 
         if (zAix > 0.0f) {
-            Down_CanMove = false;
+            Up_CanMove = true;
+            //Down_CanMove = false;
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical, 2.0f)){
                 if (hit_vertical.transform.tag == "Border"){
                     Up_CanMove = false;
                 }
 
+                //待移除
                 else if (hit_vertical.transform.tag == "Attack" && StopDetect  == false){
                     Destroy(hit_vertical.transform.gameObject);
                     GetComponent<Animator>().Play("Slime_Hurt");
@@ -161,38 +189,47 @@ public class Player_Control : MonoBehaviour{
         }
 
         if (zAix < 0.0f) {
-            Up_CanMove = false;
+            Down_CanMove = true;
+            //Up_CanMove = false;
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical,2.0f)){
                 if (hit_vertical.transform.tag == "Border"){
                     Down_CanMove = false;
                 }
 
+                //待移除
                 else if (hit_vertical.transform.tag == "Attack" && StopDetect == false) {
                     Destroy(hit_vertical.transform.gameObject);
                     GetComponent<Animator>().Play("Slime_Hurt");
                     HurtPriorityOn();
                 }
-
             }
             else {Down_CanMove = true;}
         }
 
         if (ExtraPriority == false && DeathPriority == false) {
-            if (Up_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f * DashSpeed);
-            if (Down_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f * DashSpeed);
-            if (Left_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f * DashSpeed, transform.position.y, transform.position.z);
-            if (Right_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f * DashSpeed, transform.position.y, transform.position.z);
+            //if (Up_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f * DashSpeed);
+            //if (Down_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f * DashSpeed);
+            //if (Left_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f * DashSpeed, transform.position.y, transform.position.z);
+            //if (Right_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f * DashSpeed, transform.position.y, transform.position.z);
+            if (!Up_CanMove || !Down_CanMove) zAix = .0f;
+            if (!Left_CanMove || !Right_CanMove) xAix = .0f;
+            transform.position += new Vector3(xAix, 0, zAix).normalized * DashSpeed*Time.deltaTime * 5.0f;
         }
 
         //衝刺遞減
-        if (DashSpeed > 1.0f) {
-            DashSpeed = DashSpeed - Time.deltaTime;
-            if (DashSpeed < 1.0f) {
-                OnDash = false;
-                DashSpeed = 1.0f;
-            }
+        if (DuringDashLerp == true) {
+            DashSpeed = Mathf.Lerp(DashSpeed, 0.5f, testlerp);
+            Debug.Log(DashSpeed);
         }
+
+        //if (DashSpeed > 1.0f){
+        //    DashSpeed = DashSpeed - Time.deltaTime;
+        //    if (DashSpeed < 0.5f){
+        //        OnDash = false;
+        //        DashSpeed = 1.0f;
+        //    }
+        //}
 
         //攻擊方向旋轉
         xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
@@ -274,17 +311,42 @@ public class Player_Control : MonoBehaviour{
     }
 
     //設置受傷&死亡最高優先權
-    public void HurtPriorityOn() {
-        ExtraPriority = true;
-        StopDetect = true;
-        musouTime = Time.time;
-        Damage_Count++;
-        for (int i = 0; i < Damage_Count; i++) { Personal_HP[i].SetActive(false); }
-        if (Damage_Count == 3) {
-            DeathPriority = true;
-            ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
-            GetComponent<Animator>().Play("Slime_Death");
+    public void SlimeGetHurt() {
+        Collider[]colliders = Physics.OverlapBox(Player_Sprite.transform.position, new Vector3(0.4f, 2.9f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
+        int i = 0;
+        while (i < colliders.Length) {
+            if (i == 0) {
+                Destroy(colliders[i]);//之後要移除
+                GetComponent<Animator>().Play("Slime_Hurt");
+                ExtraPriority = true;
+                StopDetect = true;
+                musouTime = Time.time;
+                Damage_Count++;
+                for (int k = 0; k < Damage_Count; k++) { Personal_HP[k].SetActive(false); }
+                if (Damage_Count == 3){
+                    DeathPriority = true;
+                    ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
+                    GetComponent<Animator>().Play("Slime_Death");
+                }
+            }
+            i++;
         }
+    }
+
+
+
+
+    public void HurtPriorityOn() {
+        //ExtraPriority = true;
+        //StopDetect = true;
+        //musouTime = Time.time;
+        //Damage_Count++;
+        //for (int i = 0; i < Damage_Count; i++) { Personal_HP[i].SetActive(false); }
+        //if (Damage_Count == 3) {
+        //    DeathPriority = true;
+        //    ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
+        //    GetComponent<Animator>().Play("Slime_Death");
+        //}
     }
 
     public void HurtPriorityOff(){
@@ -292,10 +354,18 @@ public class Player_Control : MonoBehaviour{
         AttackPriority = false;
     }
 
+    //短衝刺設定
+    public void DashEnd() {
+        DashSpeed = 1.0f;
+        DuringDashLerp = false;
+    }
+
 
     //呼叫水花濺起
     public void PondEffect() {
-        Player_Sprite.GetComponent<SpriteRenderer>().color = SplashEffect.GetComponent<SpriteRenderer>().color;
+        //Player_Sprite.GetComponent<SpriteRenderer>().color = SplashEffect.GetComponent<SpriteRenderer>().color;
+
+        Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
     }
 
     public void HideSplash() {

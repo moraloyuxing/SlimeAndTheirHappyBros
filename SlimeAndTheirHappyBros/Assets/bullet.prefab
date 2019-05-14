@@ -119,5 +119,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aabc36013b6d1b442ac9dee8b107f124, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  WhichPlayer: {fileID: 0}
   speed: 10
+  FadeTime: 2
   recoveryTime: 3
