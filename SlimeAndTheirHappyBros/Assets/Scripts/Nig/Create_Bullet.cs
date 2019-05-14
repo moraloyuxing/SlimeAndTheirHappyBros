@@ -13,7 +13,7 @@ public class Create_Bullet : MonoBehaviour{
     }
 
     void ShootBullet(Vector3 current_angle) {
-        bulletPool.ReUse(Player.transform.position, Hint_Arrow.transform.rotation, current_angle);
+        bulletPool.ReUse(Player.transform.position, Hint_Arrow.transform.rotation, current_angle,Player);
     }
 
 }

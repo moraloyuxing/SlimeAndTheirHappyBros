@@ -20,14 +20,14 @@ public class Object_Pool : MonoBehaviour{
     private Queue<GameObject> _MSlimepool = new Queue<GameObject>();
 
     void Awake(){
-        //生成子彈
-        for (int cnt = 0; cnt < initailsize; cnt++){
-            GameObject clone_bullet = Instantiate(prefabBullet) as GameObject;
-            clone_bullet.GetComponent<Bullet_Behaviour>().SetPool(this);
-            _pool.Enqueue(clone_bullet);
-            clone_bullet.transform.SetParent(Group_Bullet.transform);
-            clone_bullet.SetActive(false);
-        }
+        //生成子彈(暫時停用，射擊應會有bug)
+        //for (int cnt = 0; cnt < initailsize; cnt++){
+        //    GameObject clone_bullet = Instantiate(prefabBullet) as GameObject;
+        //    clone_bullet.GetComponent<Bullet_Behaviour>().SetPool(this);
+        //    _pool.Enqueue(clone_bullet);
+        //    clone_bullet.transform.SetParent(Group_Bullet.transform);
+        //    clone_bullet.SetActive(false);
+        //}
 
         //生成合體史萊姆
         for (int cnt = 0; cnt < ini; cnt++){
@@ -43,13 +43,13 @@ public class Object_Pool : MonoBehaviour{
     }
 
     //子彈
-    public void ReUse(Vector3 position, Quaternion rotation, Vector3 current_angle){
+    public void ReUse(Vector3 position, Quaternion rotation, Vector3 current_angle,GameObject xSlime){
         if (_pool.Count > 0){
             GameObject reuse = _pool.Dequeue();
             reuse.transform.position = position;
             reuse.transform.rotation = rotation;
             reuse.SetActive(true);
-            reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle);
+            reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle,xSlime);
         }
 
         else{
