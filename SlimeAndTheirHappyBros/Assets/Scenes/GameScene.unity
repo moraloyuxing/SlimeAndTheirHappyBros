@@ -505,6 +505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d298f50f893a1f48ab02b60672c31a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testlerp: 0.1
   Player_Manager: {fileID: 1636010432}
   Player_Sprite: {fileID: 1313979794}
   SplashEffect: {fileID: 184661429}
@@ -1856,6 +1857,85 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1802553086}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &267065904
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 267065906}
+  - component: {fileID: 267065905}
+  m_Layer: 0
+  m_Name: Idle_0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!212 &267065905
+SpriteRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267065904}
+  m_Enabled: 1
+  m_CastShadows: 0
+  m_ReceiveShadows: 0
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: ddb34a6f970421449ab884b9286ec546, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 0
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_Sprite: {fileID: 21300000, guid: 8de8ce1cd0b6e43ab90645fae2d6ccd9, type: 3}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_FlipX: 0
+  m_FlipY: 0
+  m_DrawMode: 0
+  m_Size: {x: 1.67, y: 2.5}
+  m_AdaptiveModeThreshold: 0.5
+  m_SpriteTileMode: 0
+  m_WasSpriteAssigned: 1
+  m_MaskInteraction: 0
+  m_SpriteSortPoint: 0
+--- !u!4 &267065906
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 267065904}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.05, y: 1.12, z: -10.08}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &275216018
 GameObject:
   m_ObjectHideFlags: 0
@@ -5397,6 +5477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d298f50f893a1f48ab02b60672c31a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testlerp: 0.1
   Player_Manager: {fileID: 1636010432}
   Player_Sprite: {fileID: 1838567498}
   SplashEffect: {fileID: 998713421}
@@ -5918,6 +5999,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d298f50f893a1f48ab02b60672c31a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testlerp: 0.1
   Player_Manager: {fileID: 1636010432}
   Player_Sprite: {fileID: 1040819816}
   SplashEffect: {fileID: 2073668208}
@@ -6844,7 +6926,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: be11ca9ffa0ef8942b5ca709ab740e04, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9118,7 +9200,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ddb34a6f970421449ab884b9286ec546, type: 2}
+  - {fileID: 2100000, guid: be11ca9ffa0ef8942b5ca709ab740e04, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9285,7 +9367,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: be11ca9ffa0ef8942b5ca709ab740e04, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -13182,7 +13264,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: be11ca9ffa0ef8942b5ca709ab740e04, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14625,6 +14707,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d298f50f893a1f48ab02b60672c31a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  testlerp: 0.1
   Player_Manager: {fileID: 1636010432}
   Player_Sprite: {fileID: 1329751484}
   SplashEffect: {fileID: 1722425253}

@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ChangeColor
-  m_Shader: {fileID: 4800000, guid: 1eab7e23d381ab747953bfa92eefd6c6, type: 3}
+  m_Name: SlimeSprite
+  m_Shader: {fileID: 4800000, guid: fcc4dba3709aaa048a382e0d06bc2c74, type: 3}
   m_ShaderKeywords: ETC1_EXTERNAL_ALPHA
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -81,14 +81,14 @@ Material:
     - _colorID: 1
     - _diffTrans: 0.08
     m_Colors:
-    - _BlueColor: {r: 0.42114633, g: 0.70345324, b: 0.9811321, a: 1}
+    - _BlueColor: {r: 0, g: 0, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _GreenColor: {r: 0.5385814, g: 0.8584906, b: 0.5385814, a: 1}
-    - _OrangeColor: {r: 1, g: 0.6267061, b: 0.18396229, a: 1}
-    - _PurpleColor: {r: 0.85553676, g: 0.56737274, b: 0.9622642, a: 1}
-    - _RedColor: {r: 0.9433962, g: 0.4494482, b: 0.4494482, a: 1}
+    - _GreenColor: {r: 0, g: 1, b: 0, a: 1}
+    - _OrangeColor: {r: 1, g: 0.5, b: 0, a: 1}
+    - _PurpleColor: {r: 1, g: 0, b: 1, a: 1}
+    - _RedColor: {r: 1, g: 0.4575472, b: 0.4575472, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _WhiteColor: {r: 1, g: 1, b: 1, a: 1}
-    - _YellowColor: {r: 0.98039216, g: 0.94509804, b: 0, a: 1}
+    - _YellowColor: {r: 1, g: 1, b: 0, a: 1}
