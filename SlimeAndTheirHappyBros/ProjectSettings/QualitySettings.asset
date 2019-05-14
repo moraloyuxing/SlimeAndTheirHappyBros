@@ -151,7 +151,7 @@ QualitySettings:
     pixelLightCount: 3
     shadows: 1
     shadowResolution: 2
-    shadowProjection: 1
+    shadowProjection: 0
     shadowCascades: 2
     shadowDistance: 180
     shadowNearPlaneOffset: 3
