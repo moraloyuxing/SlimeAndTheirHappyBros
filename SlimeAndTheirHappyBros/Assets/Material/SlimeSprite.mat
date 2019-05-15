@@ -81,14 +81,14 @@ Material:
     - _colorID: 0
     - _diffTrans: 0.08
     m_Colors:
-    - _BlueColor: {r: 0.5518868, g: 0.757311, b: 1, a: 1}
+    - _BlueColor: {r: 0.5707547, g: 0.99141675, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Flip: {r: 1, g: 1, b: 1, a: 1}
     - _GreenColor: {r: 0.54701406, g: 0.9339623, b: 0.5242524, a: 1}
     - _OrangeColor: {r: 0.9339623, g: 0.631657, b: 0.3216002, a: 1}
-    - _PurpleColor: {r: 0.92267734, g: 0.5613208, b: 1, a: 1}
-    - _RedColor: {r: 0.9716981, g: 0.5821022, b: 0.5821022, a: 1}
+    - _PurpleColor: {r: 0.87668043, g: 0.56078434, b: 1, a: 1}
+    - _RedColor: {r: 1, g: 0.5235849, b: 0.5235849, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _WhiteColor: {r: 1, g: 1, b: 1, a: 1}
     - _YellowColor: {r: 1, g: 1, b: 0.3915094, a: 1}

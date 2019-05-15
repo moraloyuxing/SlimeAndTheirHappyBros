@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class HobGoblin : GoblinBase, IEnemyUnit
 {
+    bool startAttack = false;
+    int maxHp;
+    int attackType = 0;
     float[] atkColOffset = new float[2];
     Transform[] atkCol = new Transform[2];
 
@@ -20,7 +23,8 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         imgScale = image.localScale.x;
         atkColOffset[0] = atkCol[0].localPosition.x;
         atkColOffset[1] = atkCol[1].localPosition.x;
-        hp = info.hp;
+        maxHp = info.hp;
+        hp = maxHp;
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
@@ -41,7 +45,8 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         imgScale = image.localScale.x;
         atkColOffset[0] = atkCol[0].localPosition.x;
         atkColOffset[1] = atkCol[1].localPosition.x;
-        hp = info.hp;
+        maxHp = info.hp;
+        hp = maxHp;
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
@@ -95,6 +100,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         int i = 0;
         while (i < colliders.Length)
         {
+            hp--;
             if (i == 0 && curState != GoblinState.hurt && curState != GoblinState.attack)
             {
                 SetState(GoblinState.hurt);
@@ -108,12 +114,23 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
     public override void Attack()
     {
-        if (firstInState)
+        if (firstInState && !startAttack)
         {
-            animator.SetInteger("state", 2);
+            
+            attackType = Random.Range(0, 2);
+            if (attackType == 0)
+            {
+            }
+            else {
+                startAttack = true;
+                animator.speed = 1.0f;
+                animator.SetInteger("attackType", attackType);
+                animator.SetInteger("state", 2);
+                firstInState = false;
+            }
 
-            animator.speed = 1.0f;
-            firstInState = false;
+
+
 
             moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
             float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
@@ -140,8 +157,31 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         }
     }
 
+    public override void Die()
+    {
+        if (firstInState)
+        {
+            animator.speed = 1.0f;
+            animator.SetInteger("state", 4);
+            firstInState = false;
+        }
+        else
+        {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.99f)
+            {
+                ResetUnit();
+            }
+        }
+    }
+
     public void ResetUnit()
     {
+        hp = maxHp;
+        firstInState = false;
+        inStateTime = .0f;
+        curState = GoblinState.moveIn;
+
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }
