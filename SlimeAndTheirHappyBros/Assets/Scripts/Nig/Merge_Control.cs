@@ -28,6 +28,7 @@ public class Merge_Control : MonoBehaviour{
     bool Down_CanMove = true;
     bool Left_CanMove = true;
     bool Right_CanMove = true;
+    bool Walking = false;
 
     //攻擊方向旋轉
     public GameObject Attack_Arrow;
@@ -68,11 +69,17 @@ public class Merge_Control : MonoBehaviour{
     bool left_bumper = false;
     bool OnDash = false;
     public float DashSpeed = 1.0f;
+    bool DuringDashLerp = false;
+    float testlerp = 0.1f;
+
+    //動畫插斷
+    Animator anim;
 
     void Start(){
         Player_Manager = GameObject.Find("Player_Manager");
-        ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(2.0f, 0.0f, 0.0f));
-        ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 2.0f));
+        ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(4.0f, 0.0f, 0.0f));
+        ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 4.0f));
+        anim = GetComponent<Animator>();
     }
 
     public void SetMSlimePool(Object_Pool pool){
@@ -98,121 +105,105 @@ public class Merge_Control : MonoBehaviour{
         Debug.DrawRay(ray_horizontal.origin, ray_horizontal.direction, Color.cyan);
         Debug.DrawRay(ray_vertical.origin, ray_vertical.direction, Color.cyan);
 
+        anim.SetBool("Walking", Walking);
+
+        //受傷判定
+        if (StopDetect == false) SlimeGetHurt();
+
         //移動&短衝刺
         xAix = Input.GetAxis(WhichPlayer_Moving + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer_Moving + "Vertical");
         left_bumper = Input.GetButtonDown(WhichPlayer_Moving + "Dash");
-        if (left_bumper == true){
-            DashSpeed = 2.5f;
+        if (left_bumper == true && OnDash == false){
+            DashSpeed = 6.0f;
             OnDash = true;
+            DuringDashLerp = true;
         }
 
         if (AttackPriority == false && HurtPriority == false && DeathPriority == false) {
             if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f) {
-                if (OnDash == false) { GetComponent<Animator>().Play("Slime_Walk"); }
+                if (OnDash == false && DuringDashLerp == false) { Walking = true; }
                 else if (OnDash == true){
+                    Walking = false;
                     if (Mathf.Abs(xAix) >= Mathf.Abs(zAix)) GetComponent<Animator>().Play("Slime_DashFoward");
                     else if (Mathf.Abs(xAix) < Mathf.Abs(zAix)){
                         if (zAix >= 0) GetComponent<Animator>().Play("Slime_DashUp");
                         else GetComponent<Animator>().Play("Slime_DashDown");
                     }
+                    OnDash = false;
                 }
                 Player_Manager.SendMessage(WhichPlayer_Moving + "rePos", transform.position);  //應該可以另寫函式避免衍生bug
             }
+            else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) /*GetComponent<Animator>().Play("Slime_Idle")*/Walking = false;
         }
 
         if (xAix > 0.0f){
-            transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-            if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
-            Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
-            Left_CanMove = false;
-            ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(3.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 3.0f)){
+            //加個轉向(受傷、死亡......等等不觸發)
+            if (HurtPriority == false && DeathPriority == false && OnDash == false) {
+                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+                Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+            }
+
+            Left_CanMove = true;
+            ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(4.0f, 0.0f, 0.0f));
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 4.0f)){
                 if (hit_horizontal.transform.tag == "Border"){
                     Right_CanMove = false;
                 }
-
-                else if (hit_horizontal.transform.tag == "Attack" && StopDetect == false) {
-                    Destroy(hit_horizontal.transform.gameObject);
-                    GetComponent<Animator>().Play("Slime_Hurt");
-                    HurtPriorityOn();
-                }
-
             }
             else { Right_CanMove = true; }
         }
 
         if (xAix < 0.0f){
-            transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
-            if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.4f, 0.4f, 0.4f);
-            Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
-            Right_CanMove = false;
-            ray_horizontal = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(-3.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 3.0f)){
+            //加個轉向(受傷、死亡......等等不觸發)
+            if (HurtPriority == false && DeathPriority == false && OnDash == false) {
+                transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+                if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.4f, 0.4f, 0.4f);
+                Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
+            }
+
+            Right_CanMove = true;
+            ray_horizontal = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(-4.0f, 0.0f, 0.0f));
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 4.0f)){
                 if (hit_horizontal.transform.tag == "Border"){
                     Left_CanMove = false;
                 }
-
-                else if (hit_horizontal.transform.tag == "Attack" && StopDetect == false) {
-                    Destroy(hit_horizontal.transform.gameObject);
-                    GetComponent<Animator>().Play("Slime_Hurt");
-                    HurtPriorityOn();
-                }
-
             }
             else { Left_CanMove = true; }
         }
 
         if (zAix > 0.0f){
-            Down_CanMove = false;
-            ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 3.0f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical, 3.0f)){
+            Down_CanMove = true;
+            ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 4.0f));
+            if (Physics.Raycast(ray_vertical, out hit_vertical, 4.0f)){
                 if (hit_vertical.transform.tag == "Border"){
                     Up_CanMove = false;
                 }
-
-                else if (hit_vertical.transform.tag == "Attack" && StopDetect == false){
-                    Destroy(hit_vertical.transform.gameObject);
-                    GetComponent<Animator>().Play("Slime_Hurt");
-                    HurtPriorityOn();
-                }
-
             }
             else { Up_CanMove = true; }
         }
 
         if (zAix < 0.0f){
-            Up_CanMove = false;
+            Up_CanMove = true;
             ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, -3.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical, 3.0f)){
                 if (hit_vertical.transform.tag == "Border"){
                     Down_CanMove = false;
                 }
-
-                else if (hit_vertical.transform.tag == "Attack" && StopDetect == false){
-                    Destroy(hit_vertical.transform.gameObject);
-                    GetComponent<Animator>().Play("Slime_Hurt");
-                    HurtPriorityOn();
-                }
-
             }
             else { Down_CanMove = true; }
         }
 
         if (HurtPriority == false && DeathPriority == false) {
-            if (Up_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f);
-            if (Down_CanMove) transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + zAix * 0.1f);
-            if (Left_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f, transform.position.y, transform.position.z);
-            if (Right_CanMove) transform.position = new Vector3(transform.position.x + xAix * 0.1f, transform.position.y, transform.position.z);
+            if (!Up_CanMove || !Down_CanMove) zAix = .0f;
+            if (!Left_CanMove || !Right_CanMove) xAix = .0f;
+            transform.position += new Vector3(xAix, 0, zAix).normalized * DashSpeed * Time.deltaTime * 5.0f;
         }
 
         //衝刺遞減
-        if (DashSpeed > 1.0f){
-            DashSpeed = DashSpeed - Time.deltaTime;
-            if (DashSpeed < 1.0f){
-                OnDash = false;
-                DashSpeed = 1.0f;
-            }
+        if (DuringDashLerp == true){
+            DashSpeed = Mathf.Lerp(DashSpeed, 0.5f, testlerp);
         }
 
         //攻擊方向旋轉
@@ -333,23 +324,52 @@ public class Merge_Control : MonoBehaviour{
     }
 
     //設置受傷&死亡最高優先權
-    public void HurtPriorityOn(){
-        HurtPriority = true;
-        StopDetect = true;
-        musouTime = Time.time;
-        Damage_Count++;
-        for (int i = 0; i < Damage_Count; i++) { Merge_HP[i].SetActive(false); }
-        if (Damage_Count == 3){
-            DeathPriority = true;
-            HurtPriority = false;//沒必要true受傷優先，也有利之後復活初始化
-            CancelInvoke("Merge_Timer");
-            GetComponent<Animator>().Play("Slime_MergeDeath");
+    public void SlimeGetHurt(){
+        Collider[] colliders = Physics.OverlapBox(Merge_Sprite.transform.position, new Vector3(2.3f, 1.7f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
+        int i = 0;
+        while (i < colliders.Length){
+            if (i == 0){
+                Destroy(colliders[i]);//之後要移除
+                GetComponent<Animator>().Play("Slime_Hurt");
+                HurtPriority = true;
+                StopDetect = true;
+                musouTime = Time.time;
+                Damage_Count++;
+                for (int k = 0; k < Damage_Count; k++) {Merge_HP[k].SetActive(false); }
+                if (Damage_Count == 3){
+                    DeathPriority = true;
+                    HurtPriority = false;//沒必要true受傷優先，也有利之後復活初始化
+                    CancelInvoke("Merge_Timer");
+                    GetComponent<Animator>().Play("Slime_Death");
+                }
+            }
+            i++;
         }
+    }
+
+    public void HurtPriorityOn(){
+        //HurtPriority = true;
+        //StopDetect = true;
+        //musouTime = Time.time;
+        //Damage_Count++;
+        //for (int i = 0; i < Damage_Count; i++) { Merge_HP[i].SetActive(false); }
+        //if (Damage_Count == 3){
+        //    DeathPriority = true;
+        //    HurtPriority = false;//沒必要true受傷優先，也有利之後復活初始化
+        //    CancelInvoke("Merge_Timer");
+        //    GetComponent<Animator>().Play("Slime_MergeDeath");
+        //}
     }
 
     public void HurtPriorityOff(){
         HurtPriority = false;
         AttackPriority = false;
+    }
+
+    //短衝刺設定
+    public void DashEnd(){
+        DashSpeed = 1.0f;
+        DuringDashLerp = false;
     }
 
 }

@@ -99,7 +99,7 @@ public class Player_Control : MonoBehaviour{
 
         if (AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
             if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f){
-                if (OnDash == false && DashSpeed!=2.5f) {/*GetComponent<Animator>().Play("Slime_Walk");*/ Walking = true; } 
+                if (OnDash == false && DuringDashLerp == false) {Walking = true; } 
                 else if (OnDash == true){
                     Walking = false;
                     if (Mathf.Abs(xAix) >= Mathf.Abs(zAix)) GetComponent<Animator>().Play("Slime_DashFoward");
@@ -312,6 +312,8 @@ public class Player_Control : MonoBehaviour{
     public void HurtPriorityOff(){
         ExtraPriority = false;
         AttackPriority = false;
+        if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
+        else if(Mathf.Abs(xAix) > 0.03f && Mathf.Abs(zAix) > 0.03f) GetComponent<Animator>().Play("Slime_Walk");
     }
 
     //短衝刺設定
