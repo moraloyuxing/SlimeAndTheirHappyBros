@@ -22,7 +22,7 @@ public class GoblinBase
     protected AnimatorStateInfo aniInfo;
     protected SpriteRenderer renderer;
 
-    Path path;
+    PathFinder.Path path;
     protected GoblinManager goblinManager;
 
     public enum GoblinState
@@ -252,7 +252,7 @@ public class GoblinBase
         if (pathSuccessful)
         {
 
-            path = new Path(waypoints, transform.position, turnDist); 
+            path = new PathFinder.Path(waypoints, transform.position, turnDist); 
             followingPath = true;
             pathIndex = 0;
             moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
