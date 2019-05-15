@@ -104,6 +104,7 @@ public class GoblinBase
                 GetHurt();
                 break;
             case GoblinState.die:
+                Die();
                 break;
             case GoblinState.erroeCatch:
                 ErroeCatch();
@@ -277,6 +278,7 @@ public class GoblinBase
         Collider[]colliders =  Physics.OverlapBox(image.position, new Vector3(0.4f, 2.9f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
         int i = 0;
         while (i < colliders.Length) {
+            hp--;
             if (i == 0 && curState != GoblinState.hurt) {
                 SetState(GoblinState.hurt);
                 moveFwdDir = -Vector3.forward;
@@ -299,16 +301,18 @@ public class GoblinBase
         else {
             transform.position += 10.0f * deltaTime * moveFwdDir;
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
+            //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f) {
                 Debug.Log("hurrrrt  over");
-                OverAttackDetectDist();
+                if (hp <= 0) SetState(GoblinState.die);
+                else OverAttackDetectDist();
+
             }
         }
     }
     public virtual void Die()
     {
-
+        
     }
     public virtual void OnGetHurt(int value)
     {
