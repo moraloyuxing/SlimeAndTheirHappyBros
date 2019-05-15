@@ -6,6 +6,7 @@ using UnityEngine;
 public class ArcherGoblin : GoblinBase, IEnemyUnit
 {
     bool hasShoot = false;
+    int maxHp;
     int delayShoot = 0;
     float scaleX;
     Vector3 shootPos;
@@ -20,7 +21,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         renderer = image.GetComponent<SpriteRenderer>();
         shootLauncher = t.Find("shootPos");
         imgScale = image.localScale.x;
-        hp = info.hp;
+        maxHp = info.hp;
+        hp = maxHp;
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
@@ -163,8 +165,31 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         }
     }
 
+    public override void Die()
+    {
+        if (firstInState)
+        {
+            animator.speed = 1.0f;
+            animator.SetInteger("state", 4);
+            firstInState = false;
+        }
+        else
+        {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.99f)
+            {
+                ResetUnit();
+            }
+        }
+    }
+
     public void ResetUnit()
     {
+        hp = maxHp;
+        firstInState = false;
+        inStateTime = .0f;
+        curState = GoblinState.moveIn;
+
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }

@@ -5,8 +5,10 @@ using UnityEngine;
 
 public class NormalGoblin: GoblinBase, IEnemyUnit
 {
+    int maxHp;
     float atkColOffset;
-    Transform atkCol;
+    Transform atkColTrans;
+    Collider atkCol;
 
     //TestPlayerManager playerManager;
     //Player_Manager playerManager;
@@ -17,10 +19,12 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         animator = t.GetComponent<Animator>();
         image = t.Find("image");
         renderer = image.GetComponent<SpriteRenderer>();
-        atkCol = t.Find("AtkCollider");
+        atkColTrans = t.Find("AtkCollider");
+        atkCol = atkColTrans.GetComponent<Collider>();
         imgScale = image.localScale.x;
-        atkColOffset = atkCol.localPosition.x;
-        hp = info.hp;
+        atkColOffset =atkColTrans.localPosition.x;
+        maxHp = info.hp;
+        hp = maxHp;
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
@@ -36,9 +40,10 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         animator = t.GetComponent<Animator>();
         image = t.Find("image");
         renderer = image.GetComponent<SpriteRenderer>();
-        atkCol = t.Find("AtkCollider");
+        atkColTrans = t.Find("AtkCollider");
+        atkCol = atkColTrans.GetComponent<Collider>();
         imgScale = image.localScale.x;
-        atkColOffset = atkCol.localPosition.x;
+        atkColOffset = atkColTrans.localPosition.x;
         hp = info.hp;
         atkValue = info.atkValue;
         speed = info.speed;
@@ -98,7 +103,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
             float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
             image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-            atkCol.localPosition = new Vector3(scaleX * atkColOffset, atkCol.localPosition.y, atkCol.localPosition.z);
+            atkColTrans.localPosition = new Vector3(scaleX * atkColOffset, atkColTrans.localPosition.y, atkColTrans.localPosition.z);
         }
         else
         {
@@ -120,7 +125,56 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         }
     }
 
+
+    public override void GetHurt()
+    {
+        if (firstInState)
+        {
+            atkCol.enabled = false;
+            firstInState = false;
+            atkCol.enabled = true;
+            animator.Play("hurt");
+            animator.SetInteger("state", 3);
+        }
+        else
+        {
+            transform.position += 10.0f * deltaTime * moveFwdDir;
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
+            if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f)
+            {
+                Debug.Log("hurrrrt  over");
+                if (hp <= 0) SetState(GoblinState.die);
+                else OverAttackDetectDist();
+
+            }
+        }
+    }
+
+    public override void Die()
+    {
+        if (firstInState)
+        {
+            animator.speed = 1.0f;
+            animator.SetInteger("state", 4);
+            firstInState = false;
+        }
+        else
+        {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.99f)
+            {
+                ResetUnit();
+            }
+        }
+    }
+
     public void ResetUnit() {
+        hp = maxHp;
+        firstInState = false;
+        inStateTime = .0f;
+        curState = GoblinState.moveIn;
+
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }
