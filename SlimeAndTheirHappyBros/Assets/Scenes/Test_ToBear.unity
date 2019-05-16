@@ -3151,21 +3151,12 @@ MonoBehaviour:
   Player_Sprite: {fileID: 1651425400}
   SplashEffect: {fileID: 1335730876}
   Player_Icon: {fileID: 985991901}
-  xAix: 0
-  zAix: 0
   Attack_Arrow: {fileID: 219557132}
-  xAtk: 0
-  zAtk: 0
   Four_Pigment:
   - {fileID: 1155738641}
   - {fileID: 1155738640}
   - {fileID: 1155738639}
   - {fileID: 1155738638}
-  Other_Player:
-  - {fileID: 1930958716}
-  - {fileID: 1517294619}
-  - {fileID: 1050854430}
-  Merge_Target: {fileID: 0}
   Hint: {fileID: 907465243}
   Personal_HP:
   - {fileID: 1535569155}
@@ -3173,6 +3164,8 @@ MonoBehaviour:
   - {fileID: 799066198}
   DashSpeed: 1
   testlerp: 0.1
+  Shop: {fileID: 0}
+  Focus_Item: {fileID: 0}
 --- !u!1 &356022415
 GameObject:
   m_ObjectHideFlags: 0
@@ -8079,21 +8072,12 @@ MonoBehaviour:
   Player_Sprite: {fileID: 87374099}
   SplashEffect: {fileID: 2719533}
   Player_Icon: {fileID: 1907737967}
-  xAix: 0
-  zAix: 0
   Attack_Arrow: {fileID: 1398147385}
-  xAtk: 0
-  zAtk: 0
   Four_Pigment:
   - {fileID: 1155738641}
   - {fileID: 1155738640}
   - {fileID: 1155738639}
   - {fileID: 1155738638}
-  Other_Player:
-  - {fileID: 1930958716}
-  - {fileID: 1517294619}
-  - {fileID: 351806362}
-  Merge_Target: {fileID: 0}
   Hint: {fileID: 658723552}
   Personal_HP:
   - {fileID: 1341845949}
@@ -8101,6 +8085,8 @@ MonoBehaviour:
   - {fileID: 411371065}
   DashSpeed: 1
   testlerp: 0.1
+  Shop: {fileID: 0}
+  Focus_Item: {fileID: 0}
 --- !u!1 &1062383474
 GameObject:
   m_ObjectHideFlags: 0
@@ -10875,21 +10861,12 @@ MonoBehaviour:
   Player_Sprite: {fileID: 955307554}
   SplashEffect: {fileID: 123939775}
   Player_Icon: {fileID: 1092669414}
-  xAix: 0
-  zAix: 0
   Attack_Arrow: {fileID: 2134032421}
-  xAtk: 0
-  zAtk: 0
   Four_Pigment:
   - {fileID: 1155738641}
   - {fileID: 1155738640}
   - {fileID: 1155738639}
   - {fileID: 1155738638}
-  Other_Player:
-  - {fileID: 1930958716}
-  - {fileID: 351806362}
-  - {fileID: 1050854430}
-  Merge_Target: {fileID: 0}
   Hint: {fileID: 61170179}
   Personal_HP:
   - {fileID: 231191740}
@@ -10897,6 +10874,8 @@ MonoBehaviour:
   - {fileID: 837288272}
   DashSpeed: 1
   testlerp: 0.1
+  Shop: {fileID: 0}
+  Focus_Item: {fileID: 0}
 --- !u!4 &1517294622
 Transform:
   m_ObjectHideFlags: 0
@@ -13606,21 +13585,12 @@ MonoBehaviour:
   Player_Sprite: {fileID: 1152496611}
   SplashEffect: {fileID: 1047086143}
   Player_Icon: {fileID: 466745468}
-  xAix: 0
-  zAix: 0
   Attack_Arrow: {fileID: 1749218226}
-  xAtk: 0
-  zAtk: 0
   Four_Pigment:
   - {fileID: 1155738641}
   - {fileID: 1155738640}
   - {fileID: 1155738639}
   - {fileID: 1155738638}
-  Other_Player:
-  - {fileID: 1517294619}
-  - {fileID: 351806362}
-  - {fileID: 1050854430}
-  Merge_Target: {fileID: 0}
   Hint: {fileID: 1912469652}
   Personal_HP:
   - {fileID: 9876949}
@@ -13628,6 +13598,8 @@ MonoBehaviour:
   - {fileID: 1566067602}
   DashSpeed: 1
   testlerp: 0.1
+  Shop: {fileID: 0}
+  Focus_Item: {fileID: 0}
 --- !u!4 &1930958719
 Transform:
   m_ObjectHideFlags: 0
