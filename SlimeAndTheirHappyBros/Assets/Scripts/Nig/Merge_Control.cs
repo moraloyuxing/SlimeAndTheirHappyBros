@@ -9,7 +9,8 @@ public class Merge_Control : MonoBehaviour{
     public GameObject Player_Manager;
     public GameObject Merge_Sprite;
     public Transform Heart_Group;
-    Object_Pool MSlimePool;
+    Object_Pool _MSlimePool;
+    Bullet_Manager _BulletPool;
 
     //優先權、無敵時間等等
     bool AttackPriority = false;
@@ -35,12 +36,14 @@ public class Merge_Control : MonoBehaviour{
     public float xAtk, zAtk;
     float Atk_angle = 0.0f;
     float angle_toLerp;
-    float testrot = 1.0f;
+    float ArrowRot = 1.0f;
     Vector3 current_angle;
     Vector3 Attack_Direction = new Vector3(0.0f, 0.0f, 1.0f);
 
     //攻擊
-    bool right_bumper = false;
+    //bool right_bumper = false;
+    float right_trigger = 0.0f;
+    bool Shooting = false;
 
     //控制權相關
     public GameObject Merge_Control_Hint;
@@ -53,6 +56,7 @@ public class Merge_Control : MonoBehaviour{
     string WhichPlayer_Shooting;//之後用到
     bool Hint_Activate = false;
     float Hint_Moment;
+    int MergeNumber = 0;
 
     //倒數計時
     //整數倒數 → 隔秒呼叫；計量條 → Time.deltaTime
@@ -66,25 +70,32 @@ public class Merge_Control : MonoBehaviour{
     int Damage_Count = 0;
 
     //短衝刺
-    bool left_bumper = false;
+    float left_trigger = 0.0f;
     bool OnDash = false;
     public float DashSpeed = 1.0f;
     bool DuringDashLerp = false;
+    float DashCD = 0.0f;
     float testlerp = 0.1f;
 
     //動畫插斷
     Animator anim;
 
+    //Shader著色
+    int Shader_Number;
+
     void Start(){
         Player_Manager = GameObject.Find("Player_Manager");
         ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(4.0f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 4.0f));
+        Current_Color = Merge_Sprite.GetComponent<SpriteRenderer>().color;
         anim = GetComponent<Animator>();
+        anim.SetInteger("MergeNumber", MergeNumber);
     }
 
-    public void SetMSlimePool(Object_Pool pool){
-        Attack_Arrow.GetComponent<Create_Bullet>().bulletPool = pool;
-        MSlimePool = pool;
+    public void SetMSlimePool(Bullet_Manager _bulletpool,Object_Pool pool){
+        Attack_Arrow.GetComponent<Create_Bullet>()._bulletPool = _bulletpool;
+        _BulletPool = _bulletpool;
+        _MSlimePool = pool;
     }
 
     void OnEnable(){
@@ -106,6 +117,7 @@ public class Merge_Control : MonoBehaviour{
         Debug.DrawRay(ray_vertical.origin, ray_vertical.direction, Color.cyan);
 
         anim.SetBool("Walking", Walking);
+        anim.SetBool("Shooting", Shooting);
 
         //受傷判定
         if (StopDetect == false) SlimeGetHurt();
@@ -113,14 +125,15 @@ public class Merge_Control : MonoBehaviour{
         //移動&短衝刺
         xAix = Input.GetAxis(WhichPlayer_Moving + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer_Moving + "Vertical");
-        left_bumper = Input.GetButtonDown(WhichPlayer_Moving + "Dash");
-        if (left_bumper == true && OnDash == false){
+        left_trigger = Input.GetAxis(WhichPlayer_Moving + "Dash");
+        if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 2.0f){
             DashSpeed = 6.0f;
             OnDash = true;
             DuringDashLerp = true;
+            DashCD = Time.time;
         }
 
-        if (AttackPriority == false && HurtPriority == false && DeathPriority == false) {
+        if ( HurtPriority == false && DeathPriority == false) {
             if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f) {
                 if (OnDash == false && DuringDashLerp == false) { Walking = true; }
                 else if (OnDash == true){
@@ -132,12 +145,13 @@ public class Merge_Control : MonoBehaviour{
                     }
                     OnDash = false;
                 }
-                Player_Manager.SendMessage(WhichPlayer_Moving + "rePos", transform.position);  //應該可以另寫函式避免衍生bug
+                Player_Manager.SendMessage(WhichPlayer_Moving + "rePos", transform.position);
             }
-            else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) /*GetComponent<Animator>().Play("Slime_Idle")*/Walking = false;
+            else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) Walking = false;
         }
 
         if (xAix > 0.0f){
+            ArrowRot = 1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (HurtPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
@@ -156,6 +170,7 @@ public class Merge_Control : MonoBehaviour{
         }
 
         if (xAix < 0.0f){
+            ArrowRot = -1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (HurtPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
@@ -211,19 +226,17 @@ public class Merge_Control : MonoBehaviour{
         zAtk = Input.GetAxis(WhichPlayer_Shooting + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
         if (xAtk != 0.0f || zAtk != 0.0f){
-            if (xAix > 0.0f) testrot = 1.0f;
-            else if (xAix < 0.0f) testrot = -1.0f;
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
-            Attack_Arrow.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle_toLerp*testrot);
+            Attack_Arrow.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle_toLerp* ArrowRot);
         }
 
         //攻擊
-        right_bumper = Input.GetButtonDown(WhichPlayer_Shooting + "Attack");
-        if (right_bumper == true && AttackPriority == false &&HurtPriority == false && DeathPriority == false){
+        right_trigger = Input.GetAxis(WhichPlayer_Shooting + "Attack");
+        if (right_trigger > 0.3f && AttackPriority == false &&HurtPriority == false && DeathPriority == false){
             GetComponent<Animator>().Play("Slime_Attack");
-            Attack_Arrow.SendMessage("ShootBullet", Attack_Direction);
+            Shooting = true;
         }
 
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)
@@ -279,9 +292,9 @@ public class Merge_Control : MonoBehaviour{
             Storage_Player[i].SetActive(true);
             if (Damage_Count == 3)Storage_Player[i].SendMessage("Die_InMergeState");
         }
-        Storage_Player[0].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(0.5f, 2.0f), 0.5f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
-        Storage_Player[1].transform.position = new Vector3(gameObject.transform.position.x + Random.Range(0.5f, 2.0f), 0.5f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
-        MSlimePool.MSlime_Recovery(gameObject);
+        Storage_Player[0].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(0.5f, 2.0f), -9.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
+        Storage_Player[1].transform.position = new Vector3(gameObject.transform.position.x + Random.Range(0.5f, 2.0f), -9.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
+        _MSlimePool.MSlime_Recovery(gameObject);
     }
 
 
@@ -302,25 +315,54 @@ public class Merge_Control : MonoBehaviour{
         }
 
         if (Timer_float < 0) {
-            Spilt_toOriginal();
+            //Spilt_toOriginal();
             CancelInvoke("Merge_Timer");
+            Current_Color.a = 1.0f;
+            Merge_Sprite.GetComponent<SpriteRenderer>().color = Current_Color;
+
+            switch (MergeNumber){
+                case 3:
+                    GetComponent<Animator>().Play("Slime_SpiltRY");
+                    break;
+                case 5:
+                    GetComponent<Animator>().Play("Slime_SpiltRB");
+                    break;
+                case 6:
+                    GetComponent<Animator>().Play("Slime_SpiltYB");
+                    break;
+            }
         }
     }
 
     //混色確認
-    public void SetUp_DyeingColor(Color x) {
-        Merge_Sprite.GetComponent<SpriteRenderer>().color = x;
-        Current_Color = x;
+    public void SetUp_DyeingColor(int x) {
+        Merge_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", x);
+        Shader_Number = x;
+        MergeNumber = x;
+
+        switch (MergeNumber) {
+            case 3:
+                GetComponent<Animator>().Play("Slime_MergeRY");
+                break;
+            case 5:
+                GetComponent<Animator>().Play("Slime_MergeRB");
+                break;
+            case 6:
+                GetComponent<Animator>().Play("Slime_MergeYB");
+                break;
+        }
+
     }
 
     //設置攻擊最高優先權
     public void AttackPriorityOn(){
         AttackPriority = true;
+        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Shader_Number); 
     }
 
     public void AttackPriorityOff(){
         AttackPriority = false;
-        if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
+        Shooting = false;
     }
 
     //設置受傷&死亡最高優先權
@@ -348,17 +390,7 @@ public class Merge_Control : MonoBehaviour{
     }
 
     public void HurtPriorityOn(){
-        //HurtPriority = true;
-        //StopDetect = true;
-        //musouTime = Time.time;
-        //Damage_Count++;
-        //for (int i = 0; i < Damage_Count; i++) { Merge_HP[i].SetActive(false); }
-        //if (Damage_Count == 3){
-        //    DeathPriority = true;
-        //    HurtPriority = false;//沒必要true受傷優先，也有利之後復活初始化
-        //    CancelInvoke("Merge_Timer");
-        //    GetComponent<Animator>().Play("Slime_MergeDeath");
-        //}
+
     }
 
     public void HurtPriorityOff(){
