@@ -101,8 +101,8 @@ MonoBehaviour:
     m_Enabled: 1
     m_Settings:
       bloom:
-        intensity: 0.5
-        threshold: 1.1
+        intensity: 0.3
+        threshold: 0.92
         softKnee: 0.994
         radius: 4.66
         antiFlicker: 0
@@ -110,16 +110,16 @@ MonoBehaviour:
         texture: {fileID: 0}
         intensity: 3
   colorGrading:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       tonemapping:
         tonemapper: 2
-        neutralBlackIn: 0.02
-        neutralWhiteIn: 2.9
+        neutralBlackIn: 0.007
+        neutralWhiteIn: 2.4
         neutralBlackOut: 0
         neutralWhiteOut: 10
-        neutralWhiteLevel: 5.3
-        neutralWhiteClip: 10
+        neutralWhiteLevel: 12
+        neutralWhiteClip: 5.04
       basic:
         postExposure: 0
         temperature: -5
@@ -135,9 +135,9 @@ MonoBehaviour:
       colorWheels:
         mode: 1
         log:
-          slope: {r: 1, g: 1, b: 1, a: 0}
-          power: {r: 1, g: 0.73125327, b: 0.91679525, a: 0}
-          offset: {r: 1, g: 1, b: 1, a: 0}
+          slope: {r: 0.8679598, g: 0.8673966, b: 1, a: 0.07692308}
+          power: {r: 0.9836993, g: 1, b: 0.8380126, a: -0.000000001432804}
+          offset: {r: 1, g: 0.9335706, b: 0.7787238, a: 0}
         linear:
           lift: {r: 0, g: 0, b: 0, a: 0}
           gamma: {r: 0, g: 0, b: 0, a: 0}
@@ -311,20 +311,20 @@ MonoBehaviour:
       spectralTexture: {fileID: 0}
       intensity: 0.1
   grain:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       colored: 1
-      intensity: 0.5
-      size: 1
+      intensity: 0.281
+      size: 0.71
       luminanceContribution: 0.8
   vignette:
-    m_Enabled: 0
+    m_Enabled: 1
     m_Settings:
       mode: 0
-      color: {r: 0, g: 0, b: 0, a: 1}
+      color: {r: 0.50980395, g: 0.34901962, b: 0.50980395, a: 1}
       center: {x: 0.5, y: 0.5}
-      intensity: 0.45
-      smoothness: 0.2
+      intensity: 0.473
+      smoothness: 0.454
       roundness: 1
       mask: {fileID: 0}
       opacity: 1
