@@ -9,6 +9,7 @@ TagManager:
   - Border
   - GoblinMelee
   - GoblinArrow
+  - Item
   layers:
   - Default
   - TransparentFX
