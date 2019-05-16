@@ -107,8 +107,8 @@ MonoBehaviour:
         radius: 4.66
         antiFlicker: 0
       lensDirt:
-        texture: {fileID: 0}
-        intensity: 3
+        texture: {fileID: 2800000, guid: 3aac3087967ea4fae858ec0494fd24d9, type: 3}
+        intensity: 0.69
   colorGrading:
     m_Enabled: 1
     m_Settings:
@@ -150,8 +150,8 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 0
               value: 0
-              inSlope: 1
-              outSlope: 1
+              inSlope: 0
+              outSlope: 0.964533
               tangentMode: 0
               weightedMode: 0
               inWeight: 0
@@ -159,8 +159,8 @@ MonoBehaviour:
             - serializedVersion: 3
               time: 1
               value: 1
-              inSlope: 1
-              outSlope: 1
+              inSlope: 0.85021794
+              outSlope: 0.85021794
               tangentMode: 0
               weightedMode: 0
               inWeight: 0
@@ -309,7 +309,7 @@ MonoBehaviour:
     m_Enabled: 0
     m_Settings:
       spectralTexture: {fileID: 0}
-      intensity: 0.1
+      intensity: 0.02
   grain:
     m_Enabled: 1
     m_Settings:
