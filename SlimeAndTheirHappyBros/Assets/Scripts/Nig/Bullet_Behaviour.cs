@@ -13,7 +13,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     private Transform _myTransform;
     Color BulletAlpha;
     private float alpha = - 0.01f;
-    Object_Pool bulletPool;
+    Bullet_Manager bulletPool;
     Vector3 Attack_Dir;
 
     void Awake(){
@@ -21,16 +21,19 @@ public class Bullet_Behaviour : MonoBehaviour{
         BulletAlpha = GetComponent<SpriteRenderer>().color;
     }
 
-    public void SetPool(Object_Pool pool) {
+    public void SetPool(Bullet_Manager pool) {
         bulletPool = pool;
     }
 
     void OnEnable(){
         _timer = Time.time;
         BulletAlpha.a = 1.0f;
+        transform.localEulerAngles = new Vector3(20.0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
     }
 
-    public void SetAttackDir(Vector3 current_angle,GameObject xSlime) {
+    public void SetAttackDir(Vector3 current_angle,GameObject xSlime,int Shader_Number) {
+        //補一行著色器
+        GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
         Attack_Dir = current_angle.normalized;
         offset = Mathf.Abs(Attack_Dir.x);
@@ -45,7 +48,7 @@ public class Bullet_Behaviour : MonoBehaviour{
             GetComponent<SpriteRenderer>().color = BulletAlpha;
         }
 
-        if(BulletAlpha.a <= 0.0f) bulletPool.Recovery(gameObject);
+        if(BulletAlpha.a <= 0.0f) bulletPool.Bullet_Recovery(gameObject);
 
         _myTransform.position += new Vector3(Attack_Dir.x*Time.deltaTime,0,Attack_Dir.z*Time.deltaTime);
         _myTransform.position = new Vector3(_myTransform.position. x, _myTransform.position.y,  _myTransform.position.z);

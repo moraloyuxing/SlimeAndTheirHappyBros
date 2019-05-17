@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class Player_Control : MonoBehaviour{
 
-    public float testlerp = 0.1f;
-
     //確定為第幾位玩家&動畫優先權
     public GameObject Player_Manager;
     public GameObject Player_Sprite;
@@ -23,7 +21,7 @@ public class Player_Control : MonoBehaviour{
 
     //移動
     public GameObject Player_Icon;
-    public float xAix, zAix;
+    float xAix, zAix;
     Ray ray_horizontal;
     Ray ray_vertical;
     RaycastHit hit_horizontal;
@@ -36,23 +34,19 @@ public class Player_Control : MonoBehaviour{
 
     //攻擊方向旋轉
     public GameObject Attack_Arrow;
-    public float xAtk, zAtk;
+     float xAtk, zAtk;
     float Atk_angle = 0.0f;
     float angle_toLerp;
     Vector3 current_angle;
     Vector3 Attack_Direction = new Vector3(0.0f,0.0f,1.0f);
-    float testrot = 1.0f;
+    float ArrowRot = 1.0f;
 
     //攻擊
-    bool right_bumper = false;
+    float right_trigger = 0.0f;
+    bool Shooting = false;
 
     //單人染色偵測
     public Transform[] Four_Pigment = new Transform[4];//白紅黃藍
-
-    //雙人混色偵測
-    public GameObject[] Other_Player = new GameObject[3];
-    float[] Player_Distance = new float[3];
-    public GameObject Merge_Target;
 
     //頭頂提示
     public GameObject Hint;
@@ -63,13 +57,20 @@ public class Player_Control : MonoBehaviour{
     int rescue_count = 0;
 
     //短衝刺
-    bool left_bumper = false;
+    float left_trigger = 0.0f;
     bool OnDash = false;
     public float DashSpeed = 1.0f;
     bool DuringDashLerp = false;
+    float DashCD = 0.0f;
+    public float testlerp = 0.1f;
 
     //動畫插斷
     Animator anim;
+
+    //商店道具加成等等
+    public Item_Manager Shop;
+    public GameObject Focus_Item;
+    bool Item_Checked = false;
 
     void Start(){
         WhichPlayer = gameObject.name;
@@ -79,27 +80,26 @@ public class Player_Control : MonoBehaviour{
     }
 
     void Update(){
-        Debug.DrawRay(ray_horizontal.origin,ray_horizontal.direction,Color.cyan);
-        Debug.DrawRay(ray_vertical.origin, ray_vertical.direction, Color.cyan);
-
         anim.SetBool("Walking", Walking);
+        anim.SetBool("Shooting", Shooting);
 
         //受傷判定
-        if(StopDetect == false)SlimeGetHurt();
+        if (StopDetect == false)SlimeGetHurt();
 
         //移動&短衝刺
         xAix = Input.GetAxis(WhichPlayer + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
-        left_bumper = Input.GetButtonDown(WhichPlayer + "Dash");
-        if (left_bumper == true && OnDash == false){
+        left_trigger = Input.GetAxis(WhichPlayer + "Dash");
+        if (left_trigger >0.3f && OnDash == false && Time.time > DashCD + 2.0f){
             DashSpeed = 6.0f;
             OnDash = true;
             DuringDashLerp = true;
+            DashCD = Time.time;
         }
 
-        if (AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
+        if (ExtraPriority == false && DeathPriority == false) {
             if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f){
-                if (OnDash == false && DashSpeed!=2.5f) {/*GetComponent<Animator>().Play("Slime_Walk");*/ Walking = true; } 
+                if (OnDash == false && DuringDashLerp == false) {Walking = true; } 
                 else if (OnDash == true){
                     Walking = false;
                     if (Mathf.Abs(xAix) >= Mathf.Abs(zAix)) GetComponent<Animator>().Play("Slime_DashFoward");
@@ -111,10 +111,11 @@ public class Player_Control : MonoBehaviour{
                 }
                 Player_Manager.SendMessage(WhichPlayer + "rePos", transform.position);
             }
-            else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) /*GetComponent<Animator>().Play("Slime_Idle")*/Walking = false;
+            else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) Walking = false;
         }
 
         if (xAix > 0.0f) {
+            ArrowRot = 1.0f;
             //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
@@ -128,14 +129,27 @@ public class Player_Control : MonoBehaviour{
 
             ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,3.0f)) {
-                if (hit_horizontal.transform.tag == "Border"){
-                    Right_CanMove = false;
+                if (hit_horizontal.transform.tag == "Border"){Right_CanMove = false;}
+                if (hit_horizontal.transform.tag == "Item") {
+                    if (hit_horizontal.transform.gameObject != Focus_Item && Item_Checked == false) {
+                        Shop.ShowWhichIntro(hit_horizontal.transform.gameObject);
+                        Focus_Item = hit_horizontal.transform.gameObject;
+                        Item_Checked = true;
+                    }
                 }
             }
-            else { Right_CanMove = true; }
+            else {
+                if (Focus_Item != null && Item_Checked == true) {
+                    Debug.Log(hit_horizontal.transform.name + "Exit");
+                    Shop.Decrease_FocusCount(Focus_Item);
+                    Item_Checked = false;
+                }
+                Right_CanMove = true;
+            }
         }
 
         if (xAix < 0.0f) {
+            ArrowRot = -1.0f;
             //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(-1.3f, 1.3f, 1.3f);
@@ -149,11 +163,24 @@ public class Player_Control : MonoBehaviour{
             Right_CanMove = true;
             ray_horizontal = new Ray(transform.position, new Vector3(-3.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,3.0f)){
-                if (hit_horizontal.transform.tag == "Border"){
-                    Left_CanMove = false;
+                if (hit_horizontal.transform.tag == "Border"){Left_CanMove = false;}
+                if (hit_horizontal.transform.tag == "Item") {
+                    if (hit_horizontal.transform.gameObject != Focus_Item && Item_Checked == false) {
+                        Debug.Log(hit_horizontal.transform.name + "Enter");
+                        Shop.ShowWhichIntro(hit_horizontal.transform.gameObject);
+                        Focus_Item = hit_horizontal.transform.gameObject;
+                        Item_Checked = true;
+                    }
                 }
             }
-            else { Left_CanMove = true; }
+            else {
+                if (Focus_Item != null && Item_Checked == true){
+
+                    Shop.Decrease_FocusCount(Focus_Item);
+                    Item_Checked = false;
+                }
+                Left_CanMove = true;
+            }
         }
 
         if (zAix > 0.0f) {
@@ -161,11 +188,22 @@ public class Player_Control : MonoBehaviour{
             //Down_CanMove = false;
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical, 3.0f)){
-                if (hit_vertical.transform.tag == "Border"){
-                    Up_CanMove = false;
+                if (hit_vertical.transform.tag == "Border"){Up_CanMove = false;}
+                if (hit_vertical.transform.tag == "Item") {
+                    if (hit_vertical.transform.gameObject != Focus_Item && Item_Checked == false) {
+                        Shop.ShowWhichIntro(hit_vertical.transform.gameObject);
+                        Focus_Item = hit_vertical.transform.gameObject;
+                        Item_Checked = true;
+                    }
                 }
             }
-            else {Up_CanMove = true;}
+            else {
+                if (Focus_Item != null && Item_Checked == true){
+                    Shop.Decrease_FocusCount(Focus_Item);
+                    Item_Checked = false;
+                }
+                Up_CanMove = true;
+            }
         }
 
         if (zAix < 0.0f) {
@@ -173,11 +211,22 @@ public class Player_Control : MonoBehaviour{
             //Up_CanMove = false;
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -3.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical,3.0f)){
-                if (hit_vertical.transform.tag == "Border"){
-                    Down_CanMove = false;
+                if (hit_vertical.transform.tag == "Border"){Down_CanMove = false;}
+                if (hit_vertical.transform.tag == "Item") {
+                    if (hit_vertical.transform.gameObject != Focus_Item && Item_Checked == false) {
+                        Shop.ShowWhichIntro(hit_vertical.transform.gameObject);
+                        Focus_Item = hit_vertical.transform.gameObject;
+                        Item_Checked = true;
+                    }
                 }
             }
-            else {Down_CanMove = true;}
+            else {
+                if (Focus_Item != null && Item_Checked == true){
+                    Shop.Decrease_FocusCount(Focus_Item);
+                    Item_Checked = false;
+                }
+                Down_CanMove = true;
+            }
         }
 
         if (ExtraPriority == false && DeathPriority == false) {
@@ -196,19 +245,17 @@ public class Player_Control : MonoBehaviour{
         zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
         if (xAtk != 0.0f || zAtk != 0.0f) {
-            if (xAix > 0.0f) testrot = 1.0f;
-            else if(xAix < 0.0f)testrot = -1.0f;
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
-            Attack_Arrow.transform.localEulerAngles = new Vector3(65.0f, 0.0f, angle_toLerp * testrot);
+            Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp * ArrowRot);
         }
 
         //攻擊
-        right_bumper = Input.GetButtonDown(WhichPlayer + "Attack");
-        if (right_bumper == true && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
+        right_trigger = Input.GetAxis(WhichPlayer + "Attack");
+        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
             GetComponent<Animator>().Play("Slime_Attack");
-            Attack_Arrow.SendMessage("ShootBullet", Attack_Direction);
+            Shooting = true;
         }
 
         //單人染色偵測(by距離)
@@ -228,7 +275,6 @@ public class Player_Control : MonoBehaviour{
                 }
             }
         }
-
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)
         if (Time.time > musouTime + 2.5f && StopDetect == true) { StopDetect = false; }
     }
@@ -249,7 +295,6 @@ public class Player_Control : MonoBehaviour{
         Player_Manager.GetComponent<Player_Manager>().SetPlayerColor(Player_Number, Color_Number);
     }
 
-
     //顯示/隱藏混合提示
     void Show_Hint(Sprite HintSprite) {
         Hint.SetActive(true);
@@ -263,11 +308,12 @@ public class Player_Control : MonoBehaviour{
     //設置攻擊最高優先權
     public void AttackPriorityOn() {
         AttackPriority = true;
+        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Color_Number); //移到另外函式呼叫
     }
 
     public void AttackPriorityOff(){
         AttackPriority = false;
-        if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
+        Shooting = false;
     }
 
     //設置受傷&死亡最高優先權
@@ -293,25 +339,11 @@ public class Player_Control : MonoBehaviour{
         }
     }
 
-
-
-
-    public void HurtPriorityOn() {
-        //ExtraPriority = true;
-        //StopDetect = true;
-        //musouTime = Time.time;
-        //Damage_Count++;
-        //for (int i = 0; i < Damage_Count; i++) { Personal_HP[i].SetActive(false); }
-        //if (Damage_Count == 3) {
-        //    DeathPriority = true;
-        //    ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
-        //    GetComponent<Animator>().Play("Slime_Death");
-        //}
-    }
-
     public void HurtPriorityOff(){
         ExtraPriority = false;
         AttackPriority = false;
+        if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
+        else if(Mathf.Abs(xAix) > 0.03f && Mathf.Abs(zAix) > 0.03f) GetComponent<Animator>().Play("Slime_Walk");
     }
 
     //短衝刺設定
@@ -320,10 +352,8 @@ public class Player_Control : MonoBehaviour{
         DuringDashLerp = false;
     }
 
-
     //呼叫水花濺起
     public void PondEffect() {
-        //Player_Sprite.GetComponent<SpriteRenderer>().color = SplashEffect.GetComponent<SpriteRenderer>().color;
         Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
     }
@@ -343,7 +373,6 @@ public class Player_Control : MonoBehaviour{
             Damage_Count = 0;
             GetComponent<Animator>().Play("Slime_Revive");
         }
-
     }
 
     public void DeathPriorityOff(){
