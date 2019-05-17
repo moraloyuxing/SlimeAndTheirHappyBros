@@ -6,13 +6,13 @@ public class Bullet_Behaviour : MonoBehaviour{
 
     float  offset;
     public GameObject WhichPlayer;
-    public float speed = 3.0f;
+    public float speed = 20.0f;
+    public float alpha = -0.04f;
     public float FadeTime = 1.5f;
     public float recoveryTime = 2.0f;
     private float _timer;
     private Transform _myTransform;
     Color BulletAlpha;
-    private float alpha = - 0.01f;
     Bullet_Manager bulletPool;
     Vector3 Attack_Dir;
 
@@ -32,7 +32,6 @@ public class Bullet_Behaviour : MonoBehaviour{
     }
 
     public void SetAttackDir(Vector3 current_angle,GameObject xSlime,int Shader_Number) {
-        //補一行著色器
         GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
         Attack_Dir = current_angle.normalized;

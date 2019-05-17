@@ -69,8 +69,6 @@ public class Player_Control : MonoBehaviour{
 
     //商店道具加成等等
     public Item_Manager Shop;
-    public GameObject Focus_Item;
-    bool Item_Checked = false;
 
     void Start(){
         WhichPlayer = gameObject.name;
@@ -90,7 +88,7 @@ public class Player_Control : MonoBehaviour{
         xAix = Input.GetAxis(WhichPlayer + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
         left_trigger = Input.GetAxis(WhichPlayer + "Dash");
-        if (left_trigger >0.3f && OnDash == false && Time.time > DashCD + 2.0f){
+        if (left_trigger >0.3f && OnDash == false && Time.time > DashCD + 1.0f){
             DashSpeed = 6.0f;
             OnDash = true;
             DuringDashLerp = true;
@@ -130,22 +128,8 @@ public class Player_Control : MonoBehaviour{
             ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,3.0f)) {
                 if (hit_horizontal.transform.tag == "Border"){Right_CanMove = false;}
-                if (hit_horizontal.transform.tag == "Item") {
-                    if (hit_horizontal.transform.gameObject != Focus_Item && Item_Checked == false) {
-                        Shop.ShowWhichIntro(hit_horizontal.transform.gameObject);
-                        Focus_Item = hit_horizontal.transform.gameObject;
-                        Item_Checked = true;
-                    }
-                }
             }
-            else {
-                if (Focus_Item != null && Item_Checked == true) {
-                    Debug.Log(hit_horizontal.transform.name + "Exit");
-                    Shop.Decrease_FocusCount(Focus_Item);
-                    Item_Checked = false;
-                }
-                Right_CanMove = true;
-            }
+            else {Right_CanMove = true;}
         }
 
         if (xAix < 0.0f) {
@@ -164,23 +148,8 @@ public class Player_Control : MonoBehaviour{
             ray_horizontal = new Ray(transform.position, new Vector3(-3.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,3.0f)){
                 if (hit_horizontal.transform.tag == "Border"){Left_CanMove = false;}
-                if (hit_horizontal.transform.tag == "Item") {
-                    if (hit_horizontal.transform.gameObject != Focus_Item && Item_Checked == false) {
-                        Debug.Log(hit_horizontal.transform.name + "Enter");
-                        Shop.ShowWhichIntro(hit_horizontal.transform.gameObject);
-                        Focus_Item = hit_horizontal.transform.gameObject;
-                        Item_Checked = true;
-                    }
-                }
             }
-            else {
-                if (Focus_Item != null && Item_Checked == true){
-
-                    Shop.Decrease_FocusCount(Focus_Item);
-                    Item_Checked = false;
-                }
-                Left_CanMove = true;
-            }
+            else {Left_CanMove = true;}
         }
 
         if (zAix > 0.0f) {
@@ -189,21 +158,8 @@ public class Player_Control : MonoBehaviour{
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical, 3.0f)){
                 if (hit_vertical.transform.tag == "Border"){Up_CanMove = false;}
-                if (hit_vertical.transform.tag == "Item") {
-                    if (hit_vertical.transform.gameObject != Focus_Item && Item_Checked == false) {
-                        Shop.ShowWhichIntro(hit_vertical.transform.gameObject);
-                        Focus_Item = hit_vertical.transform.gameObject;
-                        Item_Checked = true;
-                    }
-                }
             }
-            else {
-                if (Focus_Item != null && Item_Checked == true){
-                    Shop.Decrease_FocusCount(Focus_Item);
-                    Item_Checked = false;
-                }
-                Up_CanMove = true;
-            }
+            else {Up_CanMove = true;}
         }
 
         if (zAix < 0.0f) {
@@ -212,21 +168,8 @@ public class Player_Control : MonoBehaviour{
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -3.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical,3.0f)){
                 if (hit_vertical.transform.tag == "Border"){Down_CanMove = false;}
-                if (hit_vertical.transform.tag == "Item") {
-                    if (hit_vertical.transform.gameObject != Focus_Item && Item_Checked == false) {
-                        Shop.ShowWhichIntro(hit_vertical.transform.gameObject);
-                        Focus_Item = hit_vertical.transform.gameObject;
-                        Item_Checked = true;
-                    }
-                }
             }
-            else {
-                if (Focus_Item != null && Item_Checked == true){
-                    Shop.Decrease_FocusCount(Focus_Item);
-                    Item_Checked = false;
-                }
-                Down_CanMove = true;
-            }
+            else {Down_CanMove = true;}
         }
 
         if (ExtraPriority == false && DeathPriority == false) {

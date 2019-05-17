@@ -30,6 +30,9 @@ public class GoblinManager : MonoBehaviour
 
     Dictionary<string, GoblinArrow> goblinArrowsDic;
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
+    Dictionary<string, GoblinLeaf> goblinLeafDic;
+    List<GoblinLeaf> freeGoblinLeaves, usedGoblinLeaves;
+
 
     public TestPlayerManager playerManager;
     //Player_Manager playerManager;
@@ -118,6 +121,18 @@ public class GoblinManager : MonoBehaviour
             goblinArrowsDic.Add(goblin.name, freeGoblinArrows[i]);
             goblin.gameObject.SetActive(false);
         }
+        goblins = transform.Find("GoblinLeaves");
+        freeGoblinLeaves = new List<GoblinLeaf>();
+        usedGoblinLeaves = new List<GoblinLeaf>();
+        goblinLeafDic = new Dictionary<string, GoblinLeaf>();
+        for (int i = 0; i < goblins.childCount; i++)
+        {
+            goblin = goblins.GetChild(i);
+            freeGoblinLeaves.Add(new GoblinLeaf());
+            freeGoblinLeaves[i].Init(goblin, this, poolUnitInfo[0]);
+            goblinLeafDic.Add(goblin.name, freeGoblinLeaves[i]);
+            goblin.gameObject.SetActive(false);
+        }
     }
     void Start()
     {
@@ -163,6 +178,10 @@ public class GoblinManager : MonoBehaviour
 
         for (index = 0; index < usedGoblinArrows.Count; index++) {
             usedGoblinArrows[index].Update(dt);
+        }
+        for (index = 0; index < usedGoblinLeaves.Count; index++)
+        {
+            usedGoblinLeaves[index].Update(dt);
         }
 
 
@@ -251,11 +270,24 @@ public class GoblinManager : MonoBehaviour
         arrow.ToActive(pos, dir);
         freeGoblinArrows.Remove(arrow);
     }
+    public void UseLeaf(Vector3 pos, Vector3 dir)
+    {
+        if (freeGoblinLeaves.Count <= 0) return;
+        GoblinLeaf leaf = freeGoblinLeaves[0];
+        usedGoblinLeaves.Add(leaf);
+        leaf.ToActive(pos, dir);
+        freeGoblinLeaves.Remove(leaf);
+    }
 
     public void RecycleArrow(GoblinArrow arrow) {
         freeGoblinArrows.Add(arrow);
         usedGoblinArrows.Remove(arrow);
         
+    }
+
+    public void RecycleLeaf(GoblinLeaf leaf) {
+        freeGoblinLeaves.Add(leaf);
+        usedGoblinLeaves.Remove(leaf);
     }
 
 

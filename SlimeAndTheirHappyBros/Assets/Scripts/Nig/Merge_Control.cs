@@ -14,7 +14,7 @@ public class Merge_Control : MonoBehaviour{
 
     //優先權、無敵時間等等
     bool AttackPriority = false;
-    bool HurtPriority = false;//適用範圍：受傷
+    bool ExtraPriority = false;//適用範圍：受傷、合體、解體
     bool DeathPriority = false;
     bool StopDetect = false;
     float musouTime = 0.0f; //無敵時間：受傷後、染色時
@@ -101,6 +101,7 @@ public class Merge_Control : MonoBehaviour{
     void OnEnable(){
         //相當於數據初始化
         Merge_Control_Hint.SetActive(true);
+        ExtraPriority = true;
         Merge_Sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         Timer_float = 10.0f;
         flicker = -0.5f;
@@ -108,13 +109,10 @@ public class Merge_Control : MonoBehaviour{
 
     void Update(){
         //操作提示
-        if (Time.time > Hint_Moment + 3.0f && Hint_Activate == true) {
+        if (Time.time > Hint_Moment + 7.0f && Hint_Activate == true) {
             Merge_Control_Hint.SetActive(false);
             Hint_Activate = false;
         }
-
-        Debug.DrawRay(ray_horizontal.origin, ray_horizontal.direction, Color.cyan);
-        Debug.DrawRay(ray_vertical.origin, ray_vertical.direction, Color.cyan);
 
         anim.SetBool("Walking", Walking);
         anim.SetBool("Shooting", Shooting);
@@ -126,14 +124,14 @@ public class Merge_Control : MonoBehaviour{
         xAix = Input.GetAxis(WhichPlayer_Moving + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer_Moving + "Vertical");
         left_trigger = Input.GetAxis(WhichPlayer_Moving + "Dash");
-        if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 2.0f){
+        if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f){
             DashSpeed = 6.0f;
             OnDash = true;
             DuringDashLerp = true;
             DashCD = Time.time;
         }
 
-        if ( HurtPriority == false && DeathPriority == false) {
+        if ( ExtraPriority == false && DeathPriority == false) {
             if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f) {
                 if (OnDash == false && DuringDashLerp == false) { Walking = true; }
                 else if (OnDash == true){
@@ -153,7 +151,7 @@ public class Merge_Control : MonoBehaviour{
         if (xAix > 0.0f){
             ArrowRot = 1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
-            if (HurtPriority == false && DeathPriority == false && OnDash == false) {
+            if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
                 Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
@@ -172,7 +170,7 @@ public class Merge_Control : MonoBehaviour{
         if (xAix < 0.0f){
             ArrowRot = -1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
-            if (HurtPriority == false && DeathPriority == false && OnDash == false) {
+            if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.4f, 0.4f, 0.4f);
                 Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
@@ -210,7 +208,7 @@ public class Merge_Control : MonoBehaviour{
             else { Down_CanMove = true; }
         }
 
-        if (HurtPriority == false && DeathPriority == false) {
+        if (ExtraPriority == false && DeathPriority == false) {
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
             if (!Left_CanMove || !Right_CanMove) xAix = .0f;
             transform.position += new Vector3(xAix, 0, zAix).normalized * DashSpeed * Time.deltaTime * 5.0f;
@@ -234,7 +232,7 @@ public class Merge_Control : MonoBehaviour{
 
         //攻擊
         right_trigger = Input.GetAxis(WhichPlayer_Shooting + "Attack");
-        if (right_trigger > 0.3f && AttackPriority == false &&HurtPriority == false && DeathPriority == false){
+        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false){
             GetComponent<Animator>().Play("Slime_Attack");
             Shooting = true;
         }
@@ -373,14 +371,14 @@ public class Merge_Control : MonoBehaviour{
             if (i == 0){
                 Destroy(colliders[i]);//之後要移除
                 GetComponent<Animator>().Play("Slime_Hurt");
-                HurtPriority = true;
+                ExtraPriority = true;
                 StopDetect = true;
                 musouTime = Time.time;
                 Damage_Count++;
                 for (int k = 0; k < Damage_Count; k++) {Merge_HP[k].SetActive(false); }
                 if (Damage_Count == 3){
                     DeathPriority = true;
-                    HurtPriority = false;//沒必要true受傷優先，也有利之後復活初始化
+                    ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     CancelInvoke("Merge_Timer");
                     GetComponent<Animator>().Play("Slime_Death");
                 }
@@ -389,12 +387,8 @@ public class Merge_Control : MonoBehaviour{
         }
     }
 
-    public void HurtPriorityOn(){
-
-    }
-
     public void HurtPriorityOff(){
-        HurtPriority = false;
+        ExtraPriority = false;
         AttackPriority = false;
     }
 
@@ -402,6 +396,10 @@ public class Merge_Control : MonoBehaviour{
     public void DashEnd(){
         DashSpeed = 1.0f;
         DuringDashLerp = false;
+    }
+
+    public void SpiltPriorityOn() {
+        ExtraPriority = true;
     }
 
 }
