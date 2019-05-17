@@ -179,6 +179,10 @@ public class GoblinManager : MonoBehaviour
         for (index = 0; index < usedGoblinArrows.Count; index++) {
             usedGoblinArrows[index].Update(dt);
         }
+        for (index = 0; index < usedGoblinLeaves.Count; index++)
+        {
+            usedGoblinLeaves[index].Update(dt);
+        }
 
 
         playerMove[0] = false;
@@ -282,7 +286,8 @@ public class GoblinManager : MonoBehaviour
     }
 
     public void RecycleLeaf(GoblinLeaf leaf) {
-
+        freeGoblinLeaves.Add(leaf);
+        usedGoblinLeaves.Remove(leaf);
     }
 
 

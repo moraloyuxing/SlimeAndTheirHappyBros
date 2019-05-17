@@ -187,6 +187,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     {
         hp = maxHp;
         firstInState = false;
+        hasShoot = false;
         inStateTime = .0f;
         curState = GoblinState.moveIn;
 

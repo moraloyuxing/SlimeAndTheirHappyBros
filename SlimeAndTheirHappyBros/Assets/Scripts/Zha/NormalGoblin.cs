@@ -132,7 +132,6 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         {
             atkCol.enabled = false;
             firstInState = false;
-            atkCol.enabled = true;
             animator.Play("hurt");
             animator.SetInteger("state", 3);
         }

@@ -6,7 +6,7 @@ public class GoblinArrow : IEnemyObjectPoolUnit
 {
     bool fallGround = false;
     float time,flyTime, lifeTime = 3.0f, deltaTime;
-    float speed, addSpeed = 3.0f, degree, length;
+    float speed, degree, length;
     Vector3 moveDir;
     Collider collider;
     Transform transform;
