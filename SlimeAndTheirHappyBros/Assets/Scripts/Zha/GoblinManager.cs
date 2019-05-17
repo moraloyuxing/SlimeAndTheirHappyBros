@@ -25,6 +25,8 @@ public class GoblinManager : MonoBehaviour
 
     List<NormalGoblin> freeNormalGoblins, usedNormalGoblins;
     List<ArcherGoblin> freeArcherGoblins, usedArcherGoblins;
+    List<HobGoblin> freeHobGoblins, usedHobGoblins;
+
 
     Dictionary<string, GoblinArrow> goblinArrowsDic;
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
@@ -85,6 +87,19 @@ public class GoblinManager : MonoBehaviour
             goblin.gameObject.SetActive(false);
         }
 
+        goblins = transform.Find("HobGoblins");
+        freeHobGoblins = new List<HobGoblin>();
+        usedHobGoblins = new List<HobGoblin>();
+        for (int i = 0; i < goblins.childCount; i++)
+        {
+            goblin = goblins.GetChild(i);
+            freeHobGoblins.Add(new HobGoblin());
+            freeHobGoblins[i].TestInit(goblin, goblinInfo[2], this);
+            //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
+            goblin.gameObject.SetActive(false);
+        }
+
+
         Transform locs = transform.Find("SpawnLocs");
         spawnPos = new Vector3[locs.childCount];
         for (int i = 0; i < spawnPos.Length; i++) {
@@ -121,6 +136,9 @@ public class GoblinManager : MonoBehaviour
             //SpawnNormalGoblinRandomPos(-1);
             SpawnArcherGoblininRandomPos(-1);
         }
+        if (Input.GetKeyDown(KeyCode.X)) {
+            SpawnHobGoblininRandomPos(-1);
+        }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
             usedNormalGoblins[index].Update(dt);
@@ -128,6 +146,10 @@ public class GoblinManager : MonoBehaviour
         for (index = 0; index < usedArcherGoblins.Count; index++)
         {
             usedArcherGoblins[index].Update(dt);
+        }
+        for (index = 0; index < usedHobGoblins.Count; index++)
+        {
+            usedHobGoblins[index].Update(dt);
         }
 
         if (Input.GetKeyDown(KeyCode.X)) {
@@ -179,14 +201,33 @@ public class GoblinManager : MonoBehaviour
         goblin.UpdateAllPlayerPos();
         freeArcherGoblins.RemoveAt(0);
     }
-    void SpawnNormalArcherSpecificPos(Vector3 pos, int col)
+    void SpawnArcherSpecificPos(Vector3 pos, int col)
     {
-        if (freeNormalGoblins.Count <= 0) return;
+        if (freeArcherGoblins.Count <= 0) return;
         ArcherGoblin goblin = freeArcherGoblins[0];
         usedArcherGoblins.Add(goblin);
         goblin.Spawn(pos, col);
         goblin.UpdateAllPlayerPos();
         freeArcherGoblins.RemoveAt(0);
+    }
+    void SpawnHobGoblininRandomPos(int col)
+    {
+        if (freeHobGoblins.Count <= 0) return;
+        HobGoblin goblin = freeHobGoblins[0];
+        usedHobGoblins.Add(goblin);
+        Vector3 pos = spawnPos[Random.Range(0, 13)];
+        goblin.Spawn(pos, col);
+        goblin.UpdateAllPlayerPos();
+        freeHobGoblins.RemoveAt(0);
+    }
+    void SpawnHobSpecificPos(Vector3 pos, int col)
+    {
+        if (freeHobGoblins.Count <= 0) return;
+        HobGoblin goblin = freeHobGoblins[0];
+        usedHobGoblins.Add(goblin);
+        goblin.Spawn(pos, col);
+        goblin.UpdateAllPlayerPos();
+        freeHobGoblins.RemoveAt(0);
     }
 
     public void RecycleGoblin<T>(T goblin) where T : IEnemyUnit {
