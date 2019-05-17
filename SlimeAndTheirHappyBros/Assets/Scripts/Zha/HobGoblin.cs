@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class HobGoblin : GoblinBase, IEnemyUnit
 {
-    bool startAttack = false, endure = false;
+    bool startAttack = false, endure = false, hasShoot = false;
     int maxHp;
     int attackType = 0;
     float imgOffset;
+    Vector3 shootOffset;
     float[] atkColOffset = new float[2];
     Transform[] atkCol = new Transform[2];
 
@@ -23,6 +24,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         atkCol[1] = t.Find("AtkCollider (1)");
         imgScale = image.localScale.x;
         imgOffset = image.localPosition.x;
+        shootOffset = t.Find("ShootPos").localPosition;
         atkColOffset[0] = atkCol[0].localPosition.x;
         atkColOffset[1] = atkCol[1].localPosition.x;
         maxHp = info.hp;
@@ -100,11 +102,16 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
     public override void DetectGethurt()
     {
-        Collider[] colliders = Physics.OverlapBox(image.position, new Vector3(0.4f, 2.9f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
+        float offset = Mathf.Sign(image.localScale.x);
+        Collider[] colliders = Physics.OverlapBox((selfPos + new Vector3(offset*0.7f,-1.55f,.0f)), new Vector3(1.5f, 3.1f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
         int i = 0;
         while (i < colliders.Length)
         {
             hp--;
+            if (hp <= 0) {
+                SetState(GoblinState.die);
+                break;
+            }
             if (i == 0 && curState != GoblinState.hurt && !endure)
             {
                 SetState(GoblinState.hurt);
@@ -112,6 +119,24 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             }
             //Debug.Log(colliders[i].name);
             i++;
+        }
+    }
+
+    public override void MoveIn()
+    {
+        if (firstInState)
+        {
+            animator.SetInteger("state", 1);
+            firstInState = false;
+            moveFwdDir = new Vector3(-selfPos.x, 0, -selfPos.z).normalized;
+            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+            image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+        }
+        else
+        {
+            transform.position += deltaTime * speed * moveFwdDir;
+            if (inStateTime > 1.0f) SetState(GoblinState.ramble);
         }
     }
 
@@ -247,36 +272,53 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 }
             }
 
-            moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z);
-            if (Mathf.Abs(moveFwdDir.z) > 1.2f)
-            {
-                scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-                image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-                image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+            if (!startAttack) {
+                moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z);
+                if (Mathf.Abs(moveFwdDir.z) > 1.2f)
+                {
+                    scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                    image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                    image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
 
-                if (Mathf.Abs(moveFwdDir.x) < 5.0f) moveFwdDir = new Vector3(0, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
-                else moveFwdDir = (moveFwdDir + new Vector3(-scaleX * 4.0f, 0, 0)).normalized;
-                transform.position += speed*2.0f * deltaTime * moveFwdDir;
+                    if (Mathf.Abs(moveFwdDir.x) < 5.0f) moveFwdDir = new Vector3(0, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
+                    else moveFwdDir = (moveFwdDir + new Vector3(-scaleX * 4.0f, 0, 0)).normalized;
+                    transform.position += speed * 2.0f * deltaTime * moveFwdDir;
+                }
+                else
+                {
+                    startAttack = true;
+                    endure = true;
+                    animator.SetInteger("attackType", attackType);
+                    animator.SetInteger("state", 2);
+                }
             }
-            else {
-                startAttack = true;
-                endure = true;
-                animator.SetInteger("attackType", attackType);
-                animator.SetInteger("state", 2);
-            }
+            
         }
         else
         {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             if (aniInfo.IsTag("attack"))
             {
-                if (attackType == 1 && aniInfo.normalizedTime >= 0.47f) {
+                if (attackType == 1 && !hasShoot && aniInfo.normalizedTime >= 0.47f) {
+                    hasShoot = true;
+                    float scaleX = (goblinManager.PlayerPos[targetPlayer].x > selfPos.x) ? -1.0f : 1.0f;
+                    Vector3 launchPos = selfPos + new Vector3(scaleX * shootOffset.x, shootOffset.y, shootOffset.z);
+                    goblinManager.UseLeaf(launchPos + new Vector3(-scaleX * 1.5f, 0, 0), new Vector3(-scaleX,0,0));
+                    for (int i = 1; i <= 4; i++) {
+                        Vector3 shootDir =  Quaternion.AngleAxis(15.0f*i, Vector3.up) * new Vector3(-scaleX, 0, 0);
+                        goblinManager.UseLeaf(launchPos + shootDir * 1.5f, shootDir);
+
+                        shootDir = Quaternion.AngleAxis(-15.0f * i, Vector3.up) * new Vector3(-scaleX, 0, 0);
+                        goblinManager.UseLeaf(launchPos + shootDir * 1.5f, shootDir);
+                    }
+
 
                 }
                 if (aniInfo.normalizedTime >= 0.99f)
                 {
                     endure = false;
                     startAttack = false;
+                    hasShoot = false;
                     animator.SetTrigger("attackOver");
                     OverAttackDetectDist();
                 }
@@ -308,7 +350,9 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         firstInState = false;
         inStateTime = .0f;
         curState = GoblinState.moveIn;
-
+        hasShoot = false;
+        endure = false;
+        startAttack = false;
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }
