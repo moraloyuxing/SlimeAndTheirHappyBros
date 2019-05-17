@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class GoblinLeaf : IEnemyObjectPoolUnit
 {
-    float time, flyTime, deltaTime;
-    float speed, degree, length;
+    float time, flyTime, lifeTime = 3.0f, deltaTime;
+    float speed, addSpeed = 3.0f, degree, length;
     Vector3 moveDir;
+    Collider collider;
     Transform transform;
 
     GoblinManager goblinManager;
@@ -18,21 +19,23 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
         goblinManager = manager;
         speed = info.speed;
         length = info.length;
-        flyTime = 15.0f * length;
+        collider = transform.GetComponent<Collider>();
+
     }
     public void ToActive(Vector3 pos, Vector3 dir)
     {
         transform.gameObject.SetActive(true);
         transform.position = pos;
-        moveDir = (dir + new Vector3(0,-0.2f,0)).normalized;
-        float baseD = -25.0f * (1.0f - Mathf.Abs(moveDir.x - moveDir.z));
-        //degree = (Mathf.Atan2(rot.z, rot.x)) * Mathf.Rad2Deg + 90.0f + baseD;
-
-        degree = (Mathf.Atan2(moveDir.z, moveDir.x)) * Mathf.Rad2Deg - 90.0f + baseD;
+        moveDir = dir.normalized;
+        Vector3 rot = new Vector3(dir.x, 0, dir.z).normalized;
+        float baseD = -20.0f * (1.0f - Mathf.Abs(rot.x - rot.z));
+        if (Mathf.Sign(rot.x * rot.z) < .0f) baseD += 5.0f;
+        degree = (Mathf.Atan2(rot.z, rot.x)) * Mathf.Rad2Deg + 90.0f + baseD;
         transform.localRotation = Quaternion.Euler(25, 0, degree);
+        collider.enabled = true;
 
-        //float offset = (Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
-        
+        float offset = (Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
+        flyTime = Mathf.Sqrt(dir.x * dir.x + dir.z * dir.z) * length + offset;
     }
     public void Update(float dt)
     {
@@ -63,7 +66,6 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
         }
         else
         {
-            ResetUnit();
             //if (!fallGround)
             //{
             //    fallGround = true;
@@ -78,7 +80,7 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
     public void ResetUnit()
     {
         time = .0f;
-        goblinManager.RecycleLeaf(this);
+        //goblinManager.RecycleArrow(this);
         transform.gameObject.SetActive(false);
     }
 }

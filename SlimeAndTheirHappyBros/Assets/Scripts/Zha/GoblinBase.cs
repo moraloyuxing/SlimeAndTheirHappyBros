@@ -275,7 +275,7 @@ public class GoblinBase
 
 
     public virtual void DetectGethurt() {
-        Collider[]colliders =  Physics.OverlapBox(selfPos, new Vector3(0.55f, 1.4f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
+        Collider[]colliders =  Physics.OverlapBox(image.position, new Vector3(0.4f, 2.9f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
         int i = 0;
         while (i < colliders.Length) {
             hp--;
