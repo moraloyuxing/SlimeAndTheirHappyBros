@@ -33,7 +33,7 @@ public class Player_Manager : MonoBehaviour {
     void Update() {
 
         if (Game_State) {
-            for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "Merge");
+            for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
 
             //玩家1啟用融合
             if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true){

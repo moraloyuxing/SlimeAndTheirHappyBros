@@ -422,7 +422,7 @@ InputManager:
     axis: 1
     joyNum: 4
   - serializedVersion: 3
-    m_Name: Player1_Merge
+    m_Name: Player1_MultiFunction
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
@@ -438,7 +438,7 @@ InputManager:
     axis: 3
     joyNum: 1
   - serializedVersion: 3
-    m_Name: Player2_Merge
+    m_Name: Player2_MultiFunction
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
@@ -454,7 +454,7 @@ InputManager:
     axis: 3
     joyNum: 2
   - serializedVersion: 3
-    m_Name: Player3_Merge
+    m_Name: Player3_MultiFunction
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
@@ -470,7 +470,7 @@ InputManager:
     axis: 3
     joyNum: 3
   - serializedVersion: 3
-    m_Name: Player4_Merge
+    m_Name: Player4_MultiFunction
     descriptiveName: 
     descriptiveNegativeName: 
     negativeButton: 
