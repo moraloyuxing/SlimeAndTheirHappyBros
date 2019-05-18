@@ -10,6 +10,8 @@ TagManager:
   - GoblinMelee
   - GoblinArrow
   - Item
+  - Barrier
+  - Goblin
   layers:
   - Default
   - TransparentFX

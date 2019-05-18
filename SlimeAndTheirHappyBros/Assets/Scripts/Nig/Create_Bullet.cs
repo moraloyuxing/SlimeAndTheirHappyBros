@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Create_Bullet : MonoBehaviour{
-    public GameObject Player;
+    public Player_Control Player;
     public GameObject Hint_Arrow;
     //public Object_Pool bulletPool;
     public Bullet_Manager _bulletPool;

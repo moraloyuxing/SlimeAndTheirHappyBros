@@ -20,6 +20,7 @@ public class Player_Manager : MonoBehaviour {
     public Sprite[] Hint_Type = new Sprite[2];//0→洗白；1→混合
 
     bool Game_State = true;
+    public GoblinManager _goblinmanager;
 
     void Awake(){
         pigmentManager = GetComponent<Pigment_Manager>();
@@ -146,6 +147,8 @@ public class Player_Manager : MonoBehaviour {
                 if (Player_Distance[1] < Player_Distance[2]) shortest_toPlayer[0] = FourPlayer[2].gameObject;//離3最近
                 else shortest_toPlayer[0] = FourPlayer[3].gameObject;//離4最近
             }
+
+            //_goblinmanager.函式(pos);
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
