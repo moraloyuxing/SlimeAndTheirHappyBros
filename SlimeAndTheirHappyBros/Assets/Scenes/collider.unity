@@ -3708,6 +3708,8 @@ GameObject:
   m_Component:
   - component: {fileID: 409261451}
   - component: {fileID: 409261453}
+  - component: {fileID: 409261455}
+  - component: {fileID: 409261454}
   - component: {fileID: 409261452}
   m_Layer: 0
   m_Name: barrier
@@ -3724,14 +3726,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 409261450}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 343257707}
   m_RootOrder: 278
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!64 &409261452
-MeshCollider:
+--- !u!65 &409261452
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -3740,10 +3742,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 0
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 0}
+  serializedVersion: 2
+  m_Size: {x: 6.7, y: 16.5, z: 131.9}
+  m_Center: {x: -46.92, y: 3.9, z: 5.3}
 --- !u!65 &409261453
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3755,8 +3756,34 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 66.47076, y: 16.696983, z: 5.2938538}
-  m_Center: {x: -2.8537178, y: 4.74992, z: -61.478455}
+  m_Size: {x: 116.92, y: 16.696983, z: 6.67}
+  m_Center: {x: 8.1, y: 4.74992, z: -59.38}
+--- !u!65 &409261454
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409261450}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.3, y: 16.5, z: 131.1}
+  m_Center: {x: 65.1, y: 3.9, z: 6.06}
+--- !u!65 &409261455
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409261450}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 117.02, y: 16.696983, z: 7.37}
+  m_Center: {x: 9.06, y: 4.74992, z: 70.18}
 --- !u!1 &411371065
 GameObject:
   m_ObjectHideFlags: 0
@@ -9039,14 +9066,6 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Border
       objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: -90.00001
-      objectReference: {fileID: 0}
-    - target: {fileID: 400010, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 67.397
-      objectReference: {fileID: 0}
     - target: {fileID: 400538, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -9090,6 +9109,14 @@ PrefabInstance:
     - target: {fileID: 400538, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90.00001
+      objectReference: {fileID: 0}
+    - target: {fileID: 400010, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 67.397
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
