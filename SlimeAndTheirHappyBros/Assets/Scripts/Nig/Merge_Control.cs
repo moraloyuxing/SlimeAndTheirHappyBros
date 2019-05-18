@@ -41,7 +41,6 @@ public class Merge_Control : MonoBehaviour{
     Vector3 Attack_Direction = new Vector3(0.0f, 0.0f, 1.0f);
 
     //攻擊
-    //bool right_bumper = false;
     float right_trigger = 0.0f;
     bool Shooting = false;
 
@@ -60,7 +59,6 @@ public class Merge_Control : MonoBehaviour{
 
     //倒數計時
     //整數倒數 → 隔秒呼叫；計量條 → Time.deltaTime
-    float Timer_float = 10.0f;
     float Merge_Moment;
     float flicker = -0.5f;
     Color Current_Color;
@@ -72,7 +70,6 @@ public class Merge_Control : MonoBehaviour{
     //短衝刺
     float left_trigger = 0.0f;
     bool OnDash = false;
-    public float DashSpeed = 1.0f;
     bool DuringDashLerp = false;
     float DashCD = 0.0f;
     float testlerp = 0.1f;
@@ -82,6 +79,17 @@ public class Merge_Control : MonoBehaviour{
 
     //Shader著色
     int Shader_Number;
+
+    //各式數值
+    float Base_Timer = 15.0f;
+    int Base_HP = 3;
+    int Max_HP = 5;
+    int Base_ATK = 5;
+    float Base_Speed = 1.0f;
+    int Base_Penetrate = 1;
+    int Speed_Superimposed = 0;
+    int Bullet_Superimposed = 0;
+    int Timer_Superimposed = 0;
 
     void Start(){
         Player_Manager = GameObject.Find("Player_Manager");
@@ -103,7 +111,8 @@ public class Merge_Control : MonoBehaviour{
         Merge_Control_Hint.SetActive(true);
         ExtraPriority = true;
         Merge_Sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        Timer_float = 10.0f;
+        //這行要補上載入合體數值
+        Base_Timer = 15.0f + Timer_Superimposed*5.0f;
         flicker = -0.5f;
     }
 
@@ -125,7 +134,7 @@ public class Merge_Control : MonoBehaviour{
         zAix = Input.GetAxis(WhichPlayer_Moving + "Vertical");
         left_trigger = Input.GetAxis(WhichPlayer_Moving + "Dash");
         if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f){
-            DashSpeed = 6.0f;
+            Base_Speed = Base_Speed + 5.0f;
             OnDash = true;
             DuringDashLerp = true;
             DashCD = Time.time;
@@ -211,12 +220,12 @@ public class Merge_Control : MonoBehaviour{
         if (ExtraPriority == false && DeathPriority == false) {
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
             if (!Left_CanMove || !Right_CanMove) xAix = .0f;
-            transform.position += new Vector3(xAix, 0, zAix).normalized * DashSpeed * Time.deltaTime * 5.0f;
+            transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 5.0f;
         }
 
         //衝刺遞減
         if (DuringDashLerp == true){
-            DashSpeed = Mathf.Lerp(DashSpeed, 0.5f, testlerp);
+            Base_Speed = Mathf.Lerp(Base_Speed, 0.5f, testlerp);
         }
 
         //攻擊方向旋轉
@@ -304,15 +313,15 @@ public class Merge_Control : MonoBehaviour{
     }
 
     void Merge_Timer() {
-        Timer_float -= 0.15f;
+        Base_Timer -= 0.15f;
 
-        if (Timer_float < 3.0f) {
+        if (Base_Timer < 3.0f) {
             Current_Color.a = Current_Color.a + flicker;
             flicker = flicker * -1.0f;
             Merge_Sprite.GetComponent<SpriteRenderer>().color = Current_Color;
         }
 
-        if (Timer_float < 0) {
+        if (Base_Timer < 0) {
             //Spilt_toOriginal();
             CancelInvoke("Merge_Timer");
             Current_Color.a = 1.0f;
@@ -394,7 +403,7 @@ public class Merge_Control : MonoBehaviour{
 
     //短衝刺設定
     public void DashEnd(){
-        DashSpeed = 1.0f;
+        Base_Speed = 1.0f + Speed_Superimposed*1.25f;
         DuringDashLerp = false;
     }
 

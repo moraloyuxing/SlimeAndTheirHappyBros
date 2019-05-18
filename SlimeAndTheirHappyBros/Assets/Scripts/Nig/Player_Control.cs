@@ -24,8 +24,10 @@ public class Player_Control : MonoBehaviour{
     float xAix, zAix;
     Ray ray_horizontal;
     Ray ray_vertical;
+    Ray ray_direction;
     RaycastHit hit_horizontal;
     RaycastHit hit_vertical;
+    RaycastHit hit_direction;
     bool Up_CanMove = true;
     bool Down_CanMove = true;
     bool Left_CanMove = true;
@@ -59,7 +61,6 @@ public class Player_Control : MonoBehaviour{
     //短衝刺
     float left_trigger = 0.0f;
     bool OnDash = false;
-    public float DashSpeed = 1.0f;
     bool DuringDashLerp = false;
     float DashCD = 0.0f;
     public float testlerp = 0.1f;
@@ -67,8 +68,14 @@ public class Player_Control : MonoBehaviour{
     //動畫插斷
     Animator anim;
 
-    //商店道具加成等等
-    public Item_Manager Shop;
+    //各式數值
+    int Base_ATK = 2;
+    int Base_HP = 3;
+    float Base_Speed = 1.0f;//Dash固定為此變數+5
+    int Base_Penetrate = 1;
+    int Speed_Superimposed = 0;
+    int Bullet_Superimposed = 0;
+    int Timer_Superimposed = 0;
 
     void Start(){
         WhichPlayer = gameObject.name;
@@ -89,7 +96,7 @@ public class Player_Control : MonoBehaviour{
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
         left_trigger = Input.GetAxis(WhichPlayer + "Dash");
         if (left_trigger >0.3f && OnDash == false && Time.time > DashCD + 1.0f){
-            DashSpeed = 6.0f;
+            Base_Speed = Base_Speed+5.0f;
             OnDash = true;
             DuringDashLerp = true;
             DashCD = Time.time;
@@ -175,12 +182,12 @@ public class Player_Control : MonoBehaviour{
         if (ExtraPriority == false && DeathPriority == false) {
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
             if (!Left_CanMove || !Right_CanMove) xAix = .0f;
-            transform.position += new Vector3(xAix, 0, zAix).normalized * DashSpeed*Time.deltaTime * 5.0f;
+            transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 5.0f;
         }
 
         //衝刺遞減
         if (DuringDashLerp == true) {
-            DashSpeed = Mathf.Lerp(DashSpeed, 0.5f, testlerp);
+            Base_Speed = Mathf.Lerp(Base_Speed, 0.5f, testlerp);
         }
 
         //攻擊方向旋轉
@@ -291,7 +298,7 @@ public class Player_Control : MonoBehaviour{
 
     //短衝刺設定
     public void DashEnd() {
-        DashSpeed = 1.0f;
+        Base_Speed = 1.0f + Speed_Superimposed*1.25f;
         DuringDashLerp = false;
     }
 
@@ -353,6 +360,7 @@ public class Player_Control : MonoBehaviour{
         ExtraPriority = false;
         musouTime = Time.time;
         StopDetect = true;
+        Player_Manager.SendMessage("BackWashBoard");
     }
 
 }

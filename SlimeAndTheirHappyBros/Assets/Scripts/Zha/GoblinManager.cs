@@ -27,6 +27,7 @@ public class GoblinManager : MonoBehaviour
     List<ArcherGoblin> freeArcherGoblins, usedArcherGoblins;
     List<HobGoblin> freeHobGoblins, usedHobGoblins;
 
+    Dictionary<string, GoblinBase> goblinDic = new Dictionary<string, GoblinBase>();
 
     Dictionary<string, GoblinArrow> goblinArrowsDic;
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
@@ -75,6 +76,7 @@ public class GoblinManager : MonoBehaviour
             freeNormalGoblins.Add(new NormalGoblin());
             freeNormalGoblins[i].TestInit(goblin, goblinInfo[0], this);
             //freeNormalGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
+            goblinDic.Add(goblin.name, freeNormalGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
 
@@ -87,6 +89,7 @@ public class GoblinManager : MonoBehaviour
             freeArcherGoblins.Add(new ArcherGoblin());
             freeArcherGoblins[i].TestInit(goblin, goblinInfo[1], this);
             //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
+            goblinDic.Add(goblin.name, freeArcherGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
 
@@ -99,6 +102,7 @@ public class GoblinManager : MonoBehaviour
             freeHobGoblins.Add(new HobGoblin());
             freeHobGoblins[i].TestInit(goblin, goblinInfo[2], this);
             //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
+            goblinDic.Add(goblin.name, freeHobGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
 
@@ -296,5 +300,12 @@ public class GoblinManager : MonoBehaviour
         playerPos[id] = pos;
     }
 
+    public GoblinBase FindGoblin(string name) {
+        if (goblinDic.ContainsKey(name))
+        {
+            return goblinDic[name];
+        }
+        else return null;
+    }
 
 }

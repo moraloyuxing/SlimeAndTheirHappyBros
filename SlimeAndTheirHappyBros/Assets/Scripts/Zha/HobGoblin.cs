@@ -258,7 +258,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
 
                 firstInState = false;
-                if (false)//Random.Range(0, 100) < 70
+                if (Random.Range(0, 100) < 70)//Random.Range(0, 100) < 70
                 { //槌擊
                     animator.speed = 2.0f;
                     animator.SetInteger("state", 1);
@@ -307,12 +307,12 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     hasShoot = true;
                     float scaleX = (goblinManager.PlayerPos[targetPlayer].x > selfPos.x) ? -1.0f : 1.0f;
                     Vector3 launchPos = selfPos + new Vector3(scaleX * shootOffset.x, shootOffset.y, shootOffset.z);
-                    goblinManager.UseLeaf(launchPos + new Vector3(-scaleX * 1.5f, 0, 0), new Vector3(-scaleX,0,0));
-                    for (int i = 1; i <= 4; i++) {
-                        Vector3 shootDir =  Quaternion.AngleAxis(15.0f*i, Vector3.up) * new Vector3(-scaleX, 0, 0);
+                    //goblinManager.UseLeaf(launchPos + new Vector3(-scaleX * 1.5f, 0, 0), new Vector3(-scaleX,0,0));
+                    for (int i = 0; i <= 1; i++) {
+                        Vector3 shootDir =  Quaternion.AngleAxis(25.0f + i*30, Vector3.up) * new Vector3(-scaleX, 0, 0);
                         goblinManager.UseLeaf(launchPos + shootDir * 1.5f, shootDir);
 
-                        shootDir = Quaternion.AngleAxis(-15.0f * i, Vector3.up) * new Vector3(-scaleX, 0, 0);
+                        shootDir = Quaternion.AngleAxis(-25.0f - i*30, Vector3.up) * new Vector3(-scaleX, 0, 0);
                         goblinManager.UseLeaf(launchPos + shootDir * 1.5f, shootDir);
                     }
 
@@ -327,6 +327,22 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     OverAttackDetectDist();
                 }
             }
+        }
+    }
+
+    public override void OnGettingHurt(int col, int atkValue, int playerID)
+    {
+
+        if (col == color)
+        {
+            hp -= atkValue;
+            targetPlayer = playerID;
+            if (curState != GoblinState.hurt && !endure)
+            {
+                SetState(GoblinState.hurt);
+            }
+            
+
         }
     }
 

@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class GoblinLeaf : IEnemyObjectPoolUnit
 {
-    float time, flyTime, deltaTime;
+    bool startDisappear = false;
+    float time, flyTime, deltaTime, lifeTime;
     float speed, degree, length;
     Vector3 moveDir;
     Transform transform;
 
+    
     GoblinManager goblinManager;
+    SpriteRenderer render;
 
+    Collider collider;
 
     public void Init(Transform t, GoblinManager manager, GoblinManager.PoolUnitInfo info)
     {
@@ -19,18 +23,21 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
         speed = info.speed;
         length = info.length;
         flyTime = 15.0f * length;
+        lifeTime = flyTime + 0.5f;
+        collider = transform.GetComponent<Collider>();
+        render = transform.GetChild(0).GetComponent<SpriteRenderer>();
     }
     public void ToActive(Vector3 pos, Vector3 dir)
     {
         transform.gameObject.SetActive(true);
         transform.position = pos;
-        moveDir = (dir + new Vector3(0,-0.2f,0)).normalized;
+        moveDir = dir;
         float baseD = -25.0f * (1.0f - Mathf.Abs(moveDir.x - moveDir.z));
         //degree = (Mathf.Atan2(rot.z, rot.x)) * Mathf.Rad2Deg + 90.0f + baseD;
 
         degree = (Mathf.Atan2(moveDir.z, moveDir.x)) * Mathf.Rad2Deg - 90.0f + baseD;
         transform.localRotation = Quaternion.Euler(25, 0, degree);
-
+        collider.enabled = true;
         //float offset = (Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
         
     }
@@ -38,13 +45,21 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
     {
         deltaTime = dt;
         time += deltaTime;
-        if (time <= flyTime)
+        if (time <= lifeTime)
         {
             //float yOffset = -addSpeed * time;
             //transform.position += deltaTime * new Vector3(moveDir.x * speed, yOffset, moveDir.z * speed);
             //transform.localRotation = Quaternion.Euler(25 + yOffset * -Mathf.Abs(moveDir.z) * 15.0f, 0, degree + yOffset * moveDir.x * 15.0f); //拋物線角度
 
             transform.position += deltaTime * moveDir * speed;
+
+            if (time >= flyTime) {
+                if (!startDisappear) {
+                    collider.enabled = false;
+                    startDisappear = true;
+                }
+                render.color = Color.Lerp(new Color(1,1,1,1), new Color(1,1,1,0), (time - flyTime)*2.0f);
+            }
 
             //if (moveDir.x < .0f) yOffset *= -1.0f;
             //transform.localRotation = Quaternion.Euler(25, 0, degree + yOffset*moveDir.x*15.0f);
@@ -78,6 +93,8 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
     public void ResetUnit()
     {
         time = .0f;
+        startDisappear = false;
+        render.color = new Color(1, 1, 1, 1);
         goblinManager.RecycleLeaf(this);
         transform.gameObject.SetActive(false);
     }
