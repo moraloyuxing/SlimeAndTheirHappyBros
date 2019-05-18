@@ -47,32 +47,18 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
         time += deltaTime;
         if (time <= lifeTime)
         {
-            //float yOffset = -addSpeed * time;
-            //transform.position += deltaTime * new Vector3(moveDir.x * speed, yOffset, moveDir.z * speed);
-            //transform.localRotation = Quaternion.Euler(25 + yOffset * -Mathf.Abs(moveDir.z) * 15.0f, 0, degree + yOffset * moveDir.x * 15.0f); //拋物線角度
-
             transform.position += deltaTime * moveDir * speed;
 
-            if (time >= flyTime) {
-                if (!startDisappear) {
+            if (time >= flyTime)
+            {
+                if (!startDisappear)
+                {
                     collider.enabled = false;
                     startDisappear = true;
                 }
-                render.color = Color.Lerp(new Color(1,1,1,1), new Color(1,1,1,0), (time - flyTime)*2.0f);
+                render.color = Color.Lerp(new Color(1, 1, 1, 1), new Color(1, 1, 1, 0), (time - flyTime) * 2.0f);
             }
-
-            //if (moveDir.x < .0f) yOffset *= -1.0f;
-            //transform.localRotation = Quaternion.Euler(25, 0, degree + yOffset*moveDir.x*15.0f);
-
-
-
-
-            //if (time > 0.5f * lifeTime)
-            //{
-            //    if (moveDir.x < .0f) degree += 200.0f * moveDir.x * deltaTime;
-            //    else degree -= 200.0f * moveDir.x * deltaTime;
-            //    transform.localRotation = Quaternion.Euler(25, 0, degree);
-            //}
+            else DetectObstacle();
 
 
         }
@@ -89,6 +75,16 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
         }
 
     }
+
+    void DetectObstacle()
+    {
+        Collider[] colliders = Physics.OverlapBox(transform.position + new Vector3(0, -1.23f, 0), new Vector3(0.05f, 0.25f, 0.05f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("Barrier"));
+        if (colliders.Length > 0)
+        {
+            ResetUnit();
+        }
+    }
+
 
     public void ResetUnit()
     {
