@@ -13429,6 +13429,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BattleSceNoShop0514
       objectReference: {fileID: 0}
+    - target: {fileID: 100444, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 100522, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -14257,7 +14261,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: bc96add7fe4036f47b9d2a14892f1f51, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bc96add7fe4036f47b9d2a14892f1f51, type: 3}
       propertyPath: m_LocalPosition.x
@@ -16278,7 +16282,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364984143}
   m_LocalRotation: {x: -0.16779163, y: 0.5437567, z: 0.8218823, w: 0.026154783}
-  m_LocalPosition: {x: 55.65, y: 0.96, z: 41.9}
+  m_LocalPosition: {x: 56.18, y: -0.95, z: 41.16}
   m_LocalScale: {x: 0.34516117, y: 0.34516117, z: 0.34516117}
   m_Children: []
   m_Father: {fileID: 343257707}
@@ -22260,7 +22264,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 98f64e86e86aa004c940fa00fdc846b3, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 98f64e86e86aa004c940fa00fdc846b3, type: 3}
       propertyPath: m_LocalPosition.x
