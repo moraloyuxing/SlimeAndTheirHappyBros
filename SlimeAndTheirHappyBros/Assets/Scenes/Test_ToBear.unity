@@ -5206,6 +5206,7 @@ MonoBehaviour:
   - {fileID: 351806365}
   - {fileID: 1050854433}
   WashingPlace: {fileID: 1155738641}
+  WashingBoard: {fileID: 0}
   Hint_Type:
   - {fileID: 21300000, guid: b639d69a168ac384cbf80e20b77cbddd, type: 3}
   - {fileID: 21300000, guid: dfc9e62d230744481814f33ae8fdc25a, type: 3}
@@ -17520,18 +17521,6 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 400004, guid: 8ed7bb9e72d57ff4da10b403baf682c4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -15.37
-      objectReference: {fileID: 0}
-    - target: {fileID: 400008, guid: 8ed7bb9e72d57ff4da10b403baf682c4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -19.15
-      objectReference: {fileID: 0}
-    - target: {fileID: 400014, guid: 8ed7bb9e72d57ff4da10b403baf682c4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -9.87
-      objectReference: {fileID: 0}
     - target: {fileID: 400020, guid: 8ed7bb9e72d57ff4da10b403baf682c4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -17575,6 +17564,18 @@ PrefabInstance:
     - target: {fileID: 400020, guid: 8ed7bb9e72d57ff4da10b403baf682c4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400004, guid: 8ed7bb9e72d57ff4da10b403baf682c4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -15.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 400008, guid: 8ed7bb9e72d57ff4da10b403baf682c4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -19.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 400014, guid: 8ed7bb9e72d57ff4da10b403baf682c4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.87
       objectReference: {fileID: 0}
     - target: {fileID: 2300000, guid: 8ed7bb9e72d57ff4da10b403baf682c4, type: 3}
       propertyPath: m_Materials.Array.data[2]
