@@ -199,7 +199,7 @@ public class Player_Control : MonoBehaviour{
         xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
         zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
-        if (xAtk != 0.0f || zAtk != 0.0f) {
+        if (xAtk != 0.0f || zAtk != 0.0f && DeathPriority == false) {
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
@@ -276,7 +276,7 @@ public class Player_Control : MonoBehaviour{
         Collider[]colliders = Physics.OverlapBox(Player_Sprite.transform.position, new Vector3(2.3f, 1.7f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
         int i = 0;
         while (i < colliders.Length) {
-            if (i == 0) {
+            if (i == 0 && DeathPriority == false) {
                 GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;

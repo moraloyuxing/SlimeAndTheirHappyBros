@@ -32,6 +32,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     void OnEnable(){
         _timer = Time.time;
         BulletAlpha.a = 1.0f;
+        GetComponent<SpriteRenderer>().color = BulletAlpha;
         transform.localEulerAngles = new Vector3(20.0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
     }
 
@@ -79,7 +80,9 @@ public class Bullet_Behaviour : MonoBehaviour{
         }
     }
 
-
+    public void ExplosionEnd() {
+        bulletPool.Bullet_Recovery(gameObject);
+    }
 
 
 
