@@ -6,7 +6,6 @@ public class Item_Manager : MonoBehaviour {
     public Transform[] All_Player = new Transform[4];//四位玩家
     public Transform[] All_Item = new Transform[6];//六樣道具
     public GameObject[] Item_Hint = new GameObject[6];//六樣道具提示
-    float[] ShortestDistance = new float[4] { 10000.0f,10000.0f,10000.0f,10000.0f};//目前最短距離保持者
     float[] CurrentDistance = new float[4];//目前測量的道具距離
     int[] itemBeFocused = new int[6] { 0, 0, 0, 0,0,0 };
     int[] Focus_Count = new int[4] { -1,-1,-1,-1};
@@ -31,13 +30,14 @@ public class Item_Manager : MonoBehaviour {
 
                     if (Mathf.Abs(All_Player[p].position.x - All_Item[i].transform.position.x) < 4.0f && Mathf.Abs(All_Player[p].position.z - All_Item[i].transform.position.z) < 5.0f && PlayerHasBuy[p,i] == false){
                         CurrentDistance[p] = Mathf.Pow(All_Player[p].position.x - All_Item[i].position.x, 2) + Mathf.Pow(All_Player[p].position.z - All_Item[i].position.z, 2);
-                        if (CurrentDistance[p] < ShortestDistance[p]){
-                            if (Focus_Count[p] != i){
-                                if (Focus_Count[p] >= 0) { itemBeFocused[Focus_Count[p]]--; }
-                                Focus_Count[p] = i;
-                                itemBeFocused[i]++;
-                            }
+                        if (Focus_Count[p] != i){
+                            if (Focus_Count[p] >= 0) { itemBeFocused[Focus_Count[p]]--; }
+                            Focus_Count[p] = i;
+                            itemBeFocused[i]++;
                         }
+
+
+
                     }
 
                     //if (Mathf.Abs(All_Player[p].position.x - All_Item[i].transform.position.x) < 4.0f && Mathf.Abs(All_Player[p].position.z - All_Item[i].transform.position.z) < 5.0f){
@@ -53,16 +53,12 @@ public class Item_Manager : MonoBehaviour {
 
 
                     //離開一定距離關閉
-                    else
-                    {
+                    else{
                         if (Focus_Count[p] == i){
                             itemBeFocused[Focus_Count[p]]--;
                             Focus_Count[p] = -1;
                         }
                     }
-
-                    //購買後提示也會消失
-
                 }
             }
 

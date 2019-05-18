@@ -72,9 +72,9 @@ public class Player_Control : MonoBehaviour{
     int Base_ATK = 2;
     int Base_HP = 3;
     float Base_Speed = 1.0f;//Dash固定為此變數+5
-    int Base_Penetrate = 1;
+    public int Base_Penetrate = 1;
     int Speed_Superimposed = 0;
-    int Bullet_Superimposed = 0;
+    public int Bullet_Superimposed = 0;
     int Timer_Superimposed = 0;
 
     void Start(){

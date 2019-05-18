@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Bullet_Behaviour : MonoBehaviour{
 
-    float  offset;
-    public GameObject WhichPlayer;
+    float  offset, scaleOffset = 1.0f;
+    public Player_Control WhichPlayer;
     public float speed = 20.0f;
     public float alpha = -0.04f;
     public float FadeTime = 1.5f;
@@ -15,6 +15,9 @@ public class Bullet_Behaviour : MonoBehaviour{
     Color BulletAlpha;
     Bullet_Manager bulletPool;
     Vector3 Attack_Dir;
+    string LastTouch = "empty";
+    int PenetrateMaxCount = 0;
+    int NowPenetrate = 0;
 
     void Awake(){
         _myTransform = transform;
@@ -31,13 +34,16 @@ public class Bullet_Behaviour : MonoBehaviour{
         transform.localEulerAngles = new Vector3(20.0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
     }
 
-    public void SetAttackDir(Vector3 current_angle,GameObject xSlime,int Shader_Number) {
+    public void SetAttackDir(Vector3 current_angle,Player_Control xSlime,int Shader_Number) {
         GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
         Attack_Dir = current_angle.normalized;
         offset = Mathf.Abs(Attack_Dir.x);
         offset = Mathf.Clamp(offset, 0.5f, 0.8f);
         Attack_Dir *= speed;
+        scaleOffset = Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
+        PenetrateMaxCount = xSlime.Base_Penetrate;
+
     }
 
     void Update(){
@@ -52,4 +58,25 @@ public class Bullet_Behaviour : MonoBehaviour{
         _myTransform.position += new Vector3(Attack_Dir.x*Time.deltaTime,0,Attack_Dir.z*Time.deltaTime);
         _myTransform.position = new Vector3(_myTransform.position. x, _myTransform.position.y,  _myTransform.position.z);
     }
+
+    void Bullet_Detect() {
+        Collider[]colliders = Physics.OverlapBox(_myTransform.position, scaleOffset * new Vector3(0.22f, 0.15f, 0.025f), Quaternion.Euler(25, 0, 0), 
+            1 << LayerMask.NameToLayer("DamageToPlayer") | 1<< LayerMask.NameToLayer("Barrier"));
+        int i = 0;
+        while (NowPenetrate < PenetrateMaxCount && i < colliders.Length ){
+            if (colliders[i].name != LastTouch) {
+                LastTouch = colliders[i].name;
+                NowPenetrate++;
+                if (colliders[i].tag == "Goblin") bulletPool.ShotGoblin();
+
+                if (NowPenetrate == PenetrateMaxCount) GetComponent<Animator>().Play("SlimeBullet_Explosion");
+            }
+            i++;
+        }
+    }
+
+
+
+
+
 }
