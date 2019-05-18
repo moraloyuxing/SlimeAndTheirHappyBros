@@ -322,9 +322,13 @@ public class GoblinBase
     {
         
     }
-    public virtual void OnGetHurt(int value)
+    public virtual void OnGettingHurt(int col, int atkValue, int playerID)
     {
-
+        if (col == color) {
+            hp -= atkValue;
+            targetPlayer = playerID;
+            SetState(GoblinState.hurt);
+        }
     }
 
     public void ErroeCatch() {

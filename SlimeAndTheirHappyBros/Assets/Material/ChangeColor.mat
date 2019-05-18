@@ -79,7 +79,7 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     - _colorID: 6
-    - _diffTrans: 0.04
+    - _diffTrans: 0.03
     m_Colors:
     - _BlueColor: {r: 0.42114633, g: 0.70345324, b: 0.9811321, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
