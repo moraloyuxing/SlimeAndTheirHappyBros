@@ -149,14 +149,14 @@ public class GoblinManager : MonoBehaviour
         float dt = Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.A)) {
-            SpawnNormalGoblinRandomPos(-1);
+            SpawnNormalGoblinRandomPos(1);
         }
         if (Input.GetKeyDown(KeyCode.Z)) {
             //SpawnNormalGoblinRandomPos(-1);
-            SpawnArcherGoblininRandomPos(-1);
+            SpawnArcherGoblininRandomPos(1);
         }
         if (Input.GetKeyDown(KeyCode.X)) {
-            SpawnHobGoblininRandomPos(-1);
+            SpawnHobGoblininRandomPos(1);
         }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {

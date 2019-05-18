@@ -41,8 +41,6 @@ public class Bullet_Manager : MonoBehaviour{
         recovery.SetActive(false);
     }
 
-    public void ShotGoblin() {
 
-    }
 
 }

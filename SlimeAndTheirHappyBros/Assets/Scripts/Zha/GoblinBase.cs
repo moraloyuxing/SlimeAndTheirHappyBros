@@ -24,7 +24,6 @@ public class GoblinBase
 
     protected Vector3 selfPos, moveFwdDir, oldTargetPos;
 
-
     protected Transform transform, image;
     protected Animator animator;
     protected AnimatorStateInfo aniInfo;
@@ -300,7 +299,6 @@ public class GoblinBase
     {
         if (firstInState)
         {
-            Debug.Log("ggggggeeeet hurt");
             firstInState = false;
             //animator.SetTrigger("hurt");
             animator.Play("hurt");
@@ -311,7 +309,6 @@ public class GoblinBase
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f) {
-                Debug.Log("hurrrrt  over");
                 if (hp <= 0) SetState(GoblinState.die);
                 else OverAttackDetectDist();
 
@@ -322,11 +319,12 @@ public class GoblinBase
     {
         
     }
-    public virtual void OnGettingHurt(int col, int atkValue, int playerID)
+    public virtual void OnGettingHurt(int col, int atkValue, int playerID, Vector3 dir)
     {
         if (col == color) {
             hp -= atkValue;
             targetPlayer = playerID;
+            moveFwdDir = dir.normalized;
             SetState(GoblinState.hurt);
         }
     }

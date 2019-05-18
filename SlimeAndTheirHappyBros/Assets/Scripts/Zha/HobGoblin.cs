@@ -292,6 +292,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 {
                     startAttack = true;
                     endure = true;
+                    animator.speed = 1.0f;
                     animator.SetInteger("attackType", attackType);
                     animator.SetInteger("state", 2);
                 }
@@ -330,7 +331,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         }
     }
 
-    public override void OnGettingHurt(int col, int atkValue, int playerID)
+    public override void OnGettingHurt(int col, int atkValue, int playerID,Vector3 dir)
     {
 
         if (col == color)
@@ -339,6 +340,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             targetPlayer = playerID;
             if (curState != GoblinState.hurt && !endure)
             {
+                moveFwdDir = dir.normalized;
                 SetState(GoblinState.hurt);
             }
             

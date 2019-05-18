@@ -28,7 +28,11 @@ public class Player_Manager : MonoBehaviour {
 
     void Start() {
         for (int i = 0; i < 6; i++) Can_Merge[i] = false;
-        for (int i = 0; i < 4; i++) Which_Player[i] = FourPlayer[i].gameObject.name;
+        for (int i = 0; i < 4; i++) {
+            Which_Player[i] = FourPlayer[i].gameObject.name;
+            FourPlayer[i].SetUp_Number(i);
+        }
+
     }
 
     void Update() {
@@ -148,7 +152,7 @@ public class Player_Manager : MonoBehaviour {
                 else shortest_toPlayer[0] = FourPlayer[3].gameObject;//離4最近
             }
 
-            //_goblinmanager.函式(pos);
+            _goblinmanager.SetPlayersMove(0, pos);
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
@@ -187,6 +191,8 @@ public class Player_Manager : MonoBehaviour {
                 if (Player_Distance[3] < Player_Distance[4]) shortest_toPlayer[1] = FourPlayer[2].gameObject;//離3最近
                 else shortest_toPlayer[1] = FourPlayer[3].gameObject;//離4最近
             }
+
+            _goblinmanager.SetPlayersMove(1, pos);
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
@@ -227,6 +233,8 @@ public class Player_Manager : MonoBehaviour {
                 else shortest_toPlayer[2] = FourPlayer[3].gameObject;//離4最近
             }
 
+            _goblinmanager.SetPlayersMove(2, pos);
+
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
 
@@ -265,6 +273,8 @@ public class Player_Manager : MonoBehaviour {
                 if (Player_Distance[4] < Player_Distance[5]) shortest_toPlayer[3] = FourPlayer[1].gameObject;//離2最近
                 else shortest_toPlayer[3] = FourPlayer[2].gameObject;//離3最近
             }
+
+            _goblinmanager.SetPlayersMove(3, pos);
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();

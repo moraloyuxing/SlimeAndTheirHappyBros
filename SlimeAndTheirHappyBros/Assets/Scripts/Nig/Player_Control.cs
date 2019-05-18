@@ -9,6 +9,11 @@ public class Player_Control : MonoBehaviour{
     public GameObject Player_Sprite;
     public GameObject SplashEffect;
     int Player_Number=0;
+    public int PlayerID {
+        get {
+            return Player_Number;
+        }
+    }
     int Color_Number = 0;
     string WhichPlayer;
 
@@ -69,7 +74,7 @@ public class Player_Control : MonoBehaviour{
     Animator anim;
 
     //各式數值
-    int Base_ATK = 2;
+    public int Base_ATK = 2;
     int Base_HP = 3;
     float Base_Speed = 1.0f;//Dash固定為此變數+5
     public int Base_Penetrate = 1;
@@ -230,7 +235,7 @@ public class Player_Control : MonoBehaviour{
     }
 
     //設置玩家編號
-    void SetUp_Number(int x){
+    public void SetUp_Number(int x){
         Player_Number = x;
     }
 
@@ -272,7 +277,6 @@ public class Player_Control : MonoBehaviour{
         int i = 0;
         while (i < colliders.Length) {
             if (i == 0) {
-                Destroy(colliders[i]);//之後要移除
                 GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet_Behaviour : MonoBehaviour{
-
+    int BulletATK = 0;
+    int color;
     float  offset, scaleOffset = 1.0f;
     public Player_Control WhichPlayer;
     public float speed = 20.0f;
@@ -35,6 +36,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     }
 
     public void SetAttackDir(Vector3 current_angle,Player_Control xSlime,int Shader_Number) {
+        color = Shader_Number;
         GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
         Attack_Dir = current_angle.normalized;
@@ -43,7 +45,7 @@ public class Bullet_Behaviour : MonoBehaviour{
         Attack_Dir *= speed;
         scaleOffset = Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
         PenetrateMaxCount = xSlime.Base_Penetrate;
-
+        BulletATK = xSlime.Base_ATK;
     }
 
     void Update(){
@@ -57,17 +59,19 @@ public class Bullet_Behaviour : MonoBehaviour{
 
         _myTransform.position += new Vector3(Attack_Dir.x*Time.deltaTime,0,Attack_Dir.z*Time.deltaTime);
         _myTransform.position = new Vector3(_myTransform.position. x, _myTransform.position.y,  _myTransform.position.z);
+        Bullet_Detect();
     }
 
     void Bullet_Detect() {
         Collider[]colliders = Physics.OverlapBox(_myTransform.position, scaleOffset * new Vector3(0.22f, 0.15f, 0.025f), Quaternion.Euler(25, 0, 0), 
-            1 << LayerMask.NameToLayer("DamageToPlayer") | 1<< LayerMask.NameToLayer("Barrier"));
+            1 << LayerMask.NameToLayer("GoblinHurtArea") | 1<< LayerMask.NameToLayer("Barrier"));
         int i = 0;
         while (NowPenetrate < PenetrateMaxCount && i < colliders.Length ){
-            if (colliders[i].name != LastTouch) {
-                LastTouch = colliders[i].name;
+            Transform c = colliders[i].transform.parent;
+            if (c.name != LastTouch) {
+                LastTouch = c.name;
                 NowPenetrate++;
-                if (colliders[i].tag == "Goblin") bulletPool.ShotGoblin();
+                if (c.tag == "Goblin") bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
 
                 if (NowPenetrate == PenetrateMaxCount) GetComponent<Animator>().Play("SlimeBullet_Explosion");
             }
