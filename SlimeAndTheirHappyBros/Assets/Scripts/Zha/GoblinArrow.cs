@@ -38,6 +38,7 @@ public class GoblinArrow : IEnemyObjectPoolUnit
         float offset = (Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
         flyTime =Mathf.Sqrt( dir.x * dir.x + dir.z * dir.z)* length + offset;
     }
+
     public void Update(float dt) {
         deltaTime = dt;
         time += deltaTime;

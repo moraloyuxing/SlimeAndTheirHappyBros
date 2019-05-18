@@ -10,6 +10,14 @@ public class GoblinBase
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
     protected float imgScale;
 
+    public int GetColor
+    {
+        get
+        {
+            return color;
+        }
+    }
+
     protected int targetPlayer = -1;
     protected float nearstPlayerDist = 5000;
     protected float[] playerDist = new float[4] { 5000, 5000, 5000, 5000 };
@@ -274,19 +282,19 @@ public class GoblinBase
     }
 
 
-    public virtual void DetectGethurt() {
-        Collider[]colliders =  Physics.OverlapBox(selfPos, new Vector3(0.55f, 1.4f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
-        int i = 0;
-        while (i < colliders.Length) {
-            hp--;
-            if (i == 0 && curState != GoblinState.hurt) {
-                SetState(GoblinState.hurt);
-                moveFwdDir = -Vector3.forward;
-            }
-            //Debug.Log(colliders[i].name);
-            i++;
-        }
-    }
+    //public virtual void DetectGethurt() {
+    //    Collider[]colliders =  Physics.OverlapBox(selfPos, new Vector3(0.55f, 1.4f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
+    //    int i = 0;
+    //    while (i < colliders.Length) {
+    //        hp--;
+    //        if (i == 0 && curState != GoblinState.hurt) {
+    //            SetState(GoblinState.hurt);
+    //            moveFwdDir = -Vector3.forward;
+    //        }
+    //        //Debug.Log(colliders[i].name);
+    //        i++;
+    //    }
+    //}
 
     public virtual void GetHurt()
     {

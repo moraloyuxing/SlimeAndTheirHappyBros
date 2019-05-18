@@ -7,11 +7,11 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     bool startAttack = false, endure = false, hasShoot = false;
     int maxHp;
     int attackType = 0;
-    float imgOffset;
+    float imgOffset, hurtAreaOffset;
     Vector3 shootOffset;
     float[] atkColOffset = new float[2];
     Transform[] atkCol = new Transform[2];
-
+    Transform hurtArea;
 
     // Start is called before the first frame update
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -27,6 +27,8 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         shootOffset = t.Find("ShootPos").localPosition;
         atkColOffset[0] = atkCol[0].localPosition.x;
         atkColOffset[1] = atkCol[1].localPosition.x;
+        hurtArea = t.Find("HurtArea");
+        hurtAreaOffset = hurtArea.localPosition.x;
         maxHp = info.hp;
         hp = maxHp;
         atkValue = info.atkValue;
@@ -51,6 +53,8 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         imgOffset = image.localPosition.x;
         atkColOffset[0] = atkCol[0].localPosition.x;
         atkColOffset[1] = atkCol[1].localPosition.x;
+        hurtArea = t.Find("HurtArea");
+        hurtAreaOffset = hurtArea.localPosition.x;
         maxHp = info.hp;
         hp = maxHp;
         atkValue = info.atkValue;
@@ -96,31 +100,31 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             }
             //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
-        if(hp > 0) DetectGethurt();
+        //if(hp > 0)DetectGethurt();  //傷害判定
         StateMachine();
     }
 
-    public override void DetectGethurt()
-    {
-        float offset = Mathf.Sign(image.localScale.x);
-        Collider[] colliders = Physics.OverlapBox((selfPos + new Vector3(offset*0.7f,-1.55f,.0f)), new Vector3(1.5f, 3.1f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
-        int i = 0;
-        while (i < colliders.Length)
-        {
-            hp--;
-            if (hp <= 0) {
-                SetState(GoblinState.die);
-                break;
-            }
-            if (i == 0 && curState != GoblinState.hurt && !endure)
-            {
-                SetState(GoblinState.hurt);
-                moveFwdDir = -Vector3.forward;
-            }
-            //Debug.Log(colliders[i].name);
-            i++;
-        }
-    }
+    //public override void DetectGethurt()
+    //{
+    //    float offset = Mathf.Sign(image.localScale.x);
+    //    Collider[] colliders = Physics.OverlapBox((selfPos + new Vector3(offset*0.7f,-1.55f,.0f)), new Vector3(1.5f, 3.1f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
+    //    int i = 0;
+    //    while (i < colliders.Length)
+    //    {
+    //        hp--;
+    //        if (hp <= 0) {
+    //            SetState(GoblinState.die);
+    //            break;
+    //        }
+    //        if (i == 0 && curState != GoblinState.hurt && !endure)
+    //        {
+    //            SetState(GoblinState.hurt);
+    //            moveFwdDir = -Vector3.forward;
+    //        }
+    //        //Debug.Log(colliders[i].name);
+    //        i++;
+    //    }
+    //}
 
     public override void MoveIn()
     {

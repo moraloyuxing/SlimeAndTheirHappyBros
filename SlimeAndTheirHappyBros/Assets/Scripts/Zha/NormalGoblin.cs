@@ -86,7 +86,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             }
             //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
-        if(hp > 0)DetectGethurt();
+        //if(hp > 0)DetectGethurt();  //傷害判定
         StateMachine();
     }
 
