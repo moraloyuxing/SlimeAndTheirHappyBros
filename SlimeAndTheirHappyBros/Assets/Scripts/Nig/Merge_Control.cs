@@ -86,10 +86,11 @@ public class Merge_Control : MonoBehaviour{
     int Max_HP = 5;
     int Base_ATK = 5;
     float Base_Speed = 1.0f;
+    float Current_Speed = 1.0f;
     int Base_Penetrate = 1;
-    int Speed_Superimposed = 0;
+    //int Speed_Superimposed = 0;
     int Bullet_Superimposed = 0;
-    int Timer_Superimposed = 0;
+    //int Timer_Superimposed = 0;
 
     void Start(){
         Player_Manager = GameObject.Find("Player_Manager");
@@ -111,8 +112,6 @@ public class Merge_Control : MonoBehaviour{
         Merge_Control_Hint.SetActive(true);
         ExtraPriority = true;
         Merge_Sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-        //這行要補上載入合體數值
-        Base_Timer = 15.0f + Timer_Superimposed*5.0f;
         flicker = -0.5f;
     }
 
@@ -161,7 +160,7 @@ public class Merge_Control : MonoBehaviour{
             ArrowRot = 1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
-                transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
                 Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             }
@@ -180,7 +179,7 @@ public class Merge_Control : MonoBehaviour{
             ArrowRot = -1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
-                transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+                transform.localScale = new Vector3(-2.0f, 2.0f, 2.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.4f, 0.4f, 0.4f);
                 Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
             }
@@ -236,7 +235,7 @@ public class Merge_Control : MonoBehaviour{
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
-            Attack_Arrow.transform.localEulerAngles = new Vector3(0.0f, 0.0f, angle_toLerp* ArrowRot);
+            Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp* ArrowRot);
         }
 
         //攻擊
@@ -255,6 +254,9 @@ public class Merge_Control : MonoBehaviour{
 
         Storage_Player[0] = PlayerA;
         Storage_Player[1] = PlayerB;
+
+        //設定加成數值
+        Ability_Modify(PlayerA, PlayerB);
 
         for (int i = 0; i < 2; i++) {
             switch (Storage_Player[i].name) {
@@ -299,8 +301,10 @@ public class Merge_Control : MonoBehaviour{
             Storage_Player[i].SetActive(true);
             if (Damage_Count == 3)Storage_Player[i].SendMessage("Die_InMergeState");
         }
-        Storage_Player[0].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(0.5f, 2.0f), -9.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
-        Storage_Player[1].transform.position = new Vector3(gameObject.transform.position.x + Random.Range(0.5f, 2.0f), -9.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
+        Storage_Player[0].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(0.5f, 2.0f), 1.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
+        Storage_Player[1].transform.position = new Vector3(gameObject.transform.position.x + Random.Range(0.5f, 2.0f), 1.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
+        Storage_Player[0].SendMessage("Weak_State");
+        Storage_Player[1].SendMessage("Weak_State");
         _MSlimePool.MSlime_Recovery(gameObject);
     }
 
@@ -403,12 +407,33 @@ public class Merge_Control : MonoBehaviour{
 
     //短衝刺設定
     public void DashEnd(){
-        Base_Speed = 1.0f + Speed_Superimposed*1.25f;
+        Base_Speed = Current_Speed;
         DuringDashLerp = false;
     }
 
     public void SpiltPriorityOn() {
         ExtraPriority = true;
+    }
+
+    //混色後抓取雙方數值加成
+    void Ability_Modify(GameObject PlayerA,GameObject PlayerB) {
+        Player_Control A = PlayerA.GetComponent<Player_Control>();
+        Player_Control B = PlayerB.GetComponent<Player_Control>();
+
+        //設定HP
+        Base_HP = 3 + A.Extra_HP + B.Extra_HP;
+        if (Base_HP > Max_HP) Base_HP = Max_HP;
+        //設定ATK
+        Base_ATK = 5 + A.Extra_ATK + B.Extra_ATK;
+        //設定穿透
+        Base_Penetrate = 1 + A.Extra_Penetrate + B.Extra_Penetrate;
+        //設定合體時間
+        Base_Timer = 15.0f + (A.Timer_Superimposed + B.Timer_Superimposed) * 5.0f;
+        //設定速度
+        Base_Speed = 1.0f * Mathf.Pow(1.25f, (A.Speed_Superimposed + B.Speed_Superimposed));
+        Current_Speed = Base_Speed;
+        //設定子彈大小與速度
+        Bullet_Superimposed = A.Bullet_Superimposed + B.Bullet_Superimposed;
     }
 
 }

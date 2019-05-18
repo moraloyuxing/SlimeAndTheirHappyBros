@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player_Control : MonoBehaviour{
 
@@ -53,7 +54,7 @@ public class Player_Control : MonoBehaviour{
     bool Shooting = false;
 
     //單人染色偵測
-    public Transform[] Four_Pigment = new Transform[4];//白紅黃藍
+    public Transform[] Pigment = new Transform[3];//白紅黃藍
 
     //頭頂提示
     public GameObject Hint;
@@ -68,19 +69,35 @@ public class Player_Control : MonoBehaviour{
     bool OnDash = false;
     bool DuringDashLerp = false;
     float DashCD = 0.0f;
-    public float testlerp = 0.1f;
+    float DashLerp = 0.1f;
 
     //動畫插斷
     Animator anim;
 
-    //各式數值
+    //各式數值(基礎)
     public int Base_ATK = 2;
     int Base_HP = 3;
     float Base_Speed = 1.0f;//Dash固定為此變數+5
+    float Current_Speed = 1.0f;//Dash後抓回
     public int Base_Penetrate = 1;
-    int Speed_Superimposed = 0;
+
+    //各式數值(額外加成)
+    public int Extra_ATK = 0;
+    public int Extra_HP = 0;
+    public int Extra_Penetrate = 0;
+    public int Speed_Superimposed = 0;
     public int Bullet_Superimposed = 0;
-    int Timer_Superimposed = 0;
+    public int Timer_Superimposed = 0;
+
+    //UI連動
+    public GameObject UI_Icon;
+    public Image[] ItemBar = new Image[6];
+    public Text[] ItemStateText = new Text[6];
+    int[] ItemCount = new int[6];
+
+    //衰弱狀態相關
+    float Weak_Moment = 0.0f;
+    bool On_Weak = false;
 
     void Start(){
         WhichPlayer = gameObject.name;
@@ -187,12 +204,12 @@ public class Player_Control : MonoBehaviour{
         if (ExtraPriority == false && DeathPriority == false) {
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
             if (!Left_CanMove || !Right_CanMove) xAix = .0f;
-            transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 5.0f;
+            transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 7.0f;
         }
 
         //衝刺遞減
         if (DuringDashLerp == true) {
-            Base_Speed = Mathf.Lerp(Base_Speed, 0.5f, testlerp);
+            Base_Speed = Mathf.Lerp(Base_Speed, 0.5f, DashLerp);
         }
 
         //攻擊方向旋轉
@@ -215,12 +232,12 @@ public class Player_Control : MonoBehaviour{
 
         //單人染色偵測(by距離)
         if (ExtraPriority == false && DeathPriority == false) {
-            for (int i = 1; i < 4; i++){
-                if (Mathf.Abs(transform.position.x - Four_Pigment[i].position.x) < 1.7f && Mathf.Abs(transform.position.z - Four_Pigment[i].position.z) < 1.8f){
+            for (int i = 0; i < 3; i++){
+                if (Mathf.Abs(transform.position.x - Pigment[i].position.x) < 1.7f && Mathf.Abs(transform.position.z - Pigment[i].position.z) < 1.8f){
                     if (Color_Number == 0) {
-                        if (i == 1) Color_Number = 1;
-                        else if(i==2) Color_Number = 2;
-                        else if (i == 3) Color_Number = 4;
+                        if (i == 0) Color_Number = 1;
+                        else if(i==1) Color_Number = 2;
+                        else if (i == 2) Color_Number = 4;
                         //跳池動畫
                         ExtraPriority = true;
                         musouTime = Time.time;
@@ -230,8 +247,12 @@ public class Player_Control : MonoBehaviour{
                 }
             }
         }
-        //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)
-        if (Time.time > musouTime + 2.5f && StopDetect == true) { StopDetect = false; }
+        //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)、衰弱時間(速度*0.6f)
+        if (Time.time > musouTime + 2.5f && StopDetect) { StopDetect = false; }
+        if (Time.time > Weak_Moment + 10.0f && On_Weak) {
+            On_Weak = false;
+            Base_Speed = Current_Speed;
+        }
     }
 
     //設置玩家編號
@@ -273,7 +294,7 @@ public class Player_Control : MonoBehaviour{
 
     //設置受傷&死亡最高優先權
     public void SlimeGetHurt() {
-        Collider[]colliders = Physics.OverlapBox(Player_Sprite.transform.position, new Vector3(2.3f, 1.7f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
+        Collider[]colliders = Physics.OverlapBox(Player_Sprite.transform.position, new Vector3(1.8f, 1.3f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
         int i = 0;
         while (i < colliders.Length) {
             if (i == 0 && DeathPriority == false) {
@@ -281,9 +302,12 @@ public class Player_Control : MonoBehaviour{
                 ExtraPriority = true;
                 StopDetect = true;
                 musouTime = Time.time;
-                Damage_Count++;
-                for (int k = 0; k < Damage_Count; k++) { Personal_HP[k].SetActive(false); }
-                if (Damage_Count == 3){
+                //Damage_Count++;
+                Base_HP--;
+                for (int k = 0; k < Base_HP; k++) { Personal_HP[k].SetActive(true); }
+                //for (int k = 0; k < Damage_Count; k++) { Personal_HP[k].SetActive(false); }
+
+                if (Base_HP == 0){
                     DeathPriority = true;
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     GetComponent<Animator>().Play("Slime_Death");
@@ -302,7 +326,7 @@ public class Player_Control : MonoBehaviour{
 
     //短衝刺設定
     public void DashEnd() {
-        Base_Speed = 1.0f + Speed_Superimposed*1.25f;
+        Base_Speed = Current_Speed;
         DuringDashLerp = false;
     }
 
@@ -310,6 +334,7 @@ public class Player_Control : MonoBehaviour{
     public void PondEffect() {
         Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
+        //UI_Icon.GetComponent<Image>().material.SetInt("_colorID", Color_Number);
     }
 
     public void HideSplash() {
@@ -323,8 +348,8 @@ public class Player_Control : MonoBehaviour{
 
         if (rescue_count >= 5) {
             rescue_count = 0;
-            for (int i = 0; i < Damage_Count; i++) { Personal_HP[i].SetActive(true); }
-            Damage_Count = 0;
+            Base_HP = 3 + Extra_HP;
+            for (int k = 0; k < Base_HP; k++) { Personal_HP[k].SetActive(true); }
             GetComponent<Animator>().Play("Slime_Revive");
         }
     }
@@ -365,6 +390,53 @@ public class Player_Control : MonoBehaviour{
         musouTime = Time.time;
         StopDetect = true;
         Player_Manager.SendMessage("BackWashBoard");
+    }
+
+    //道具加成
+    public void Ability_Modify(int ItemType, Sprite ItemSprite) {
+        //0:劍，1:子彈，2:愛心，3:放大燈，4:鞋子，5:潤滑液
+        switch (ItemType) {
+            case 0:
+                Base_ATK++;
+                Extra_ATK++;
+                break;
+            case 1:
+                Base_Penetrate++;
+                break;
+            case 2:
+                Base_HP++;
+                Extra_HP++;
+                for (int k = 0; k < Base_HP; k++) { Personal_HP[k].SetActive(true); }
+                break;
+            case 3:
+                Bullet_Superimposed++;
+                break;
+            case 4:
+                Speed_Superimposed++;
+                Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                Current_Speed = Base_Speed;//備份，用以DashLerp後重置
+                break;
+            case 5:
+                Timer_Superimposed++;
+                //更新進合體時間
+                break;
+        }
+
+        //更新UI資訊
+        ItemCount[ItemType]++;
+        if (ItemCount[ItemType] == 1){
+            ItemBar[ItemType].gameObject.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+            ItemBar[ItemType].GetComponent<Image>().sprite = ItemSprite;
+            ItemStateText[ItemType].gameObject.SetActive(true);
+        }
+        ItemStateText[ItemType].text = ItemCount[ItemType].ToString();
+    }
+
+    //解體後的衰弱狀態
+    void Weak_State() {
+        Weak_Moment = Time.time;
+        On_Weak = true;
+        Base_Speed *= 0.6f;
     }
 
 }
