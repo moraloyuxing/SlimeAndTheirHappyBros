@@ -24,8 +24,10 @@ public class Player_Control : MonoBehaviour{
     float xAix, zAix;
     Ray ray_horizontal;
     Ray ray_vertical;
+    Ray ray_direction;
     RaycastHit hit_horizontal;
     RaycastHit hit_vertical;
+    RaycastHit hit_direction;
     bool Up_CanMove = true;
     bool Down_CanMove = true;
     bool Left_CanMove = true;
@@ -353,6 +355,7 @@ public class Player_Control : MonoBehaviour{
         ExtraPriority = false;
         musouTime = Time.time;
         StopDetect = true;
+        Player_Manager.SendMessage("BackWashBoard");
     }
 
 }

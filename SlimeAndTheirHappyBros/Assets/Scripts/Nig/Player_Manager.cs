@@ -14,6 +14,8 @@ public class Player_Manager : MonoBehaviour {
     Pigment_Manager pigmentManager;
 
     public Transform WashingPlace;
+    public GameObject WashingBoard;
+    bool HaveBoard = true;
     bool[] WashPriority = new bool[4];//靠近洗衣板會有洗白優先權，混合次之
     public Sprite[] Hint_Type = new Sprite[2];//0→洗白；1→混合
 
@@ -44,6 +46,8 @@ public class Player_Manager : MonoBehaviour {
             FourPlayer[0].SendMessage("WashOutColor");
             Check_distance();
             WashPriority[0] = false;
+            HaveBoard = false;
+            WashingBoard.SetActive(false);
         }
 
         //玩家2啟用融合
@@ -61,6 +65,8 @@ public class Player_Manager : MonoBehaviour {
             FourPlayer[1].SendMessage("WashOutColor");
             Check_distance();
             WashPriority[1] = false;
+            HaveBoard = false;
+            WashingBoard.SetActive(false);
         }
 
         //玩家3啟用融合
@@ -78,6 +84,8 @@ public class Player_Manager : MonoBehaviour {
             FourPlayer[2].SendMessage("WashOutColor");
             Check_distance();
             WashPriority[2] = false;
+            HaveBoard = false;
+            WashingBoard.SetActive(false);
         }
 
         //玩家4啟用融合
@@ -95,6 +103,8 @@ public class Player_Manager : MonoBehaviour {
             FourPlayer[3].SendMessage("WashOutColor");
             Check_distance();
             WashPriority[3] = false;
+            HaveBoard = false;
+            WashingBoard.SetActive(false);
         }
 
     }
@@ -106,13 +116,13 @@ public class Player_Manager : MonoBehaviour {
             FourPlayer[0].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) < 5.0f){
+            if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) < 5.0f && HaveBoard){
                 if (Color_Number[0] != 0){
                     WashPriority[0] = true;
                     SetHintType(0, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) >= 5.0f){
+            else if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) >= 5.0f || HaveBoard == false){
                 FourPlayer[0].SendMessage("Hide_Hint");
                 WashPriority[0] = false;
             }
@@ -145,13 +155,13 @@ public class Player_Manager : MonoBehaviour {
             FourPlayer[1].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 5.0f){
+            if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 5.0f && HaveBoard){
                 if (Color_Number[1] != 0){
                     WashPriority[1] = true;
                     SetHintType(1, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) >= 5.0f){
+            else if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) >= 5.0f || HaveBoard == false){
                 FourPlayer[1].SendMessage("Hide_Hint");
                 WashPriority[1] = false;
             }
@@ -184,13 +194,13 @@ public class Player_Manager : MonoBehaviour {
             FourPlayer[2].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) < 5.0f){
+            if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) < 5.0f && HaveBoard){
                 if (Color_Number[2] != 0){
                     WashPriority[2] = true;
                     SetHintType(2, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) >= 5.0f){
+            else if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) >= 5.0f || HaveBoard == false){
                 FourPlayer[2].SendMessage("Hide_Hint");
                 WashPriority[2] = false;
             }
@@ -223,13 +233,13 @@ public class Player_Manager : MonoBehaviour {
             FourPlayer[3].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) <5.0f){
+            if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) <5.0f && HaveBoard){
                 if (Color_Number[3] != 0){
                     WashPriority[3] = true;
                     SetHintType(3, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) >= 5.0f){
+            else if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) >= 5.0f || HaveBoard == false){
                 FourPlayer[3].SendMessage("Hide_Hint");
                 WashPriority[3] = false;
             }
@@ -296,6 +306,11 @@ public class Player_Manager : MonoBehaviour {
     void SetHintType(int pCnt,int pHint) {
         Sprite WhichHint = Hint_Type[pHint];
         FourPlayer[pCnt].SendMessage("Show_Hint",WhichHint);
+    }
+
+    void BackWashBoard() {
+        WashingBoard.SetActive(true);
+        HaveBoard = true;
     }
 
 }
