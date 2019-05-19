@@ -326,13 +326,30 @@ public class Player_Manager : MonoBehaviour {
         }
     }
 
-    void BackWashBoard() {
+    public void BackWashBoard() {
         WashingBoard.SetActive(true);
         HaveBoard = true;
     }
 
     void State_Switch() {
         Game_State = !Game_State;
+    }
+
+    public void GetPlayerRePos(int xP, Vector3 pos) {
+        switch (xP) {
+            case 0:
+                Player1_rePos(pos);
+                break;
+            case 1:
+                Player2_rePos(pos);
+                break;
+            case 2:
+                Player3_rePos(pos);
+                break;
+            case 3:
+                Player4_rePos(pos);
+                break;
+        }
     }
 
 }
