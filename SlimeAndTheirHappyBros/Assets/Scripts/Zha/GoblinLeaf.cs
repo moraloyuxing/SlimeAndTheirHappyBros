@@ -30,7 +30,7 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
     public void ToActive(Vector3 pos, Vector3 dir)
     {
         transform.gameObject.SetActive(true);
-        transform.position = pos;
+        transform.position = new Vector3(pos.x, 0.8f, pos.z);
         moveDir = dir;
         float baseD = -25.0f * (1.0f - Mathf.Abs(moveDir.x - moveDir.z));
         //degree = (Mathf.Atan2(rot.z, rot.x)) * Mathf.Rad2Deg + 90.0f + baseD;

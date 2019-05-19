@@ -33,7 +33,7 @@ public class Money :IEnemyObjectPoolUnit
 
         if (moveDir.sqrMagnitude > 0.25f)
         {
-            transform.position += dt * speed * moveDir;
+            transform.position += dt * speed * (moveDir.normalized);
         }
         else {
             ResetUnit();

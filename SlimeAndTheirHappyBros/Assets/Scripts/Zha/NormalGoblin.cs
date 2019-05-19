@@ -46,7 +46,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         atkCol = atkColTrans.GetComponent<Collider>();
         imgScale = image.localScale.x;
         atkColOffset = atkColTrans.localPosition.x;
-        hp = info.hp;
+        maxHp = info.hp;
+        hp = maxHp;
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
@@ -56,7 +57,6 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
-        //playerManager = pManager;
     }
 
 
@@ -80,17 +80,21 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         deltaTime = dt;
         selfPos = transform.position;
 
-        nearstPlayerDist = 500.0f;
-        for (int i = 0; i < 4; i++) {
-            if (goblinManager.PlayersDie[i]) continue;
-            playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
-            if (playerDist[i] < nearstPlayerDist)
+        if (hp > 0) {
+            nearstPlayerDist = 500.0f;
+            for (int i = 0; i < 4; i++)
             {
-                nearstPlayerDist = playerDist[i];
-                targetPlayer = i;
+                if (goblinManager.PlayersDie[i]) continue;
+                playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
+                if (playerDist[i] < nearstPlayerDist)
+                {
+                    nearstPlayerDist = playerDist[i];
+                    targetPlayer = i;
+                }
+                //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
             }
-            //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
+       
         //if(hp > 0)DetectGethurt();  //傷害判定
         StateMachine();
     }
@@ -142,7 +146,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         }
         else
         {
-            transform.position += 10.0f * deltaTime * moveFwdDir;
+            transform.position += backSpeed* deltaTime * moveFwdDir;
+            backSpeed -= deltaTime * 15.0f;
+            if (backSpeed <= .0f) backSpeed = .0f;
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f)
@@ -150,6 +156,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                 Debug.Log("hurrrrt  over");
                 if (hp <= 0) SetState(GoblinState.die);
                 else OverAttackDetectDist();
+                backSpeed = 10.0f;
 
             }
         }
@@ -176,6 +183,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
     public void ResetUnit() {
         hp = maxHp;
+        Debug.Log("rrrreeeeset hp   " + hp + "                 " + maxHp);
         firstInState = false;
         inStateTime = .0f;
         curState = GoblinState.moveIn;

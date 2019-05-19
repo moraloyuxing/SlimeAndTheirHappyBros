@@ -8,6 +8,7 @@ public class GoblinBase
     protected int hp, atkValue, color, pathIndex;
     protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
+    protected float backSpeed = 10.0f;
     protected float imgScale;
     protected int minMoney, maxMoney;
 
@@ -216,7 +217,7 @@ public class GoblinBase
         if (firstInState)
         {
             animator.SetInteger("state", 1);
-            animator.speed = 2.0f;
+            animator.speed = 1.2f;
             firstInState = false;
             followingPath = false;
             PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
@@ -252,7 +253,7 @@ public class GoblinBase
                         image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                     }
                 }
-                transform.position += deltaTime * speed * 2.0f * moveFwdDir;
+                transform.position += deltaTime * speed * 1.2f * moveFwdDir;
 
             }
         }
@@ -307,12 +308,15 @@ public class GoblinBase
             animator.SetInteger("state",3);
         }
         else {
-            transform.position += 10.0f * deltaTime * moveFwdDir;
+            transform.position += (backSpeed)* deltaTime * moveFwdDir;
+            backSpeed -= deltaTime * 15.0f;
+            if (backSpeed <= .0f) backSpeed = .0f;
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f) {
                 if (hp <= 0) SetState(GoblinState.die);
                 else OverAttackDetectDist();
+                backSpeed = 10.0f;
 
             }
         }
@@ -323,7 +327,8 @@ public class GoblinBase
     }
     public virtual void OnGettingHurt(int col, int atkValue, int playerID, Vector3 dir)
     {
-        if (col == color) {
+        if (col == color && hp > 0) {
+            
             hp -= atkValue;
             targetPlayer = playerID;
             moveFwdDir = dir.normalized;

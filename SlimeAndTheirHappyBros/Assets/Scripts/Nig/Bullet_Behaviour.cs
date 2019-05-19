@@ -20,6 +20,8 @@ public class Bullet_Behaviour : MonoBehaviour{
     int PenetrateMaxCount = 0;
     int NowPenetrate = 0;
 
+    List<Collider> colliderRecord = new List<Collider>();
+
     void Awake(){
         _myTransform = transform;
         BulletAlpha = GetComponent<SpriteRenderer>().color;
@@ -58,7 +60,10 @@ public class Bullet_Behaviour : MonoBehaviour{
             GetComponent<SpriteRenderer>().color = BulletAlpha;
         }
 
-        if(BulletAlpha.a <= 0.0f) bulletPool.Bullet_Recovery(gameObject);
+        if (BulletAlpha.a <= 0.0f) {
+            colliderRecord = new List<Collider>();
+            bulletPool.Bullet_Recovery(gameObject);
+        }
 
         _myTransform.position += new Vector3(Attack_Dir.x*Time.deltaTime,0,Attack_Dir.z*Time.deltaTime);
         _myTransform.position = new Vector3(_myTransform.position. x, _myTransform.position.y,  _myTransform.position.z);
@@ -71,18 +76,25 @@ public class Bullet_Behaviour : MonoBehaviour{
         int i = 0;
         while (NowPenetrate < PenetrateMaxCount && i < colliders.Length ){
             Transform c = colliders[i].transform.parent;
-            if (c.name != LastTouch) {
-                LastTouch = c.name;
-                NowPenetrate++;
-                if (c.tag == "Goblin") bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
 
-                if (NowPenetrate == PenetrateMaxCount) GetComponent<Animator>().Play("SlimeBullet_Explosion");
+            if (!colliderRecord.Contains(colliders[i])) {
+                colliderRecord.Add(colliders[i]);
+                NowPenetrate++;
+                if (c.tag == "Goblin")
+                {
+                    bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
+                }
+                if (NowPenetrate == PenetrateMaxCount) {
+                    Attack_Dir = Vector3.zero;
+                    GetComponent<Animator>().Play("SlimeBullet_Explosion");
+                } 
             }
             i++;
         }
     }
 
     public void ExplosionEnd() {
+        colliderRecord = new List<Collider>();
         bulletPool.Bullet_Recovery(gameObject);
     }
 

@@ -42,7 +42,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         renderer = image.GetComponent<SpriteRenderer>();
         shootLauncher = t.Find("shootPos");
         imgScale = image.localScale.x;
-        hp = info.hp;
+        maxHp = info.hp;
+        hp = maxHp;
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
@@ -52,7 +53,6 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
-        //playerManager = pManager;
     }
 
     public void Spawn(Vector3 pos, int col)
@@ -76,17 +76,21 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         deltaTime = Time.deltaTime;
         selfPos = transform.position;
 
-        nearstPlayerDist = 500.0f;
-        for (int i = 0; i < 4; i++)
-        {
-            playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
-            if (playerDist[i] < nearstPlayerDist)
+        if (hp > 0) {
+            nearstPlayerDist = 500.0f;
+            for (int i = 0; i < 4; i++)
             {
-                nearstPlayerDist = playerDist[i];
-                targetPlayer = i;
+                if (goblinManager.PlayersDie[i]) continue;
+                playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
+                if (playerDist[i] < nearstPlayerDist)
+                {
+                    nearstPlayerDist = playerDist[i];
+                    targetPlayer = i;
+                }
+                //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
             }
-            //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
+       
         //if(hp > 0)DetectGethurt();  //傷害判定
         StateMachine();
 

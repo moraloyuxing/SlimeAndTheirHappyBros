@@ -31,6 +31,7 @@ public class Player_Manager : MonoBehaviour {
         for (int i = 0; i < 4; i++) {
             Which_Player[i] = FourPlayer[i].gameObject.name;
             FourPlayer[i].SetUp_Number(i);
+            _goblinmanager.SetPlayersMove(i,FourPlayer[i].transform.position);
         }
 
     }

@@ -98,7 +98,6 @@ public class PathFinding : MonoBehaviour {
 
         if (pathSuccess)
         {
-            Debug.Log("path success");
             waypoints = RetracePath(startNode, targetNode);
             //Debug.Log(waypoints);
             requestManager.FinishedProcessingPath(waypoints, pathSuccess);
@@ -119,12 +118,10 @@ public class PathFinding : MonoBehaviour {
         //Debug.Log(endNode.worldPosition);
         if (startNode == endNode)
         {
-            Debug.Log("overlap");
             waypoints = new Vector3[1] { endNode.worldPosition };
             return waypoints;
         }
         else {
-            Debug.Log("normal ");
             while (currentNode != startNode)
             {
                 

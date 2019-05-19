@@ -97,17 +97,21 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         deltaTime = dt;
         selfPos = transform.position;
 
-        nearstPlayerDist = 500.0f;
-        for (int i = 0; i < 4; i++)
-        {
-            playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
-            if (playerDist[i] < nearstPlayerDist)
+        if (hp > 0) {
+            nearstPlayerDist = 500.0f;
+            for (int i = 0; i < 4; i++)
             {
-                nearstPlayerDist = playerDist[i];
-                targetPlayer = i;
+                if (goblinManager.PlayersDie[i]) continue;
+                playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
+                if (playerDist[i] < nearstPlayerDist)
+                {
+                    nearstPlayerDist = playerDist[i];
+                    targetPlayer = i;
+                }
+                //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
             }
-            //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
+        
         //if(hp > 0)DetectGethurt();  //傷害判定
         StateMachine();
     }
@@ -144,6 +148,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
             image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
             image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+            hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset,0,0);
         }
         else
         {
@@ -166,6 +171,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
             image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
             image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+            hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
         }
         else
         {
@@ -186,7 +192,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         if (firstInState)
         {
             animator.SetInteger("state", 1);
-            animator.speed = 2.0f;
+            animator.speed = 1.2f;
             firstInState = false;
             followingPath = false;
             PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
@@ -224,9 +230,10 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                         float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
                         image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                         image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+                        hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
                     }
                 }
-                transform.position += deltaTime * speed * 2.0f * moveFwdDir;
+                transform.position += deltaTime * speed * 1.2f * moveFwdDir;
 
             }
         }
@@ -244,6 +251,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
             image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
             image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+            hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
 
             //StopCoroutine("FollowPath");
             //StartCoroutine("FollowPath");
@@ -265,11 +273,12 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
                 image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                 image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+                hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
 
                 firstInState = false;
                 if (attackType == 1)//Random.Range(0, 100) < 70
                 { //槌擊
-                    animator.speed = 2.0f;
+                    animator.speed = 1.2f;
                     animator.SetInteger("state", 1);
                     attackType = 0;
                 }
@@ -291,15 +300,14 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
             if (!startAttack) {
                 moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z);
+                scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
                 if (Mathf.Abs(moveFwdDir.z) > 1.2f)
                 {
-                    scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
                     image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                     image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
-
                     if (Mathf.Abs(moveFwdDir.x) < 5.0f) moveFwdDir = new Vector3(0, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
                     else moveFwdDir = (moveFwdDir + new Vector3(-scaleX * 4.0f, 0, 0)).normalized;
-                    transform.position += speed * 2.0f * deltaTime * moveFwdDir;
+                    transform.position += speed * 1.2f * deltaTime * moveFwdDir;
                 }
                 else
                 {
@@ -320,7 +328,6 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             if ((aniInfo.IsName("quackAttack") && attackType == 0) || (aniInfo.IsName("leafAttack") && attackType == 1))
             {
-                Debug.Log("start in ani time" + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
                 if (attackType == 1 && !hasShoot && aniInfo.normalizedTime >= 0.47f) {
                     hasShoot = true;
                     float scaleX = (goblinManager.PlayerPos[targetPlayer].x > selfPos.x) ? -1.0f : 1.0f;
@@ -348,7 +355,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     public override void OnGettingHurt(int col, int atkValue, int playerID,Vector3 dir)
     {
 
-        if (col == color)
+        if (col == color && hp > 0)
         {
             hp -= atkValue;
             targetPlayer = playerID;
@@ -357,7 +364,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 moveFwdDir = dir.normalized;
                 SetState(GoblinState.hurt);
             }
-            
+            else if ( hp <= 0) SetState(GoblinState.die);
 
         }
     }

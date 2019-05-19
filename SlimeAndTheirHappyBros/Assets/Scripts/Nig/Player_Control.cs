@@ -231,7 +231,7 @@ public class Player_Control : MonoBehaviour{
         if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
             GetComponent<Animator>().Play("Slime_Attack");
             Shooting = true;
-            AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot",0.5f);
+            //AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot",0.5f);
         }
 
         //單人染色偵測(by距離)
@@ -318,6 +318,7 @@ public class Player_Control : MonoBehaviour{
                     DeathPriority = true;
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     GetComponent<Animator>().Play("Slime_Death");
+                    _playermanager._goblinmanager.SetPlayerDie(Player_Number);
                 }
             }
         }
