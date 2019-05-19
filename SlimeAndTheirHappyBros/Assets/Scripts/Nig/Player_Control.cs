@@ -157,9 +157,9 @@ public class Player_Control : MonoBehaviour{
             //Right_CanMove = true;
             Left_CanMove = true;
 
-            ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal,3.0f)) {
-                if (hit_horizontal.transform.tag == "Border"){Right_CanMove = false;}
+            ray_horizontal = new Ray(transform.position, new Vector3(2.8f, 0.0f, 0.0f));
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.8f)) {
+                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") {Right_CanMove = false;}
             }
             else {Right_CanMove = true;}
         }
@@ -177,9 +177,9 @@ public class Player_Control : MonoBehaviour{
             //Right_CanMove = false;
             //Left_CanMove = true;
             Right_CanMove = true;
-            ray_horizontal = new Ray(transform.position, new Vector3(-3.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal,3.0f)){
-                if (hit_horizontal.transform.tag == "Border"){Left_CanMove = false;}
+            ray_horizontal = new Ray(transform.position, new Vector3(-2.8f, 0.0f, 0.0f));
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.8f)){
+                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") {Left_CanMove = false;}
             }
             else {Left_CanMove = true;}
         }
@@ -187,9 +187,9 @@ public class Player_Control : MonoBehaviour{
         if (zAix > 0.0f) {
             Down_CanMove = true;
             //Down_CanMove = false;
-            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical, 3.0f)){
-                if (hit_vertical.transform.tag == "Border"){Up_CanMove = false;}
+            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.8f));
+            if (Physics.Raycast(ray_vertical, out hit_vertical, 2.8f)){
+                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") { Up_CanMove = false;}
             }
             else {Up_CanMove = true;}
         }
@@ -197,12 +197,29 @@ public class Player_Control : MonoBehaviour{
         if (zAix < 0.0f) {
             Up_CanMove = true;
             //Up_CanMove = false;
-            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -3.0f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical,3.0f)){
-                if (hit_vertical.transform.tag == "Border"){Down_CanMove = false;}
+            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.8f));
+            if (Physics.Raycast(ray_vertical, out hit_vertical,2.8f)){
+                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") {Down_CanMove = false;}
             }
             else {Down_CanMove = true;}
         }
+
+        //內部障礙物偵測
+        ray_direction = new Ray(transform.position, new Vector3(xAix, 0.0f, zAix));
+        //Debug.DrawRay(ray_direction.origin, ray_direction.direction, Color.cyan);
+        if (Physics.Raycast(ray_direction, out hit_direction, 2.8f)) {
+            if (hit_direction.transform.tag == "Barrier") {
+                if (Mathf.Abs(xAix) > Mathf.Abs(zAix)){
+                    Left_CanMove = false;
+                    Right_CanMove = false;
+                }
+                else {
+                    Up_CanMove = false;
+                    Down_CanMove = false;
+                }
+            }
+        }
+
 
         if (ExtraPriority == false && DeathPriority == false) {
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;

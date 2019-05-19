@@ -24,8 +24,10 @@ public class Merge_Control : MonoBehaviour{
     public float xAix, zAix;
     Ray ray_horizontal;
     Ray ray_vertical;
+    Ray ray_direction;
     RaycastHit hit_horizontal;
     RaycastHit hit_vertical;
+    RaycastHit hit_direction;
     bool Up_CanMove = true;
     bool Down_CanMove = true;
     bool Left_CanMove = true;
@@ -95,8 +97,8 @@ public class Merge_Control : MonoBehaviour{
 
     void Start(){
         Player_Manager = GameObject.Find("Player_Manager");
-        ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(4.0f, 0.0f, 0.0f));
-        ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 4.0f));
+        ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(3.8f, 0.0f, 0.0f));
+        ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 3.8f));
         Current_Color = Merge_Sprite.GetComponent<SpriteRenderer>().color;
         anim = GetComponent<Animator>();
         anim.SetInteger("MergeNumber", MergeNumber);
@@ -169,9 +171,9 @@ public class Merge_Control : MonoBehaviour{
             }
 
             Left_CanMove = true;
-            ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(4.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 4.0f)){
-                if (hit_horizontal.transform.tag == "Border"){
+            ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(3.8f, 0.0f, 0.0f));
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 3.8f)){
+                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier"){
                     Right_CanMove = false;
                 }
             }
@@ -188,9 +190,9 @@ public class Merge_Control : MonoBehaviour{
             }
 
             Right_CanMove = true;
-            ray_horizontal = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(-4.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 4.0f)){
-                if (hit_horizontal.transform.tag == "Border"){
+            ray_horizontal = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(-3.8f, 0.0f, 0.0f));
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 3.8f)){
+                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier"){
                     Left_CanMove = false;
                 }
             }
@@ -199,9 +201,9 @@ public class Merge_Control : MonoBehaviour{
 
         if (zAix > 0.0f){
             Down_CanMove = true;
-            ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 4.0f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical, 4.0f)){
-                if (hit_vertical.transform.tag == "Border"){
+            ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 3.8f));
+            if (Physics.Raycast(ray_vertical, out hit_vertical, 3.8f)){
+                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier"){
                     Up_CanMove = false;
                 }
             }
@@ -212,12 +214,28 @@ public class Merge_Control : MonoBehaviour{
             Up_CanMove = true;
             ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, -3.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical, 3.0f)){
-                if (hit_vertical.transform.tag == "Border"){
+                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier"){
                     Down_CanMove = false;
                 }
             }
             else { Down_CanMove = true; }
         }
+
+        //內部障礙物偵測
+        ray_direction = new Ray(transform.position, new Vector3(xAix, 0.0f, zAix));
+        if (Physics.Raycast(ray_direction, out hit_direction, 3.8f)){
+            if (hit_direction.transform.tag == "Barrier"){
+                if (Mathf.Abs(xAix) > Mathf.Abs(zAix)){
+                    Left_CanMove = false;
+                    Right_CanMove = false;
+                }
+                else{
+                    Up_CanMove = false;
+                    Down_CanMove = false;
+                }
+            }
+        }
+
 
         if (ExtraPriority == false && DeathPriority == false) {
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
