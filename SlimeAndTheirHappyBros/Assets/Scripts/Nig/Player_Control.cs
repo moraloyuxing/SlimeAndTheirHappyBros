@@ -6,7 +6,8 @@ using UnityEngine.UI;
 public class Player_Control : MonoBehaviour{
 
     //確定為第幾位玩家&動畫優先權
-    public GameObject Player_Manager;
+    public Player_Manager _playermanager;
+    public Pigment_Manager _pigmentmanager;
     public GameObject Player_Sprite;
     public GameObject SplashEffect;
     int Player_Number=0;
@@ -60,7 +61,7 @@ public class Player_Control : MonoBehaviour{
     public GameObject Hint;
 
     //血量
-    public GameObject[] Personal_HP = new GameObject[3];
+    public GameObject[] Personal_HP = new GameObject[13];
     int Damage_Count = 0;
     int rescue_count = 0;
 
@@ -104,6 +105,8 @@ public class Player_Control : MonoBehaviour{
         ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
         anim = GetComponent<Animator>();
+        _playermanager = _playermanager.GetComponent<Player_Manager>();
+        _pigmentmanager = _pigmentmanager.GetComponent<Pigment_Manager>();
     }
 
     void Update(){
@@ -136,7 +139,7 @@ public class Player_Control : MonoBehaviour{
                     }
                     OnDash = false;
                 }
-                Player_Manager.SendMessage(WhichPlayer + "rePos", transform.position);
+                _playermanager.GetPlayerRePos(Player_Number, transform.position);
             }
             else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) Walking = false;
         }
@@ -228,6 +231,7 @@ public class Player_Control : MonoBehaviour{
         if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
             GetComponent<Animator>().Play("Slime_Attack");
             Shooting = true;
+            AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot",0.5f);
         }
 
         //單人染色偵測(by距離)
@@ -267,8 +271,8 @@ public class Player_Control : MonoBehaviour{
 
     public void ChangeColorCalling() {
         GetComponent<Animator>().Play("Slime_JumpinPondEffect");
-        Player_Manager.GetComponent<Pigment_Manager>().Change_Base_Color(Player_Number, Color_Number);
-        Player_Manager.GetComponent<Player_Manager>().SetPlayerColor(Player_Number, Color_Number);
+        _pigmentmanager.Change_Base_Color(Player_Number, Color_Number);
+        _playermanager.SetPlayerColor(Player_Number, Color_Number);
     }
 
     //顯示/隱藏混合提示
@@ -294,18 +298,21 @@ public class Player_Control : MonoBehaviour{
 
     //設置受傷&死亡最高優先權
     public void SlimeGetHurt() {
-        Collider[]colliders = Physics.OverlapBox(Player_Sprite.transform.position, new Vector3(1.8f, 1.3f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
-        int i = 0;
-        while (i < colliders.Length) {
-            if (i == 0 && DeathPriority == false) {
-                GetComponent<Animator>().Play("Slime_Hurt");
+        Collider[]colliders = Physics.OverlapBox(transform.position + new Vector3(0,-0.2f ,0) , new Vector3(0.79f, 0.6f, 0.2f), Quaternion.Euler(0, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
+        if (colliders.Length > 0) {
+            if (colliders[0].tag == "GoblinArrow") {
+                //Player_Manager
+            }
+            if (DeathPriority == false) {
+                 GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;
                 musouTime = Time.time;
-                //Damage_Count++;
                 Base_HP--;
-                for (int k = 0; k < Base_HP; k++) { Personal_HP[k].SetActive(true); }
-                //for (int k = 0; k < Damage_Count; k++) { Personal_HP[k].SetActive(false); }
+                for (int k = 0; k <Personal_HP.Length; k++) {
+                    if (k < Base_HP) Personal_HP[k].SetActive(true);
+                    else Personal_HP[k].SetActive(false);
+                }
 
                 if (Base_HP == 0){
                     DeathPriority = true;
@@ -313,7 +320,6 @@ public class Player_Control : MonoBehaviour{
                     GetComponent<Animator>().Play("Slime_Death");
                 }
             }
-            i++;
         }
     }
 
@@ -328,13 +334,13 @@ public class Player_Control : MonoBehaviour{
     public void DashEnd() {
         Base_Speed = Current_Speed;
         DuringDashLerp = false;
+        AttackPriority = false;
     }
 
     //呼叫水花濺起
     public void PondEffect() {
         Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
-        //UI_Icon.GetComponent<Image>().material.SetInt("_colorID", Color_Number);
     }
 
     public void HideSplash() {
@@ -349,7 +355,11 @@ public class Player_Control : MonoBehaviour{
         if (rescue_count >= 5) {
             rescue_count = 0;
             Base_HP = 3 + Extra_HP;
-            for (int k = 0; k < Base_HP; k++) { Personal_HP[k].SetActive(true); }
+            for (int k = 0; k < Personal_HP.Length; k++){
+                if (k < Base_HP) Personal_HP[k].SetActive(true);
+                else Personal_HP[k].SetActive(false);
+            }
+            CancelColor();
             GetComponent<Animator>().Play("Slime_Revive");
         }
     }
@@ -362,15 +372,20 @@ public class Player_Control : MonoBehaviour{
     //死亡的數值reset等等
     public void CancelColor() {
         Color_Number = 0;
-        Player_Manager.GetComponent<Pigment_Manager>().Change_Base_Color(Player_Number, Color_Number);
-        Player_Manager.GetComponent<Player_Manager>().SetPlayerColor(Player_Number, Color_Number);
-        Player_Sprite.GetComponent<SpriteRenderer>().color = SplashEffect.GetComponent<SpriteRenderer>().color;
+        _pigmentmanager.Change_Base_Color(Player_Number, Color_Number);
+        _playermanager.SetPlayerColor(Player_Number, Color_Number);
+        Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
+        Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
+        //Player_Sprite.GetComponent<SpriteRenderer>().color = SplashEffect.GetComponent<SpriteRenderer>().color;
     }
 
     //合體狀態被擊殺
     void Die_InMergeState(){
-        Damage_Count = 3;
-        for (int i = 0; i < Damage_Count; i++) { Personal_HP[i].SetActive(false); }
+        Base_HP = 0;
+        for (int k = 0; k < Personal_HP.Length; k++){
+            Personal_HP[k].SetActive(false);
+        }
+
         CancelColor();
         DeathPriority = true;
         ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
@@ -389,7 +404,7 @@ public class Player_Control : MonoBehaviour{
         ExtraPriority = false;
         musouTime = Time.time;
         StopDetect = true;
-        Player_Manager.SendMessage("BackWashBoard");
+        _playermanager.BackWashBoard();
     }
 
     //道具加成
@@ -406,7 +421,10 @@ public class Player_Control : MonoBehaviour{
             case 2:
                 Base_HP++;
                 Extra_HP++;
-                for (int k = 0; k < Base_HP; k++) { Personal_HP[k].SetActive(true); }
+                for (int k = 0; k < Personal_HP.Length; k++){
+                    if (k < Base_HP) Personal_HP[k].SetActive(true);
+                    else Personal_HP[k].SetActive(false);
+                }
                 break;
             case 3:
                 Bullet_Superimposed++;
