@@ -11,6 +11,7 @@ public class Merge_Control : MonoBehaviour{
     public Transform Heart_Group;
     Object_Pool _MSlimePool;
     Bullet_Manager _BulletPool;
+    Merge_Control _mergectrl;
 
     //優先權、無敵時間等等
     bool AttackPriority = false;
@@ -84,12 +85,12 @@ public class Merge_Control : MonoBehaviour{
     float Base_Timer = 15.0f;
     int Base_HP = 3;
     int Max_HP = 5;
-    int Base_ATK = 5;
+    public int Base_ATK = 5;
     float Base_Speed = 1.0f;
     float Current_Speed = 1.0f;
-    int Base_Penetrate = 1;
+    public int Base_Penetrate = 1;
     //int Speed_Superimposed = 0;
-    int Bullet_Superimposed = 0;
+    public int Bullet_Superimposed = 0;
     //int Timer_Superimposed = 0;
 
     void Start(){
@@ -99,6 +100,7 @@ public class Merge_Control : MonoBehaviour{
         Current_Color = Merge_Sprite.GetComponent<SpriteRenderer>().color;
         anim = GetComponent<Animator>();
         anim.SetInteger("MergeNumber", MergeNumber);
+        _mergectrl = GetComponent<Merge_Control>();
     }
 
     public void SetMSlimePool(Bullet_Manager _bulletpool,Object_Pool pool){
@@ -149,6 +151,7 @@ public class Merge_Control : MonoBehaviour{
                         if (zAix >= 0) GetComponent<Animator>().Play("Slime_DashUp");
                         else GetComponent<Animator>().Play("Slime_DashDown");
                     }
+                    AudioManager.SingletonInScene.PlaySound2D("Dash", 0.5f);
                     OnDash = false;
                 }
                 Player_Manager.SendMessage(WhichPlayer_Moving + "rePos", transform.position);
@@ -251,6 +254,7 @@ public class Merge_Control : MonoBehaviour{
     }
 
     public void Decide_TwoPlayer_Control(GameObject PlayerA,GameObject PlayerB) {
+        AudioManager.SingletonInScene.PlaySound2D("Mix", 0.5f);
 
         Storage_Player[0] = PlayerA;
         Storage_Player[1] = PlayerB;
@@ -368,7 +372,8 @@ public class Merge_Control : MonoBehaviour{
     //設置攻擊最高優先權
     public void AttackPriorityOn(){
         AttackPriority = true;
-        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Shader_Number); 
+        Attack_Arrow.GetComponent<Create_Bullet>().MSlimeShootBullet(_mergectrl,Attack_Direction, Shader_Number);
+        AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.5f);
     }
 
     public void AttackPriorityOff(){
@@ -388,12 +393,14 @@ public class Merge_Control : MonoBehaviour{
                 StopDetect = true;
                 musouTime = Time.time;
                 Damage_Count++;
+                AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
                 for (int k = 0; k < Damage_Count; k++) {Merge_HP[k].SetActive(false); }
                 if (Damage_Count == 3){
                     DeathPriority = true;
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     CancelInvoke("Merge_Timer");
                     GetComponent<Animator>().Play("Slime_Death");
+                    AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.5f);
                 }
             }
             i++;
@@ -413,6 +420,7 @@ public class Merge_Control : MonoBehaviour{
 
     public void SpiltPriorityOn() {
         ExtraPriority = true;
+        AudioManager.SingletonInScene.PlaySound2D("Separate", 0.5f);
     }
 
     //混色後抓取雙方數值加成

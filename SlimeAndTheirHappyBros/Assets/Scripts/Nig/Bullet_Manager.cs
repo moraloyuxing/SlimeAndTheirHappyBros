@@ -36,6 +36,23 @@ public class Bullet_Manager : MonoBehaviour{
 
     }
 
+    public void Bullet_MSlimeReUse(Vector3 position, Quaternion rotation, Vector3 current_angle, Merge_Control MSlime, int Shader_Number){
+        if (_bulletpool.Count > 0){
+            GameObject reuse = _bulletpool.Dequeue();
+            reuse.transform.position = position;
+            reuse.transform.rotation = rotation;
+            reuse.SetActive(true);
+            reuse.GetComponent<Bullet_Behaviour>().SetMSlimeAttackDir(current_angle, MSlime, Shader_Number);
+        }
+
+        else{
+            GameObject clone_bullet = Instantiate(prefabBullet) as GameObject;
+            clone_bullet.transform.position = position;
+            clone_bullet.transform.rotation = rotation;
+        }
+
+    }
+
     public void Bullet_Recovery(GameObject recovery) {
         _bulletpool.Enqueue(recovery);
         recovery.SetActive(false);

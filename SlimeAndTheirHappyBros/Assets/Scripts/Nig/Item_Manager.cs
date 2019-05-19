@@ -44,6 +44,8 @@ public class Item_Manager : MonoBehaviour {
 
                         if (a_button[p]){
                             PlayerHasBuy[p, Focus_Count[p]] = true;
+                            AudioManager.SingletonInScene.PlaySound2D("Buy", 0.5f);
+
                             //針對各玩家進行道具加成跟UI更新
                             Player_BaseAbility[p].Ability_Modify(Focus_Count[p],ItemSprite[Focus_Count[p]]);
 

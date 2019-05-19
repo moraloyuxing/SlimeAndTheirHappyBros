@@ -58,6 +58,7 @@ public class Player_Manager : MonoBehaviour {
                 WashPriority[0] = false;
                 HaveBoard = false;
                 WashingBoard.SetActive(false);
+                AudioManager.SingletonInScene.PlaySound2D("Washing", 0.5f);
             }
 
             //玩家2啟用融合
@@ -77,6 +78,7 @@ public class Player_Manager : MonoBehaviour {
                 WashPriority[1] = false;
                 HaveBoard = false;
                 WashingBoard.SetActive(false);
+                AudioManager.SingletonInScene.PlaySound2D("Washing", 0.5f);
             }
 
             //玩家3啟用融合
@@ -96,6 +98,7 @@ public class Player_Manager : MonoBehaviour {
                 WashPriority[2] = false;
                 HaveBoard = false;
                 WashingBoard.SetActive(false);
+                AudioManager.SingletonInScene.PlaySound2D("Washing", 0.5f);
             }
 
             //玩家4啟用融合
@@ -115,6 +118,7 @@ public class Player_Manager : MonoBehaviour {
                 WashPriority[3] = false;
                 HaveBoard = false;
                 WashingBoard.SetActive(false);
+                AudioManager.SingletonInScene.PlaySound2D("Washing", 0.5f);
             }
         }
     }

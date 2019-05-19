@@ -7,6 +7,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     int color;
     float  offset, scaleOffset = 1.0f;
     public Player_Control WhichPlayer;
+    public Merge_Control WhichMergeSlime;
     public float speed = 20.0f;
     public float alpha = -0.04f;
     public float FadeTime = 1.5f;
@@ -16,7 +17,6 @@ public class Bullet_Behaviour : MonoBehaviour{
     Color BulletAlpha;
     Bullet_Manager bulletPool;
     Vector3 Attack_Dir;
-    string LastTouch = "empty";
     int PenetrateMaxCount = 0;
     int NowPenetrate = 0;
 
@@ -39,6 +39,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     }
 
     public void SetAttackDir(Vector3 current_angle,Player_Control xSlime,int Shader_Number) {
+        WhichMergeSlime = null;
         color = Shader_Number;
         GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
@@ -52,6 +53,23 @@ public class Bullet_Behaviour : MonoBehaviour{
         PenetrateMaxCount = xSlime.Base_Penetrate;
         BulletATK = xSlime.Base_ATK;
     }
+
+    public void SetMSlimeAttackDir(Vector3 current_angle, Merge_Control xSlime, int Shader_Number){
+        WhichPlayer = null;
+        color = Shader_Number;
+        GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
+        WhichMergeSlime = xSlime;
+        Attack_Dir = current_angle.normalized;
+        offset = Mathf.Abs(Attack_Dir.x);
+        offset = Mathf.Clamp(offset, 0.5f, 0.8f);
+        scaleOffset = Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
+        speed = 20.0f * Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
+        Attack_Dir *= speed;
+        _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
+        PenetrateMaxCount = xSlime.Base_Penetrate;
+        BulletATK = xSlime.Base_ATK;
+    }
+
 
     void Update(){
         if (!gameObject.activeInHierarchy) return;
@@ -80,9 +98,9 @@ public class Bullet_Behaviour : MonoBehaviour{
             if (!colliderRecord.Contains(colliders[i])) {
                 colliderRecord.Add(colliders[i]);
                 NowPenetrate++;
-                if (c.tag == "Goblin")
-                {
-                    bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
+                if (c.tag == "Goblin"){
+                    if(WhichMergeSlime == null)bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
+                    //else if(WhichPlayer == null) bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichMergeSlime.PlayerID, Attack_Dir);
                 }
                 if (NowPenetrate == PenetrateMaxCount) {
                     Attack_Dir = Vector3.zero;
