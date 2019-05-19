@@ -78,7 +78,7 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
 
     void DetectObstacle()
     {
-        Collider[] colliders = Physics.OverlapBox(transform.position + new Vector3(0, -1.23f, 0), new Vector3(0.05f, 0.25f, 0.05f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("Barrier"));
+        Collider[] colliders = Physics.OverlapBox(transform.position, new Vector3(0.35f, 0.6f, 0.3f), Quaternion.Euler(0, 0, 0), 1 << LayerMask.NameToLayer("Barrier"));
         if (colliders.Length > 0)
         {
             ResetUnit();

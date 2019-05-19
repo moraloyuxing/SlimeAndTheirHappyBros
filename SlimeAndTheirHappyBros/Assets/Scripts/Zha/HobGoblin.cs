@@ -9,8 +9,9 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     int attackType = 0;
     float imgOffset, hurtAreaOffset;
     Vector3 shootOffset;
-    float[] atkColOffset = new float[2];
-    Transform[] atkCol = new Transform[2];
+    Vector3 launchPos, shootFace;
+    float[] atkColOffset = new float[3];
+    Transform[] atkCol = new Transform[3];
     Transform hurtArea;
 
     // Start is called before the first frame update
@@ -22,11 +23,13 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         renderer = image.GetComponent<SpriteRenderer>();
         atkCol[0] = t.Find("AtkCollider");
         atkCol[1] = t.Find("AtkCollider (1)");
+        atkCol[2] = t.Find("AtkCollider (2)");
         imgScale = image.localScale.x;
         imgOffset = image.localPosition.x;
         shootOffset = t.Find("ShootPos").localPosition;
         atkColOffset[0] = atkCol[0].localPosition.x;
         atkColOffset[1] = atkCol[1].localPosition.x;
+        atkColOffset[2] = atkCol[2].localPosition.x;
         hurtArea = t.Find("HurtArea");
         hurtAreaOffset = hurtArea.localPosition.x;
         maxHp = info.hp;
@@ -50,10 +53,12 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         renderer = image.GetComponent<SpriteRenderer>();
         atkCol[0] = t.Find("AtkCollider");
         atkCol[1] = t.Find("AtkCollider (1)");
+        atkCol[2] = t.Find("AtkCollider (2)");
         imgScale = image.localScale.x;
         imgOffset = image.localPosition.x;
         atkColOffset[0] = atkCol[0].localPosition.x;
         atkColOffset[1] = atkCol[1].localPosition.x;
+        atkColOffset[2] = atkCol[2].localPosition.x;
         hurtArea = t.Find("HurtArea");
         hurtAreaOffset = hurtArea.localPosition.x;
         maxHp = info.hp;
@@ -255,13 +260,14 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         {
             float scaleX = .0f;
             if (firstInState) {
+
                 moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
                 image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                 image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
 
                 firstInState = false;
-                if (Random.Range(0, 100) < 70)//Random.Range(0, 100) < 70
+                if (attackType == 1)//Random.Range(0, 100) < 70
                 { //槌擊
                     animator.speed = 2.0f;
                     animator.SetInteger("state", 1);
@@ -270,11 +276,15 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 else {//葉子
                     attackType = 1;
                     startAttack = true;
-                    atkCol[0].localPosition = new Vector3(scaleX * atkColOffset[0], atkCol[0].localPosition.y, atkCol[0].localPosition.z);
+                    atkCol[2].localPosition = new Vector3(scaleX * atkColOffset[2], atkCol[2].localPosition.y, atkCol[2].localPosition.z);
+
+                    launchPos = selfPos + new Vector3(scaleX * shootOffset.x, shootOffset.y, shootOffset.z);
+                    shootFace = new Vector3(-scaleX, 0, 0);
 
                     animator.speed = 1.0f;
                     animator.SetInteger("attackType", attackType);
                     animator.SetInteger("state", 2);
+                    animator.SetTrigger("attackOver");
                     endure = true;
                 }
             }
@@ -293,11 +303,14 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 }
                 else
                 {
+                    atkCol[0].localPosition = new Vector3(scaleX * atkColOffset[0], atkCol[0].localPosition.y, atkCol[0].localPosition.z);
+                    atkCol[1].localPosition = new Vector3(scaleX * atkColOffset[1], atkCol[1].localPosition.y, atkCol[1].localPosition.z);
                     startAttack = true;
                     endure = true;
                     animator.speed = 1.0f;
                     animator.SetInteger("attackType", attackType);
                     animator.SetInteger("state", 2);
+                    animator.SetTrigger("attackOver");
                 }
             }
             
@@ -305,18 +318,17 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         else
         {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsTag("attack"))
+            if ((aniInfo.IsName("quackAttack") && attackType == 0) || (aniInfo.IsName("leafAttack") && attackType == 1))
             {
+                Debug.Log("start in ani time" + animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
                 if (attackType == 1 && !hasShoot && aniInfo.normalizedTime >= 0.47f) {
                     hasShoot = true;
                     float scaleX = (goblinManager.PlayerPos[targetPlayer].x > selfPos.x) ? -1.0f : 1.0f;
-                    Vector3 launchPos = selfPos + new Vector3(scaleX * shootOffset.x, shootOffset.y, shootOffset.z);
-                    //goblinManager.UseLeaf(launchPos + new Vector3(-scaleX * 1.5f, 0, 0), new Vector3(-scaleX,0,0));
                     for (int i = 0; i <= 1; i++) {
-                        Vector3 shootDir =  Quaternion.AngleAxis(25.0f + i*30, Vector3.up) * new Vector3(-scaleX, 0, 0);
+                        Vector3 shootDir =  Quaternion.AngleAxis(25.0f + i*30, Vector3.up) * shootFace;
                         goblinManager.UseLeaf(launchPos + shootDir * 1.5f, shootDir);
 
-                        shootDir = Quaternion.AngleAxis(-25.0f - i*30, Vector3.up) * new Vector3(-scaleX, 0, 0);
+                        shootDir = Quaternion.AngleAxis(-25.0f - i*30, Vector3.up) * shootFace;
                         goblinManager.UseLeaf(launchPos + shootDir * 1.5f, shootDir);
                     }
 
@@ -327,7 +339,6 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     endure = false;
                     startAttack = false;
                     hasShoot = false;
-                    animator.SetTrigger("attackOver");
                     OverAttackDetectDist();
                 }
             }
