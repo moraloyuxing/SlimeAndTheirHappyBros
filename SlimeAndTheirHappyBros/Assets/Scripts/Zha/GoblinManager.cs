@@ -10,6 +10,10 @@ public class GoblinManager : MonoBehaviour
     public Vector3[] spawnPos;
 
     bool[] playerMove = new bool[4] { false, false, false, false };
+    bool[] playerDie = new bool[4] { false, false, false, false };
+    public bool[] PlayersDie {
+        get { return playerDie; }
+    }
     public bool[] PlayersMove {
         get { return playerMove; }
     }
@@ -33,6 +37,7 @@ public class GoblinManager : MonoBehaviour
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
     Dictionary<string, GoblinLeaf> goblinLeafDic;
     List<GoblinLeaf> freeGoblinLeaves, usedGoblinLeaves;
+    List<Money> freeMoneys, usedMoneys;
 
 
     public TestPlayerManager playerManager;
@@ -51,6 +56,10 @@ public class GoblinManager : MonoBehaviour
 
         public float turnDist;
         public float stopDist;
+
+        public int minMoney;
+        public int maxMoney;
+
     }
     public GoblinInfo[] goblinInfo;
 
@@ -133,10 +142,21 @@ public class GoblinManager : MonoBehaviour
         {
             goblin = goblins.GetChild(i);
             freeGoblinLeaves.Add(new GoblinLeaf());
-            freeGoblinLeaves[i].Init(goblin, this, poolUnitInfo[0]);
+            freeGoblinLeaves[i].Init(goblin, this, poolUnitInfo[1]);
             goblinLeafDic.Add(goblin.name, freeGoblinLeaves[i]);
             goblin.gameObject.SetActive(false);
         }
+        goblins = transform.Find("Moneys");
+        freeMoneys = new List<Money>();
+        usedMoneys = new List<Money>();
+        for (int i = 0; i < goblins.childCount; i++)
+        {
+            goblin = goblins.GetChild(i);
+            freeMoneys.Add(new Money());
+            freeMoneys[i].Init(goblin, this, poolUnitInfo[2]);
+            goblin.gameObject.SetActive(false);
+        }
+
     }
     void Start()
     {
@@ -282,22 +302,43 @@ public class GoblinManager : MonoBehaviour
         leaf.ToActive(pos, dir);
         freeGoblinLeaves.Remove(leaf);
     }
+    public void UseMoney(int num, Vector3 pos, int target)
+    {
+        int i = 0;
+        while (i < num) {
+            if (freeMoneys.Count <= 0) return;
+            Money money = freeMoneys[0];
+            usedMoneys.Add(money);
+            money.ToActive(pos, target);
+            freeMoneys.Remove(money);
+            i++;
+        }
+
+    }
+
 
     public void RecycleArrow(GoblinArrow arrow) {
         freeGoblinArrows.Add(arrow);
         usedGoblinArrows.Remove(arrow);
         
     }
-
     public void RecycleLeaf(GoblinLeaf leaf) {
         freeGoblinLeaves.Add(leaf);
         usedGoblinLeaves.Remove(leaf);
     }
-
+    public void RecycleMoney(Money money)
+    {
+        freeMoneys.Add(money);
+        usedMoneys.Remove(money);
+    }
 
     public void SetPlayersMove(int id, Vector3 pos) {
         playerMove[id] = true;
         playerPos[id] = pos;
+    }
+
+    public void SetPlayerDie(int id) {
+        playerDie[id] = true;
     }
 
     public GoblinBase FindGoblin(string name) {

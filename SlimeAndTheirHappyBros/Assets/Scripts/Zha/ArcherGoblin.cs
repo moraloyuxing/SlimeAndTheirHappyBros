@@ -30,6 +30,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
         turnDist = info.turnDist;
+        minMoney = info.minMoney;
+        maxMoney = info.maxMoney;
     }
 
     public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -48,6 +50,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
         turnDist = info.turnDist;
+        minMoney = info.minMoney;
+        maxMoney = info.maxMoney;
         //playerManager = pManager;
     }
 
@@ -171,6 +175,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         {
             animator.speed = 1.0f;
             animator.SetInteger("state", 4);
+            goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
             firstInState = false;
         }
         else

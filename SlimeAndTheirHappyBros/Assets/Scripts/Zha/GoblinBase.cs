@@ -9,6 +9,8 @@ public class GoblinBase
     protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
     protected float imgScale;
+    protected int minMoney, maxMoney;
+
 
     public int GetColor
     {

@@ -32,6 +32,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
         turnDist = info.turnDist;
+        minMoney = info.minMoney;
+        maxMoney = info.maxMoney;
     }
 
     public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -52,6 +54,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
         turnDist = info.turnDist;
+        minMoney = info.minMoney;
+        maxMoney = info.maxMoney;
         //playerManager = pManager;
     }
 
@@ -78,6 +82,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
         nearstPlayerDist = 500.0f;
         for (int i = 0; i < 4; i++) {
+            if (goblinManager.PlayersDie[i]) continue;
             playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
             if (playerDist[i] < nearstPlayerDist)
             {
@@ -156,6 +161,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         {
             animator.speed = 1.0f;
             animator.SetInteger("state", 4);
+            goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
             firstInState = false;
         }
         else
