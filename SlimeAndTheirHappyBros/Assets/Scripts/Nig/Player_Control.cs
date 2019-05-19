@@ -217,10 +217,10 @@ public class Player_Control : MonoBehaviour{
         zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
         if (xAtk != 0.0f || zAtk != 0.0f && DeathPriority == false) {
-            Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
-            Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
+            Attack_Direction = 0.1f *( new Vector3(xAtk, 0.0f, zAtk).normalized);
+            Atk_angle = Mathf.Atan2(-Attack_Direction.x, Attack_Direction.z) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
-            Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp * ArrowRot);
+            Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp*ArrowRot);
         }
 
         //攻擊
