@@ -7,7 +7,7 @@ public class Item_Manager : MonoBehaviour {
     public SpriteRenderer Docter;
     public Transform[] All_Player = new Transform[4];//四位玩家
     public Transform[] All_Item = new Transform[6];//六樣道具
-    public GameObject[] Item_InBox = new GameObject[6];
+    public SpriteRenderer[] Item_InBox = new SpriteRenderer[6];
     public GameObject[] Item_Hint = new GameObject[6];//六樣道具提示
     Player_Control[] Player_BaseAbility = new Player_Control[4];
     float[] CurrentDistance = new float[4];//目前測量的道具距離
@@ -97,12 +97,12 @@ public class Item_Manager : MonoBehaviour {
         Purchase_State = !Purchase_State;
         if (Purchase_State){
             Docter.enabled = true;
-            for (int i = 0; i < 6; i++) All_Item[i].gameObject.SetActive(true);
+            for (int i = 0; i < 6; i++) Item_InBox[i].enabled = true;
             NewRound_toBuy();
         }
         else {
             Docter.enabled = false;
-            for (int i = 0; i < 6; i++) All_Item[i].gameObject.SetActive(false);
+            for (int i = 0; i < 6; i++) Item_InBox[i].enabled = false;
         }
     }
 
