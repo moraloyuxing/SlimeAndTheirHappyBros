@@ -12351,11 +12351,6 @@ MonoBehaviour:
   MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 691512662}
   _bulletPool: {fileID: 1309389867}
-  Storage_Player:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &219557134
 Transform:
   m_ObjectHideFlags: 0
@@ -23998,7 +23993,6 @@ GameObject:
   - component: {fileID: 412872797}
   - component: {fileID: 412872800}
   - component: {fileID: 412872801}
-  - component: {fileID: 412872802}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -24104,20 +24098,6 @@ MonoBehaviour:
   maxZoom: 20
   minZoom: 10
   zoomLimiter: 30
---- !u!114 &412872802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 412872796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31b6659605a3f6947930b775880b4eed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Item_Manager: {fileID: 1385684562}
-  Player_Manager: {fileID: 356022415}
 --- !u!1 &415806230
 GameObject:
   m_ObjectHideFlags: 0
@@ -78269,11 +78249,6 @@ MonoBehaviour:
   MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 212379511}
   _bulletPool: {fileID: 1309389867}
-  Storage_Player:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &1398147387
 Transform:
   m_ObjectHideFlags: 0
@@ -96013,11 +95988,6 @@ MonoBehaviour:
   MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 705649045}
   _bulletPool: {fileID: 1309389867}
-  Storage_Player:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &1749218228
 Transform:
   m_ObjectHideFlags: 0
@@ -117760,11 +117730,6 @@ MonoBehaviour:
   MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 1273168509}
   _bulletPool: {fileID: 1309389867}
-  Storage_Player:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
 --- !u!4 &2134032423
 Transform:
   m_ObjectHideFlags: 0
