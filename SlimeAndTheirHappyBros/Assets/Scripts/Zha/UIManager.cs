@@ -95,4 +95,8 @@ public class UIManager : MonoBehaviour
         GoblinProgress(0);
         animator.Play("breakTimeIn");
     }
+    public void RoundStartMusic() {
+        AudioManager.SingletonInScene.PauseBGM();
+        AudioManager.SingletonInScene.PlaySound2D("Round_Begin",1.0f);
+    }
 }

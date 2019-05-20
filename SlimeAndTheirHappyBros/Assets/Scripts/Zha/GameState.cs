@@ -50,8 +50,9 @@ public class GameState
 
                 i++;
             }
+            if(currentWave >0)SpawnOverCBK(currentWave);
             currentWave++;
-            SpawnOverCBK(currentWave);
+            
             
             
             if (currentWave >= stateInfo.maxWave) spawnOver = true;

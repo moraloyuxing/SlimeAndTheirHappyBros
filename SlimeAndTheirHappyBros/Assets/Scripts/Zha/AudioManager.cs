@@ -8,6 +8,10 @@ public class AudioManager : MonoBehaviour
 
     Dictionary<string, AudioClip> soundDictionary = new Dictionary<string, AudioClip>();
 
+    AudioClip nextMusic;
+
+    public AudioClip shoppingMusic;
+    public AudioClip[] battleMusic;
     public SoundClip[] soundClips;
 
     private static AudioManager singletonInScene;
@@ -37,6 +41,31 @@ public class AudioManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void PauseBGM() {
+        bgmAudio.Pause();
+    }
+
+    public void ChangeBGM(bool shopping, int curRound) {
+        
+        if (shopping) {
+            bgmAudio.Pause();
+            bgmAudio.clip = shoppingMusic;
+            StartCoroutine(OnChangingBGM());
+        }
+        else {
+            if (curRound < 3) bgmAudio.clip = battleMusic[0];
+            else if (curRound < 5) bgmAudio.clip = battleMusic[1];
+            else bgmAudio.clip = battleMusic[2];
+            bgmAudio.Play();
+        }
+        
+    }
+
+    IEnumerator OnChangingBGM() {
+        yield return new WaitForSeconds(1.5f);
+        bgmAudio.Play();
     }
 
     public void PlaySound2D(string _name, float volume)

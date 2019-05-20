@@ -160,7 +160,7 @@ public class GoblinBase
         }
         else {
             transform.position += deltaTime * speed * moveFwdDir;
-            if (inStateTime > 1.0f) SetState(GoblinState.ramble);
+            if (inStateTime > 6.0f) SetState(GoblinState.ramble);
         }
     }
 
@@ -329,16 +329,66 @@ public class GoblinBase
     }
     public virtual void OnGettingHurt(int col, int atkValue, int playerID, Vector3 dir)
     {
-        if (col == color ){
-            if (hp > 0) {
-                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-                hp -= atkValue;
-                targetPlayer = playerID;
-                moveFwdDir = dir.normalized;
-                SetState(GoblinState.hurt);
+        if (col == 1 || col == 2 || col == 4)
+        {
+            if (col == color) {
+                if (hp > 0)
+                {
+                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                    hp -= atkValue;
+                    targetPlayer = playerID;
+                    moveFwdDir = dir.normalized;
+                    SetState(GoblinState.hurt);
+                }
+            }
+            else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        }
+        else {
+            if (col == 3)
+            {
+                if ((color == 1 || color == 2))
+                {
+                    if (hp > 0)
+                    {
+                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                        hp -= atkValue;
+                        targetPlayer = playerID;
+                        moveFwdDir = dir.normalized;
+                        SetState(GoblinState.hurt);
+                    }
+                }
+                else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+            }
+            else if (col == 5) {
+                if ((color == 1 || color == 4))
+                {
+                    if (hp > 0)
+                    {
+                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                        hp -= atkValue;
+                        targetPlayer = playerID;
+                        moveFwdDir = dir.normalized;
+                        SetState(GoblinState.hurt);
+                    }
+                }
+                else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+            }
+            else if (col == 6)
+            {
+                if ((color == 2 || color == 4))
+                {
+                    if (hp > 0)
+                    {
+                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                        hp -= atkValue;
+                        targetPlayer = playerID;
+                        moveFwdDir = dir.normalized;
+                        SetState(GoblinState.hurt);
+                    }
+                }
+                else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
             }
         }
-        else { AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f); }
     }
 
     public virtual void ErroeCatch() {

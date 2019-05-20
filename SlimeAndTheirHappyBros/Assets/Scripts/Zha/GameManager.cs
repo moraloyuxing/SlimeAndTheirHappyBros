@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
         if (curWave <= roundInfos[curRound].maxWave)
         {
             if(curWave == 0 ) uiManager.GoblinProgress(0);
-            else uiManager.GoblinProgress((float)curWave / (float)roundInfos[curRound].maxWave);
+            else uiManager.GoblinProgress((float)curWave / (float)roundInfos[curRound].maxWave - 1);
         }
         else {
             
@@ -97,6 +97,7 @@ public class GameManager : MonoBehaviour
 
     public void StartRound() {
         roundStart = true;
+        AudioManager.SingletonInScene.ChangeBGM(false, curRound);
     }
 
     public void RoundOver() {
@@ -108,6 +109,8 @@ public class GameManager : MonoBehaviour
         goblinKills = 0;
         itemManager.State_Switch();
         playerManager.State_Switch();
+        AudioManager.SingletonInScene.ChangeBGM(true, 0);
+        AudioManager.SingletonInScene.PlaySound2D("Round_End", 1.0f);
         uiManager.GoBreakTime();
     }
     public void GoNextRound() {

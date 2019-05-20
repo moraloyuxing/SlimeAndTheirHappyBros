@@ -15191,6 +15191,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3843e58877af1a4bac05812e6130227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shoppingMusic: {fileID: 8300000, guid: d9fa9712853ac4df8b795f38be18352a, type: 3}
+  battleMusic:
+  - {fileID: 8300000, guid: fd10ae8fc63d142d7a7836fad727d7bc, type: 3}
+  - {fileID: 8300000, guid: f0a2ce7143a8347649ad0b76cd265a23, type: 3}
+  - {fileID: 8300000, guid: 2a1aabb555bd84cef8f9b990f3978499, type: 3}
   soundClips:
   - clipNmae: Goblin_Attack
     clip: {fileID: 8300000, guid: 859fcc960e5ea4882ac29b68cee80183, type: 3}
@@ -47124,6 +47129,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efafbb6ed6437944a34c0ab01245e2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  test: 0
   roundInfos:
   - maxWave: 1
     waves:
@@ -65182,7 +65188,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: fd10ae8fc63d142d7a7836fad727d7bc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
