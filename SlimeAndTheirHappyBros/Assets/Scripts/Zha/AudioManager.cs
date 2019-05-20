@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    AudioSource soundAudio;
+    AudioSource effectAudio, bgmAudio;
 
     Dictionary<string, AudioClip> soundDictionary = new Dictionary<string, AudioClip>();
 
@@ -23,7 +23,8 @@ public class AudioManager : MonoBehaviour
     void Awake()
     {
         singletonInScene = this;
-        singletonInScene.soundAudio = GetComponent<AudioSource>();
+        singletonInScene.effectAudio = transform.Find("EffectAudio").GetComponent<AudioSource>();
+        singletonInScene.bgmAudio = transform.Find("BGMAudio").GetComponent<AudioSource>();
 
         if (soundClips != null) {
             foreach (SoundClip clip in soundClips) {
@@ -42,11 +43,20 @@ public class AudioManager : MonoBehaviour
     {
         if (soundDictionary.ContainsKey(_name))
         {
-            soundAudio.PlayOneShot(soundDictionary[_name], volume);
+            effectAudio.PlayOneShot(soundDictionary[_name], volume);
         }
         else Debug.Log("沒有這個音檔");
     }
-
+    public void PlaySound2D(string _name, float volume, float pitch)
+    {
+        if (soundDictionary.ContainsKey(_name))
+        {
+            effectAudio.pitch = pitch;
+            effectAudio.PlayOneShot(soundDictionary[_name], volume);
+            effectAudio.pitch = 1.0f;
+        }
+        else Debug.Log("沒有這個音檔");
+    }
 }
 
 

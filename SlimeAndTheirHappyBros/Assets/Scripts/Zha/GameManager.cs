@@ -23,10 +23,11 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         goblinManager = GameObject.Find("GoblinManager").GetComponent<GoblinManager>();
-        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
+        uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
+            gameStates[i] = new GameState();
             gameStates[i].Init(roundInfos[i], goblinManager, SpawnOver);
         }
 

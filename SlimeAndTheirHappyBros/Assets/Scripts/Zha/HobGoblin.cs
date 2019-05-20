@@ -301,12 +301,12 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             if (!startAttack) {
                 moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z);
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-                if (Mathf.Abs(moveFwdDir.z) > 1.2f)
+                if (moveFwdDir.sqrMagnitude > 16.0f) //Mathf.Abs(moveFwdDir.z) > 1.2f && 
                 {
                     image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                     image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
-                    if (Mathf.Abs(moveFwdDir.x) < 5.0f) moveFwdDir = new Vector3(0, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
-                    else moveFwdDir = (moveFwdDir + new Vector3(-scaleX * 4.0f, 0, 0)).normalized;
+                    if (Mathf.Abs(moveFwdDir.x) < 3.0f) moveFwdDir = new Vector3(0, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
+                    else moveFwdDir = (moveFwdDir + new Vector3(-scaleX * 3.5f, 0, 0)).normalized;
                     transform.position += speed * 1.2f * deltaTime * moveFwdDir;
                 }
                 else
