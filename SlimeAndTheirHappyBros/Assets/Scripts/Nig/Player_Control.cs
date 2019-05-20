@@ -250,7 +250,7 @@ public class Player_Control : MonoBehaviour{
 
         //攻擊
         right_trigger = Input.GetAxis(WhichPlayer + "Attack");
-        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false && Color_Number!=0) {
+        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
             GetComponent<Animator>().Play("Slime_Attack");
             Shooting = true;
         }
@@ -345,6 +345,7 @@ public class Player_Control : MonoBehaviour{
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     GetComponent<Animator>().Play("Slime_Death");
                     _playermanager._goblinmanager.SetPlayerDie(Player_Number);
+                    _playermanager.DeathCountPlus();
                     AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
                 }
             }
@@ -395,6 +396,7 @@ public class Player_Control : MonoBehaviour{
                 GetComponent<Animator>().Play("Slime_Revive");
                 AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
                 _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
+                _playermanager.DeathCountMinus();
             }
         }
     }
@@ -431,6 +433,8 @@ public class Player_Control : MonoBehaviour{
         ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
         Hide_Hint();
         GetComponent<Animator>().Play("Slime_GrassIdle");
+        _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
+        _playermanager.DeathCountPlus();
     }
 
     public void HideWeak(){
@@ -531,6 +535,8 @@ public class Player_Control : MonoBehaviour{
             if (k < Base_HP) Personal_HP[k].SetActive(true);
             else Personal_HP[k].SetActive(false);
         }
+        _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
+        _playermanager.DeathCountMinus();
     }
 
 }

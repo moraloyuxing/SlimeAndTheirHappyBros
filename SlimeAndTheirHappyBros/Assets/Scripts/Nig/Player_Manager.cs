@@ -25,6 +25,7 @@ public class Player_Manager : MonoBehaviour
     bool[] On_Altar = new bool[4];
     public Transform Altar;
     public GoblinManager _goblinmanager;
+    public int DeathCount = 0;
 
     System.Action OnAltarCBK;
 
@@ -440,6 +441,15 @@ public class Player_Manager : MonoBehaviour
         for (int i = 0; i < 4; i++) {
             FourPlayer[i].GetDocterHelp();
         }
+    }
+
+    public void DeathCountPlus() {
+        DeathCount++;
+        //if(DeathCount == 4)進入結算
+    }
+
+    public void DeathCountMinus() {
+        DeathCount--;
     }
 
 }
