@@ -39,9 +39,7 @@ public class GoblinManager : MonoBehaviour
     List<GoblinLeaf> freeGoblinLeaves, usedGoblinLeaves;
     List<Money> freeMoneys, usedMoneys;
 
-
-    public TestPlayerManager playerManager;
-    //Player_Manager playerManager;
+    public Player_Control[] Four_Player = new Player_Control[4];
     public Vector2 mapBorder;
 
     [System.Serializable]
@@ -84,7 +82,6 @@ public class GoblinManager : MonoBehaviour
             goblin = goblins.GetChild(i);
             freeNormalGoblins.Add(new NormalGoblin());
             freeNormalGoblins[i].TestInit(goblin, goblinInfo[0], this);
-            //freeNormalGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblinDic.Add(goblin.name, freeNormalGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
@@ -97,7 +94,6 @@ public class GoblinManager : MonoBehaviour
             goblin = goblins.GetChild(i);
             freeArcherGoblins.Add(new ArcherGoblin());
             freeArcherGoblins[i].TestInit(goblin, goblinInfo[1], this);
-            //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblinDic.Add(goblin.name, freeArcherGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
@@ -110,7 +106,6 @@ public class GoblinManager : MonoBehaviour
             goblin = goblins.GetChild(i);
             freeHobGoblins.Add(new HobGoblin());
             freeHobGoblins[i].TestInit(goblin, goblinInfo[2], this);
-            //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblinDic.Add(goblin.name, freeHobGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
@@ -348,6 +343,7 @@ public class GoblinManager : MonoBehaviour
     }
     public void UseMoney(int num, Vector3 pos, int target)
     {
+        Four_Player[target].MoneyUpdate(num);//UI更新num
         StartCoroutine(DropMoney(num,pos, target));
 
     }

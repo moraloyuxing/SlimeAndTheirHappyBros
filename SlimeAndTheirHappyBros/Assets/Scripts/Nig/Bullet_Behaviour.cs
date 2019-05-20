@@ -7,6 +7,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     int color;
     float  offset, scaleOffset = 1.0f;
     public Player_Control WhichPlayer;
+    public Player_Control Rescue_Which;
     public Merge_Control WhichMergeSlime;
     public float speed = 20.0f;
     public float alpha = -0.04f;
@@ -90,7 +91,7 @@ public class Bullet_Behaviour : MonoBehaviour{
 
     void Bullet_Detect() {
         Collider[]colliders = Physics.OverlapBox(_myTransform.position, scaleOffset * new Vector3(0.22f, 0.15f, 0.025f), Quaternion.Euler(25, 0, 0), 
-            1 << LayerMask.NameToLayer("GoblinHurtArea") | 1<< LayerMask.NameToLayer("Barrier"));
+            1 << LayerMask.NameToLayer("GoblinHurtArea") | 1<< LayerMask.NameToLayer("Barrier") | 1 << LayerMask.NameToLayer("PlayerReviveArea"));
         int i = 0;
         while (NowPenetrate < PenetrateMaxCount && i < colliders.Length ){
             Transform c = colliders[i].transform.parent;
@@ -102,6 +103,12 @@ public class Bullet_Behaviour : MonoBehaviour{
                     if(WhichMergeSlime == null)bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
                     //else if(WhichPlayer == null) bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichMergeSlime.PlayerID, Attack_Dir);
                 }
+
+                if (c.tag == "Player") {
+                    Rescue_Which = c.GetComponent<Player_Control>();
+                    Rescue_Which.GetRescued();
+                }
+
                 if (NowPenetrate == PenetrateMaxCount) {
                     Attack_Dir = Vector3.zero;
                     GetComponent<Animator>().Play("SlimeBullet_Explosion");
