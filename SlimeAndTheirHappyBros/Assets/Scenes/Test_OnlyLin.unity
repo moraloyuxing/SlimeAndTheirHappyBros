@@ -12351,6 +12351,11 @@ MonoBehaviour:
   MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 691512662}
   _bulletPool: {fileID: 1309389867}
+  Storage_Player:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &219557134
 Transform:
   m_ObjectHideFlags: 0
@@ -24690,7 +24695,7 @@ MonoBehaviour:
     type: 3}
   initailsize: 50
   CameraFocus: {fileID: 412872801}
-  prefabMergeSlime: {fileID: 1383578949352158127, guid: 7a5f3a0d18484654a84aa13eb5ea6fc4,
+  prefabMergeSlime: {fileID: 5793676542781561008, guid: 7a5f3a0d18484654a84aa13eb5ea6fc4,
     type: 3}
   _bulletpool: {fileID: 1309389867}
 --- !u!4 &426551266
@@ -72857,6 +72862,11 @@ MonoBehaviour:
   prefabBullet: {fileID: 3540405224066701742, guid: 4e65a53bce6489f4794c958743ae8c49,
     type: 3}
   _goblinmanager: {fileID: 1762441515}
+  Four_Player:
+  - {fileID: 1930958718}
+  - {fileID: 1517294621}
+  - {fileID: 351806365}
+  - {fileID: 1050854433}
 --- !u!4 &1309389868
 Transform:
   m_ObjectHideFlags: 0
@@ -78259,6 +78269,11 @@ MonoBehaviour:
   MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 212379511}
   _bulletPool: {fileID: 1309389867}
+  Storage_Player:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1398147387
 Transform:
   m_ObjectHideFlags: 0
@@ -95998,6 +96013,11 @@ MonoBehaviour:
   MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 705649045}
   _bulletPool: {fileID: 1309389867}
+  Storage_Player:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &1749218228
 Transform:
   m_ObjectHideFlags: 0
@@ -117740,6 +117760,11 @@ MonoBehaviour:
   MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 1273168509}
   _bulletPool: {fileID: 1309389867}
+  Storage_Player:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!4 &2134032423
 Transform:
   m_ObjectHideFlags: 0

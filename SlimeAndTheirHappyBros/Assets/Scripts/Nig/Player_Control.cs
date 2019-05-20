@@ -414,6 +414,11 @@ public class Player_Control : MonoBehaviour{
         ReviveArea.enabled = true;
     }
 
+    //合體假死狀態
+    public void FakeDeath() {
+        _playermanager._goblinmanager.SetPlayerDie(Player_Number);
+    }
+
     //合體狀態被擊殺
     void Die_InMergeState(){
         Base_HP = 0;
@@ -506,6 +511,7 @@ public class Player_Control : MonoBehaviour{
         Base_Speed = Weak_Speed;
         GetComponent<Animator>().Play("Slime_Weak");
         _playermanager.StartWeak(Player_Number);
+        _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
     }
 
     //金幣
