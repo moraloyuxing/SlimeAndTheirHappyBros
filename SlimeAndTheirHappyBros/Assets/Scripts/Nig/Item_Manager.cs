@@ -12,8 +12,8 @@ public class Item_Manager : MonoBehaviour {
     int[] itemBeFocused = new int[6] { 0, 0, 0, 0, 0, 0 };
     int[] Focus_Count = new int[4] { -1, -1, -1, -1 };
     bool Purchase_State = false;
-    int[] Item_Price = new int[6] { 30, 50, 50, 40, 20, 30 };
-    int[] Base_Price = new int[6] { 30, 50, 50, 40, 20, 30 };
+    int[] Item_Price = new int[6] { 13, 13, 12, 20, 18, 15 };
+    int[] Base_Price = new int[6] { 13, 13, 12, 20, 18, 15 };
 
     //玩家購買相關
     bool[] a_button = new bool[4];

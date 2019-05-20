@@ -23993,7 +23993,6 @@ GameObject:
   - component: {fileID: 412872797}
   - component: {fileID: 412872800}
   - component: {fileID: 412872801}
-  - component: {fileID: 412872802}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -24099,20 +24098,6 @@ MonoBehaviour:
   maxZoom: 20
   minZoom: 10
   zoomLimiter: 30
---- !u!114 &412872802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 412872796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31b6659605a3f6947930b775880b4eed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Item_Manager: {fileID: 1385684562}
-  Player_Manager: {fileID: 356022415}
 --- !u!1 &415806230
 GameObject:
   m_ObjectHideFlags: 0
@@ -24690,7 +24675,7 @@ MonoBehaviour:
     type: 3}
   initailsize: 50
   CameraFocus: {fileID: 412872801}
-  prefabMergeSlime: {fileID: 1383578949352158127, guid: 7a5f3a0d18484654a84aa13eb5ea6fc4,
+  prefabMergeSlime: {fileID: 5793676542781561008, guid: 7a5f3a0d18484654a84aa13eb5ea6fc4,
     type: 3}
   _bulletpool: {fileID: 1309389867}
 --- !u!4 &426551266
@@ -72857,6 +72842,11 @@ MonoBehaviour:
   prefabBullet: {fileID: 3540405224066701742, guid: 4e65a53bce6489f4794c958743ae8c49,
     type: 3}
   _goblinmanager: {fileID: 1762441515}
+  Four_Player:
+  - {fileID: 1930958718}
+  - {fileID: 1517294621}
+  - {fileID: 351806365}
+  - {fileID: 1050854433}
 --- !u!4 &1309389868
 Transform:
   m_ObjectHideFlags: 0

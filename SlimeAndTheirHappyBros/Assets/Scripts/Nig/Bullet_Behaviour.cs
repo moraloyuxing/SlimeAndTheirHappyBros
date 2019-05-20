@@ -8,7 +8,6 @@ public class Bullet_Behaviour : MonoBehaviour{
     float  offset, scaleOffset = 1.0f;
     public Player_Control WhichPlayer;
     public Player_Control Rescue_Which;
-    public Merge_Control WhichMergeSlime;
     public float speed = 20.0f;
     public float alpha = -0.04f;
     public float FadeTime = 1.5f;
@@ -40,7 +39,6 @@ public class Bullet_Behaviour : MonoBehaviour{
     }
 
     public void SetAttackDir(Vector3 current_angle,Player_Control xSlime,int Shader_Number) {
-        WhichMergeSlime = null;
         color = Shader_Number;
         GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
@@ -54,23 +52,6 @@ public class Bullet_Behaviour : MonoBehaviour{
         PenetrateMaxCount = xSlime.Base_Penetrate;
         BulletATK = xSlime.Base_ATK;
     }
-
-    public void SetMSlimeAttackDir(Vector3 current_angle, Merge_Control xSlime, int Shader_Number){
-        WhichPlayer = null;
-        color = Shader_Number;
-        GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
-        WhichMergeSlime = xSlime;
-        Attack_Dir = current_angle.normalized;
-        offset = Mathf.Abs(Attack_Dir.x);
-        offset = Mathf.Clamp(offset, 0.5f, 0.8f);
-        scaleOffset = Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
-        speed = 20.0f * Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
-        Attack_Dir *= speed;
-        _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
-        PenetrateMaxCount = xSlime.Base_Penetrate;
-        BulletATK = xSlime.Base_ATK;
-    }
-
 
     void Update(){
         if (!gameObject.activeInHierarchy) return;
@@ -101,7 +82,7 @@ public class Bullet_Behaviour : MonoBehaviour{
                 colliderRecord.Add(colliders[i]);
                 NowPenetrate++;
                 if (c.tag == "Goblin"){
-                    if(WhichMergeSlime == null)bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
+                    bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
                 }
 
                 if (c.tag == "Player") {
@@ -112,7 +93,8 @@ public class Bullet_Behaviour : MonoBehaviour{
                 if(colliders[i].tag == "Barrier" || c.tag == "Barrier") AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 0.5f);
                 if (NowPenetrate == PenetrateMaxCount) {
                     Attack_Dir = Vector3.zero;
-                    GetComponent<Animator>().Play("SlimeBullet_Explosion");
+                    if (c.tag == "Player") ExplosionEnd();
+                    else GetComponent<Animator>().Play("SlimeBullet_Explosion");
                 } 
             }
             i++;
