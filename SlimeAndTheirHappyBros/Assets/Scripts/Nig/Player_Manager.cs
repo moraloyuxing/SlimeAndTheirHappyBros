@@ -160,6 +160,7 @@ public class Player_Manager : MonoBehaviour
 
     void Player1_rePos(Vector3 pos)
     {
+        _goblinmanager.SetPlayersMove(0, pos);
         if (FourPlayer[0].gameObject.activeSelf == true)
         {
             //更新自己位置跟色況
@@ -198,7 +199,6 @@ public class Player_Manager : MonoBehaviour
                 else shortest_toPlayer[0] = FourPlayer[3].gameObject;//離4最近
             }
 
-            _goblinmanager.SetPlayersMove(0, pos);
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
@@ -207,6 +207,7 @@ public class Player_Manager : MonoBehaviour
 
     void Player2_rePos(Vector3 pos)
     {
+        _goblinmanager.SetPlayersMove(1, pos);
         if (FourPlayer[1].gameObject.activeSelf == true)
         {
             //更新自己位置跟色況
@@ -245,7 +246,7 @@ public class Player_Manager : MonoBehaviour
                 else shortest_toPlayer[1] = FourPlayer[3].gameObject;//離4最近
             }
 
-            _goblinmanager.SetPlayersMove(1, pos);
+
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
@@ -255,6 +256,7 @@ public class Player_Manager : MonoBehaviour
 
     void Player3_rePos(Vector3 pos)
     {
+        _goblinmanager.SetPlayersMove(2, pos);
         if (FourPlayer[2].gameObject.activeSelf == true)
         {
             //更新自己位置跟色況
@@ -293,7 +295,7 @@ public class Player_Manager : MonoBehaviour
                 else shortest_toPlayer[2] = FourPlayer[3].gameObject;//離4最近
             }
 
-            _goblinmanager.SetPlayersMove(2, pos);
+
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
@@ -303,6 +305,7 @@ public class Player_Manager : MonoBehaviour
 
     void Player4_rePos(Vector3 pos)
     {
+        _goblinmanager.SetPlayersMove(3, pos);
         if (FourPlayer[3].gameObject.activeSelf == true)
         {
             //更新自己位置跟色況
@@ -341,7 +344,7 @@ public class Player_Manager : MonoBehaviour
                 else shortest_toPlayer[3] = FourPlayer[2].gameObject;//離3最近
             }
 
-            _goblinmanager.SetPlayersMove(3, pos);
+
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
