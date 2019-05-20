@@ -273,6 +273,9 @@ public class Merge_Control : MonoBehaviour
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
             if (!Left_CanMove || !Right_CanMove) xAix = .0f;
             transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 5.0f;
+
+            Player_Manager.GetComponent<Player_Manager>().GetPlayerRePos(Moving_ID, transform.position);
+
         }
 
         //衝刺遞減

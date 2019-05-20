@@ -346,7 +346,7 @@ public class GoblinBase
         else {
             if (col == 3)
             {
-                if ((color == 1 || color == 2))
+                if ((color == 1 || color == 2 || color == 3))
                 {
                     if (hp > 0)
                     {
@@ -360,7 +360,7 @@ public class GoblinBase
                 else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
             }
             else if (col == 5) {
-                if ((color == 1 || color == 4))
+                if ((color == 1 || color == 4 || color == 5))
                 {
                     if (hp > 0)
                     {
@@ -375,7 +375,7 @@ public class GoblinBase
             }
             else if (col == 6)
             {
-                if ((color == 2 || color == 4))
+                if ((color == 2 || color == 4 || color == 6))
                 {
                     if (hp > 0)
                     {
