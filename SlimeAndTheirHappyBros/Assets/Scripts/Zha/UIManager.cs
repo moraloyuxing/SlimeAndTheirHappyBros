@@ -62,6 +62,7 @@ public class UIManager : MonoBehaviour
     public void NextTutorial() {
         tutorialProgres++;
         animator.SetInteger("TutorialProgress", tutorialProgres);
+        AudioManager.SingletonInScene.PlaySound2D("Teach_Enter",0.7f);
         if (tutorialProgres >= 4) tutorialImg.enabled = false;
     }
 
