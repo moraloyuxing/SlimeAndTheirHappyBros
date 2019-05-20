@@ -69,6 +69,8 @@ public class GoblinManager : MonoBehaviour
     }
     public PoolUnitInfo[] poolUnitInfo;
 
+    System.Action KillGoblin;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -213,6 +215,10 @@ public class GoblinManager : MonoBehaviour
         playerMove[3] = false;
     }
 
+    public void SubKillGoblinCBK(System.Action cbk) {
+        KillGoblin = cbk;
+    }
+
     public void SpawnNormalGoblinBaseColor(int col)
     {
         if (col == 0)
@@ -311,19 +317,20 @@ public class GoblinManager : MonoBehaviour
         {
             usedNormalGoblins.Remove(goblin as NormalGoblin);
             freeNormalGoblins.Add(goblin as NormalGoblin);
-            Debug.Log(freeNormalGoblins.Count);
+            //Debug.Log(freeNormalGoblins.Count);
         }
         else if (goblin is ArcherGoblin) {
             usedArcherGoblins.Remove(goblin as ArcherGoblin);
             freeArcherGoblins.Add(goblin as ArcherGoblin);
-            Debug.Log(freeArcherGoblins.Count);
+            //Debug.Log(freeArcherGoblins.Count);
         }
         else if (goblin is HobGoblin)
         {
             usedHobGoblins.Remove(goblin as HobGoblin);
             freeHobGoblins.Add(goblin as HobGoblin);
-            Debug.Log(freeHobGoblins.Count);
+            //Debug.Log(freeHobGoblins.Count);
         }
+        KillGoblin();
     }
 
     public void UseArrow(Vector3 pos, Vector3 dir) {

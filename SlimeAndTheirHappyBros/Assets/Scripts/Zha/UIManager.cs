@@ -5,9 +5,11 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    bool progressMove = false;
     int tutorialProgres = 0;
-    float length;
+    float length, progressTime = .0f;
 
+    Vector2 oringinProgress, targetProgress;
 
     RectTransform goblinHeadTrans;
 
@@ -30,6 +32,8 @@ public class UIManager : MonoBehaviour
         tutorialImg = transform.Find("Tutorial").GetChild(0).GetComponent<Image>();
         roundImg = transform.Find("CountDown").GetChild(3).GetComponent<Image>();
 
+        goblinHeadTrans = transform.Find("GoblinProgress").GetChild(0).GetComponent<RectTransform>();
+
         animator = GetComponent<Animator>();
     }
     void Start()
@@ -40,7 +44,15 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (progressMove) {
+            progressTime += Time.deltaTime*2.0f;
+
+            goblinHeadTrans.anchoredPosition = Vector2.Lerp(oringinProgress, targetProgress, progressTime);
+            if (progressTime >= 1.0f) {
+                progressMove = false;
+                progressTime = .0f;
+            }
+        }
     }
 
     public void SubCountDownCallBack(System.Action cbk) {
@@ -58,6 +70,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void StartRound(int round) {
+
         roundImg.sprite = RoundSprite[round];
         animator.SetTrigger("Round");
     }
@@ -70,13 +83,16 @@ public class UIManager : MonoBehaviour
     }
 
     public void GoblinProgress(float percent) {
-        goblinHeadTrans.anchoredPosition = new Vector2(headStart + length * percent, 0);
+        progressMove = true;
+        oringinProgress = goblinHeadTrans.anchoredPosition;
+        targetProgress = new Vector2(headStart + length * percent, 0);
     }
 
     public void CountDownCBK() {
 
     }
     public void GoBreakTime() {
+        GoblinProgress(0);
         animator.Play("breakTimeIn");
     }
 }

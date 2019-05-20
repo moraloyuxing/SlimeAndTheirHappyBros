@@ -181,6 +181,10 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 {
                     float degree = Random.Range(135.0f, 225.0f);
                     moveFwdDir = Quaternion.AngleAxis(degree, Vector3.up) * moveFwdDir;
+                    float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                    image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                    image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+                    hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
                 }
                 transform.position += deltaTime * speed * moveFwdDir;
             }
@@ -390,6 +394,27 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 ResetUnit();
             }
+        }
+    }
+
+    public override void ErroeCatch()
+    {
+        if (firstInState)
+        {
+            animator.SetInteger("state", 1);
+            animator.speed = 1f;
+            firstInState = false;
+            moveFwdDir = new Vector3(0 - selfPos.x, 0, 0 - selfPos.z).normalized;
+            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+            scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+            image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+            hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
+        }
+        else
+        {
+            transform.position += deltaTime * speed * moveFwdDir;
+            if (inStateTime > 1.0f) SetState();
         }
     }
 

@@ -206,6 +206,8 @@ public class GoblinBase
                 {
                     float degree = Random.Range(135.0f, 225.0f);
                     moveFwdDir = Quaternion.AngleAxis(degree, Vector3.up) * moveFwdDir;
+                    float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                    image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                 }
                 transform.position += deltaTime * speed * moveFwdDir;
             }
@@ -337,13 +339,15 @@ public class GoblinBase
         else { AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 0.5f); }
     }
 
-    public void ErroeCatch() {
+    public virtual void ErroeCatch() {
         if (firstInState)
         {
             animator.SetInteger("state", 1);
             animator.speed = 1f;
             firstInState = false;
             moveFwdDir = new Vector3(0 - selfPos.x, 0, 0 - selfPos.z).normalized;
+            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
         }
         else {
             transform.position += deltaTime * speed * moveFwdDir;
