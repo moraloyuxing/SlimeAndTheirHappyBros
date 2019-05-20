@@ -10,6 +10,7 @@ public class Player_Control : MonoBehaviour{
     public Pigment_Manager _pigmentmanager;
     public GameObject Player_Sprite;
     public GameObject SplashEffect;
+    public GameObject WeakEffect;
     int Player_Number=0;
     public int PlayerID {
         get {
@@ -79,6 +80,7 @@ public class Player_Control : MonoBehaviour{
     public int Base_ATK = 2;
     int Base_HP = 3;
     float Base_Speed = 1.0f;//Dash固定為此變數+5
+    float Weak_Speed = 0.6f;
     float Current_Speed = 1.0f;//Dash後抓回
     public int Base_Penetrate = 1;
 
@@ -100,7 +102,7 @@ public class Player_Control : MonoBehaviour{
 
     //衰弱狀態相關
     float Weak_Moment = 0.0f;
-    bool On_Weak = false;
+    bool OnWeak = false;
 
     void Start(){
         WhichPlayer = gameObject.name;
@@ -272,9 +274,12 @@ public class Player_Control : MonoBehaviour{
         }
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)、衰弱時間(速度*0.6f)
         if (Time.time > musouTime + 2.5f && StopDetect) { StopDetect = false; }
-        if (Time.time > Weak_Moment + 10.0f && On_Weak) {
-            On_Weak = false;
+        if (Time.time > Weak_Moment + 10.0f && OnWeak) {
+            OnWeak = false;
+            anim.SetBool("OnWeak", OnWeak);
             Base_Speed = Current_Speed;
+            _playermanager.ExitWeak(Player_Number);
+            HideWeak();
         }
     }
 
@@ -355,7 +360,8 @@ public class Player_Control : MonoBehaviour{
 
     //短衝刺設定
     public void DashEnd() {
-        Base_Speed = Current_Speed;
+        if (OnWeak) Base_Speed = Weak_Speed;
+        else Base_Speed = Current_Speed;
         DuringDashLerp = false;
         AttackPriority = false;
     }
@@ -388,6 +394,7 @@ public class Player_Control : MonoBehaviour{
                 ReviveArea.enabled = false;
                 GetComponent<Animator>().Play("Slime_Revive");
                 AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
+                _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
             }
         }
     }
@@ -419,6 +426,10 @@ public class Player_Control : MonoBehaviour{
         ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
         Hide_Hint();
         GetComponent<Animator>().Play("Slime_GrassIdle");
+    }
+
+    public void HideWeak(){
+        WeakEffect.GetComponent<SpriteRenderer>().sprite = null;
     }
 
     //洗白相關
@@ -489,8 +500,12 @@ public class Player_Control : MonoBehaviour{
     //解體後的衰弱狀態
     void Weak_State() {
         Weak_Moment = Time.time;
-        On_Weak = true;
-        Base_Speed *= 0.6f;
+        OnWeak = true;
+        anim.SetBool("OnWeak", OnWeak);
+        Weak_Speed = Base_Speed * 0.6f;
+        Base_Speed = Weak_Speed;
+        GetComponent<Animator>().Play("Slime_Weak");
+        _playermanager.StartWeak(Player_Number);
     }
 
     //金幣
