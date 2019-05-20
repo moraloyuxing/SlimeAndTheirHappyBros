@@ -104,7 +104,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            AudioManager.SingletonInScene.PlaySound2D("Goblin_Attack", 0.5f);
+            AudioManager.SingletonInScene.PlaySound2D("Goblin_Attack", 0.18f);
             animator.SetInteger("state", 2);
 
             animator.speed = 1.0f;
@@ -167,10 +167,10 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.5f);
+            AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             animator.speed = 1.0f;
             animator.SetInteger("state", 4);
-            AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.5f);
+            AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
             goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
             firstInState = false;
         }
