@@ -137423,5 +137423,180 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[0].waves.Array.data[2].spawnTime
+      value: 35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[2].waves.Array.data[0].hobGoblin
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[2].waves.Array.data[1].hobGoblin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[2].waves.Array.data[2].hobGoblin
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[2].waves.Array.data[2].normalGoblin
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[3].waves.Array.data[3].normalGoblin
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[4].waves.Array.data[3].hobGoblin
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[4].waves.Array.data[3].archerGoblin
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[4].waves.Array.data[3].normalGoblin
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[4].waves.Array.data[2].hobGoblin
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[5].waves.Array.data[3].hobGoblin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[5].waves.Array.data[2].hobGoblin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[5].waves.Array.data[3].archerGoblin
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[6].waves.Array.data[1].hobGoblin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[6].waves.Array.data[3].hobGoblin
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[6].waves.Array.data[4].archerGoblin
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[6].waves.Array.data[4].hobGoblin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[7].waves.Array.data[3].hobGoblin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[8].waves.Array.data[3].normalGoblin
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[8].waves.Array.data[3].archerGoblin
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[8].waves.Array.data[3].hobGoblin
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[0].waves.Array.data[1].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[1].waves.Array.data[1].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[2].waves.Array.data[2].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[3].waves.Array.data[1].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[4].waves.Array.data[3].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[5].waves.Array.data[3].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[6].waves.Array.data[2].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[6].waves.Array.data[4].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[7].waves.Array.data[2].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[7].waves.Array.data[4].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[8].waves.Array.data[2].mutiColor
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[8].waves.Array.data[4].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[9].waves.Array.data[1].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
+        type: 3}
+      propertyPath: roundInfos.Array.data[9].waves.Array.data[4].mutiColor
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70d8dfaf85a434e4791eaf895639e141, type: 3}
