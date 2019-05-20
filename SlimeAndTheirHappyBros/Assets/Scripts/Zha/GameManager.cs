@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     bool roundStart = false, inShopping = false;
-    int tutorialProgress = 0;
+    int tutorialProgress = 0, goblinKills = 0;
     float time = .0f;
     GameState tutorialState;
     GameState[] gameStates;
@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public static int curRound = -1;
 
     public StateInfo[] roundInfos;
+    int[] goblinKillsGoal;
 
 
 
@@ -24,13 +25,19 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         goblinManager = GameObject.Find("GoblinManager").GetComponent<GoblinManager>();
+        goblinManager.SubKillGoblinCBK(KillGoblin);
         uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         uiManager.SubCountDownCallBack(StartRound);
 
+        goblinKillsGoal = new int[roundInfos.Length];
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
             gameStates[i] = new GameState();
             gameStates[i].Init(roundInfos[i], goblinManager, SpawnOver);
+            for (int j = 0; j < roundInfos[i].waves.Length; j++) {
+                goblinKillsGoal[i] += roundInfos[i].waves[j].normalGoblin + roundInfos[i].waves[j].archerGoblin + roundInfos[i].waves[j].hobGoblin;
+ 
+            }
         }
 
     }
@@ -42,6 +49,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
         if (curRound < 0)
         {
             if(Input.GetButtonDown("Player1_Attack") || Input.GetButtonDown("Player2_Attack") 
@@ -72,9 +80,10 @@ public class GameManager : MonoBehaviour
 
     public void SpawnOver(int curWave) {
 
-        if (curWave < roundInfos[curRound].maxWave)
+        if (curWave <= roundInfos[curRound].maxWave)
         {
-            uiManager.GoblinProgress((float)curWave / (float)roundInfos[curRound].maxWave);
+            if(curWave == 0 ) uiManager.GoblinProgress(0);
+            else uiManager.GoblinProgress((float)curWave / (float)roundInfos[curRound].maxWave);
         }
         else {
             
@@ -86,9 +95,12 @@ public class GameManager : MonoBehaviour
     }
 
     public void RoundOver() {
+        //Debug.Log(curRound + "  round over");
         curRound++;
+        if (curRound > 10) curRound = 10;
         roundStart = false;
         inShopping = true;
+        goblinKills = 0;
         uiManager.GoBreakTime();
     }
     public void GoNextRound() {
@@ -98,7 +110,10 @@ public class GameManager : MonoBehaviour
     }
 
     public void KillGoblin() {
+        goblinKills++;
 
+        if (goblinKills >= goblinKillsGoal[curRound]) RoundOver();
+        //Debug.Log("kill goblin  " + goblinKills +"    in   " +  curRound);
     }
 
 }
@@ -113,7 +128,6 @@ public class StateInfo {
         public int normalGoblin;
         public int archerGoblin;
         public int hobGoblin;
-        public int maxNum;
         public bool mutiColor;
     }
 

@@ -38,21 +38,22 @@ public class GameState
         if (time > stateInfo.waves[currentWave].spawnTime) {
             int i = 0;
             while (i < totalGoblinPerWave[currentWave]) {
-
-                if (!stateInfo.waves[i].mutiColor) {
-                    if (i < stateInfo.waves[i].normalGoblin) goblinManager.SpawnNormalGoblinBaseColor(0);
-                    if (i < stateInfo.waves[i].archerGoblin) goblinManager.SpawnArcherGoblinBaseColor(0);
+                if (!stateInfo.waves[currentWave].mutiColor) {
+                    if (i < stateInfo.waves[currentWave].normalGoblin) goblinManager.SpawnNormalGoblinBaseColor(0);
+                    if (i < stateInfo.waves[currentWave].archerGoblin) goblinManager.SpawnArcherGoblinBaseColor(0);
                 }
                 else {
-                    if (i < stateInfo.waves[i].normalGoblin) goblinManager.SpawnNormalGoblinMutiColor(0);
-                    if (i < stateInfo.waves[i].archerGoblin) goblinManager.SpawnArcherGoblinMutiColor(0);
+                    if (i < stateInfo.waves[currentWave].normalGoblin) goblinManager.SpawnNormalGoblinMutiColor(0);
+                    if (i < stateInfo.waves[currentWave].archerGoblin) goblinManager.SpawnArcherGoblinMutiColor(0);
                 }
-                if (i < stateInfo.waves[i].hobGoblin) goblinManager.SpawnHobGoblinMutiColor(0);
+                if (i < stateInfo.waves[currentWave].hobGoblin) goblinManager.SpawnHobGoblinMutiColor(0);
 
                 i++;
             }
             currentWave++;
             SpawnOverCBK(currentWave);
+            
+            
             if (currentWave >= stateInfo.maxWave) spawnOver = true;
         }
     }

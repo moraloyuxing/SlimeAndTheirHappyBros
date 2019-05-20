@@ -186,7 +186,6 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
     public void ResetUnit() {
         hp = maxHp;
-        Debug.Log("rrrreeeeset hp   " + hp + "                 " + maxHp);
         firstInState = false;
         inStateTime = .0f;
         curState = GoblinState.moveIn;
