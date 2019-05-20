@@ -475,12 +475,21 @@ public class Merge_Control : MonoBehaviour
                 Damage_Count++;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
                 for (int k = 0; k < Damage_Count; k++) { Merge_HP[k].SetActive(false); }
-                if (Damage_Count == 3)
-                {
+                if (Damage_Count == 3){
                     DeathPriority = true;
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     CancelInvoke("Merge_Timer");
-                    GetComponent<Animator>().Play("Slime_Death");
+                    switch (MergeNumber){
+                        case 3:
+                            GetComponent<Animator>().Play("Slime_SpiltRY");
+                            break;
+                        case 5:
+                            GetComponent<Animator>().Play("Slime_SpiltRB");
+                            break;
+                        case 6:
+                            GetComponent<Animator>().Play("Slime_SpiltYB");
+                            break;
+                    }
                     AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.5f);
                 }
             }

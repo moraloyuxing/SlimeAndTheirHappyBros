@@ -25,7 +25,7 @@ public class Player_Manager : MonoBehaviour
     bool[] On_Altar = new bool[4];
     public Transform Altar;
     public GoblinManager _goblinmanager;
-    public int DeathCount = 0;
+    int DeathCount = 0;
 
     System.Action OnAltarCBK;
 
