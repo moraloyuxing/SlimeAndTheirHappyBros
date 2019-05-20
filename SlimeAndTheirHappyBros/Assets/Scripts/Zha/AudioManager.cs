@@ -53,9 +53,14 @@ public class AudioManager : MonoBehaviour
         {
             effectAudio.pitch = pitch;
             effectAudio.PlayOneShot(soundDictionary[_name], volume);
-            effectAudio.pitch = 1.0f;
         }
         else Debug.Log("沒有這個音檔");
+    }
+    IEnumerator ReturnPitch() {
+
+        yield return null;
+        effectAudio.pitch = 1.0f;
+
     }
 }
 
