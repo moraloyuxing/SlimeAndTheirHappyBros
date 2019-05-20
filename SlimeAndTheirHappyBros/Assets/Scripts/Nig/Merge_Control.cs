@@ -391,7 +391,7 @@ public class Merge_Control : MonoBehaviour{
     public void AttackPriorityOn(){
         AttackPriority = true;
         Attack_Arrow.GetComponent<Create_Bullet>().MSlimeShootBullet(_mergectrl,Attack_Direction, Shader_Number);
-        AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.5f);
+        AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.55f);
     }
 
     public void AttackPriorityOff(){
@@ -411,14 +411,14 @@ public class Merge_Control : MonoBehaviour{
                 StopDetect = true;
                 musouTime = Time.time;
                 Damage_Count++;
-                AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
+                AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
                 for (int k = 0; k < Damage_Count; k++) {Merge_HP[k].SetActive(false); }
                 if (Damage_Count == 3){
                     DeathPriority = true;
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     CancelInvoke("Merge_Timer");
                     GetComponent<Animator>().Play("Slime_Death");
-                    AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.5f);
+                    AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
                 }
             }
             i++;
