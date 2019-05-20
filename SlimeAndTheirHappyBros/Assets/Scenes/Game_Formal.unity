@@ -2041,7 +2041,7 @@ GameObject:
   - component: {fileID: 27706935}
   - component: {fileID: 27706934}
   - component: {fileID: 27706933}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: shop
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -6739,36 +6739,6 @@ Transform:
   m_Father: {fileID: 627322459}
   m_RootOrder: 478
   m_LocalEulerAnglesHint: {x: 25, y: 0, z: 0}
---- !u!1 &105728573
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 105728574}
-  m_Layer: 0
-  m_Name: trunk05
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &105728574
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 105728573}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.36, y: -6.12, z: -58.3}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1421647287}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &105847165
 GameObject:
   m_ObjectHideFlags: 0
@@ -10099,7 +10069,7 @@ GameObject:
   m_Component:
   - component: {fileID: 167449878}
   - component: {fileID: 167449879}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tree07
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -10546,7 +10516,7 @@ GameObject:
   m_Component:
   - component: {fileID: 178892735}
   - component: {fileID: 178892736}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rock06
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -13857,6 +13827,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Barrier
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 14.52
@@ -15161,7 +15135,7 @@ GameObject:
   m_Component:
   - component: {fileID: 243951188}
   - component: {fileID: 243951189}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rock04
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -19275,7 +19249,7 @@ GameObject:
   m_Component:
   - component: {fileID: 305565750}
   - component: {fileID: 305565751}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tree01
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -19726,7 +19700,7 @@ GameObject:
   - component: {fileID: 311516713}
   - component: {fileID: 311516712}
   - component: {fileID: 311516711}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: normalhouse01
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -25308,6 +25282,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_TagString
       value: Barrier
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -35210,7 +35188,7 @@ GameObject:
   m_Component:
   - component: {fileID: 598421785}
   - component: {fileID: 598421786}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tree05
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -37722,7 +37700,7 @@ GameObject:
   - component: {fileID: 628513983}
   - component: {fileID: 628513982}
   - component: {fileID: 628513981}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: altar
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -37813,7 +37791,7 @@ GameObject:
   - component: {fileID: 630450410}
   - component: {fileID: 630450409}
   - component: {fileID: 630450408}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: normalhouse02
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -38843,7 +38821,7 @@ GameObject:
   m_Component:
   - component: {fileID: 643659931}
   - component: {fileID: 643659932}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: trunk02
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -39123,7 +39101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 645111275}
   - component: {fileID: 645111276}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tree02
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -42021,6 +41999,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_TagString
       value: Barrier
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -46150,6 +46132,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: a9126e441314e814caa9fe5615c3ee6f, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: a9126e441314e814caa9fe5615c3ee6f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -11.953
@@ -49398,6 +49384,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Barrier
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.43
@@ -51759,6 +51749,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Barrier
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.2
@@ -53563,7 +53557,7 @@ GameObject:
   m_Component:
   - component: {fileID: 895644113}
   - component: {fileID: 895644114}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rock03
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -65193,7 +65187,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1085596060}
   - component: {fileID: 1085596061}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: trunk04
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -70310,7 +70304,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1161273095}
   - component: {fileID: 1161273096}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tree03
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -75507,7 +75501,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1251843319}
   - component: {fileID: 1251843320}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rock01
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -76586,7 +76580,7 @@ GameObject:
   - component: {fileID: 1269829102}
   - component: {fileID: 1269829104}
   - component: {fileID: 1269829103}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: wall02
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -80288,7 +80282,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1328848359}
   - component: {fileID: 1328848360}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: trunk01
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -84912,7 +84906,6 @@ Transform:
   - {fileID: 643659931}
   - {fileID: 1749268588}
   - {fileID: 1085596060}
-  - {fileID: 105728574}
   - {fileID: 1588099565}
   - {fileID: 1876952295}
   m_Father: {fileID: 1043965144}
@@ -93313,7 +93306,7 @@ GameObject:
   - component: {fileID: 1552953404}
   - component: {fileID: 1552953403}
   - component: {fileID: 1552953402}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: wall01
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -93665,7 +93658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1563077622}
   - component: {fileID: 1563077623}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tree06
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -94715,7 +94708,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1588099565}
   - component: {fileID: 1588099566}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: trunk06
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -94734,7 +94727,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1421647287}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1588099566
 CapsuleCollider:
@@ -101505,7 +101498,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1695958123}
   - component: {fileID: 1695958124}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: tree04
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -102884,7 +102877,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1711352547}
   - component: {fileID: 1711352548}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rock05
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -103808,7 +103801,7 @@ GameObject:
   - component: {fileID: 1728494409}
   - component: {fileID: 1728494408}
   - component: {fileID: 1728494407}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: bush01
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -105244,7 +105237,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1749268588}
   - component: {fileID: 1749268589}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: trunk03
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -105384,6 +105377,10 @@ PrefabInstance:
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_TagString
       value: Barrier
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -111551,7 +111548,7 @@ GameObject:
   - component: {fileID: 1849456216}
   - component: {fileID: 1849456218}
   - component: {fileID: 1849456217}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: rock02
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -112980,7 +112977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1876952295}
   - component: {fileID: 1876952296}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: trunk07
   m_TagString: Barrier
   m_Icon: {fileID: 0}
@@ -112999,7 +112996,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1421647287}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!136 &1876952296
 CapsuleCollider:
