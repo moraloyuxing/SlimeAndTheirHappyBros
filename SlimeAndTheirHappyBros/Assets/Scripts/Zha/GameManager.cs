@@ -88,7 +88,7 @@ public class GameManager : MonoBehaviour
         if (curWave <= roundInfos[curRound].maxWave)
         {
             if(curWave == 0 ) uiManager.GoblinProgress(0);
-            else uiManager.GoblinProgress((float)curWave / (float)roundInfos[curRound].maxWave - 1);
+            else uiManager.GoblinProgress((float)curWave / (float)(roundInfos[curRound].maxWave - 1));
         }
         else {
             

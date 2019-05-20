@@ -15950,7 +15950,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: fd10ae8fc63d142d7a7836fad727d7bc, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -25677,7 +25677,6 @@ GameObject:
   - component: {fileID: 412872797}
   - component: {fileID: 412872800}
   - component: {fileID: 412872801}
-  - component: {fileID: 412872802}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -25783,18 +25782,6 @@ MonoBehaviour:
   maxZoom: 20
   minZoom: 10
   zoomLimiter: 30
---- !u!114 &412872802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 412872796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31b6659605a3f6947930b775880b4eed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &415044950
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -95925,6 +95912,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c3843e58877af1a4bac05812e6130227, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  shoppingMusic: {fileID: 8300000, guid: d9fa9712853ac4df8b795f38be18352a, type: 3}
+  battleMusic:
+  - {fileID: 8300000, guid: fd10ae8fc63d142d7a7836fad727d7bc, type: 3}
+  - {fileID: 8300000, guid: f0a2ce7143a8347649ad0b76cd265a23, type: 3}
+  - {fileID: 8300000, guid: 2a1aabb555bd84cef8f9b990f3978499, type: 3}
   soundClips:
   - clipNmae: Goblin_Attack
     clip: {fileID: 8300000, guid: 859fcc960e5ea4882ac29b68cee80183, type: 3}
