@@ -80,7 +80,8 @@ public class Bullet_Behaviour : MonoBehaviour{
         }
 
         if (BulletAlpha.a <= 0.0f) {
-            colliderRecord = new List<Collider>();
+            colliderRecord.Clear();
+            NowPenetrate = 0;
             bulletPool.Bullet_Recovery(gameObject);
         }
 
@@ -101,7 +102,6 @@ public class Bullet_Behaviour : MonoBehaviour{
                 NowPenetrate++;
                 if (c.tag == "Goblin"){
                     if(WhichMergeSlime == null)bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
-                    //else if(WhichPlayer == null) bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichMergeSlime.PlayerID, Attack_Dir);
                 }
 
                 if (c.tag == "Player") {
@@ -120,7 +120,8 @@ public class Bullet_Behaviour : MonoBehaviour{
     }
 
     public void ExplosionEnd() {
-        colliderRecord = new List<Collider>();
+        colliderRecord.Clear();
+        NowPenetrate = 0;
         bulletPool.Bullet_Recovery(gameObject);
     }
 

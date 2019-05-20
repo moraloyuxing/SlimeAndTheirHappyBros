@@ -22,7 +22,11 @@ public class Player_Manager : MonoBehaviour
     bool[] Weak_State = new bool[4];
 
     bool Game_State = true;
+    bool[] On_Altar = new bool[4];
+    public Transform Altar;
     public GoblinManager _goblinmanager;
+
+    System.Action OnAltarCBK;
 
     void Awake()
     {
@@ -44,8 +48,7 @@ public class Player_Manager : MonoBehaviour
     void Update()
     {
 
-        if (Game_State)
-        {
+        if (Game_State){
             for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
 
             //玩家1啟用融合
@@ -136,8 +139,23 @@ public class Player_Manager : MonoBehaviour
                 AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
             }
         }
+
+        if (!Game_State) {
+            bool onit = true;
+            for (int i = 0; i < 4; i++) {
+                if (Mathf.Abs(FourPlayer[i].transform.position.x - Altar.position.x) > 10.0f || Mathf.Abs(FourPlayer[i].transform.position.z - Altar.position.z) > 10.0f) {
+                    onit = false;
+                    break;
+                }
+            }
+            if (onit) OnAltarCBK();
+        }
+
     }
 
+    public void SubAltar(System.Action cbk) {
+        OnAltarCBK = cbk;
+    }
 
     void Player1_rePos(Vector3 pos)
     {
@@ -384,7 +402,7 @@ public class Player_Manager : MonoBehaviour
         HaveBoard = true;
     }
 
-    void State_Switch()
+    public void State_Switch()
     {
         Game_State = !Game_State;
     }

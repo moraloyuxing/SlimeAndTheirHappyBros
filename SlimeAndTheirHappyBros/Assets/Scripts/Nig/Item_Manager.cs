@@ -91,7 +91,7 @@ public class Item_Manager : MonoBehaviour {
         }
     }
 
-    void State_Switch() {
+    public void State_Switch() {
         Purchase_State = !Purchase_State;
         if (Purchase_State) NewRound_toBuy();
     }

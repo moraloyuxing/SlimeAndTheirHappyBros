@@ -29,9 +29,7 @@ public class Bullet_Manager : MonoBehaviour{
         }
 
         else {
-            GameObject clone_bullet = Instantiate(prefabBullet) as GameObject;
-            clone_bullet.transform.position = position;
-            clone_bullet.transform.rotation = rotation;
+            //再玩啊?
         }
 
     }
@@ -46,9 +44,7 @@ public class Bullet_Manager : MonoBehaviour{
         }
 
         else{
-            GameObject clone_bullet = Instantiate(prefabBullet) as GameObject;
-            clone_bullet.transform.position = position;
-            clone_bullet.transform.rotation = rotation;
+
         }
 
     }
