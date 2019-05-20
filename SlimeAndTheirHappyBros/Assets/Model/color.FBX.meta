@@ -1,36 +1,14 @@
 fileFormatVersion: 2
-guid: 0ae5fd8b4d80b5541b7bd9b41af8861a
+guid: 5fb298deb8afe0c4eaf816515fb8ebce
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
-    100000: rock020
-    100002: rock021
-    100004: rock022
-    100006: rock023
-    100008: rock025
-    100010: //RootNode
-    400000: rock020
-    400002: rock021
-    400004: rock022
-    400006: rock023
-    400008: rock025
-    400010: //RootNode
-    2100000: wall_rock
-    2300000: rock020
-    2300002: rock021
-    2300004: rock022
-    2300006: rock023
-    2300008: rock025
-    3300000: rock020
-    3300002: rock021
-    3300004: rock022
-    3300006: rock023
-    3300008: rock025
-    4300000: rock020
-    4300002: rock021
-    4300004: rock022
-    4300006: rock023
-    4300008: rock025
+    100000: //RootNode
+    400000: //RootNode
+    2100000: No Name
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Hedra001
     2186277476908879412: ImportLogs
   externalObjects: {}
   materials:
