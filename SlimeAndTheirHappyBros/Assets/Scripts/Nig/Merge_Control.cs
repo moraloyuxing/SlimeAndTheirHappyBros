@@ -272,7 +272,7 @@ public class Merge_Control : MonoBehaviour{
     }
 
     public void Decide_TwoPlayer_Control(GameObject PlayerA,GameObject PlayerB) {
-        AudioManager.SingletonInScene.PlaySound2D("Mix", 0.5f);
+        AudioManager.SingletonInScene.PlaySound2D("Mix", 1f);
 
         Storage_Player[0] = PlayerA;
         Storage_Player[1] = PlayerB;
@@ -438,7 +438,7 @@ public class Merge_Control : MonoBehaviour{
 
     public void SpiltPriorityOn() {
         ExtraPriority = true;
-        AudioManager.SingletonInScene.PlaySound2D("Separate", 0.5f);
+        AudioManager.SingletonInScene.PlaySound2D("Separate", 0.6f);
     }
 
     //混色後抓取雙方數值加成

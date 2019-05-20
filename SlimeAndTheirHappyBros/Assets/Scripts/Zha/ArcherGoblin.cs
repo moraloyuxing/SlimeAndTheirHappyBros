@@ -161,7 +161,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
                     //Debug.Log("start sssssssssssshooot");
                     hasShoot = true;
                     goblinManager.UseArrow(transform.position + shootPos, moveFwdDir);
-                    AudioManager.SingletonInScene.PlaySound2D("Shoot_Bow", 0.5f);
+                    AudioManager.SingletonInScene.PlaySound2D("Shoot_Bow", 0.75f);
                 }
                 if (aniInfo.normalizedTime >= 0.99f)
                 {
@@ -177,10 +177,10 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.5f);
+            AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             animator.speed = 1.0f;
             animator.SetInteger("state", 4);
-            AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.5f);
+            AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
             goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
             firstInState = false;
         }
