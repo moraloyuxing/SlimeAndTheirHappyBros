@@ -311,7 +311,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 }
                 else
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Tree_Attack", 0.5f);
+                    AudioManager.SingletonInScene.PlaySound2D("Tree_Attack", 0.38f);
                     atkCol[0].localPosition = new Vector3(scaleX * atkColOffset[0], atkCol[0].localPosition.y, atkCol[0].localPosition.z);
                     atkCol[1].localPosition = new Vector3(scaleX * atkColOffset[1], atkCol[1].localPosition.y, atkCol[1].localPosition.z);
                     startAttack = true;
@@ -330,7 +330,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             if ((aniInfo.IsName("quackAttack") && attackType == 0) || (aniInfo.IsName("leafAttack") && attackType == 1))
             {
                 if (attackType == 1 && !hasShoot && aniInfo.normalizedTime >= 0.47f) {
-                    AudioManager.SingletonInScene.PlaySound2D("Leaf_Attack", 0.5f);
+                    AudioManager.SingletonInScene.PlaySound2D("Leaf_Attack", 0.35f);
                     hasShoot = true;
                     float scaleX = (goblinManager.PlayerPos[targetPlayer].x > selfPos.x) ? -1.0f : 1.0f;
                     for (int i = 0; i <= 1; i++) {

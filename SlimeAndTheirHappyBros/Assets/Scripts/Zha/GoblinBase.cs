@@ -334,7 +334,7 @@ public class GoblinBase
             moveFwdDir = dir.normalized;
             SetState(GoblinState.hurt);
         }
-        else { AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 0.8f); }
+        else { AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f); }
     }
 
     public void ErroeCatch() {
