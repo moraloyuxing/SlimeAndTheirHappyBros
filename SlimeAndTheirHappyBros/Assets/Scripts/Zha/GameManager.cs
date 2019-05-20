@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     bool roundStart = false, inShopping = false;
+    int tutorialProgress = 0;
     float time = .0f;
     GameState tutorialState;
     GameState[] gameStates;
@@ -24,6 +25,7 @@ public class GameManager : MonoBehaviour
     {
         goblinManager = GameObject.Find("GoblinManager").GetComponent<GoblinManager>();
         uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        uiManager.SubCountDownCallBack(StartRound);
 
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
@@ -42,7 +44,15 @@ public class GameManager : MonoBehaviour
     {
         if (curRound < 0)
         {
-
+            if(Input.GetButtonDown("Player1_Attack") || Input.GetButtonDown("Player2_Attack") 
+                || Input.GetButtonDown("Player3_Attack") || Input.GetButtonDown("Player4_Attack") || Input.GetKeyDown(KeyCode.Space)) {
+                uiManager.NextTutorial();
+                tutorialProgress++;
+                if (tutorialProgress >= 4) {
+                    curRound++;
+                    uiManager.FirstRound();
+                } 
+            }
         }
         else {
             if (inShopping)
@@ -67,17 +77,28 @@ public class GameManager : MonoBehaviour
             uiManager.GoblinProgress((float)curWave / (float)roundInfos[curRound].maxWave);
         }
         else {
-
+            
         }
+    }
+
+    public void StartRound() {
+        roundStart = true;
     }
 
     public void RoundOver() {
         curRound++;
+        roundStart = false;
         inShopping = true;
+        uiManager.GoBreakTime();
     }
     public void GoNextRound() {
         inShopping = false;
-        uiManager.GoBreakTime();
+        
+        uiManager.StartRound(curRound);
+    }
+
+    public void KillGoblin() {
+
     }
 
 }
@@ -92,6 +113,7 @@ public class StateInfo {
         public int normalGoblin;
         public int archerGoblin;
         public int hobGoblin;
+        public int maxNum;
         public bool mutiColor;
     }
 
