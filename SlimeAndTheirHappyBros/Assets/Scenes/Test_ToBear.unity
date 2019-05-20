@@ -747,6 +747,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 2.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9715a0ae0c850843aa96d9d7270c80c, type: 3}
 --- !u!1 &36574090
@@ -3921,6 +3931,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
+  MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 691512662}
   _bulletPool: {fileID: 1309389867}
 --- !u!4 &219557134
@@ -6275,6 +6286,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9715a0ae0c850843aa96d9d7270c80c, type: 3}
@@ -16735,6 +16756,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 400384, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.69063
+      objectReference: {fileID: 0}
+    - target: {fileID: 400384, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400384, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 400384, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.72320825
+      objectReference: {fileID: 0}
+    - target: {fileID: 400384, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -87.36
+      objectReference: {fileID: 0}
+    - target: {fileID: 400384, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.04
+      objectReference: {fileID: 0}
     - target: {fileID: 400010, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: -90.00001
@@ -17577,7 +17622,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: bc96add7fe4036f47b9d2a14892f1f51, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: bc96add7fe4036f47b9d2a14892f1f51, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19760,6 +19805,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 2.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9715a0ae0c850843aa96d9d7270c80c, type: 3}
 --- !u!1 &1341235929
@@ -20446,7 +20501,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1396741186}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.5, y: -12, z: 72.3}
+  m_LocalPosition: {x: 8.5, y: -2, z: 72.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 288586000}
@@ -20520,6 +20575,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
+  MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 212379511}
   _bulletPool: {fileID: 1309389867}
 --- !u!4 &1398147387
@@ -21269,6 +21325,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 2.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9715a0ae0c850843aa96d9d7270c80c, type: 3}
 --- !u!1 &1439754497
@@ -21530,7 +21596,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1452950577}
   m_LocalRotation: {x: 0.3228644, y: 0.06782756, z: -0.037483376, w: 0.9432672}
-  m_LocalPosition: {x: 32.11254, y: 45.42, z: 107.33004}
+  m_LocalPosition: {x: 32.11254, y: 55, z: 107.33004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 288586000}
@@ -22550,6 +22616,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9715a0ae0c850843aa96d9d7270c80c, type: 3}
@@ -25333,6 +25409,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
+  MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 705649045}
   _bulletPool: {fileID: 1309389867}
 --- !u!4 &1749218228
@@ -26171,6 +26248,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 2.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9715a0ae0c850843aa96d9d7270c80c, type: 3}
 --- !u!1 &1786688452
@@ -26275,7 +26362,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790129224}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 8.3, y: -6.66, z: 71.7}
+  m_LocalPosition: {x: 8.3, y: 3, z: 71.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 288586000}
@@ -27644,7 +27731,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 98f64e86e86aa004c940fa00fdc846b3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 98f64e86e86aa004c940fa00fdc846b3, type: 3}
       propertyPath: m_LocalPosition.x
@@ -28313,7 +28400,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1962149862}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 121, y: -12.25, z: 106.3}
+  m_LocalPosition: {x: 121, y: -2.25, z: 106.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 288586000}
@@ -35508,6 +35595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player: {fileID: 0}
+  MSlimePlayer: {fileID: 0}
   Hint_Arrow: {fileID: 1273168509}
   _bulletPool: {fileID: 1309389867}
 --- !u!4 &2134032423
@@ -35758,6 +35846,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: ShapeModule.radius.value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122268972256748884, guid: c9715a0ae0c850843aa96d9d7270c80c,
+        type: 3}
+      propertyPath: EmissionModule.rateOverTime.scalar
+      value: 2.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c9715a0ae0c850843aa96d9d7270c80c, type: 3}
