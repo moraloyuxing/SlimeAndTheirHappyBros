@@ -60,7 +60,12 @@ public class GameManager : MonoBehaviour
     }
 
     public void SpawnOver(int curWave) {
-        if (curWave >= roundInfos[curRound].maxWave) {
+
+        if (curWave < roundInfos[curRound].maxWave)
+        {
+            uiManager.GoblinProgress((float)curWave / (float)roundInfos[curRound].maxWave);
+        }
+        else {
 
         }
     }
@@ -71,7 +76,7 @@ public class GameManager : MonoBehaviour
     }
     public void GoNextRound() {
         inShopping = false;
-
+        uiManager.GoBreakTime();
     }
 
 }
@@ -86,6 +91,7 @@ public class StateInfo {
         public int normalGoblin;
         public int archerGoblin;
         public int hobGoblin;
+        public bool mutiColor;
     }
 
     public PerSpawn[] waves;
