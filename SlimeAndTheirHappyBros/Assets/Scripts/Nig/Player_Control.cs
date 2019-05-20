@@ -248,7 +248,7 @@ public class Player_Control : MonoBehaviour{
 
         //攻擊
         right_trigger = Input.GetAxis(WhichPlayer + "Attack");
-        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
+        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false && Color_Number!=0) {
             GetComponent<Animator>().Play("Slime_Attack");
             Shooting = true;
         }
