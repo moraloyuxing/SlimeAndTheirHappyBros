@@ -12,6 +12,6 @@ EditorBuildSettings:
     path: Assets/Scenes/Title.unity
     guid: abd7e505f0cb843bea4295ddf94b4cc7
   - enabled: 1
-    path: Assets/Scenes/Test_ToBear.unity
-    guid: fd02f5545600b86438e603641917b949
+    path: Assets/Scenes/Game_Formal.unity
+    guid: acd694ac77a3a0e47a40d429a926a71e
   m_configObjects: {}
