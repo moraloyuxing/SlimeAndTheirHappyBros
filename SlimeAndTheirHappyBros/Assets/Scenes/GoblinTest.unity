@@ -10846,6 +10846,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   headStart: -90
   headEnd: 170
+  RoundSprite: []
 --- !u!1 &278199779
 GameObject:
   m_ObjectHideFlags: 0
@@ -13205,7 +13206,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPos: []
-  playerManager: {fileID: 0}
+  Four_Player:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   mapBorder: {x: 71, y: 74}
   goblinInfo:
   - typeName: normal
@@ -43042,31 +43047,37 @@ MonoBehaviour:
       normalGoblin: 0
       archerGoblin: 0
       hobGoblin: 0
+      maxNum: 0
       mutiColor: 0
     - spawnTime: 0
       normalGoblin: 0
       archerGoblin: 0
       hobGoblin: 0
+      maxNum: 0
       mutiColor: 0
     - spawnTime: 0
       normalGoblin: 0
       archerGoblin: 0
       hobGoblin: 0
+      maxNum: 0
       mutiColor: 0
     - spawnTime: 0
       normalGoblin: 0
       archerGoblin: 0
       hobGoblin: 0
+      maxNum: 0
       mutiColor: 0
     - spawnTime: 0
       normalGoblin: 0
       archerGoblin: 0
       hobGoblin: 0
+      maxNum: 0
       mutiColor: 0
     - spawnTime: 0
       normalGoblin: 0
       archerGoblin: 0
       hobGoblin: 0
+      maxNum: 0
       mutiColor: 0
 --- !u!4 &1221904202
 Transform:
