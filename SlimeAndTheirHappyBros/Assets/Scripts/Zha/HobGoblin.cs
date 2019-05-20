@@ -361,18 +361,21 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     public override void OnGettingHurt(int col, int atkValue, int playerID,Vector3 dir)
     {
 
-        if (col == color && hp > 0)
+        if (col == color)
         {
-            hp -= atkValue;
-            targetPlayer = playerID;
-            if (curState != GoblinState.hurt && !endure)
-            {
-                moveFwdDir = dir.normalized;
-                SetState(GoblinState.hurt);
+            if (hp > 0) {
+                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                hp -= atkValue;
+                targetPlayer = playerID;
+                if (curState != GoblinState.hurt && !endure)
+                {
+                    moveFwdDir = dir.normalized;
+                    SetState(GoblinState.hurt);
+                }
+                else if (hp <= 0) SetState(GoblinState.die);
             }
-            else if ( hp <= 0) SetState(GoblinState.die);
-
         }
+        else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
     }
 
     public override void Die()

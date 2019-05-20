@@ -11,11 +11,13 @@ public class GameManager : MonoBehaviour
     GameState[] gameStates;
     GoblinManager goblinManager;
     UIManager uiManager;
-
+    Item_Manager itemManager;
+    Player_Manager playerManager;
 
     public static bool isBreakTime = false;
     public static int curRound = -1;
 
+    public bool test;
     public StateInfo[] roundInfos;
     int[] goblinKillsGoal;
 
@@ -28,7 +30,9 @@ public class GameManager : MonoBehaviour
         goblinManager.SubKillGoblinCBK(KillGoblin);
         uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
         uiManager.SubCountDownCallBack(StartRound);
-
+        itemManager = GameObject.Find("Item_Group").GetComponent<Item_Manager>() ;
+        playerManager = GameObject.Find("Player_Manager").GetComponent<Player_Manager>() ;
+        playerManager.SubAltar(GoNextRound);
         goblinKillsGoal = new int[roundInfos.Length];
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
@@ -49,11 +53,12 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (test) return;
         if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
         if (curRound < 0)
         {
-            if(Input.GetButtonDown("Player1_Attack") || Input.GetButtonDown("Player2_Attack") 
-                || Input.GetButtonDown("Player3_Attack") || Input.GetButtonDown("Player4_Attack") || Input.GetKeyDown(KeyCode.Space)) {
+            if(Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction") 
+                || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space)) {
                 uiManager.NextTutorial();
                 tutorialProgress++;
                 if (tutorialProgress >= 4) {
@@ -101,11 +106,14 @@ public class GameManager : MonoBehaviour
         roundStart = false;
         inShopping = true;
         goblinKills = 0;
+        itemManager.State_Switch();
+        playerManager.State_Switch();
         uiManager.GoBreakTime();
     }
     public void GoNextRound() {
         inShopping = false;
-        
+        itemManager.State_Switch();
+        playerManager.State_Switch();
         uiManager.StartRound(curRound);
     }
 

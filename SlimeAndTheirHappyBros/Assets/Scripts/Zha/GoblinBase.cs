@@ -329,12 +329,14 @@ public class GoblinBase
     }
     public virtual void OnGettingHurt(int col, int atkValue, int playerID, Vector3 dir)
     {
-        if (col == color && hp > 0){
-            AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-            hp -= atkValue;
-            targetPlayer = playerID;
-            moveFwdDir = dir.normalized;
-            SetState(GoblinState.hurt);
+        if (col == color ){
+            if (hp > 0) {
+                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                hp -= atkValue;
+                targetPlayer = playerID;
+                moveFwdDir = dir.normalized;
+                SetState(GoblinState.hurt);
+            }
         }
         else { AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f); }
     }

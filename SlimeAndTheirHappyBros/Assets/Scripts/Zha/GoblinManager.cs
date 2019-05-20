@@ -173,7 +173,7 @@ public class GoblinManager : MonoBehaviour
             SpawnArcherGoblinBaseColor(0);
         }
         if (Input.GetKeyDown(KeyCode.X)) {
-            SpawnHobGoblinMutiColor(0);
+            SpawnHobGoblinMutiColor(1);
         }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
