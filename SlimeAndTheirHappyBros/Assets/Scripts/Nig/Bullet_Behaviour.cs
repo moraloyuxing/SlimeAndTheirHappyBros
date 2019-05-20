@@ -93,7 +93,8 @@ public class Bullet_Behaviour : MonoBehaviour{
                 if(colliders[i].tag == "Barrier" || c.tag == "Barrier") AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 0.5f);
                 if (NowPenetrate == PenetrateMaxCount) {
                     Attack_Dir = Vector3.zero;
-                    GetComponent<Animator>().Play("SlimeBullet_Explosion");
+                    if (c.tag == "Player") ExplosionEnd();
+                    else GetComponent<Animator>().Play("SlimeBullet_Explosion");
                 } 
             }
             i++;
