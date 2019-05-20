@@ -85906,6 +85906,8 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 457d755f8412347edbc78cfd639bedc7, type: 3}
   - clipNmae: Teach_Enter
     clip: {fileID: 8300000, guid: d5db1f0b7c39e4806b16cab82ec57ae1, type: 3}
+  - clipNmae: Revive
+    clip: {fileID: 8300000, guid: f386bdc9b2c2c4f009a1576240eb60cd, type: 3}
 --- !u!4 &1595382936
 Transform:
   m_ObjectHideFlags: 0
