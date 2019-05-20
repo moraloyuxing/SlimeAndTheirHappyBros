@@ -520,6 +520,13 @@ public class Player_Control : MonoBehaviour{
         _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
     }
 
+    public void forceoutweak(){
+        OnWeak = false;
+        Base_Speed = Current_Speed;
+        Weak_Moment = Time.time;
+        HideWeak();
+    }
+
     //金幣
     public void MoneyUpdate(int gain) {
         Current_Money = Current_Money + gain;

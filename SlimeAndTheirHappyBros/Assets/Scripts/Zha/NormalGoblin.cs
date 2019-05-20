@@ -147,7 +147,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         }
         else
         {
-            transform.position += backSpeed* deltaTime * moveFwdDir;
+            if (!Physics.Raycast(selfPos, moveFwdDir, 2.0f, LayerMask.NameToLayer("barrier"))) {
+                transform.position += backSpeed * deltaTime * moveFwdDir;
+            }
             backSpeed -= deltaTime * 15.0f;
             if (backSpeed <= .0f) backSpeed = .0f;
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);

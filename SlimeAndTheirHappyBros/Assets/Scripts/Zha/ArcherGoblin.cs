@@ -181,7 +181,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
             animator.speed = 1.0f;
             animator.SetInteger("state", 4);
             AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
-            goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
+            if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
+            else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);
             firstInState = false;
         }
         else

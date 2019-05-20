@@ -26,6 +26,7 @@ public class Pigment_Manager : MonoBehaviour{
     public void Change_Advanced_Color(GameObject PlayerA,GameObject PlayerB,int dyeing_type) {
         PlayerA.SendMessage("Hide_Hint");
         PlayerB.SendMessage("Hide_Hint");
+        PlayerB.GetComponent<Player_Control>().forceoutweak();
         Vector3 Merge_Pos = new Vector3((PlayerA.transform.position.x + PlayerB.transform.position.x) / 2.0f, 1.5f,(PlayerA.transform.position.z + PlayerB.transform.position.z) / 2.0f);
         ObjectPool.GetComponent<Object_Pool>().MSlime_Reuse(Merge_Pos, Quaternion.identity, dyeing_type, PlayerA, PlayerB);
     }

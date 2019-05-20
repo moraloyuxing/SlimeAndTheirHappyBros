@@ -511,6 +511,7 @@ public class Merge_Control : MonoBehaviour
     {
         Base_Speed = Current_Speed;
         DuringDashLerp = false;
+        AttackPriority = false;
     }
 
     public void SpiltPriorityOn()
