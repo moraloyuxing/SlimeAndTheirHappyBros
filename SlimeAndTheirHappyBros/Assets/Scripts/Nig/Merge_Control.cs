@@ -123,6 +123,7 @@ public class Merge_Control : MonoBehaviour
         ExtraPriority = true;
         Merge_Sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         flicker = -0.5f;
+        StopDetect = false;
     }
 
     void Update()
@@ -347,7 +348,7 @@ public class Merge_Control : MonoBehaviour
             Shooting_ID = PlayerB.GetComponent<Player_Control>().PlayerID;
             Player_Move.GetComponent<SpriteRenderer>().sprite = Control_Icon[0];
             Player_Shoot.GetComponent<SpriteRenderer>().sprite = Control_Icon[1];
-            Attack_Arrow.GetComponent<Create_Bullet>().SetMSlimeMovingPlayer(Moving_ID);
+            Attack_Arrow.GetComponent<Create_Bullet>().SetMSlimeMovingPlayer(Moving_ID,Shooting_ID);
             PlayerB.GetComponent<Player_Control>().FakeDeath();
         }
 
@@ -359,7 +360,7 @@ public class Merge_Control : MonoBehaviour
             Shooting_ID = PlayerA.GetComponent<Player_Control>().PlayerID;
             Player_Move.GetComponent<SpriteRenderer>().sprite = Control_Icon[1];
             Player_Shoot.GetComponent<SpriteRenderer>().sprite = Control_Icon[0];
-            Attack_Arrow.GetComponent<Create_Bullet>().SetMSlimeMovingPlayer(Moving_ID);
+            Attack_Arrow.GetComponent<Create_Bullet>().SetMSlimeMovingPlayer(Moving_ID,Shooting_ID);
             PlayerA.GetComponent<Player_Control>().FakeDeath();
         }
 
@@ -405,7 +406,7 @@ public class Merge_Control : MonoBehaviour
 
         if (Base_Timer < 0)
         {
-            //Spilt_toOriginal();
+            StopDetect = true;
             CancelInvoke("Merge_Timer");
             Current_Color.a = 1.0f;
             Merge_Sprite.GetComponent<SpriteRenderer>().color = Current_Color;
@@ -470,7 +471,6 @@ public class Merge_Control : MonoBehaviour
         {
             if (i == 0)
             {
-                Destroy(colliders[i]);//之後要移除
                 GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;
