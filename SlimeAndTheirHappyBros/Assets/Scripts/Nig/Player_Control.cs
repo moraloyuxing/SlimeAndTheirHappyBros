@@ -63,6 +63,7 @@ public class Player_Control : MonoBehaviour{
     //血量
     public GameObject[] Personal_HP = new GameObject[13];
     int rescue_count = 0;
+    public BoxCollider ReviveArea;
 
     //短衝刺
     float left_trigger = 0.0f;
@@ -93,7 +94,9 @@ public class Player_Control : MonoBehaviour{
     public GameObject UI_Icon;
     public Image[] ItemBar = new Image[6];
     public Text[] ItemStateText = new Text[6];
+    public Text HaveMoney;
     int[] ItemCount = new int[6];
+    int Current_Money = 0;
 
     //衰弱狀態相關
     float Weak_Moment = 0.0f;
@@ -237,7 +240,7 @@ public class Player_Control : MonoBehaviour{
         zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
         if (xAtk != 0.0f || zAtk != 0.0f && DeathPriority == false) {
-            Attack_Direction = 0.1f *( new Vector3(xAtk, 0.0f, zAtk).normalized);
+            Attack_Direction = ( new Vector3(xAtk, 0.0f, zAtk).normalized);
             Atk_angle = Mathf.Atan2(-Attack_Direction.x, Attack_Direction.z) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
             Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp*ArrowRot);
@@ -370,18 +373,22 @@ public class Player_Control : MonoBehaviour{
 
     //復活相關
     public void GetRescued() {
-        GetComponent<Animator>().Play("Slime_CureEffect");
-        rescue_count++;
+        if (DeathPriority) {
+            GetComponent<Animator>().Play("Slime_CureEffect");
+            rescue_count++;
 
-        if (rescue_count >= 5) {
-            rescue_count = 0;
-            Base_HP = 3 + Extra_HP;
-            for (int k = 0; k < Personal_HP.Length; k++){
-                if (k < Base_HP) Personal_HP[k].SetActive(true);
-                else Personal_HP[k].SetActive(false);
+            if (rescue_count >= 5){
+                rescue_count = 0;
+                Base_HP = 3 + Extra_HP;
+                for (int k = 0; k < Personal_HP.Length; k++){
+                    if (k < Base_HP) Personal_HP[k].SetActive(true);
+                    else Personal_HP[k].SetActive(false);
+                }
+                CancelColor();
+                ReviveArea.enabled = false;
+                GetComponent<Animator>().Play("Slime_Revive");
+                AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
             }
-            CancelColor();
-            GetComponent<Animator>().Play("Slime_Revive");
         }
     }
 
@@ -397,7 +404,7 @@ public class Player_Control : MonoBehaviour{
         _playermanager.SetPlayerColor(Player_Number, Color_Number);
         Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
-        //Player_Sprite.GetComponent<SpriteRenderer>().color = SplashEffect.GetComponent<SpriteRenderer>().color;
+        ReviveArea.enabled = true;
     }
 
     //合體狀態被擊殺
@@ -418,6 +425,8 @@ public class Player_Control : MonoBehaviour{
     void WashOutColor() {
         ExtraPriority = true;
         Color_Number = 0;
+        musouTime = Time.time;
+        StopDetect = true;
         GetComponent<Animator>().Play("Slime_Wash");
     }
 
@@ -429,7 +438,7 @@ public class Player_Control : MonoBehaviour{
     }
 
     //道具加成
-    public void Ability_Modify(int ItemType, Sprite ItemSprite) {
+    public void Ability_Modify(int ItemType, Sprite ItemSprite,int ItemPrice) {
         //0:劍，1:子彈，2:愛心，3:放大燈，4:鞋子，5:潤滑液
         switch (ItemType) {
             case 0:
@@ -462,6 +471,7 @@ public class Player_Control : MonoBehaviour{
         }
 
         //更新UI資訊
+        //道具狀態
         ItemCount[ItemType]++;
         if (ItemCount[ItemType] == 1){
             ItemBar[ItemType].gameObject.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
@@ -469,6 +479,11 @@ public class Player_Control : MonoBehaviour{
             ItemStateText[ItemType].gameObject.SetActive(true);
         }
         ItemStateText[ItemType].text = ItemCount[ItemType].ToString();
+
+        //剩餘金幣
+        Current_Money = Current_Money - ItemPrice;
+        HaveMoney.text = Current_Money.ToString();
+
     }
 
     //解體後的衰弱狀態
@@ -476,6 +491,16 @@ public class Player_Control : MonoBehaviour{
         Weak_Moment = Time.time;
         On_Weak = true;
         Base_Speed *= 0.6f;
+    }
+
+    //金幣
+    public void MoneyUpdate(int gain) {
+        Current_Money = Current_Money + gain;
+        HaveMoney.text = Current_Money.ToString();
+    }
+
+    public int GetPlayerMoney() {
+        return Current_Money;
     }
 
 }
