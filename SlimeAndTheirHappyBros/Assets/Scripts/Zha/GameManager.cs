@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    bool roundStart = false;
+    bool roundStart = false, inShopping = false;
+    float time = .0f;
     GameState tutorialState;
     GameState[] gameStates;
     GoblinManager goblinManager;
+    UIManager uiManager;
 
 
     public static bool isBreakTime = false;
-    public static int round = -1;
+    public static int curRound = -1;
 
     public StateInfo[] roundInfos;
 
@@ -21,6 +23,7 @@ public class GameManager : MonoBehaviour
     private void Awake()
     {
         goblinManager = GameObject.Find("GoblinManager").GetComponent<GoblinManager>();
+        uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
 
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
@@ -36,22 +39,39 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (round < 0)
+        if (curRound < 0)
         {
 
         }
         else {
-            if (!roundStart) {
+            if (inShopping)
+            {
 
             }
-            else gameStates[round].Update(Time.deltaTime);
+            else {
+                if (!roundStart)
+                {
+
+                }
+                else gameStates[curRound].Update(Time.deltaTime);
+            }
+           
         }
     }
 
     public void SpawnOver(int curWave) {
-        if (curWave >= roundInfos[round].maxWave) {
+        if (curWave >= roundInfos[curRound].maxWave) {
 
         }
+    }
+
+    public void RoundOver() {
+        curRound++;
+        inShopping = true;
+    }
+    public void GoNextRound() {
+        inShopping = false;
+
     }
 
 }
