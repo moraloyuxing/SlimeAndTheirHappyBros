@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Item_Manager : MonoBehaviour {
+    public GameObject Docter;
     public Transform[] All_Player = new Transform[4];//四位玩家
     public Transform[] All_Item = new Transform[6];//六樣道具
+    public GameObject[] Item_InBox = new GameObject[6];
     public GameObject[] Item_Hint = new GameObject[6];//六樣道具提示
     Player_Control[] Player_BaseAbility = new Player_Control[4];
     float[] CurrentDistance = new float[4];//目前測量的道具距離
@@ -93,7 +95,15 @@ public class Item_Manager : MonoBehaviour {
 
     public void State_Switch() {
         Purchase_State = !Purchase_State;
-        if (Purchase_State) NewRound_toBuy();
+        if (Purchase_State){
+            Docter.SetActive(true);
+            for (int i = 0; i < 6; i++) All_Item[i].gameObject.SetActive(true);
+            NewRound_toBuy();
+        }
+        else {
+            Docter.SetActive(false);
+            for (int i = 0; i < 6; i++) All_Item[i].gameObject.SetActive(false);
+        }
     }
 
     public void NewRound_toBuy() {

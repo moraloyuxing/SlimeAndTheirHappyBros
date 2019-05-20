@@ -436,4 +436,10 @@ public class Player_Manager : MonoBehaviour
         Weak_State[xP] = false;
     }
 
+    public void DocterRound() {
+        for (int i = 0; i < 4; i++) {
+            FourPlayer[i].GetDocterHelp();
+        }
+    }
+
 }

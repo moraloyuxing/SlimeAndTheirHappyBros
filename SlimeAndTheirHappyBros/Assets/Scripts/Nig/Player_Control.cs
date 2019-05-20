@@ -524,5 +524,14 @@ public class Player_Control : MonoBehaviour{
         return Current_Money;
     }
 
+    //巫醫治療
+    public void GetDocterHelp() {
+        Base_HP = 3 + Extra_HP;
+        for (int k = 0; k < Personal_HP.Length; k++){
+            if (k < Base_HP) Personal_HP[k].SetActive(true);
+            else Personal_HP[k].SetActive(false);
+        }
+    }
+
 }
 

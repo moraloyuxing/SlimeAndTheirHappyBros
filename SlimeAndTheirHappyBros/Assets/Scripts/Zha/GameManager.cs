@@ -112,6 +112,7 @@ public class GameManager : MonoBehaviour
         AudioManager.SingletonInScene.ChangeBGM(true, 0);
         AudioManager.SingletonInScene.PlaySound2D("Round_End", 1.0f);
         uiManager.GoBreakTime();
+        playerManager.DocterRound();
     }
     public void GoNextRound() {
         inShopping = false;
