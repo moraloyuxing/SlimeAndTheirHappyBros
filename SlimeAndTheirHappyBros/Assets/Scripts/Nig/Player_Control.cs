@@ -17,6 +17,7 @@ public class Player_Control : MonoBehaviour{
             return Player_Number;
         }
     }
+    public int PlayerID2;
     int Color_Number = 0;
     string WhichPlayer;
 
@@ -105,6 +106,7 @@ public class Player_Control : MonoBehaviour{
     bool OnWeak = false;
 
     void Start(){
+        PlayerID2 = PlayerID;
         WhichPlayer = gameObject.name;
         ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
@@ -535,6 +537,9 @@ public class Player_Control : MonoBehaviour{
             if (k < Base_HP) Personal_HP[k].SetActive(true);
             else Personal_HP[k].SetActive(false);
         }
+        ReviveArea.enabled = false;
+        GetComponent<Animator>().Play("Slime_Revive");
+        AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
         _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
         _playermanager.DeathCountMinus();
     }

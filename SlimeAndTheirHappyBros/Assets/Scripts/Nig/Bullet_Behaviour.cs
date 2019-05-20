@@ -7,6 +7,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     int color;
     float  offset, scaleOffset = 1.0f;
     public Player_Control WhichPlayer;
+    public Player_Control WhichPlayer2;
     public Player_Control Rescue_Which;
     public float speed = 20.0f;
     public float alpha = -0.04f;
@@ -42,11 +43,28 @@ public class Bullet_Behaviour : MonoBehaviour{
         color = Shader_Number;
         GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
+        WhichPlayer2 = xSlime;
         Attack_Dir = current_angle.normalized;
         offset = Mathf.Abs(Attack_Dir.x);
         offset = Mathf.Clamp(offset, 0.5f, 0.8f);
         scaleOffset = Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
         speed = 20.0f*Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
+        Attack_Dir *= speed;
+        _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
+        PenetrateMaxCount = xSlime.Base_Penetrate;
+        BulletATK = xSlime.Base_ATK;
+    }
+
+    public void SetAttackDir(Vector3 current_angle, Player_Control xSlime,Player_Control xSlime2, int Shader_Number){
+        color = Shader_Number;
+        GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
+        WhichPlayer = xSlime;
+        WhichPlayer2 = xSlime2;
+        Attack_Dir = current_angle.normalized;
+        offset = Mathf.Abs(Attack_Dir.x);
+        offset = Mathf.Clamp(offset, 0.5f, 0.8f);
+        scaleOffset = Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
+        speed = 20.0f * Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
         Attack_Dir *= speed;
         _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
         PenetrateMaxCount = xSlime.Base_Penetrate;
@@ -82,7 +100,8 @@ public class Bullet_Behaviour : MonoBehaviour{
                 colliderRecord.Add(colliders[i]);
                 NowPenetrate++;
                 if (c.tag == "Goblin"){
-                    bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
+                    if(WhichPlayer != WhichPlayer2)bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, WhichPlayer2.PlayerID2, Attack_Dir);
+                    else bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
                 }
 
                 if (c.tag == "Player") {

@@ -354,6 +354,13 @@ public class GoblinManager : MonoBehaviour
         StartCoroutine(DropMoney(num,pos, target));
 
     }
+    public void UseMoney(int num, Vector3 pos, int target1, int target2)
+    {
+        Four_Player[target1].MoneyUpdate(num);//UI更新num
+        Four_Player[target2].MoneyUpdate(num);//UI更新num
+        StartCoroutine(DropMoney(num, pos, target1));
+
+    }
     IEnumerator DropMoney(int num, Vector3 pos, int target) {
         int i = 0;
         while (i < num)
@@ -367,7 +374,20 @@ public class GoblinManager : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
         }
     }
-
+    IEnumerator DropMoney2(int num, Vector3 pos, int target)
+    {
+        int i = 0;
+        while (i < num)
+        {
+            if (freeMoneys.Count <= 0) break;
+            Money money = freeMoneys[0];
+            usedMoneys.Add(money);
+            money.ToActive(pos, target);
+            freeMoneys.Remove(money);
+            i++;
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
     public void RecycleArrow(GoblinArrow arrow) {
         freeGoblinArrows.Add(arrow);
         usedGoblinArrows.Remove(arrow);
