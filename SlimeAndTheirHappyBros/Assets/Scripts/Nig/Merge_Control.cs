@@ -4,7 +4,8 @@ using UnityEngine;
 
 //不會跳池，不需治療→不用Splash
 
-public class Merge_Control : MonoBehaviour{
+public class Merge_Control : MonoBehaviour
+{
 
     public GameObject Player_Manager;
     public GameObject Merge_Sprite;
@@ -53,6 +54,8 @@ public class Merge_Control : MonoBehaviour{
     public GameObject Player_Shoot;
     public Sprite[] Player_Icon = new Sprite[4];
     public GameObject[] Storage_Player = new GameObject[2];
+    int Moving_ID;
+    int Shooting_ID;
     Sprite[] Control_Icon = new Sprite[2];
     string WhichPlayer_Moving;
     string WhichPlayer_Shooting;//之後用到
@@ -95,9 +98,10 @@ public class Merge_Control : MonoBehaviour{
     public int Bullet_Superimposed = 0;
     //int Timer_Superimposed = 0;
 
-    void Start(){
+    void Start()
+    {
         Player_Manager = GameObject.Find("Player_Manager");
-        ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(3.8f, 0.0f, 0.0f));
+        ray_horizontal = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(3.8f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 3.8f));
         Current_Color = Merge_Sprite.GetComponent<SpriteRenderer>().color;
         anim = GetComponent<Animator>();
@@ -105,13 +109,15 @@ public class Merge_Control : MonoBehaviour{
         _mergectrl = GetComponent<Merge_Control>();
     }
 
-    public void SetMSlimePool(Bullet_Manager _bulletpool,Object_Pool pool){
+    public void SetMSlimePool(Bullet_Manager _bulletpool, Object_Pool pool)
+    {
         Attack_Arrow.GetComponent<Create_Bullet>()._bulletPool = _bulletpool;
         _BulletPool = _bulletpool;
         _MSlimePool = pool;
     }
 
-    void OnEnable(){
+    void OnEnable()
+    {
         //相當於數據初始化
         Merge_Control_Hint.SetActive(true);
         ExtraPriority = true;
@@ -119,9 +125,11 @@ public class Merge_Control : MonoBehaviour{
         flicker = -0.5f;
     }
 
-    void Update(){
+    void Update()
+    {
         //操作提示
-        if (Time.time > Hint_Moment + 7.0f && Hint_Activate == true) {
+        if (Time.time > Hint_Moment + 7.0f && Hint_Activate == true)
+        {
             Merge_Control_Hint.SetActive(false);
             Hint_Activate = false;
         }
@@ -136,20 +144,25 @@ public class Merge_Control : MonoBehaviour{
         xAix = Input.GetAxis(WhichPlayer_Moving + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer_Moving + "Vertical");
         left_trigger = Input.GetAxis(WhichPlayer_Moving + "Dash");
-        if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f){
+        if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f)
+        {
             Base_Speed = Base_Speed + 5.0f;
             OnDash = true;
             DuringDashLerp = true;
             DashCD = Time.time;
         }
 
-        if ( ExtraPriority == false && DeathPriority == false) {
-            if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f) {
+        if (ExtraPriority == false && DeathPriority == false)
+        {
+            if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f)
+            {
                 if (OnDash == false && DuringDashLerp == false) { Walking = true; }
-                else if (OnDash == true){
+                else if (OnDash == true)
+                {
                     Walking = false;
                     if (Mathf.Abs(xAix) >= Mathf.Abs(zAix)) GetComponent<Animator>().Play("Slime_DashFoward");
-                    else if (Mathf.Abs(xAix) < Mathf.Abs(zAix)){
+                    else if (Mathf.Abs(xAix) < Mathf.Abs(zAix))
+                    {
                         if (zAix >= 0) GetComponent<Animator>().Play("Slime_DashUp");
                         else GetComponent<Animator>().Play("Slime_DashDown");
                     }
@@ -161,29 +174,35 @@ public class Merge_Control : MonoBehaviour{
             else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) Walking = false;
         }
 
-        if (xAix > 0.0f){
+        if (xAix > 0.0f)
+        {
             ArrowRot = 1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
-            if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
+            if (ExtraPriority == false && DeathPriority == false && OnDash == false)
+            {
                 transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
                 Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             }
 
             Left_CanMove = true;
-            ray_horizontal = new Ray(transform.position + new Vector3(0.0f,-1.8f,0.0f), new Vector3(3.8f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 3.8f)){
-                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier"){
+            ray_horizontal = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(3.8f, 0.0f, 0.0f));
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 3.8f))
+            {
+                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier")
+                {
                     Right_CanMove = false;
                 }
             }
             else { Right_CanMove = true; }
         }
 
-        if (xAix < 0.0f){
+        if (xAix < 0.0f)
+        {
             ArrowRot = -1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
-            if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
+            if (ExtraPriority == false && DeathPriority == false && OnDash == false)
+            {
                 transform.localScale = new Vector3(-2.0f, 2.0f, 2.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.4f, 0.4f, 0.4f);
                 Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
@@ -191,30 +210,38 @@ public class Merge_Control : MonoBehaviour{
 
             Right_CanMove = true;
             ray_horizontal = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(-3.8f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 3.8f)){
-                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier"){
+            if (Physics.Raycast(ray_horizontal, out hit_horizontal, 3.8f))
+            {
+                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier")
+                {
                     Left_CanMove = false;
                 }
             }
             else { Left_CanMove = true; }
         }
 
-        if (zAix > 0.0f){
+        if (zAix > 0.0f)
+        {
             Down_CanMove = true;
             ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 3.8f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical, 3.8f)){
-                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier"){
+            if (Physics.Raycast(ray_vertical, out hit_vertical, 3.8f))
+            {
+                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier")
+                {
                     Up_CanMove = false;
                 }
             }
             else { Up_CanMove = true; }
         }
 
-        if (zAix < 0.0f){
+        if (zAix < 0.0f)
+        {
             Up_CanMove = true;
             ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, -3.0f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical, 3.0f)){
-                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier"){
+            if (Physics.Raycast(ray_vertical, out hit_vertical, 3.0f))
+            {
+                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier")
+                {
                     Down_CanMove = false;
                 }
             }
@@ -223,13 +250,17 @@ public class Merge_Control : MonoBehaviour{
 
         //內部障礙物偵測
         ray_direction = new Ray(transform.position, new Vector3(xAix, 0.0f, zAix));
-        if (Physics.Raycast(ray_direction, out hit_direction, 3.8f)){
-            if (hit_direction.transform.tag == "Barrier"){
-                if (Mathf.Abs(xAix) > Mathf.Abs(zAix)){
+        if (Physics.Raycast(ray_direction, out hit_direction, 3.8f))
+        {
+            if (hit_direction.transform.tag == "Barrier")
+            {
+                if (Mathf.Abs(xAix) > Mathf.Abs(zAix))
+                {
                     Left_CanMove = false;
                     Right_CanMove = false;
                 }
-                else{
+                else
+                {
                     Up_CanMove = false;
                     Down_CanMove = false;
                 }
@@ -237,14 +268,16 @@ public class Merge_Control : MonoBehaviour{
         }
 
 
-        if (ExtraPriority == false && DeathPriority == false) {
+        if (ExtraPriority == false && DeathPriority == false)
+        {
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
             if (!Left_CanMove || !Right_CanMove) xAix = .0f;
             transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 5.0f;
         }
 
         //衝刺遞減
-        if (DuringDashLerp == true){
+        if (DuringDashLerp == true)
+        {
             Base_Speed = Mathf.Lerp(Base_Speed, 0.5f, testlerp);
         }
 
@@ -252,16 +285,18 @@ public class Merge_Control : MonoBehaviour{
         xAtk = Input.GetAxis(WhichPlayer_Shooting + "AtkHorizontal");
         zAtk = Input.GetAxis(WhichPlayer_Shooting + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
-        if (xAtk != 0.0f || zAtk != 0.0f){
+        if (xAtk != 0.0f || zAtk != 0.0f)
+        {
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
-            Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp* ArrowRot);
+            Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp * ArrowRot);
         }
 
         //攻擊
         right_trigger = Input.GetAxis(WhichPlayer_Shooting + "Attack");
-        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false){
+        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false)
+        {
             GetComponent<Animator>().Play("Slime_Attack");
             Shooting = true;
         }
@@ -271,7 +306,8 @@ public class Merge_Control : MonoBehaviour{
 
     }
 
-    public void Decide_TwoPlayer_Control(GameObject PlayerA,GameObject PlayerB) {
+    public void Decide_TwoPlayer_Control(GameObject PlayerA, GameObject PlayerB)
+    {
         AudioManager.SingletonInScene.PlaySound2D("Mix", 1f);
 
         Storage_Player[0] = PlayerA;
@@ -280,8 +316,10 @@ public class Merge_Control : MonoBehaviour{
         //設定加成數值
         Ability_Modify(PlayerA, PlayerB);
 
-        for (int i = 0; i < 2; i++) {
-            switch (Storage_Player[i].name) {
+        for (int i = 0; i < 2; i++)
+        {
+            switch (Storage_Player[i].name)
+            {
                 case "Player1_":
                     Control_Icon[i] = Player_Icon[0];
                     break;
@@ -298,18 +336,28 @@ public class Merge_Control : MonoBehaviour{
         }
 
         int chance = Random.Range(0, 2);
-        if (chance == 0) {
+        if (chance == 0)
+        {
             WhichPlayer_Moving = PlayerA.name;
             WhichPlayer_Shooting = PlayerB.name;
+            Moving_ID = PlayerA.GetComponent<Player_Control>().PlayerID;
+            Shooting_ID = PlayerB.GetComponent<Player_Control>().PlayerID;
             Player_Move.GetComponent<SpriteRenderer>().sprite = Control_Icon[0];
             Player_Shoot.GetComponent<SpriteRenderer>().sprite = Control_Icon[1];
+            Attack_Arrow.GetComponent<Create_Bullet>().SetMSlimeMovingPlayer(Moving_ID);
+            PlayerB.GetComponent<Player_Control>().FakeDeath();
         }
 
-        else if (chance == 1){
+        else if (chance == 1)
+        {
             WhichPlayer_Moving = PlayerB.name;
             WhichPlayer_Shooting = PlayerA.name;
+            Moving_ID = PlayerB.GetComponent<Player_Control>().PlayerID;
+            Shooting_ID = PlayerA.GetComponent<Player_Control>().PlayerID;
             Player_Move.GetComponent<SpriteRenderer>().sprite = Control_Icon[1];
             Player_Shoot.GetComponent<SpriteRenderer>().sprite = Control_Icon[0];
+            Attack_Arrow.GetComponent<Create_Bullet>().SetMSlimeMovingPlayer(Moving_ID);
+            PlayerA.GetComponent<Player_Control>().FakeDeath();
         }
 
         Storage_Player[0].SetActive(false);
@@ -318,10 +366,12 @@ public class Merge_Control : MonoBehaviour{
         Start_CountDown();
     }
 
-    public void Spilt_toOriginal() {
-        for (int i = 0; i < 2; i++) {
+    public void Spilt_toOriginal()
+    {
+        for (int i = 0; i < 2; i++)
+        {
             Storage_Player[i].SetActive(true);
-            if (Damage_Count == 3)Storage_Player[i].SendMessage("Die_InMergeState");
+            if (Damage_Count == 3) Storage_Player[i].SendMessage("Die_InMergeState");
         }
         Storage_Player[0].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(0.5f, 2.0f), 1.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
         Storage_Player[1].transform.position = new Vector3(gameObject.transform.position.x + Random.Range(0.5f, 2.0f), 1.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
@@ -331,29 +381,34 @@ public class Merge_Control : MonoBehaviour{
     }
 
 
-    void Start_CountDown() {
+    void Start_CountDown()
+    {
         InvokeRepeating("Merge_Timer", 1, 0.15f);
 
         Hint_Moment = Time.time;
         Hint_Activate = true;
     }
 
-    void Merge_Timer() {
+    void Merge_Timer()
+    {
         Base_Timer -= 0.15f;
 
-        if (Base_Timer < 3.0f) {
+        if (Base_Timer < 3.0f)
+        {
             Current_Color.a = Current_Color.a + flicker;
             flicker = flicker * -1.0f;
             Merge_Sprite.GetComponent<SpriteRenderer>().color = Current_Color;
         }
 
-        if (Base_Timer < 0) {
+        if (Base_Timer < 0)
+        {
             //Spilt_toOriginal();
             CancelInvoke("Merge_Timer");
             Current_Color.a = 1.0f;
             Merge_Sprite.GetComponent<SpriteRenderer>().color = Current_Color;
 
-            switch (MergeNumber){
+            switch (MergeNumber)
+            {
                 case 3:
                     GetComponent<Animator>().Play("Slime_SpiltRY");
                     break;
@@ -368,12 +423,14 @@ public class Merge_Control : MonoBehaviour{
     }
 
     //混色確認
-    public void SetUp_DyeingColor(int x) {
+    public void SetUp_DyeingColor(int x)
+    {
         Merge_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", x);
         Shader_Number = x;
         MergeNumber = x;
 
-        switch (MergeNumber) {
+        switch (MergeNumber)
+        {
             case 3:
                 GetComponent<Animator>().Play("Slime_MergeRY");
                 break;
@@ -388,61 +445,71 @@ public class Merge_Control : MonoBehaviour{
     }
 
     //設置攻擊最高優先權
-    public void AttackPriorityOn(){
+    public void AttackPriorityOn()
+    {
         AttackPriority = true;
-        Attack_Arrow.GetComponent<Create_Bullet>().MSlimeShootBullet(_mergectrl,Attack_Direction, Shader_Number);
-        AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.55f);
+        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Shader_Number);
+        AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.5f);
     }
 
-    public void AttackPriorityOff(){
+    public void AttackPriorityOff()
+    {
         AttackPriority = false;
         Shooting = false;
     }
 
     //設置受傷&死亡最高優先權
-    public void SlimeGetHurt(){
+    public void SlimeGetHurt()
+    {
         Collider[] colliders = Physics.OverlapBox(Merge_Sprite.transform.position, new Vector3(2.3f, 1.7f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
         int i = 0;
-        while (i < colliders.Length){
-            if (i == 0){
+        while (i < colliders.Length)
+        {
+            if (i == 0)
+            {
                 Destroy(colliders[i]);//之後要移除
                 GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;
                 musouTime = Time.time;
                 Damage_Count++;
-                AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
-                for (int k = 0; k < Damage_Count; k++) {Merge_HP[k].SetActive(false); }
-                if (Damage_Count == 3){
+                AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
+                for (int k = 0; k < Damage_Count; k++) { Merge_HP[k].SetActive(false); }
+                if (Damage_Count == 3)
+                {
                     DeathPriority = true;
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     CancelInvoke("Merge_Timer");
                     GetComponent<Animator>().Play("Slime_Death");
-                    AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
+                    AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.5f);
                 }
             }
             i++;
         }
     }
 
-    public void HurtPriorityOff(){
+    public void HurtPriorityOff()
+    {
         ExtraPriority = false;
         AttackPriority = false;
     }
 
     //短衝刺設定
-    public void DashEnd(){
+    public void DashEnd()
+    {
         Base_Speed = Current_Speed;
         DuringDashLerp = false;
     }
 
-    public void SpiltPriorityOn() {
+    public void SpiltPriorityOn()
+    {
         ExtraPriority = true;
         AudioManager.SingletonInScene.PlaySound2D("Separate", 0.6f);
     }
 
     //混色後抓取雙方數值加成
-    void Ability_Modify(GameObject PlayerA,GameObject PlayerB) {
+    void Ability_Modify(GameObject PlayerA, GameObject PlayerB)
+    {
         Player_Control A = PlayerA.GetComponent<Player_Control>();
         Player_Control B = PlayerB.GetComponent<Player_Control>();
 
