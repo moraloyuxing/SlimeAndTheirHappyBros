@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     bool roundStart = false, inShopping = false;
+    bool lose = false;
     int tutorialProgress = 0, goblinKills = 0;
     float time = .0f;
     GameState tutorialState;
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
         itemManager = GameObject.Find("Item_Group").GetComponent<Item_Manager>() ;
         playerManager = GameObject.Find("Player_Manager").GetComponent<Player_Manager>() ;
         playerManager.SubAltar(GoNextRound);
+        playerManager.SubDeath(GoLose);
         goblinKillsGoal = new int[roundInfos.Length];
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
@@ -53,7 +55,7 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (test) return;
+        if (test || lose) return;
         if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
         if (curRound < 0)
         {
@@ -126,6 +128,16 @@ public class GameManager : MonoBehaviour
 
         if (goblinKills >= goblinKillsGoal[curRound]) RoundOver();
         //Debug.Log("kill goblin  " + goblinKills +"    in   " +  curRound);
+    }
+
+    public void GoLose() {
+        uiManager.GoLose();
+        StartCoroutine(PlayAgain());
+    }
+    IEnumerator PlayAgain() {
+        curRound = -1;
+        yield return new WaitForSeconds(2.5f);
+        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 
 }

@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
 {
     bool progressMove = false;
     int tutorialProgres = 0;
+    int curRound = 0;
     float length, progressTime = .0f;
 
     Vector2 oringinProgress, targetProgress;
@@ -16,6 +17,7 @@ public class UIManager : MonoBehaviour
     Image tutorialImg; 
     Image goblinProgress, goblinHead;
     Image breakTimeImg, roundImg;
+    Text roundTxt;
 
     Animator animator;
 
@@ -33,6 +35,7 @@ public class UIManager : MonoBehaviour
         roundImg = transform.Find("CountDown").GetChild(3).GetComponent<Image>();
 
         goblinHeadTrans = transform.Find("GoblinProgress").GetChild(0).GetComponent<RectTransform>();
+        roundTxt = transform.Find("GoblinProgress").GetChild(1).GetComponent<Text>();
 
         animator = GetComponent<Animator>();
     }
@@ -71,7 +74,8 @@ public class UIManager : MonoBehaviour
     }
 
     public void StartRound(int round) {
-
+        curRound++;
+        roundTxt.text = curRound.ToString();
         roundImg.sprite = RoundSprite[round];
         animator.SetTrigger("Round");
     }
@@ -89,6 +93,7 @@ public class UIManager : MonoBehaviour
         targetProgress = new Vector2(headStart + length * percent, 0);
     }
 
+
     public void CountDownCBK() {
 
     }
@@ -96,6 +101,11 @@ public class UIManager : MonoBehaviour
         GoblinProgress(0);
         animator.Play("breakTimeIn");
     }
+
+    public void GoLose() {
+        animator.SetTrigger("Lose");
+    }
+
     public void RoundStartMusic() {
         AudioManager.SingletonInScene.PauseBGM();
         AudioManager.SingletonInScene.PlaySound2D("Round_Begin",1.0f);

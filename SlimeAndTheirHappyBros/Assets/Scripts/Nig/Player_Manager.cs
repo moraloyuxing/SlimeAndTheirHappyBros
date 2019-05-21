@@ -28,6 +28,7 @@ public class Player_Manager : MonoBehaviour
     int DeathCount = 0;
 
     System.Action OnAltarCBK;
+    System.Action DeathCBK;
 
     void Awake()
     {
@@ -156,6 +157,10 @@ public class Player_Manager : MonoBehaviour
 
     public void SubAltar(System.Action cbk) {
         OnAltarCBK = cbk;
+    }
+
+    public void SubDeath(System.Action cbk) {
+        DeathCBK = cbk;
     }
 
     void Player1_rePos(Vector3 pos)
@@ -448,8 +453,9 @@ public class Player_Manager : MonoBehaviour
 
     public void DeathCountPlus() {
         DeathCount++;
-        //if(DeathCount == 4)進入結算
+        if (DeathCount == 4) DeathCBK();
     }
+
 
     public void DeathCountMinus() {
         DeathCount--;
