@@ -27,6 +27,7 @@ public class Player_Control : MonoBehaviour{
     bool DeathPriority = false;
     bool StopDetect = false;
     float musouTime = 0.0f; //無敵時間：受傷後、染色時
+    float StateMusou = 0.0f;
 
     //移動
     public GameObject Player_Icon;
@@ -268,6 +269,7 @@ public class Player_Control : MonoBehaviour{
                         //跳池動畫
                         ExtraPriority = true;
                         musouTime = Time.time;
+                        StateMusou = 1.5f;
                         StopDetect = true;
                         GetComponent<Animator>().Play("Slime_JumpinPond");
                     }
@@ -275,7 +277,7 @@ public class Player_Control : MonoBehaviour{
             }
         }
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)、衰弱時間(速度*0.6f)
-        if (Time.time > musouTime + 2.5f && StopDetect) { StopDetect = false; }
+        if (Time.time > musouTime + StateMusou && StopDetect) { StopDetect = false; }
         if (Time.time > Weak_Moment + 10.0f && OnWeak) {
             OnWeak = false;
             anim.SetBool("OnWeak", OnWeak);
@@ -295,7 +297,8 @@ public class Player_Control : MonoBehaviour{
         return Color_Number;
     }
 
-    public void ChangeColorCalling() {
+    public void ChangeColorCalling()
+    {
         GetComponent<Animator>().Play("Slime_JumpinPondEffect");
         _pigmentmanager.Change_Base_Color(Player_Number, Color_Number);
         _playermanager.SetPlayerColor(Player_Number, Color_Number);
@@ -335,6 +338,7 @@ public class Player_Control : MonoBehaviour{
                 ExtraPriority = true;
                 StopDetect = true;
                 musouTime = Time.time;
+                StateMusou = 1.2f;
                 Base_HP--;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
                 for (int k = 0; k <Personal_HP.Length; k++) {
@@ -347,7 +351,7 @@ public class Player_Control : MonoBehaviour{
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     GetComponent<Animator>().Play("Slime_Death");
                     _playermanager._goblinmanager.SetPlayerDie(Player_Number);
-                    _playermanager.DeathCountPlus();
+                    _playermanager.DeathCountPlus(PlayerID);
                     AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
                 }
             }
@@ -398,7 +402,7 @@ public class Player_Control : MonoBehaviour{
                 GetComponent<Animator>().Play("Slime_Revive");
                 AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
                 _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
-                _playermanager.DeathCountMinus();
+                _playermanager.DeathCountMinus(PlayerID);
             }
         }
     }
@@ -435,8 +439,8 @@ public class Player_Control : MonoBehaviour{
         ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
         Hide_Hint();
         GetComponent<Animator>().Play("Slime_GrassIdle");
-        _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
-        _playermanager.DeathCountPlus();
+        _playermanager._goblinmanager.SetPlayerDie(Player_Number);
+        _playermanager.DeathCountPlus(PlayerID);
     }
 
     public void HideWeak(){
@@ -448,6 +452,7 @@ public class Player_Control : MonoBehaviour{
         ExtraPriority = true;
         Color_Number = 0;
         musouTime = Time.time;
+        StateMusou = 2.5f;
         StopDetect = true;
         GetComponent<Animator>().Play("Slime_Wash");
     }
@@ -455,6 +460,7 @@ public class Player_Control : MonoBehaviour{
     public void FinishClean() {
         ExtraPriority = false;
         musouTime = Time.time;
+        StateMusou = 2.0f;
         StopDetect = true;
         _playermanager.BackWashBoard();
     }
@@ -539,16 +545,18 @@ public class Player_Control : MonoBehaviour{
 
     //巫醫治療
     public void GetDocterHelp() {
+        if (Base_HP == 0){
+            _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
+            _playermanager.DeathCountMinus(PlayerID);
+            GetComponent<Animator>().Play("Slime_Revive");
+            AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
+        }
         Base_HP = 3 + Extra_HP;
         for (int k = 0; k < Personal_HP.Length; k++){
             if (k < Base_HP) Personal_HP[k].SetActive(true);
             else Personal_HP[k].SetActive(false);
         }
         ReviveArea.enabled = false;
-        GetComponent<Animator>().Play("Slime_Revive");
-        AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
-        _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
-        _playermanager.DeathCountMinus();
     }
 
 }

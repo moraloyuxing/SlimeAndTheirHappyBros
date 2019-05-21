@@ -55,6 +55,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.K)) {
+            curRound = -1;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
         if (test || lose) return;
         if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
         if (curRound < 0)

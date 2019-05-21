@@ -7,7 +7,7 @@ public class UIManager : MonoBehaviour
 {
     bool progressMove = false;
     int tutorialProgres = 0;
-    int curRound = 0;
+    int curRound = 1;
     float length, progressTime = .0f;
 
     Vector2 oringinProgress, targetProgress;

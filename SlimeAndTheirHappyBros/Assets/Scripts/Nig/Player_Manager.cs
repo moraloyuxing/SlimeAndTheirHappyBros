@@ -25,7 +25,9 @@ public class Player_Manager : MonoBehaviour
     bool[] On_Altar = new bool[4];
     public Transform Altar;
     public GoblinManager _goblinmanager;
-    int DeathCount = 0;
+    bool[] Player_Death = new bool[4];
+    bool All_Death = false;
+
 
     System.Action OnAltarCBK;
     System.Action DeathCBK;
@@ -43,6 +45,7 @@ public class Player_Manager : MonoBehaviour
             Which_Player[i] = FourPlayer[i].gameObject.name;
             FourPlayer[i].SetUp_Number(i);
             _goblinmanager.SetPlayersMove(i, FourPlayer[i].transform.position);
+            Player_Death[i] = false;
         }
 
     }
@@ -451,14 +454,18 @@ public class Player_Manager : MonoBehaviour
         }
     }
 
-    public void DeathCountPlus() {
-        DeathCount++;
-        if (DeathCount == 4) DeathCBK();
+    public void DeathCountPlus(int PlayerID) {
+        Player_Death[PlayerID] = true;
+        All_Death = true;
+        for (int i = 0; i < 4; i++) {
+            if (Player_Death[i] == false) All_Death = false;
+        }
+        if (All_Death) DeathCBK();
     }
 
 
-    public void DeathCountMinus() {
-        DeathCount--;
+    public void DeathCountMinus(int PlayerID) {
+        Player_Death[PlayerID] = false;
     }
 
 }

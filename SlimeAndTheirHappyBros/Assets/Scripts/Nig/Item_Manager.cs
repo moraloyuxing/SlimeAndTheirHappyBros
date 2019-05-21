@@ -58,7 +58,7 @@ public class Item_Manager : MonoBehaviour {
                             Player_Money[p] = Player_BaseAbility[p].GetPlayerMoney();
 
                             //多一判斷式→錢夠不夠
-                            if (Player_Money[p] > Item_Price[Focus_Count[p]]) {
+                            if (Player_Money[p] >= Item_Price[Focus_Count[p]]) {
                                 PlayerHasBuy[p, Focus_Count[p]] = true;
                                 AudioManager.SingletonInScene.PlaySound2D("Buy", 0.5f);
 

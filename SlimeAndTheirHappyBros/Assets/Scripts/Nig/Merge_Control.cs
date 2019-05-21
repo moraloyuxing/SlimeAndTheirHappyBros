@@ -20,6 +20,7 @@ public class Merge_Control : MonoBehaviour
     bool DeathPriority = false;
     bool StopDetect = false;
     float musouTime = 0.0f; //無敵時間：受傷後、染色時
+    float StateMusou = 0.0f;
 
     //移動
     public float xAix, zAix;
@@ -120,10 +121,19 @@ public class Merge_Control : MonoBehaviour
     {
         //相當於數據初始化
         Merge_Control_Hint.SetActive(true);
-        ExtraPriority = true;
+        ExtraPriority = false;
+        DeathPriority = false;
+        AttackPriority = false;
+        OnDash = false;
+        DuringDashLerp = false;
+        Up_CanMove = true;
+        Down_CanMove = true;
+        Left_CanMove = true;
+        Right_CanMove = true;
         Merge_Sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
         flicker = -0.5f;
         StopDetect = false;
+        Damage_Count = 0;
     }
 
     void Update()
@@ -306,7 +316,7 @@ public class Merge_Control : MonoBehaviour
         }
 
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)
-        if (Time.time > musouTime + 2.5f && StopDetect == true) { StopDetect = false; }
+        if (Time.time > musouTime + StateMusou && StopDetect == true) { StopDetect = false; }
 
     }
 
@@ -375,12 +385,16 @@ public class Merge_Control : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             Storage_Player[i].SetActive(true);
-            if (Damage_Count == 3) Storage_Player[i].SendMessage("Die_InMergeState");
+            Storage_Player[i].SendMessage("Weak_State");
         }
         Storage_Player[0].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(0.5f, 2.0f), 1.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
         Storage_Player[1].transform.position = new Vector3(gameObject.transform.position.x + Random.Range(0.5f, 2.0f), 1.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
-        Storage_Player[0].SendMessage("Weak_State");
-        Storage_Player[1].SendMessage("Weak_State");
+
+        if (Base_HP == 0) {
+            Storage_Player[0].SendMessage("Die_InMergeState");
+            Storage_Player[1].SendMessage("Die_InMergeState");
+        }
+
         _MSlimePool.MSlime_Recovery(gameObject);
     }
 
@@ -407,6 +421,8 @@ public class Merge_Control : MonoBehaviour
         if (Base_Timer < 0)
         {
             StopDetect = true;
+            musouTime = Time.time;
+            StateMusou = 2.0f;
             CancelInvoke("Merge_Timer");
             Current_Color.a = 1.0f;
             Merge_Sprite.GetComponent<SpriteRenderer>().color = Current_Color;
@@ -475,10 +491,15 @@ public class Merge_Control : MonoBehaviour
                 ExtraPriority = true;
                 StopDetect = true;
                 musouTime = Time.time;
-                Damage_Count++;
+                StateMusou = 1.2f;
+                Base_HP--;
+                //Damage_Count++;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
-                for (int k = 0; k < Damage_Count; k++) { Merge_HP[k].SetActive(false); }
-                if (Damage_Count == 3){
+                for (int k = 0; k < Max_HP; k++) {
+                    if (k >= Base_HP) Merge_HP[k].SetActive(false);
+                    else Merge_HP[k].SetActive(true);
+                }
+                if (Base_HP == 0){
                     DeathPriority = true;
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     CancelInvoke("Merge_Timer");
@@ -516,6 +537,9 @@ public class Merge_Control : MonoBehaviour
 
     public void SpiltPriorityOn()
     {
+        StopDetect = true;
+        musouTime = Time.time;
+        StateMusou = 2.0f;
         ExtraPriority = true;
         AudioManager.SingletonInScene.PlaySound2D("Separate", 0.6f);
     }
@@ -529,6 +553,10 @@ public class Merge_Control : MonoBehaviour
         //設定HP
         Base_HP = 3 + A.Extra_HP + B.Extra_HP;
         if (Base_HP > Max_HP) Base_HP = Max_HP;
+        for (int k = 0; k < Max_HP; k++){
+            if (k >= Base_HP) Merge_HP[k].SetActive(false);
+            else Merge_HP[k].SetActive(true);
+        }
         //設定ATK
         Base_ATK = 5 + A.Extra_ATK + B.Extra_ATK;
         //設定穿透
