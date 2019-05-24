@@ -154,7 +154,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         else
         {
             transform.position += deltaTime * speed * moveFwdDir;
-            if (inStateTime > 1.0f) SetState(GoblinState.ramble);
+            if (inStateTime > 6.5f) SetState(GoblinState.ramble);
         }
     }
 
@@ -588,7 +588,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         else
         {
             transform.position += deltaTime * speed * moveFwdDir;
-            if (inStateTime > 1.0f) SetState();
+            if (inStateTime > 3.0f) SetState();
         }
     }
 

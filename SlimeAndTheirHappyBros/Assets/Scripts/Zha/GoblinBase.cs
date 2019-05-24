@@ -160,7 +160,7 @@ public class GoblinBase
         }
         else {
             transform.position += deltaTime * speed * moveFwdDir;
-            if (inStateTime > 8.0f) SetState(GoblinState.ramble);
+            if (inStateTime > 6.5f) SetState(GoblinState.ramble);
         }
     }
 
