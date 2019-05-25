@@ -108,6 +108,6 @@ public class UIManager : MonoBehaviour
 
     public void RoundStartMusic() {
         AudioManager.SingletonInScene.PauseBGM();
-        AudioManager.SingletonInScene.PlaySound2D("Round_Begin",1.0f);
+        AudioManager.SingletonInScene.PlaySound2D("Round_Begin",0.3f);
     }
 }
