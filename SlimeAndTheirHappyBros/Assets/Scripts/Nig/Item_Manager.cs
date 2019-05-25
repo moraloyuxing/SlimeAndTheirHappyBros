@@ -14,8 +14,9 @@ public class Item_Manager : MonoBehaviour {
     int[] itemBeFocused = new int[6] { 0, 0, 0, 0, 0, 0 };
     int[] Focus_Count = new int[4] { -1, -1, -1, -1 };
     bool Purchase_State = false;
-    int[] Item_Price = new int[6] { 13, 13, 12, 20, 18, 15 };
+    int[,] Item_Price = new int[4, 6];
     int[] Base_Price = new int[6] { 13, 13, 12, 20, 18, 15 };
+    int[,] Item_SuperImposed = new int[4, 6];
 
     //玩家購買相關
     bool[] a_button = new bool[4];
@@ -25,7 +26,7 @@ public class Item_Manager : MonoBehaviour {
     int[] Player_Money = new int[4];
     public TextMesh[] Price_Text = new TextMesh[6];
 
-    int Round_Count = 0;
+    //int Round_Count = 0;
 
     void Start(){
         for (int p = 0; p < 4; p++) {
@@ -58,12 +59,13 @@ public class Item_Manager : MonoBehaviour {
                             Player_Money[p] = Player_BaseAbility[p].GetPlayerMoney();
 
                             //多一判斷式→錢夠不夠
-                            if (Player_Money[p] >= Item_Price[Focus_Count[p]]) {
+                            if (Player_Money[p] >= Item_Price[p,Focus_Count[p]]) {
                                 PlayerHasBuy[p, Focus_Count[p]] = true;
                                 AudioManager.SingletonInScene.PlaySound2D("Buy", 0.5f);
 
                                 //針對各玩家進行道具加成跟UI更新
-                                Player_BaseAbility[p].Ability_Modify(Focus_Count[p], ItemSprite[Focus_Count[p]], Item_Price[Focus_Count[p]]);
+                                Player_BaseAbility[p].Ability_Modify(Focus_Count[p], ItemSprite[Focus_Count[p]], Item_Price[p,Focus_Count[p]]);
+                                Item_SuperImposed[p, Focus_Count[p]]++;//疊加狀態，同時調高下次購買金額
 
                                 //單回合已購買的道具，去除提示
                                 itemBeFocused[Focus_Count[p]]--;
@@ -83,12 +85,14 @@ public class Item_Manager : MonoBehaviour {
             }
 
             //最後決定哪些會顯示
-            for (int i = 0; i < 6; i++){
-                if (itemBeFocused[i] > 0) {
-                    Item_Hint[i].SetActive(true);
-                    Price_Text[i].text = Item_Price[i].ToString();
-                } 
-                else Item_Hint[i].SetActive(false);
+            for (int p = 0; p < 4; p++) {
+                for (int i = 0; i < 6; i++){
+                    if (itemBeFocused[i] > 0){
+                        Item_Hint[i].SetActive(true);
+                        Price_Text[i].text = Item_Price[p,i].ToString();
+                    }
+                    else Item_Hint[i].SetActive(false);
+                }
             }
         }
     }
@@ -107,12 +111,19 @@ public class Item_Manager : MonoBehaviour {
     }
 
     public void NewRound_toBuy() {
-        Round_Count++;
+        //Round_Count++;
         for (int p = 0; p < 4; p++){
             for (int i = 0; i < 6; i++) {
                 PlayerHasBuy[p, i] = false;
-                Item_Price[i] = Mathf.FloorToInt(Base_Price[i] * Mathf.Pow(1.3f, Round_Count-1));//下一波金額調高
+                Item_Price[p,i] = Mathf.FloorToInt(Base_Price[i] * Mathf.Pow(1.3f, Item_SuperImposed[p,i]));//先確認有無買過該道具再調漲/維持
             }
         }
     }
+
+
+    public void Item_BlewOut() {
+        //死亡噴出道具後的金額調整，能力值&UI在其他程式碼處理
+    }
+
+
 }

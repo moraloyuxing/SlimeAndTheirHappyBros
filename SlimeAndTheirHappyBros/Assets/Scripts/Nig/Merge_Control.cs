@@ -8,7 +8,9 @@ public class Merge_Control : MonoBehaviour
 {
 
     public GameObject Player_Manager;
-    public GameObject Merge_Sprite;
+    //public GameObject Merge_Sprite;
+    public SpriteRenderer Merge_Sprite;
+    public SpriteRenderer AtkDirSprite;
     public Transform Heart_Group;
     Object_Pool _MSlimePool;
     Bullet_Manager _BulletPool;
@@ -20,7 +22,7 @@ public class Merge_Control : MonoBehaviour
     bool DeathPriority = false;
     bool StopDetect = false;
     float musouTime = 0.0f; //無敵時間：受傷後、染色時
-    float StateMusou = 0.0f;
+    //float StateMusou = 0.0f;
 
     //移動
     public float xAix, zAix;
@@ -72,7 +74,6 @@ public class Merge_Control : MonoBehaviour
 
     //血量
     public GameObject[] Merge_HP = new GameObject[3];
-    int Damage_Count = 0;
 
     //短衝刺
     float left_trigger = 0.0f;
@@ -104,7 +105,7 @@ public class Merge_Control : MonoBehaviour
         Player_Manager = GameObject.Find("Player_Manager");
         ray_horizontal = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(3.8f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 3.8f));
-        Current_Color = Merge_Sprite.GetComponent<SpriteRenderer>().color;
+        Current_Color = Merge_Sprite.color;
         anim = GetComponent<Animator>();
         anim.SetInteger("MergeNumber", MergeNumber);
         _mergectrl = GetComponent<Merge_Control>();
@@ -130,10 +131,10 @@ public class Merge_Control : MonoBehaviour
         Down_CanMove = true;
         Left_CanMove = true;
         Right_CanMove = true;
-        Merge_Sprite.GetComponent<SpriteRenderer>().color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        Merge_Sprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+        Current_Color = Merge_Sprite.color;
         flicker = -0.5f;
         StopDetect = false;
-        Damage_Count = 0;
     }
 
     void Update()
@@ -187,12 +188,14 @@ public class Merge_Control : MonoBehaviour
 
         if (xAix > 0.0f)
         {
+
             ArrowRot = 1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false)
             {
-                transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
-                if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+
+                Merge_Sprite.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
             }
 
@@ -210,12 +213,14 @@ public class Merge_Control : MonoBehaviour
 
         if (xAix < 0.0f)
         {
+            Debug.Log("outside");
             ArrowRot = -1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false)
             {
-                transform.localScale = new Vector3(-2.0f, 2.0f, 2.0f);
-                if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.4f, 0.4f, 0.4f);
+                Debug.Log("go");
+                Merge_Sprite.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+                if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f);
                 Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
             }
 
@@ -301,11 +306,13 @@ public class Merge_Control : MonoBehaviour
         current_angle = Attack_Arrow.transform.eulerAngles;
         if (xAtk != 0.0f || zAtk != 0.0f)
         {
+            AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
             Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp * ArrowRot);
         }
+        else if (xAtk == 0.0f && zAtk == 0.0f) AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 
         //攻擊
         right_trigger = Input.GetAxis(WhichPlayer_Shooting + "Attack");
@@ -316,7 +323,7 @@ public class Merge_Control : MonoBehaviour
         }
 
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)
-        if (Time.time > musouTime + StateMusou && StopDetect == true) { StopDetect = false; }
+        //if (Time.time > musouTime + StateMusou && StopDetect == true) { StopDetect = false; }
 
     }
 
@@ -415,17 +422,18 @@ public class Merge_Control : MonoBehaviour
         {
             Current_Color.a = Current_Color.a + flicker;
             flicker = flicker * -1.0f;
-            Merge_Sprite.GetComponent<SpriteRenderer>().color = Current_Color;
+            Merge_Sprite.color = Current_Color;
         }
 
         if (Base_Timer < 0)
         {
             StopDetect = true;
-            musouTime = Time.time;
-            StateMusou = 2.0f;
+            //musouTime = Time.time;
+            //StateMusou = 2.0f;
+            flicker = -0.5f;
             CancelInvoke("Merge_Timer");
             Current_Color.a = 1.0f;
-            Merge_Sprite.GetComponent<SpriteRenderer>().color = Current_Color;
+            Merge_Sprite.color = Current_Color;
 
             switch (MergeNumber)
             {
@@ -445,7 +453,7 @@ public class Merge_Control : MonoBehaviour
     //混色確認
     public void SetUp_DyeingColor(int x)
     {
-        Merge_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", x);
+        Merge_Sprite.material.SetInt("_colorID", x);
         Shader_Number = x;
         MergeNumber = x;
 
@@ -490,10 +498,11 @@ public class Merge_Control : MonoBehaviour
                 GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;
-                musouTime = Time.time;
-                StateMusou = 1.2f;
+                musouTime = 1.8f;
+                InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
+                //musouTime = Time.time;
+                //StateMusou = 1.8f;
                 Base_HP--;
-                //Damage_Count++;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
                 for (int k = 0; k < Max_HP; k++) {
                     if (k >= Base_HP) Merge_HP[k].SetActive(false);
@@ -538,8 +547,8 @@ public class Merge_Control : MonoBehaviour
     public void SpiltPriorityOn()
     {
         StopDetect = true;
-        musouTime = Time.time;
-        StateMusou = 2.0f;
+        //musouTime = Time.time;
+        //StateMusou = 2.0f;
         ExtraPriority = true;
         AudioManager.SingletonInScene.PlaySound2D("Separate", 0.6f);
     }
@@ -568,6 +577,27 @@ public class Merge_Control : MonoBehaviour
         Current_Speed = Base_Speed;
         //設定子彈大小與速度
         Bullet_Superimposed = A.Bullet_Superimposed + B.Bullet_Superimposed;
+    }
+
+
+    //無敵時間閃爍
+    public void Musou_Flick(){
+        musouTime -= 0.3f;
+
+        if (musouTime < 3.0f){
+            Current_Color.a = Current_Color.a + flicker;
+            flicker = flicker * -1.0f;
+            Merge_Sprite.color = Current_Color;
+        }
+
+        if (musouTime < 0){
+            StopDetect = false;
+            CancelInvoke("Musou_Flick");
+            Current_Color.a = 1.0f;
+            flicker = -0.5f;
+            Merge_Sprite.color = Current_Color;
+        }
+
     }
 
 }

@@ -338,7 +338,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6759170873386016686
 Transform:
   m_ObjectHideFlags: 0
@@ -347,7 +347,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3969026233617641496}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0, z: -0}
+  m_LocalPosition: {x: -0.75, y: 1.43, z: -0.67}
   m_LocalScale: {x: 0.59999996, y: 0.6000001, z: 0.6000001}
   m_Children: []
   m_Father: {fileID: 3829868291661811878}
@@ -426,7 +426,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5082420020316929287}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: 6, z: -1}
+  m_LocalPosition: {x: 0, y: 6, z: 0}
   m_LocalScale: {x: 2.8, y: 1.56, z: 1}
   m_Children: []
   m_Father: {fileID: 5618234472505922927}
@@ -470,7 +470,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 148b662ffd32a43db9609b842ece19ed, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -506,7 +506,7 @@ Transform:
   m_GameObject: {fileID: 5281183004885941946}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.5, y: 0.15, z: -0.5}
-  m_LocalScale: {x: 0.66, y: 0.66, z: 0.66}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 4786048841122138553}
   m_RootOrder: 1
@@ -605,7 +605,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Player_Manager: {fileID: 0}
-  Merge_Sprite: {fileID: 1242447350091609114}
+  Merge_Sprite: {fileID: 8057222711492074905}
+  AtkDirSprite: {fileID: 3369297759999450220}
   Heart_Group: {fileID: 3829868291661811878}
   xAix: 0
   zAix: 0
@@ -616,10 +617,10 @@ MonoBehaviour:
   Player_Move: {fileID: 8852280874430074094}
   Player_Shoot: {fileID: 5281183004885941946}
   Player_Icon:
-  - {fileID: 21300000, guid: 03ba7408223ee49168075d7758e37ac0, type: 3}
-  - {fileID: 21300000, guid: 3fb3f1971eb1443439331965f3f0c744, type: 3}
-  - {fileID: 21300000, guid: 4afff6080619449e2b6e6321ea998941, type: 3}
-  - {fileID: 21300000, guid: 301d62d2c9ed64b5c89fd4a529500d96, type: 3}
+  - {fileID: 21300000, guid: e603332c71ddd4182bee849c05f13736, type: 3}
+  - {fileID: 21300000, guid: 7af2bed3f4e074c2495e2f60f50e2532, type: 3}
+  - {fileID: 21300000, guid: 4f7d4496c969c4506a30ec42b62bc30a, type: 3}
+  - {fileID: 21300000, guid: 40335f42a4aa648a18300fc0f7084047, type: 3}
   Storage_Player:
   - {fileID: 0}
   - {fileID: 0}
@@ -667,7 +668,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3918511160793291202
 Transform:
   m_ObjectHideFlags: 0
@@ -676,7 +677,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6428609158191879076}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.5, y: 0, z: -0}
+  m_LocalPosition: {x: 0.77, y: 1.4300002, z: -0.67000014}
   m_LocalScale: {x: 0.59999996, y: 0.6000001, z: 0.6000001}
   m_Children: []
   m_Father: {fileID: 3829868291661811878}
@@ -949,7 +950,7 @@ Transform:
   m_GameObject: {fileID: 8852280874430074094}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: -1.8, y: 0.15, z: -0.5}
-  m_LocalScale: {x: 0.66, y: 0.66, z: 0.66}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_Children: []
   m_Father: {fileID: 4786048841122138553}
   m_RootOrder: 0
@@ -996,7 +997,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.1, y: 1.1}
+  m_Size: {x: 2.1, y: 2.1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 0
@@ -1027,7 +1028,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9041139399546642758}
   m_LocalRotation: {x: 0.53729963, y: 0, z: 0, w: 0.8433915}
-  m_LocalPosition: {x: 0, y: -1.5, z: -0.5}
+  m_LocalPosition: {x: 0, y: -0.5, z: 0.4}
   m_LocalScale: {x: 0.375, y: 0.375, z: 0.375}
   m_Children:
   - {fileID: 7859061803263687115}

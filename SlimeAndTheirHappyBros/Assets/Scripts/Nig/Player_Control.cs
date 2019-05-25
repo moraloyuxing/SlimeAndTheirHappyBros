@@ -8,7 +8,7 @@ public class Player_Control : MonoBehaviour{
     //確定為第幾位玩家&動畫優先權
     public Player_Manager _playermanager;
     public Pigment_Manager _pigmentmanager;
-    public GameObject Player_Sprite;
+    public SpriteRenderer Player_Sprite;
     public GameObject SplashEffect;
     public GameObject WeakEffect;
     int Player_Number=0;
@@ -27,7 +27,9 @@ public class Player_Control : MonoBehaviour{
     bool DeathPriority = false;
     bool StopDetect = false;
     float musouTime = 0.0f; //無敵時間：受傷後、染色時
-    float StateMusou = 0.0f;
+    //float StateMusou = 0.0f;
+    Color Current_Color;
+    float flicker = -0.5f;
 
     //移動
     public GameObject Player_Icon;
@@ -46,6 +48,7 @@ public class Player_Control : MonoBehaviour{
 
     //攻擊方向旋轉
     public GameObject Attack_Arrow;
+    public SpriteRenderer AtkDirSprite;
      float xAtk, zAtk;
     float Atk_angle = 0.0f;
     float angle_toLerp;
@@ -112,6 +115,7 @@ public class Player_Control : MonoBehaviour{
         ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
         anim = GetComponent<Animator>();
+        Current_Color = Player_Sprite.GetComponent<SpriteRenderer>().color;
         _playermanager = _playermanager.GetComponent<Player_Manager>();
         _pigmentmanager = _pigmentmanager.GetComponent<Pigment_Manager>();
     }
@@ -245,11 +249,16 @@ public class Player_Control : MonoBehaviour{
         zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
         if (xAtk != 0.0f || zAtk != 0.0f && DeathPriority == false) {
-            Attack_Direction = ( new Vector3(xAtk, 0.0f, zAtk).normalized);
-            Atk_angle = Mathf.Atan2(-Attack_Direction.x, Attack_Direction.z) * Mathf.Rad2Deg;
+            AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+            Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
+            //Attack_Direction = ( new Vector3(xAtk, 0.0f, zAtk).normalized);
+            //Atk_angle = Mathf.Atan2(-Attack_Direction.x, Attack_Direction.z) * Mathf.Rad2Deg;
+            Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
             angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
             Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp*ArrowRot);
         }
+
+        else if(xAtk == 0.0f&& zAtk == 0.0f) AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 
         //攻擊
         right_trigger = Input.GetAxis(WhichPlayer + "Attack");
@@ -268,8 +277,9 @@ public class Player_Control : MonoBehaviour{
                         else if (i == 2) Color_Number = 4;
                         //跳池動畫
                         ExtraPriority = true;
-                        musouTime = Time.time;
-                        StateMusou = 1.5f;
+                        //musouTime = Time.time;
+                        //StateMusou = 1.5f;
+                        musouTime = 1.5f;
                         StopDetect = true;
                         GetComponent<Animator>().Play("Slime_JumpinPond");
                     }
@@ -277,7 +287,7 @@ public class Player_Control : MonoBehaviour{
             }
         }
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)、衰弱時間(速度*0.6f)
-        if (Time.time > musouTime + StateMusou && StopDetect) { StopDetect = false; }
+        //if (Time.time > musouTime + StateMusou && StopDetect) { StopDetect = false; }
         if (Time.time > Weak_Moment + 10.0f && OnWeak) {
             OnWeak = false;
             anim.SetBool("OnWeak", OnWeak);
@@ -337,8 +347,10 @@ public class Player_Control : MonoBehaviour{
                  GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;
-                musouTime = Time.time;
-                StateMusou = 1.2f;
+                musouTime = 1.8f;
+                InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
+                //musouTime = Time.time;
+                //StateMusou = 1.2f;
                 Base_HP--;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
                 for (int k = 0; k <Personal_HP.Length; k++) {
@@ -378,6 +390,7 @@ public class Player_Control : MonoBehaviour{
         AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
         Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
+        InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
     }
 
     public void HideSplash() {
@@ -392,7 +405,7 @@ public class Player_Control : MonoBehaviour{
 
             if (rescue_count >= 5){
                 rescue_count = 0;
-                Base_HP = 3 + Extra_HP;
+                Base_HP = 1 + Extra_HP;
                 for (int k = 0; k < Personal_HP.Length; k++){
                     if (k < Base_HP) Personal_HP[k].SetActive(true);
                     else Personal_HP[k].SetActive(false);
@@ -401,6 +414,9 @@ public class Player_Control : MonoBehaviour{
                 ReviveArea.enabled = false;
                 GetComponent<Animator>().Play("Slime_Revive");
                 AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
+                musouTime = 3.0f;
+                StopDetect = true;
+                InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
                 _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
                 _playermanager.DeathCountMinus(PlayerID);
             }
@@ -451,17 +467,20 @@ public class Player_Control : MonoBehaviour{
     void WashOutColor() {
         ExtraPriority = true;
         Color_Number = 0;
-        musouTime = Time.time;
-        StateMusou = 2.5f;
+        //musouTime = Time.time;
+        //StateMusou = 2.55f;
+        musouTime = 4.8f;
         StopDetect = true;
         GetComponent<Animator>().Play("Slime_Wash");
     }
 
     public void FinishClean() {
         ExtraPriority = false;
-        musouTime = Time.time;
-        StateMusou = 2.0f;
-        StopDetect = true;
+        //musouTime = Time.time;
+        //StateMusou = 2.1f;
+        //musouTime = 2.7f;
+        //StopDetect = true;
+        InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
         _playermanager.BackWashBoard();
     }
 
@@ -558,6 +577,27 @@ public class Player_Control : MonoBehaviour{
         }
         ReviveArea.enabled = false;
     }
+
+    //無敵時間閃爍
+    public void Musou_Flick() {
+        musouTime -= 0.3f;
+
+        if (musouTime < 3.0f) {
+            Current_Color.a = Current_Color.a + flicker;
+            flicker = flicker * -1.0f;
+            Player_Sprite.color = Current_Color;
+        }
+
+        if (musouTime < 0) {
+            StopDetect = false;
+            CancelInvoke("Musou_Flick");
+            Current_Color.a = 1.0f;
+            flicker = -0.5f;
+            Player_Sprite.color = Current_Color;
+        }
+
+    }
+
 
 }
 
