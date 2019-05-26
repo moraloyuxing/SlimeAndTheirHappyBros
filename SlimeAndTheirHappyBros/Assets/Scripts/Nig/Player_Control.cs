@@ -115,14 +115,28 @@ public class Player_Control : MonoBehaviour{
     //道具掉落機制相關
     public List<Sprite> _IteminHand = new List<Sprite>();
     public GameObject Item_BlewOut;
+    public GameObject ExpectDrop;
+    GameObject Current_BlewOut;
     int Random_Drop = 0;
     int DropType = 0;
+    int PickType = 0;
+    float DropX;
+    float DropZ;
+    bool CanDrop = false;
+    Ray GetItem_x;
+    Ray GetItem_z;
+    Ray GetItem_dir;
+    RaycastHit hit_GetItem_x;
+    RaycastHit hit_GetItem_z;
+    RaycastHit hit_GetItem_dir;
 
     void Start(){
         PlayerID2 = PlayerID;
         WhichPlayer = gameObject.name;
         ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
+        GetItem_x = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
+        GetItem_z = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.0f));
         anim = GetComponent<Animator>();
         Current_Color = Player_Sprite.GetComponent<SpriteRenderer>().color;
         _playermanager = _playermanager.GetComponent<Player_Manager>();
@@ -135,7 +149,6 @@ public class Player_Control : MonoBehaviour{
 
         //受傷判定
         if (StopDetect == false)SlimeGetHurt();
-        if (Input.GetKeyDown(KeyCode.H)) ChooseItemtoDrop();
         //移動&短衝刺
         xAix = Input.GetAxis(WhichPlayer + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
@@ -176,15 +189,20 @@ public class Player_Control : MonoBehaviour{
                 BuyHint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
                 BuyHint.transform.localPosition = new Vector3(0.5f, 1.0f, -1.0f);
             }
-            //Left_CanMove = false;
-            //Right_CanMove = true;
             Left_CanMove = true;
 
             ray_horizontal = new Ray(transform.position, new Vector3(2.8f, 0.0f, 0.0f));
+            GetItem_x = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.8f)) {
                 if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") {Right_CanMove = false;}
             }
             else {Right_CanMove = true;}
+            if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)) {
+                if (hit_GetItem_x.transform.tag == "DropItem") {
+                    GetItemFromFloor(hit_GetItem_x.transform.gameObject);
+                    Destroy(hit_GetItem_x.transform.gameObject);
+                }
+            }
         }
 
         if (xAix < 0.0f) {
@@ -199,39 +217,56 @@ public class Player_Control : MonoBehaviour{
                 BuyHint.transform.localPosition = new Vector3(-0.5f, 1.0f, -1.0f);
             }
 
-            //Right_CanMove = false;
-            //Left_CanMove = true;
             Right_CanMove = true;
             ray_horizontal = new Ray(transform.position, new Vector3(-2.8f, 0.0f, 0.0f));
+            GetItem_x = new Ray(transform.position, new Vector3(-2.0f, 0.0f, 0.0f));
             if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.8f)){
                 if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") {Left_CanMove = false;}
             }
             else {Left_CanMove = true;}
+            if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)){
+                if (hit_GetItem_x.transform.tag == "DropItem"){
+                    GetItemFromFloor(hit_GetItem_x.transform.gameObject);
+                    Destroy(hit_GetItem_x.transform.gameObject);
+                }
+            }
         }
 
         if (zAix > 0.0f) {
             Down_CanMove = true;
-            //Down_CanMove = false;
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.8f));
+            GetItem_z = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical, 2.8f)){
                 if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") { Up_CanMove = false;}
             }
             else {Up_CanMove = true;}
+            if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)) {
+                if (hit_GetItem_z.transform.tag == "DropItem"){
+                    GetItemFromFloor(hit_GetItem_z.transform.gameObject);
+                    Destroy(hit_GetItem_z.transform.gameObject);
+                }
+            }
         }
 
         if (zAix < 0.0f) {
             Up_CanMove = true;
-            //Up_CanMove = false;
             ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.8f));
+            GetItem_z = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.0f));
             if (Physics.Raycast(ray_vertical, out hit_vertical,2.8f)){
                 if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") {Down_CanMove = false;}
             }
             else {Down_CanMove = true;}
+            if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)){
+                if (hit_GetItem_z.transform.tag == "DropItem"){
+                    GetItemFromFloor(hit_GetItem_z.transform.gameObject);
+                    Destroy(hit_GetItem_z.transform.gameObject);
+                }
+            }
         }
 
         //內部障礙物偵測
         ray_direction = new Ray(transform.position, new Vector3(xAix, 0.0f, zAix));
-        //Debug.DrawRay(ray_direction.origin, ray_direction.direction, Color.cyan);
+        GetItem_dir = new Ray(transform.position, new Vector3(xAix, 0.0f, zAix));
         if (Physics.Raycast(ray_direction, out hit_direction, 2.8f)) {
             if (hit_direction.transform.tag == "Barrier") {
                 if (Mathf.Abs(xAix) > Mathf.Abs(zAix)){
@@ -244,7 +279,12 @@ public class Player_Control : MonoBehaviour{
                 }
             }
         }
-
+        if (Physics.Raycast(GetItem_dir, out hit_GetItem_dir, 2.0f)) {
+            if (hit_GetItem_dir.transform.tag == "DropItem"){
+                GetItemFromFloor(hit_GetItem_dir.transform.gameObject);
+                Destroy(hit_GetItem_dir.transform.gameObject);
+            }
+        }
 
         if (ExtraPriority == false && DeathPriority == false) {
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
@@ -308,6 +348,15 @@ public class Player_Control : MonoBehaviour{
             _playermanager.ExitWeak(Player_Number);
             HideWeak();
         }
+
+        //道具掉落
+        if (CanDrop == true){
+            Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);//要搬走，此處非Update
+            if (Mathf.Abs(Current_BlewOut.transform.position.x - DropX) < 0.1f && Mathf.Abs(Current_BlewOut.transform.position.z - DropZ) < 0.1f){
+                CanDrop = false;
+                Current_BlewOut = null;
+            }
+        }
     }
 
     //設置玩家編號
@@ -354,7 +403,6 @@ public class Player_Control : MonoBehaviour{
         Collider[]colliders = Physics.OverlapBox(transform.position + new Vector3(0,-0.2f ,0) , new Vector3(0.79f, 0.6f, 0.2f), Quaternion.Euler(0, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
         if (colliders.Length > 0) {
             if (colliders[0].tag == "GoblinArrow") {
-                //Player_Manager
             }
             if (DeathPriority == false) {
                  GetComponent<Animator>().Play("Slime_Hurt");
@@ -378,6 +426,7 @@ public class Player_Control : MonoBehaviour{
                     _playermanager._goblinmanager.SetPlayerDie(Player_Number);
                     _playermanager.DeathCountPlus(PlayerID);
                     AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
+                    ChooseItemtoDrop();
                 }
             }
         }
@@ -617,10 +666,12 @@ public class Player_Control : MonoBehaviour{
     //死亡噴裝
     void ChooseItemtoDrop() {
         //有東西才掉落
-        if (_IteminHand.Count > 0 && gameObject.name == "Player1_") {
+        if (_IteminHand.Count > 0) {
             Random_Drop = Random.Range(0, _IteminHand.Count);
-            GameObject clone_Item = Instantiate(Item_BlewOut) as GameObject;
-            clone_Item.GetComponent<SpriteRenderer>().sprite = _IteminHand[Random_Drop];
+            Current_BlewOut = Instantiate(Item_BlewOut) as GameObject;
+            //GameObject clone_Item = Instantiate(Item_BlewOut) as GameObject;
+            Current_BlewOut.GetComponent<SpriteRenderer>().sprite = _IteminHand[Random_Drop];
+            Current_BlewOut.transform.position = transform.position;
             //switch內做三樣：下修數值、更新UI、調降金額(itemmanager)
             switch (_IteminHand[Random_Drop].name) {
                 case "sword":
@@ -662,13 +713,83 @@ public class Player_Control : MonoBehaviour{
             _itemmanager.Item_BlewOut(PlayerID, DropType);
 
             _IteminHand.Remove(_IteminHand[Random_Drop]);//從角色持有道具的list移除
+
             //選地點，確認是否有barrier
+            while (CanDrop == false) {
+                CanDrop = true;
+                DropX = Random.Range(transform.position.x - 5.0f, transform.position.x + 5.0f);
+                DropZ = Random.Range(transform.position.z - 5.0f, transform.position.z + 5.0f);
+                GameObject ExpectPos = Instantiate(ExpectDrop) as GameObject;
+                ExpectPos.transform.position = new Vector3(DropX, 0.0f, DropZ);
+                DropPosDetect(ExpectPos.transform);
+                Destroy(ExpectPos);
+            }
         }
-
-
     }
 
+    void DropPosDetect(Transform Expect) {
+        Collider[] colliders = Physics.OverlapBox(Expect.transform.position, new Vector3(2.0f, 2.0f, 2.0f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("Barrier") | 1 << LayerMask.NameToLayer("Border"));
+        int i = 0;
+        while (i < colliders.Length) {
+            Transform c = colliders[i].transform.parent;
+            if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border") CanDrop = false;
+        }
+    }
 
+    void GetItemFromFloor(GameObject WhichItem) {
+        Sprite ItemSprite = WhichItem.GetComponent<SpriteRenderer>().sprite;
+        string ItemName = ItemSprite.name;
+        switch (ItemName){
+            case "sword":
+                Base_ATK++;
+                Extra_ATK++;
+                PickType = 0;
+                break;
+            case "bullet":
+                Base_Penetrate++;
+                PickType = 1;
+                break;
+            case "heart":
+                Base_HP++;
+                Extra_HP++;
+                PickType = 2;
+                for (int k = 0; k < Personal_HP.Length; k++){
+                    if (k < Base_HP) Personal_HP[k].SetActive(true);
+                    else Personal_HP[k].SetActive(false);
+                }
+                break;
+            case "light":
+                Bullet_Superimposed++;
+                PickType = 3;
+                break;
+            case "shoes":
+                Speed_Superimposed++;
+                Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                Current_Speed = Base_Speed;
+                PickType = 4;
+                break;
+            case "smooth":
+                Timer_Superimposed++;
+                PickType = 5;
+                break;
+        }
+
+        //更新UI資訊
+        //道具狀態
+        ItemCount[PickType]++;
+        if (ItemCount[PickType] == 1){
+            ItemBar[PickType].gameObject.transform.localScale = new Vector3(3.0f, 3.0f, 3.0f);
+            ItemBar[PickType].GetComponent<Image>().sprite = ItemSprite;
+            ItemStateText[PickType].gameObject.SetActive(true);
+        }
+        ItemStateText[PickType].text = ItemCount[PickType].ToString();
+
+        //存入List，待之後噴裝
+        _IteminHand.Add(ItemSprite);
+
+        //告訴商店要漲價
+        _itemmanager.Item_PickUp(PlayerID, PickType);
+    }
 
 }
 

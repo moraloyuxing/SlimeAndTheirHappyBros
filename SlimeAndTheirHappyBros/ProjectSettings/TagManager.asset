@@ -12,6 +12,7 @@ TagManager:
   - Item
   - Barrier
   - Goblin
+  - DropItem
   layers:
   - Default
   - TransparentFX

@@ -127,8 +127,11 @@ public class Item_Manager : MonoBehaviour {
         //死亡噴出道具後的金額調整，能力值&UI在其他程式碼處理
         Item_SuperImposed[PID, ItemID]--;
         Item_Price[PID, ItemID] = Mathf.FloorToInt(Base_Price[ItemID] * Mathf.Pow(1.3f, Item_SuperImposed[PID, ItemID]));//先確認有無買過該道具再調漲/維持
-
     }
 
+    public void Item_PickUp(int PID, int ItemID) {
+        Item_SuperImposed[PID, ItemID]++;
+        Item_Price[PID, ItemID] = Mathf.FloorToInt(Base_Price[ItemID] * Mathf.Pow(1.3f, Item_SuperImposed[PID, ItemID]));
+    }
 
 }
