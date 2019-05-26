@@ -8,9 +8,11 @@ public class Player_Control : MonoBehaviour{
     //確定為第幾位玩家&動畫優先權
     public Player_Manager _playermanager;
     public Pigment_Manager _pigmentmanager;
+    public Item_Manager _itemmanager;
     public SpriteRenderer Player_Sprite;
     public GameObject SplashEffect;
     public GameObject WeakEffect;
+    public Transform BuyHint;
     int Player_Number=0;
     public int PlayerID {
         get {
@@ -99,6 +101,7 @@ public class Player_Control : MonoBehaviour{
 
     //UI連動
     public GameObject UI_Icon;
+    public Sprite EmptyTool;
     public Image[] ItemBar = new Image[6];
     public Text[] ItemStateText = new Text[6];
     public Text HaveMoney;
@@ -108,6 +111,12 @@ public class Player_Control : MonoBehaviour{
     //衰弱狀態相關
     float Weak_Moment = 0.0f;
     bool OnWeak = false;
+
+    //道具掉落機制相關
+    public List<Sprite> _IteminHand = new List<Sprite>();
+    public GameObject Item_BlewOut;
+    int Random_Drop = 0;
+    int DropType = 0;
 
     void Start(){
         PlayerID2 = PlayerID;
@@ -126,7 +135,7 @@ public class Player_Control : MonoBehaviour{
 
         //受傷判定
         if (StopDetect == false)SlimeGetHurt();
-
+        if (Input.GetKeyDown(KeyCode.H)) ChooseItemtoDrop();
         //移動&短衝刺
         xAix = Input.GetAxis(WhichPlayer + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
@@ -164,6 +173,8 @@ public class Player_Control : MonoBehaviour{
                 Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
                 Hint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
+                BuyHint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
+                BuyHint.transform.localPosition = new Vector3(0.5f, 1.0f, -1.0f);
             }
             //Left_CanMove = false;
             //Right_CanMove = true;
@@ -184,6 +195,8 @@ public class Player_Control : MonoBehaviour{
                 Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(-0.55f, 0.55f, 0.55f);
                 Hint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
+                BuyHint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
+                BuyHint.transform.localPosition = new Vector3(-0.5f, 1.0f, -1.0f);
             }
 
             //Right_CanMove = false;
@@ -527,6 +540,9 @@ public class Player_Control : MonoBehaviour{
         }
         ItemStateText[ItemType].text = ItemCount[ItemType].ToString();
 
+        //存入List，待之後噴裝
+        _IteminHand.Add(ItemSprite);
+
         //剩餘金幣
         Current_Money = Current_Money - ItemPrice;
         HaveMoney.text = Current_Money.ToString();
@@ -597,6 +613,61 @@ public class Player_Control : MonoBehaviour{
         }
 
     }
+
+    //死亡噴裝
+    void ChooseItemtoDrop() {
+        //有東西才掉落
+        if (_IteminHand.Count > 0 && gameObject.name == "Player1_") {
+            Random_Drop = Random.Range(0, _IteminHand.Count);
+            GameObject clone_Item = Instantiate(Item_BlewOut) as GameObject;
+            clone_Item.GetComponent<SpriteRenderer>().sprite = _IteminHand[Random_Drop];
+            //switch內做三樣：下修數值、更新UI、調降金額(itemmanager)
+            switch (_IteminHand[Random_Drop].name) {
+                case "sword":
+                    Base_ATK--;
+                    Extra_ATK--;
+                    DropType = 0;
+                    break;
+                case "bullet":
+                    Base_Penetrate--;
+                    DropType = 1;
+                    break;
+                case "heart":
+                    Extra_HP--;
+                    DropType = 2;
+                    break;
+                case "light":
+                    DropType = 3;
+                    Bullet_Superimposed--;
+                    break;
+                case "shoes":
+                    Speed_Superimposed--;
+                    Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                    Current_Speed = Base_Speed;
+                    DropType = 4;
+                    break;
+                case "smooth":
+                    Timer_Superimposed--;
+                    DropType = 5;
+                    break;
+            }
+
+            ItemCount[DropType]--;
+            if (ItemCount[DropType] == 0){
+                ItemBar[DropType].GetComponent<Image>().sprite = EmptyTool;
+                ItemBar[DropType].gameObject.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                ItemStateText[DropType].gameObject.SetActive(false);
+            }
+            ItemStateText[DropType].text = ItemCount[DropType].ToString();
+            _itemmanager.Item_BlewOut(PlayerID, DropType);
+
+            _IteminHand.Remove(_IteminHand[Random_Drop]);//從角色持有道具的list移除
+            //選地點，確認是否有barrier
+        }
+
+
+    }
+
 
 
 }

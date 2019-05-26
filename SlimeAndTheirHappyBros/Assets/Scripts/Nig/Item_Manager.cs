@@ -6,6 +6,9 @@ using UnityEngine.UI;
 public class Item_Manager : MonoBehaviour {
     public SpriteRenderer Docter;
     public Transform[] All_Player = new Transform[4];//四位玩家
+    public GameObject[] Player_BuyHint = new GameObject[4];
+    public TextMesh[] PricetoPlayer = new TextMesh[4];
+
     public Transform[] All_Item = new Transform[6];//六樣道具
     public SpriteRenderer[] Item_InBox = new SpriteRenderer[6];
     public GameObject[] Item_Hint = new GameObject[6];//六樣道具提示
@@ -24,9 +27,6 @@ public class Item_Manager : MonoBehaviour {
     bool[,] PlayerHasBuy = new bool[4, 6];
     public Sprite[] ItemSprite = new Sprite[6];
     int[] Player_Money = new int[4];
-    public TextMesh[] Price_Text = new TextMesh[6];
-
-    //int Round_Count = 0;
 
     void Start(){
         for (int p = 0; p < 4; p++) {
@@ -53,6 +53,7 @@ public class Item_Manager : MonoBehaviour {
                             if (Focus_Count[p] >= 0) { itemBeFocused[Focus_Count[p]]--; }
                             Focus_Count[p] = i;
                             itemBeFocused[i]++;
+                            Player_BuyHint[p].SetActive(true);
                         }
 
                         if (a_button[p]){
@@ -69,6 +70,7 @@ public class Item_Manager : MonoBehaviour {
 
                                 //單回合已購買的道具，去除提示
                                 itemBeFocused[Focus_Count[p]]--;
+                                Player_BuyHint[p].SetActive(false);
                                 Focus_Count[p] = -1;
                             }
                         }
@@ -78,6 +80,7 @@ public class Item_Manager : MonoBehaviour {
                     else{
                         if (Focus_Count[p] == i && PlayerHasBuy[p,i] == false){
                             itemBeFocused[Focus_Count[p]]--;
+                            Player_BuyHint[p].SetActive(false);
                             Focus_Count[p] = -1;
                         }
                     }
@@ -89,7 +92,7 @@ public class Item_Manager : MonoBehaviour {
                 for (int i = 0; i < 6; i++){
                     if (itemBeFocused[i] > 0){
                         Item_Hint[i].SetActive(true);
-                        Price_Text[i].text = Item_Price[p,i].ToString();
+                        PricetoPlayer[p].text = Item_Price[p, i].ToString();
                     }
                     else Item_Hint[i].SetActive(false);
                 }
@@ -111,7 +114,6 @@ public class Item_Manager : MonoBehaviour {
     }
 
     public void NewRound_toBuy() {
-        //Round_Count++;
         for (int p = 0; p < 4; p++){
             for (int i = 0; i < 6; i++) {
                 PlayerHasBuy[p, i] = false;
@@ -121,8 +123,11 @@ public class Item_Manager : MonoBehaviour {
     }
 
 
-    public void Item_BlewOut() {
+    public void Item_BlewOut(int PID,int ItemID) {
         //死亡噴出道具後的金額調整，能力值&UI在其他程式碼處理
+        Item_SuperImposed[PID, ItemID]--;
+        Item_Price[PID, ItemID] = Mathf.FloorToInt(Base_Price[ItemID] * Mathf.Pow(1.3f, Item_SuperImposed[PID, ItemID]));//先確認有無買過該道具再調漲/維持
+
     }
 
 
