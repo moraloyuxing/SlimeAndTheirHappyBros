@@ -39,7 +39,7 @@ public class GoblinBase
 
     public enum GoblinState
     {
-        moveIn, idle, ramble, chase, attack, hurt, die, erroeCatch
+        moveIn, idle, ramble, chase, attack, hurt, die, attackBreak, erroeCatch
     }
     protected GoblinState curState = GoblinState.moveIn;
 
@@ -81,6 +81,7 @@ public class GoblinBase
         }
     }
     public virtual void SetState(GoblinState state) {
+        startFindPath = false;
         inStateTime = 0.0f;
         firstInState = true;
         curState = state;
@@ -88,6 +89,7 @@ public class GoblinBase
 
     public virtual void StateMachine()
     {
+        Debug.Log("state machine " + curState);
         inStateTime += deltaTime;
         switch (curState)
         {
@@ -112,6 +114,10 @@ public class GoblinBase
             case GoblinState.attack:
                 Attack();
                 break;
+            case GoblinState.attackBreak:
+                AttackBreak();
+                AttackBreakDetectDist();
+                break;
             case GoblinState.hurt:
                 GetHurt();
                 break;
@@ -134,8 +140,10 @@ public class GoblinBase
         {
             if (diff >= atkDist * atkDist) {
                 if (!startFindPath) {
+                    Debug.Log("go calculate");
                     CalculatePath();
                 } 
+                else Debug.Log("start find path is true");
             } //SetState(GoblinState.chase);
             else SetState(GoblinState.attack);
         }
@@ -146,12 +154,18 @@ public class GoblinBase
             SetState(GoblinState.attack);
         } 
     }
-    public virtual void OverAttackDetectDist() {
+    public virtual void AttackBreakDetectDist() {
         float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
         if (diff <= atkDist * atkDist) SetState(GoblinState.attack);
         else {
-            SetState();   //先進idle或ramble再尋路，以免尋路過久會不知要做啥
-        } //SetState(GoblinState.chase);
+            Debug.Log("go idle and ramble first ...");
+            if (!startFindPath)
+            {
+                Debug.Log("go calculate");
+                CalculatePath();
+            }
+            //SetState(GoblinState.idle);   //先進idle或ramble再尋路，以免尋路過久會不知要做啥
+        }
     }
 
 
@@ -223,17 +237,19 @@ public class GoblinBase
     }
 
     public virtual void CalculatePath() {
+        Debug.Log("in calculate");
         startFindPath = true;
         followingPath = false;
         if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
         curPathRequest =  PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
-
+        goblinManager.CalculatePath = true;
     }
 
     public virtual void Chase()
     {
         if (firstInState)
         {
+            Debug.Log("first in chase");
             startFindPath = false;
             animator.SetInteger("state", 1);
             animator.speed = 1.2f;
@@ -262,7 +278,8 @@ public class GoblinBase
                 {
                     Debug.Log("reach path goal");
                     followingPath = false;
-                    OverAttackDetectDist();
+                    SetState(GoblinState.attackBreak);
+                    //OverAttackDetectDist();
                 }
                 else
                 {
@@ -284,7 +301,8 @@ public class GoblinBase
     {
         if (pathSuccessful)
         {
-            if (curState == GoblinState.idle || curState == GoblinState.ramble || curState == GoblinState.chase) {
+            Debug.Log("find path ready to change chase");
+            if (curState == GoblinState.idle || curState == GoblinState.ramble || curState == GoblinState.chase || curState == GoblinState.attackBreak) {
                 path = new PathFinder.Path(waypoints, selfPos, turnDist);
                 followingPath = true;
                 pathIndex = 0;
@@ -304,6 +322,13 @@ public class GoblinBase
     public virtual void Attack()
     {
         
+    }
+
+    public virtual void AttackBreak() {
+        if (firstInState) {
+            animator.speed = 1.0f;
+            animator.SetInteger("state", 0);
+        }
     }
 
 
@@ -343,7 +368,7 @@ public class GoblinBase
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f) {
                 if (hp <= 0) SetState(GoblinState.die);
-                else OverAttackDetectDist();
+                else SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
 
             }

@@ -168,7 +168,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
                 {
                     //Debug.Log("verrrrrr attack");
                     delayShoot = 0;
-                    OverAttackDetectDist();
+                    SetState(GoblinState.attackBreak);
+                    //OverAttackDetectDist();
                 }
             }
         }

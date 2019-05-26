@@ -63,6 +63,11 @@ public class PathRequestManager : MonoBehaviour {
         //}
     }
 
+
+    public static void ClearExtendPenalty() {
+        instance.pathFinding.ClearGridExtendPenalty();
+    }
+
     //public void FailProcessingPath() {
     //    isProcessingPath = false;
     //}
