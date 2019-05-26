@@ -131,7 +131,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                 else if (aniInfo.normalizedTime >= 0.99f)
                 {
                     animator.SetTrigger("attackOver");
-                    OverAttackDetectDist();
+                    SetState(GoblinState.attackBreak);
+                    //OverAttackDetectDist();
                 }
             }
         }
@@ -162,7 +163,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             {
                 Debug.Log("hurrrrt  over");
                 if (hp <= 0) SetState(GoblinState.die);
-                else OverAttackDetectDist();
+                else SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
 
             }

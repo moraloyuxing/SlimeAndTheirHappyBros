@@ -27,6 +27,11 @@ public class GoblinManager : MonoBehaviour
         }
     }
 
+    bool calculatePath = false;
+    public bool CalculatePath {
+        set { calculatePath = value; }
+    }
+
     List<NormalGoblin> freeNormalGoblins, usedNormalGoblins;
     List<ArcherGoblin> freeArcherGoblins, usedArcherGoblins;
     List<HobGoblin> freeHobGoblins, usedHobGoblins;
@@ -188,14 +193,16 @@ public class GoblinManager : MonoBehaviour
             usedHobGoblins[index].Update(dt);
         }
 
-        if (Input.GetKeyDown(KeyCode.X)) {
-            if (freeGoblinArrows.Count <= 0) return;
-            Debug.Log("spawn arrow");
-            GoblinArrow arrow = freeGoblinArrows[0];
-            usedGoblinArrows.Add(arrow);
-            arrow.ToActive(new Vector3(-14.0f, 1.65f, -18.0f), new Vector3(0,0,-1).normalized);
-            freeGoblinArrows.Remove(arrow);
-        }
+        if (calculatePath) PathRequestManager.ClearExtendPenalty();
+
+        //if (Input.GetKeyDown(KeyCode.X)) {
+        //    if (freeGoblinArrows.Count <= 0) return;
+        //    Debug.Log("spawn arrow");
+        //    GoblinArrow arrow = freeGoblinArrows[0];
+        //    usedGoblinArrows.Add(arrow);
+        //    arrow.ToActive(new Vector3(-14.0f, 1.65f, -18.0f), new Vector3(0,0,-1).normalized);
+        //    freeGoblinArrows.Remove(arrow);
+        //}
 
         for (index = 0; index < usedGoblinArrows.Count; index++) {
             usedGoblinArrows[index].Update(dt);
@@ -213,6 +220,7 @@ public class GoblinManager : MonoBehaviour
         playerMove[1] = false;
         playerMove[2] = false;
         playerMove[3] = false;
+        calculatePath = false;
     }
 
     public void SubKillGoblinCBK(System.Action cbk) {

@@ -79,7 +79,7 @@ public class PathFinding : MonoBehaviour {
                         continue;
                     }
 
-                    int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour) + neighbour.movementPenalty;
+                    int newMovementCostToNeighbour = currentNode.gCost + GetDistance(currentNode, neighbour) + neighbour.movementPenalty + neighbour.extentPenalty;
                     if (newMovementCostToNeighbour < neighbour.gCost || !openSet.Contains(neighbour))
                     {
                         neighbour.gCost = newMovementCostToNeighbour;
@@ -124,7 +124,7 @@ public class PathFinding : MonoBehaviour {
         else {
             while (currentNode != startNode)
             {
-                
+                currentNode.AddPenalty(10);
                 path.Add(currentNode);
                 currentNode = currentNode.parent;
             }
@@ -167,6 +167,10 @@ public class PathFinding : MonoBehaviour {
         if (dstX > dstY)
             return 14 * dstY + 10 * (dstX - dstY);
         return 14 * dstX + 10 * (dstY - dstX);
+    }
+
+    public void ClearGridExtendPenalty() {
+        grid.ClearExtendPenalty();
     }
 
 }
