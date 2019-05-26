@@ -5,7 +5,9 @@ using System;
 
 public class PathRequestManager : MonoBehaviour {
 
-    Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
+    //Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
+    List<PathRequest> pathRequestList = new List<PathRequest>();
+
     PathRequest currentPathRequest;
 
     static PathRequestManager instance;
@@ -19,22 +21,37 @@ public class PathRequestManager : MonoBehaviour {
         pathFinding = GetComponent<PathFinding>();
     }
 
-    public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> _successCbk)
+    public static PathRequest RequestPath(Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> _successCbk)
     {
         PathRequest newRequest = new PathRequest(pathStart, pathEnd, _successCbk);
-        instance.pathRequestQueue.Enqueue(newRequest);
+        //instance.pathRequestQueue.Enqueue(newRequest);
+        instance.pathRequestList.Add(newRequest);
         instance.TryProcessNext();
+        return newRequest;
     }
 
     void TryProcessNext()
     {
-        if (!isProcessingPath && pathRequestQueue.Count > 0)
+        //if (!isProcessingPath && pathRequestQueue.Count > 0)
+        //{
+        //    currentPathRequest = pathRequestQueue.Dequeue();
+        //    isProcessingPath = true;
+        //    pathFinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd);
+        //}
+        if (!isProcessingPath && pathRequestList.Count > 0)
         {
-            currentPathRequest = pathRequestQueue.Dequeue();
+            currentPathRequest = pathRequestList[0];
+            pathRequestList.RemoveAt(0);
             isProcessingPath = true;
             pathFinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd);
         }
     }
+
+    public static void CancleRequest(PathRequest request)
+    {
+        if(instance.pathRequestList.Contains(request))instance.pathRequestList.Remove(request);
+    }
+
 
     public void FinishedProcessingPath(Vector3[] path, bool success)
     {
@@ -50,7 +67,7 @@ public class PathRequestManager : MonoBehaviour {
     //    isProcessingPath = false;
     //}
 
-    struct PathRequest
+    public class PathRequest
     {
         public Vector3 pathStart;
         public Vector3 pathEnd;

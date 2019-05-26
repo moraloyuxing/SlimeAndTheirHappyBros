@@ -189,18 +189,19 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 }
                 transform.position += deltaTime * speed * moveFwdDir;
             }
-            else SetState();
+            else if(!followingPath) SetState();
         }
     }
     public override void Chase()
     {
         if (firstInState)
         {
+            startFindPath = false;
             animator.SetInteger("state", 1);
             animator.speed = 1.2f;
             firstInState = false;
-            followingPath = false;
-            PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+            //followingPath = false;
+            //PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
         }
         else
         {
@@ -213,34 +214,35 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 if (goblinManager.PlayersMove[targetPlayer])
                 {
                     Debug.Log("request path find");
-                    PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+                    //PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+                    CalculatePath();
                     inStateTime = 0.0f;
                 }
             }
-            if (followingPath)
-            {
-                Vector2 pos2D = new Vector2(selfPos.x, selfPos.z);
-                if (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
-                {
-                    if (pathIndex == path.finishLineIndex) //|| pathIndex >= path.canAttckIndex
-                    {
-                        Debug.Log("reach path goal");
-                        followingPath = false;
-                        SetState(GoblinState.attack);
-                    }
-                    else
-                    {
-                        pathIndex++;
-                        moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
-                        float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-                        image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-                        image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
-                        hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
-                    }
-                }
-                transform.position += deltaTime * speed * 1.2f * moveFwdDir;
 
+
+            Vector2 pos2D = new Vector2(selfPos.x, selfPos.z);
+            if (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
+            {
+                if (pathIndex == path.finishLineIndex) //|| pathIndex >= path.canAttckIndex
+                {
+                    Debug.Log("reach path goal");
+                    followingPath = false;
+                    OverAttackDetectDist();
+                }
+                else
+                {
+                    pathIndex++;
+                    moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
+                    float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                    image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                    image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+                    hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
+                }
             }
+            transform.position += deltaTime * speed * 1.2f * moveFwdDir;
+
+            //if (followingPath){ }
         }
     }
 
@@ -273,6 +275,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         {
             float scaleX = .0f;
             if (firstInState) {
+                if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
 
                 moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
@@ -550,6 +553,8 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
+            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+
             AudioManager.SingletonInScene.PlaySound2D("Hob_Death", 0.5f);
             animator.speed = 1.0f;
             animator.SetInteger("state", 4);

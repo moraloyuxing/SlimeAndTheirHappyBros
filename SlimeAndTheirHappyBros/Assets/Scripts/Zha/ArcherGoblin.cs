@@ -124,6 +124,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
 
         if (firstInState )
         {
+            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
 
             if (delayShoot == 0) {
                 //Debug.Log("sssstart attack ");
@@ -177,6 +178,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
+            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             animator.speed = 1.0f;
             animator.SetInteger("state", 4);

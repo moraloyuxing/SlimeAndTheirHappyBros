@@ -104,6 +104,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
+            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Attack", 0.18f);
             animator.SetInteger("state", 2);
 
@@ -140,6 +142,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
+            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+
             atkCol.enabled = false;
             firstInState = false;
             animator.Play("hurt");
@@ -169,6 +173,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
+            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             animator.speed = 1.0f;
             animator.SetInteger("state", 4);

@@ -5,6 +5,7 @@ using UnityEngine;
 public class GoblinBase
 {
     protected bool firstInState = true, followingPath = false, getAniInfo = false;
+    protected bool startFindPath = false;
     protected int hp, atkValue, color, pathIndex;
     protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
@@ -33,6 +34,7 @@ public class GoblinBase
     protected SpriteRenderer renderer;
 
     protected PathFinder.Path path;
+    protected PathRequestManager.PathRequest curPathRequest;
     protected GoblinManager goblinManager;
 
     public enum GoblinState
@@ -130,7 +132,11 @@ public class GoblinBase
         float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
         if (diff <= sightDist * sightDist)
         {
-            if (diff >= atkDist * atkDist) SetState(GoblinState.chase);
+            if (diff >= atkDist * atkDist) {
+                if (!startFindPath) {
+                    CalculatePath();
+                } 
+            } //SetState(GoblinState.chase);
             else SetState(GoblinState.attack);
         }
     }
@@ -143,9 +149,10 @@ public class GoblinBase
     public virtual void OverAttackDetectDist() {
         float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
         if (diff <= atkDist * atkDist) SetState(GoblinState.attack);
-        else SetState(GoblinState.chase);
+        else {
+            SetState();   //先進idle或ramble再尋路，以免尋路過久會不知要做啥
+        } //SetState(GoblinState.chase);
     }
-
 
 
     public virtual void MoveIn()
@@ -173,7 +180,7 @@ public class GoblinBase
             totalTime = Random.Range(0.5f, 1.5f);
         }
         else {
-            if (inStateTime > totalTime) SetState();
+            if (inStateTime > totalTime && !followingPath) SetState();   //沒有找到尋路繼續idle或ramble
         }
     }
 
@@ -211,18 +218,28 @@ public class GoblinBase
                 }
                 transform.position += deltaTime * speed * moveFwdDir;
             }
-            else SetState();
+            else if(!followingPath) SetState();   //沒有找到尋路繼續idle或ramble
         }
     }
+
+    public virtual void CalculatePath() {
+        startFindPath = true;
+        followingPath = false;
+        if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+        curPathRequest =  PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+
+    }
+
     public virtual void Chase()
     {
         if (firstInState)
         {
+            startFindPath = false;
             animator.SetInteger("state", 1);
             animator.speed = 1.2f;
             firstInState = false;
-            followingPath = false;
-            PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+            //followingPath = false;
+            //PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
         }
         else {
             if (inStateTime < 0.3f)
@@ -233,45 +250,49 @@ public class GoblinBase
                 if (goblinManager.PlayersMove[targetPlayer])
                 {
                     Debug.Log("request path find");
-                    PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+                    CalculatePath();
                     inStateTime = 0.0f;
                 }
             }
-            if (followingPath) {
-                Vector2 pos2D = new Vector2(selfPos.x, selfPos.z);
-                if (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
-                {
-                    if (pathIndex == path.finishLineIndex) //|| pathIndex >= path.canAttckIndex
-                    {
-                        Debug.Log("reach path goal");
-                        followingPath = false;
-                        SetState(GoblinState.attack);
-                    }
-                    else
-                    {
-                        pathIndex++;
-                        moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
-                        float scaleX = (moveFwdDir.x > .0f)?-1.0f:1.0f;
-                        image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-                    }
-                }
-                transform.position += deltaTime * speed * 1.2f * moveFwdDir;
 
+            Vector2 pos2D = new Vector2(selfPos.x, selfPos.z);
+            if (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
+            {
+                if (pathIndex == path.finishLineIndex) //|| pathIndex >= path.canAttckIndex
+                {
+                    Debug.Log("reach path goal");
+                    followingPath = false;
+                    OverAttackDetectDist();
+                }
+                else
+                {
+                    pathIndex++;
+                    moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
+                    float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                    image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                }
             }
+            transform.position += deltaTime * speed * 1.2f * moveFwdDir;
+
+
+            //if (followingPath) {
+
+            //}
         }
     }
     public virtual void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
         if (pathSuccessful)
         {
-
-            path = new PathFinder.Path(waypoints, selfPos, turnDist); 
-            followingPath = true;
-            pathIndex = 0;
-            moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
-            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-
+            if (curState == GoblinState.idle || curState == GoblinState.ramble || curState == GoblinState.chase) {
+                path = new PathFinder.Path(waypoints, selfPos, turnDist);
+                followingPath = true;
+                pathIndex = 0;
+                moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
+                float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                SetState(GoblinState.chase);
+            }     
             //StopCoroutine("FollowPath");
             //StartCoroutine("FollowPath");
         }
@@ -304,6 +325,7 @@ public class GoblinBase
     {
         if (firstInState)
         {
+            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
             firstInState = false;
             //animator.SetTrigger("hurt");
             animator.Play("hurt");
@@ -472,6 +494,10 @@ public class GoblinBase
         }
     }
 
+
+    public virtual void ForceRamble() {
+
+    }
 
     public virtual void ErroeCatch() {
         if (firstInState)
