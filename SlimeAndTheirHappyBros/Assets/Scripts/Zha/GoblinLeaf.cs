@@ -30,7 +30,7 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
     public void ToActive(Vector3 pos, Vector3 dir)
     {
         transform.gameObject.SetActive(true);
-        transform.position = pos;
+        transform.position = new Vector3(pos.x, 0.8f, pos.z);
         moveDir = dir;
         float baseD = -25.0f * (1.0f - Mathf.Abs(moveDir.x - moveDir.z));
         //degree = (Mathf.Atan2(rot.z, rot.x)) * Mathf.Rad2Deg + 90.0f + baseD;
@@ -78,7 +78,7 @@ public class GoblinLeaf : IEnemyObjectPoolUnit
 
     void DetectObstacle()
     {
-        Collider[] colliders = Physics.OverlapBox(transform.position + new Vector3(0, -1.23f, 0), new Vector3(0.05f, 0.25f, 0.05f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("Barrier"));
+        Collider[] colliders = Physics.OverlapBox(transform.position, new Vector3(0.35f, 0.6f, 0.3f), Quaternion.Euler(0, 0, 0), 1 << LayerMask.NameToLayer("Barrier"));
         if (colliders.Length > 0)
         {
             ResetUnit();

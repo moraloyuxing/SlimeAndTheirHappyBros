@@ -7,6 +7,7 @@ public class Bullet_Manager : MonoBehaviour{
     private Queue<GameObject> _bulletpool = new Queue<GameObject>();
     public GameObject prefabBullet;//怕不夠......= =
     public GoblinManager _goblinmanager;
+    public Player_Control[] Four_Player = new Player_Control[4];
 
     void Awake(){
         for (int i = 0; i < transform.childCount; i++){
@@ -19,19 +20,37 @@ public class Bullet_Manager : MonoBehaviour{
     }
 
     //子彈使用與回收
-    public void Bullet_ReUse(Vector3 position,Quaternion rotation,Vector3 current_angle,Player_Control xSlime,int Shader_Number) {
+    public void Bullet_ReUse(Vector3 position,Quaternion rotation,Vector3 current_angle,int xSlime,int Shader_Number) {
         if (_bulletpool.Count > 0){
             GameObject reuse = _bulletpool.Dequeue();
             reuse.transform.position = position;
             reuse.transform.rotation = rotation;
             reuse.SetActive(true);
-            reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle, xSlime,Shader_Number);
+            Player_Control Current_Player = Four_Player[xSlime];
+            reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle, Current_Player,Shader_Number);
         }
 
         else {
-            GameObject clone_bullet = Instantiate(prefabBullet) as GameObject;
-            clone_bullet.transform.position = position;
-            clone_bullet.transform.rotation = rotation;
+            //再玩啊?
+        }
+
+    }
+
+
+    public void Bullet_ReUse(Vector3 position, Quaternion rotation, Vector3 current_angle, int xSlime,int xSlime2, int Shader_Number){
+        if (_bulletpool.Count > 0)
+        {
+            GameObject reuse = _bulletpool.Dequeue();
+            reuse.transform.position = position;
+            reuse.transform.rotation = rotation;
+            reuse.SetActive(true);
+            Player_Control Current_Player = Four_Player[xSlime];
+            Player_Control Current_Player2 = Four_Player[xSlime2];
+            reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle, Current_Player,Current_Player2, Shader_Number);
+        }
+
+        else{
+            //再玩啊?
         }
 
     }
@@ -41,8 +60,6 @@ public class Bullet_Manager : MonoBehaviour{
         recovery.SetActive(false);
     }
 
-    public void ShotGoblin() {
 
-    }
 
 }

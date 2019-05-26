@@ -60,9 +60,11 @@ public class GoblinArrow : IEnemyObjectPoolUnit
     }
 
     void DetectObstacle() {
-        Collider[] colliders = Physics.OverlapBox(transform.position + new Vector3(0, -1.23f, 0), new Vector3(0.05f, 0.25f, 0.05f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("Barrier"));
-        if (colliders.Length > 0) {
-            ResetUnit();
+        Collider[] colliders = Physics.OverlapBox(transform.position + new Vector3(0, -1.2f, -0.2f), new Vector3(0.05f, 0.25f, 0.1f), Quaternion.Euler(0, 0, 0), 1 << LayerMask.NameToLayer("Barrier"));
+        if (colliders != null) {
+            if (colliders.Length > 0) {
+                ResetUnit();
+            }
         }
     }
 

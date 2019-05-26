@@ -10,6 +10,10 @@ public class GoblinManager : MonoBehaviour
     public Vector3[] spawnPos;
 
     bool[] playerMove = new bool[4] { false, false, false, false };
+    bool[] playerDie = new bool[4] { false, false, false, false };
+    public bool[] PlayersDie {
+        get { return playerDie; }
+    }
     public bool[] PlayersMove {
         get { return playerMove; }
     }
@@ -33,10 +37,9 @@ public class GoblinManager : MonoBehaviour
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
     Dictionary<string, GoblinLeaf> goblinLeafDic;
     List<GoblinLeaf> freeGoblinLeaves, usedGoblinLeaves;
+    List<Money> freeMoneys, usedMoneys;
 
-
-    public TestPlayerManager playerManager;
-    //Player_Manager playerManager;
+    public Player_Control[] Four_Player = new Player_Control[4];
     public Vector2 mapBorder;
 
     [System.Serializable]
@@ -51,6 +54,10 @@ public class GoblinManager : MonoBehaviour
 
         public float turnDist;
         public float stopDist;
+
+        public int minMoney;
+        public int maxMoney;
+
     }
     public GoblinInfo[] goblinInfo;
 
@@ -61,6 +68,8 @@ public class GoblinManager : MonoBehaviour
         public float length;
     }
     public PoolUnitInfo[] poolUnitInfo;
+
+    System.Action KillGoblin;
 
     // Start is called before the first frame update
     private void Awake()
@@ -75,7 +84,6 @@ public class GoblinManager : MonoBehaviour
             goblin = goblins.GetChild(i);
             freeNormalGoblins.Add(new NormalGoblin());
             freeNormalGoblins[i].TestInit(goblin, goblinInfo[0], this);
-            //freeNormalGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblinDic.Add(goblin.name, freeNormalGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
@@ -88,7 +96,6 @@ public class GoblinManager : MonoBehaviour
             goblin = goblins.GetChild(i);
             freeArcherGoblins.Add(new ArcherGoblin());
             freeArcherGoblins[i].TestInit(goblin, goblinInfo[1], this);
-            //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblinDic.Add(goblin.name, freeArcherGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
@@ -101,7 +108,6 @@ public class GoblinManager : MonoBehaviour
             goblin = goblins.GetChild(i);
             freeHobGoblins.Add(new HobGoblin());
             freeHobGoblins[i].TestInit(goblin, goblinInfo[2], this);
-            //freeArcherGoblins[i].Init(goblin, goblinInfo[0], playerManager, this);
             goblinDic.Add(goblin.name, freeHobGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
@@ -133,10 +139,21 @@ public class GoblinManager : MonoBehaviour
         {
             goblin = goblins.GetChild(i);
             freeGoblinLeaves.Add(new GoblinLeaf());
-            freeGoblinLeaves[i].Init(goblin, this, poolUnitInfo[0]);
+            freeGoblinLeaves[i].Init(goblin, this, poolUnitInfo[1]);
             goblinLeafDic.Add(goblin.name, freeGoblinLeaves[i]);
             goblin.gameObject.SetActive(false);
         }
+        goblins = transform.Find("Moneys");
+        freeMoneys = new List<Money>();
+        usedMoneys = new List<Money>();
+        for (int i = 0; i < goblins.childCount; i++)
+        {
+            goblin = goblins.GetChild(i);
+            freeMoneys.Add(new Money());
+            freeMoneys[i].Init(goblin, this, poolUnitInfo[2]);
+            goblin.gameObject.SetActive(false);
+        }
+
     }
     void Start()
     {
@@ -149,14 +166,14 @@ public class GoblinManager : MonoBehaviour
         float dt = Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.A)) {
-            SpawnNormalGoblinRandomPos(-1);
+            SpawnNormalGoblinBaseColor(0);
         }
         if (Input.GetKeyDown(KeyCode.Z)) {
             //SpawnNormalGoblinRandomPos(-1);
-            SpawnArcherGoblininRandomPos(-1);
+            SpawnArcherGoblinBaseColor(0);
         }
         if (Input.GetKeyDown(KeyCode.X)) {
-            SpawnHobGoblininRandomPos(-1);
+            SpawnHobGoblinMutiColor(1);
         }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
@@ -187,7 +204,10 @@ public class GoblinManager : MonoBehaviour
         {
             usedGoblinLeaves[index].Update(dt);
         }
-
+        for (index = 0; index < usedMoneys.Count; index++)
+        {
+            usedMoneys[index].Update(dt);
+        }
 
         playerMove[0] = false;
         playerMove[1] = false;
@@ -195,8 +215,19 @@ public class GoblinManager : MonoBehaviour
         playerMove[3] = false;
     }
 
-    void SpawnNormalGoblinRandomPos(int col)
+    public void SubKillGoblinCBK(System.Action cbk) {
+        KillGoblin = cbk;
+    }
+
+    public void SpawnNormalGoblinBaseColor(int col)
     {
+        if (col == 0)
+        {
+            float o = Random.Range(0, 90);
+            if (o < 30) col = 1;
+            else if (o < 60) col = 2;
+            else col = 4;
+        }
         if (freeNormalGoblins.Count <= 0) return;
         NormalGoblin goblin = freeNormalGoblins[0];
         usedNormalGoblins.Add(goblin);
@@ -205,17 +236,35 @@ public class GoblinManager : MonoBehaviour
         goblin.UpdateAllPlayerPos();
         freeNormalGoblins.RemoveAt(0);
     }
-    void SpawnNormalGoblinSpecificPos(Vector3 pos, int col) {
+    public void SpawnNormalGoblinMutiColor(int col) {
+        if (col == 0)
+        {
+            float o = Random.Range(0, 120);
+            if (o < 30) col = 1;
+            else if (o < 60) col = 2;
+            else if (o < 90) col = 4;
+            else if (o < 100) col = 3;
+            else if (o < 110) col = 5;
+            else col = 6;
+        }
         if (freeNormalGoblins.Count <= 0) return;
         NormalGoblin goblin = freeNormalGoblins[0];
         usedNormalGoblins.Add(goblin);
+        Vector3 pos = spawnPos[Random.Range(0, 13)];
         goblin.Spawn(pos, col);
         goblin.UpdateAllPlayerPos();
         freeNormalGoblins.RemoveAt(0);
     }
 
-    void SpawnArcherGoblininRandomPos(int col)
+    public void SpawnArcherGoblinBaseColor(int col)
     {
+        if (col == 0)
+        {
+            float o = Random.Range(0, 90);
+            if (o < 30) col = 1;
+            else if (o < 60) col = 2;
+            else col = 4;
+        }
         if (freeArcherGoblins.Count <= 0) return;
         ArcherGoblin goblin = freeArcherGoblins[0];
         usedArcherGoblins.Add(goblin);
@@ -224,30 +273,40 @@ public class GoblinManager : MonoBehaviour
         goblin.UpdateAllPlayerPos();
         freeArcherGoblins.RemoveAt(0);
     }
-    void SpawnArcherSpecificPos(Vector3 pos, int col)
+    public void SpawnArcherGoblinMutiColor(int col)
     {
+        if (col == 0)
+        {
+            float o = Random.Range(0, 120);
+            if (o < 30) col = 1;
+            else if (o < 60) col = 2;
+            else if (o < 90) col = 4;
+            else if (o < 100) col = 3;
+            else if (o < 110) col = 5;
+            else col = 6;
+        }
         if (freeArcherGoblins.Count <= 0) return;
         ArcherGoblin goblin = freeArcherGoblins[0];
         usedArcherGoblins.Add(goblin);
+        Vector3 pos = spawnPos[Random.Range(0, 13)];
         goblin.Spawn(pos, col);
         goblin.UpdateAllPlayerPos();
         freeArcherGoblins.RemoveAt(0);
     }
-    void SpawnHobGoblininRandomPos(int col)
+
+    public void SpawnHobGoblinMutiColor(int col)
     {
+        if (col == 0)
+        {
+            float o = Random.Range(0, 90);
+            if (o < 30) col = 3;
+            else if (o < 60) col = 5;
+            else col = 6;
+        }
         if (freeHobGoblins.Count <= 0) return;
         HobGoblin goblin = freeHobGoblins[0];
         usedHobGoblins.Add(goblin);
         Vector3 pos = spawnPos[Random.Range(0, 13)];
-        goblin.Spawn(pos, col);
-        goblin.UpdateAllPlayerPos();
-        freeHobGoblins.RemoveAt(0);
-    }
-    void SpawnHobSpecificPos(Vector3 pos, int col)
-    {
-        if (freeHobGoblins.Count <= 0) return;
-        HobGoblin goblin = freeHobGoblins[0];
-        usedHobGoblins.Add(goblin);
         goblin.Spawn(pos, col);
         goblin.UpdateAllPlayerPos();
         freeHobGoblins.RemoveAt(0);
@@ -258,13 +317,20 @@ public class GoblinManager : MonoBehaviour
         {
             usedNormalGoblins.Remove(goblin as NormalGoblin);
             freeNormalGoblins.Add(goblin as NormalGoblin);
-            Debug.Log(freeNormalGoblins.Count);
+            //Debug.Log(freeNormalGoblins.Count);
         }
         else if (goblin is ArcherGoblin) {
             usedArcherGoblins.Remove(goblin as ArcherGoblin);
             freeArcherGoblins.Add(goblin as ArcherGoblin);
-            Debug.Log(freeArcherGoblins.Count);
+            //Debug.Log(freeArcherGoblins.Count);
         }
+        else if (goblin is HobGoblin)
+        {
+            usedHobGoblins.Remove(goblin as HobGoblin);
+            freeHobGoblins.Add(goblin as HobGoblin);
+            //Debug.Log(freeHobGoblins.Count);
+        }
+        KillGoblin();
     }
 
     public void UseArrow(Vector3 pos, Vector3 dir) {
@@ -282,22 +348,71 @@ public class GoblinManager : MonoBehaviour
         leaf.ToActive(pos, dir);
         freeGoblinLeaves.Remove(leaf);
     }
+    public void UseMoney(int num, Vector3 pos, int target)
+    {
+        Four_Player[target].MoneyUpdate(num);//UI更新num
+        StartCoroutine(DropMoney(num,pos, target));
 
+    }
+    public void UseMoney(int num, Vector3 pos, int target1, int target2)
+    {
+        Four_Player[target1].MoneyUpdate(num);//UI更新num
+        Four_Player[target2].MoneyUpdate(num);//UI更新num
+        StartCoroutine(DropMoney(num, pos, target1));
+
+    }
+    IEnumerator DropMoney(int num, Vector3 pos, int target) {
+        int i = 0;
+        while (i < num)
+        {
+            if (freeMoneys.Count <= 0) break;
+            Money money = freeMoneys[0];
+            usedMoneys.Add(money);
+            money.ToActive(pos, target);
+            freeMoneys.Remove(money);
+            i++;
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
+    IEnumerator DropMoney2(int num, Vector3 pos, int target)
+    {
+        int i = 0;
+        while (i < num)
+        {
+            if (freeMoneys.Count <= 0) break;
+            Money money = freeMoneys[0];
+            usedMoneys.Add(money);
+            money.ToActive(pos, target);
+            freeMoneys.Remove(money);
+            i++;
+            yield return new WaitForSeconds(0.3f);
+        }
+    }
     public void RecycleArrow(GoblinArrow arrow) {
         freeGoblinArrows.Add(arrow);
         usedGoblinArrows.Remove(arrow);
         
     }
-
     public void RecycleLeaf(GoblinLeaf leaf) {
         freeGoblinLeaves.Add(leaf);
         usedGoblinLeaves.Remove(leaf);
     }
-
+    public void RecycleMoney(Money money)
+    {
+        freeMoneys.Add(money);
+        usedMoneys.Remove(money);
+    }
 
     public void SetPlayersMove(int id, Vector3 pos) {
         playerMove[id] = true;
         playerPos[id] = pos;
+    }
+
+    public void SetPlayerDie(int id) {
+        playerDie[id] = true;
+    }
+    public void SetPlayerRevive(int id) {
+        playerDie[id] = false;
     }
 
     public GoblinBase FindGoblin(string name) {

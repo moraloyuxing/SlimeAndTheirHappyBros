@@ -30,6 +30,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
         turnDist = info.turnDist;
+        minMoney = info.minMoney;
+        maxMoney = info.maxMoney;
     }
 
     public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -40,7 +42,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         renderer = image.GetComponent<SpriteRenderer>();
         shootLauncher = t.Find("shootPos");
         imgScale = image.localScale.x;
-        hp = info.hp;
+        maxHp = info.hp;
+        hp = maxHp;
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
@@ -48,7 +51,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
         turnDist = info.turnDist;
-        //playerManager = pManager;
+        minMoney = info.minMoney;
+        maxMoney = info.maxMoney;
     }
 
     public void Spawn(Vector3 pos, int col)
@@ -72,17 +76,21 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         deltaTime = Time.deltaTime;
         selfPos = transform.position;
 
-        nearstPlayerDist = 500.0f;
-        for (int i = 0; i < 4; i++)
-        {
-            playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
-            if (playerDist[i] < nearstPlayerDist)
+        if (hp > 0) {
+            nearstPlayerDist = 500.0f;
+            for (int i = 0; i < 4; i++)
             {
-                nearstPlayerDist = playerDist[i];
-                targetPlayer = i;
+                if (goblinManager.PlayersDie[i]) continue;
+                playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
+                if (playerDist[i] < nearstPlayerDist)
+                {
+                    nearstPlayerDist = playerDist[i];
+                    targetPlayer = i;
+                }
+                //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
             }
-            //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
         }
+       
         //if(hp > 0)DetectGethurt();  //傷害判定
         StateMachine();
 
@@ -149,11 +157,11 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             if (aniInfo.IsTag("attack"))
             {
-
                 if (!hasShoot && aniInfo.normalizedTime > 0.64f) {
                     //Debug.Log("start sssssssssssshooot");
                     hasShoot = true;
                     goblinManager.UseArrow(transform.position + shootPos, moveFwdDir);
+                    AudioManager.SingletonInScene.PlaySound2D("Shoot_Bow", 0.75f);
                 }
                 if (aniInfo.normalizedTime >= 0.99f)
                 {
@@ -169,8 +177,12 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
+            AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             animator.speed = 1.0f;
             animator.SetInteger("state", 4);
+            AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
+            if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
+            else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);
             firstInState = false;
         }
         else

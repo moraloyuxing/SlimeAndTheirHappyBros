@@ -1,0 +1,312 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4643901618432965331
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4643901618432965341}
+  - component: {fileID: 4643901618432965340}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4643901618432965341
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4643901618432965331}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.022701144, y: 1.7327423, z: 0.0064539015}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4643901618432965340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4643901618432965331}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6efafbb6ed6437944a34c0ab01245e2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  test: 0
+  roundInfos:
+  - maxWave: 3
+    waves:
+    - spawnTime: 0
+      normalGoblin: 6
+      archerGoblin: 0
+      hobGoblin: 0
+      mutiColor: 0
+    - spawnTime: 20
+      normalGoblin: 4
+      archerGoblin: 2
+      hobGoblin: 0
+      mutiColor: 1
+    - spawnTime: 30
+      normalGoblin: 3
+      archerGoblin: 2
+      hobGoblin: 0
+      mutiColor: 1
+  - maxWave: 3
+    waves:
+    - spawnTime: 0
+      normalGoblin: 4
+      archerGoblin: 2
+      hobGoblin: 0
+      mutiColor: 1
+    - spawnTime: 15
+      normalGoblin: 4
+      archerGoblin: 2
+      hobGoblin: 1
+      mutiColor: 1
+    - spawnTime: 30
+      normalGoblin: 2
+      archerGoblin: 4
+      hobGoblin: 2
+      mutiColor: 1
+  - maxWave: 4
+    waves:
+    - spawnTime: 6
+      normalGoblin: 2
+      archerGoblin: 2
+      hobGoblin: 0
+      mutiColor: 1
+    - spawnTime: 15
+      normalGoblin: 4
+      archerGoblin: 4
+      hobGoblin: 3
+      mutiColor: 1
+    - spawnTime: 35
+      normalGoblin: 2
+      archerGoblin: 4
+      hobGoblin: 2
+      mutiColor: 1
+    - spawnTime: 45
+      normalGoblin: 4
+      archerGoblin: 4
+      hobGoblin: 3
+      mutiColor: 1
+  - maxWave: 4
+    waves:
+    - spawnTime: 0
+      normalGoblin: 6
+      archerGoblin: 4
+      hobGoblin: 4
+      mutiColor: 1
+    - spawnTime: 15
+      normalGoblin: 4
+      archerGoblin: 6
+      hobGoblin: 3
+      mutiColor: 1
+    - spawnTime: 25
+      normalGoblin: 2
+      archerGoblin: 4
+      hobGoblin: 3
+      mutiColor: 1
+    - spawnTime: 35
+      normalGoblin: 2
+      archerGoblin: 4
+      hobGoblin: 3
+      mutiColor: 1
+  - maxWave: 5
+    waves:
+    - spawnTime: 0
+      normalGoblin: 6
+      archerGoblin: 5
+      hobGoblin: 6
+      mutiColor: 1
+    - spawnTime: 15
+      normalGoblin: 3
+      archerGoblin: 4
+      hobGoblin: 3
+      mutiColor: 1
+    - spawnTime: 30
+      normalGoblin: 6
+      archerGoblin: 3
+      hobGoblin: 5
+      mutiColor: 1
+    - spawnTime: 40
+      normalGoblin: 6
+      archerGoblin: 6
+      hobGoblin: 3
+      mutiColor: 1
+    - spawnTime: 50
+      normalGoblin: 4
+      archerGoblin: 4
+      hobGoblin: 6
+      mutiColor: 1
+  - maxWave: 5
+    waves:
+    - spawnTime: 0
+      normalGoblin: 6
+      archerGoblin: 4
+      hobGoblin: 8
+      mutiColor: 1
+    - spawnTime: 15
+      normalGoblin: 4
+      archerGoblin: 4
+      hobGoblin: 4
+      mutiColor: 1
+    - spawnTime: 30
+      normalGoblin: 6
+      archerGoblin: 6
+      hobGoblin: 6
+      mutiColor: 1
+    - spawnTime: 40
+      normalGoblin: 6
+      archerGoblin: 4
+      hobGoblin: 4
+      mutiColor: 1
+    - spawnTime: 50
+      normalGoblin: 6
+      archerGoblin: 6
+      hobGoblin: 8
+      mutiColor: 1
+  - maxWave: 6
+    waves:
+    - spawnTime: 0
+      normalGoblin: 8
+      archerGoblin: 8
+      hobGoblin: 8
+      mutiColor: 1
+    - spawnTime: 15
+      normalGoblin: 10
+      archerGoblin: 6
+      hobGoblin: 4
+      mutiColor: 1
+    - spawnTime: 30
+      normalGoblin: 6
+      archerGoblin: 4
+      hobGoblin: 7
+      mutiColor: 1
+    - spawnTime: 40
+      normalGoblin: 6
+      archerGoblin: 6
+      hobGoblin: 6
+      mutiColor: 1
+    - spawnTime: 50
+      normalGoblin: 4
+      archerGoblin: 5
+      hobGoblin: 4
+      mutiColor: 1
+    - spawnTime: 60
+      normalGoblin: 8
+      archerGoblin: 6
+      hobGoblin: 6
+      mutiColor: 1
+  - maxWave: 6
+    waves:
+    - spawnTime: 0
+      normalGoblin: 6
+      archerGoblin: 10
+      hobGoblin: 8
+      mutiColor: 1
+    - spawnTime: 12
+      normalGoblin: 10
+      archerGoblin: 6
+      hobGoblin: 6
+      mutiColor: 1
+    - spawnTime: 25
+      normalGoblin: 6
+      archerGoblin: 8
+      hobGoblin: 4
+      mutiColor: 1
+    - spawnTime: 35
+      normalGoblin: 6
+      archerGoblin: 6
+      hobGoblin: 4
+      mutiColor: 1
+    - spawnTime: 45
+      normalGoblin: 4
+      archerGoblin: 5
+      hobGoblin: 6
+      mutiColor: 1
+    - spawnTime: 55
+      normalGoblin: 8
+      archerGoblin: 10
+      hobGoblin: 8
+      mutiColor: 1
+  - maxWave: 6
+    waves:
+    - spawnTime: 0
+      normalGoblin: 12
+      archerGoblin: 6
+      hobGoblin: 10
+      mutiColor: 1
+    - spawnTime: 12
+      normalGoblin: 12
+      archerGoblin: 10
+      hobGoblin: 10
+      mutiColor: 1
+    - spawnTime: 24
+      normalGoblin: 10
+      archerGoblin: 8
+      hobGoblin: 5
+      mutiColor: 1
+    - spawnTime: 33
+      normalGoblin: 6
+      archerGoblin: 10
+      hobGoblin: 6
+      mutiColor: 1
+    - spawnTime: 40
+      normalGoblin: 6
+      archerGoblin: 6
+      hobGoblin: 7
+      mutiColor: 1
+    - spawnTime: 50
+      normalGoblin: 8
+      archerGoblin: 12
+      hobGoblin: 10
+      mutiColor: 1
+  - maxWave: 7
+    waves:
+    - spawnTime: 0
+      normalGoblin: 6
+      archerGoblin: 8
+      hobGoblin: 12
+      mutiColor: 1
+    - spawnTime: 12
+      normalGoblin: 6
+      archerGoblin: 8
+      hobGoblin: 12
+      mutiColor: 1
+    - spawnTime: 24
+      normalGoblin: 10
+      archerGoblin: 8
+      hobGoblin: 7
+      mutiColor: 1
+    - spawnTime: 33
+      normalGoblin: 6
+      archerGoblin: 10
+      hobGoblin: 6
+      mutiColor: 1
+    - spawnTime: 40
+      normalGoblin: 6
+      archerGoblin: 6
+      hobGoblin: 10
+      mutiColor: 1
+    - spawnTime: 50
+      normalGoblin: 8
+      archerGoblin: 12
+      hobGoblin: 7
+      mutiColor: 1
+    - spawnTime: 58
+      normalGoblin: 6
+      archerGoblin: 6
+      hobGoblin: 10
+      mutiColor: 1
