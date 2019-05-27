@@ -34,6 +34,7 @@ public class JoinGame : MonoBehaviour{
             if (a_button[i] && Already_Player[i] == false) {
                 Already_Player[i] = true;
                 animator[i].SetBool("join", true);
+                AudioManager.SingletonInScene.PlaySound2D("Revive", 1f);
                 Ready_Count++;
                 Ready_Moment = Time.time;
             }

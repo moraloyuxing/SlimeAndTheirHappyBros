@@ -633,7 +633,7 @@ public class Player_Control : MonoBehaviour{
             _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
             _playermanager.DeathCountMinus(PlayerID);
             GetComponent<Animator>().Play("Slime_Revive");
-            AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
+            AudioManager.SingletonInScene.PlaySound2D("Revive", 1f);
         }
         Base_HP = 3 + Extra_HP;
         for (int k = 0; k < Personal_HP.Length; k++){
