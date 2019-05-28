@@ -186,8 +186,8 @@ public class Player_Control : MonoBehaviour{
                 Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
                 Hint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
-                BuyHint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
-                BuyHint.transform.localPosition = new Vector3(0.5f, 1.0f, -1.0f);
+                BuyHint.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
+                BuyHint.transform.localPosition = new Vector3(1.3f,1.7f, -1.0f);
             }
             Left_CanMove = true;
 
@@ -213,8 +213,8 @@ public class Player_Control : MonoBehaviour{
                 Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(-0.55f, 0.55f, 0.55f);
                 Hint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
-                BuyHint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
-                BuyHint.transform.localPosition = new Vector3(-0.5f, 1.0f, -1.0f);
+                BuyHint.transform.localScale = new Vector3(-1.0f,1.0f,1.0f);
+                BuyHint.transform.localPosition = new Vector3(-1.3f, 1.7f, -1.0f);
             }
 
             Right_CanMove = true;
@@ -519,6 +519,7 @@ public class Player_Control : MonoBehaviour{
         GetComponent<Animator>().Play("Slime_GrassIdle");
         _playermanager._goblinmanager.SetPlayerDie(Player_Number);
         _playermanager.DeathCountPlus(PlayerID);
+        ChooseItemtoDrop();
     }
 
     public void HideWeak(){
