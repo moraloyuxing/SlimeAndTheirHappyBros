@@ -5,6 +5,7 @@ using UnityEngine;
 public class GoblinArrow : IEnemyObjectPoolUnit
 {
     bool fallGround = false;
+    int atkValue;
     float time,flyTime, lifeTime = 3.0f, deltaTime;
     float speed, degree, length;
     Vector3 moveDir;
@@ -21,7 +22,6 @@ public class GoblinArrow : IEnemyObjectPoolUnit
         speed = info.speed;
         length = info.length;
         collider = transform.GetComponent<Collider>();
-        
     }
     public void ToActive(Vector3 pos, Vector3 dir)
     {
@@ -35,33 +35,17 @@ public class GoblinArrow : IEnemyObjectPoolUnit
         transform.localRotation = Quaternion.Euler(25,0,degree);
         collider.enabled = true;
 
-        float offset = (Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
+        float offset = 0.2f; //(Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
         flyTime =Mathf.Sqrt( dir.x * dir.x + dir.z * dir.z)* length + offset;
     }
+
     public void Update(float dt) {
         deltaTime = dt;
         time += deltaTime;
         if (time <= flyTime)
         {
-            //float yOffset = -addSpeed * time;
-            //transform.position += deltaTime * new Vector3(moveDir.x * speed, yOffset, moveDir.z * speed);
-            //transform.localRotation = Quaternion.Euler(25 + yOffset * -Mathf.Abs(moveDir.z) * 15.0f, 0, degree + yOffset * moveDir.x * 15.0f); //拋物線角度
-
             transform.position += deltaTime* moveDir*speed;
-
-            //if (moveDir.x < .0f) yOffset *= -1.0f;
-            //transform.localRotation = Quaternion.Euler(25, 0, degree + yOffset*moveDir.x*15.0f);
-
-
-
-
-            //if (time > 0.5f * lifeTime)
-            //{
-            //    if (moveDir.x < .0f) degree += 200.0f * moveDir.x * deltaTime;
-            //    else degree -= 200.0f * moveDir.x * deltaTime;
-            //    transform.localRotation = Quaternion.Euler(25, 0, degree);
-            //}
-
+            DetectObstacle();
 
         }
         else {
@@ -75,8 +59,18 @@ public class GoblinArrow : IEnemyObjectPoolUnit
         
     }
 
+    void DetectObstacle() {
+        Collider[] colliders = Physics.OverlapBox(transform.position + new Vector3(0, -1.2f, -0.2f), new Vector3(0.05f, 0.25f, 0.1f), Quaternion.Euler(0, 0, 0), 1 << LayerMask.NameToLayer("Barrier"));
+        if (colliders != null) {
+            if (colliders.Length > 0) {
+                ResetUnit();
+            }
+        }
+    }
+
     public void ResetUnit() {
         time = .0f;
+        fallGround = false;
         goblinManager.RecycleArrow(this);
         transform.gameObject.SetActive(false);
     }

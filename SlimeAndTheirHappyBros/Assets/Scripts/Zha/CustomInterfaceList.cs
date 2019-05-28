@@ -41,7 +41,6 @@ public interface IEnemyObjectPoolUnit
     void Update(float dt);
     void ToActive(Vector3 _pos, Vector3 _dir);
     void ResetUnit();
-
 }
 
 public interface IObjectPool

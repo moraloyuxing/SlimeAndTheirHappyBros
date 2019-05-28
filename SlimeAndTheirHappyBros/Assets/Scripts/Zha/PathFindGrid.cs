@@ -138,6 +138,17 @@ public class PathFindGrid : MonoBehaviour {
 
     }
 
+    public void ClearExtendPenalty()
+    {
+        for (int x = 0; x < gridSizeX; x++)
+        {
+            for (int y = 0; y < gridSizeY; y++)
+            {
+                grid[x, y].extentPenalty = 0;
+            }
+        }
+    }
+
     public List<Node> GetNeighbours(Node node)
     {
         List<Node> neighbours = new List<Node>();

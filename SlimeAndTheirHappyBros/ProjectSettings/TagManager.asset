@@ -10,6 +10,9 @@ TagManager:
   - GoblinMelee
   - GoblinArrow
   - Item
+  - Barrier
+  - Goblin
+  - DropItem
   layers:
   - Default
   - TransparentFX
@@ -26,8 +29,8 @@ TagManager:
   - PlayerHurtArea
   - GoblinHurtArea
   - Enemy
-  - 
-  - 
+  - Border
+  - PlayerReviveArea
   - 
   - 
   - 

@@ -21,15 +21,6 @@ public class Object_Pool : MonoBehaviour{
     private Queue<GameObject> _MSlimepool = new Queue<GameObject>();
 
     void Awake(){
-        //生成子彈(暫時停用，射擊應會有bug)
-        //for (int cnt = 0; cnt < initailsize; cnt++){
-        //    GameObject clone_bullet = Instantiate(prefabBullet) as GameObject;
-        //    clone_bullet.GetComponent<Bullet_Behaviour>().SetPool(this);
-        //    _pool.Enqueue(clone_bullet);
-        //    clone_bullet.transform.SetParent(Group_Bullet.transform);
-        //    clone_bullet.SetActive(false);
-        //}
-
         //生成合體史萊姆
         for (int cnt = 0; cnt < ini; cnt++){
             GameObject clone_MergeSlime = Instantiate(prefabMergeSlime) as GameObject;
@@ -40,30 +31,7 @@ public class Object_Pool : MonoBehaviour{
             CameraFocus.AllPlayers.Add(clone_MergeSlime.transform);
             clone_MergeSlime.SetActive(false);
         }
-
     }
-
-    //子彈
-    //public void ReUse(Vector3 position, Quaternion rotation, Vector3 current_angle,GameObject xSlime){
-    //    if (_pool.Count > 0){
-    //        GameObject reuse = _pool.Dequeue();
-    //        reuse.transform.position = position;
-    //        reuse.transform.rotation = rotation;
-    //        reuse.SetActive(true);
-    //        reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle,xSlime);
-    //    }
-
-    //    else{
-    //        GameObject clone_bullet = Instantiate(prefabBullet) as GameObject;
-    //        clone_bullet.transform.position = position;
-    //        clone_bullet.transform.rotation = rotation;
-    //    }
-    //}
-
-    //public void Recovery(GameObject recovery){
-    //    _pool.Enqueue(recovery);
-    //    recovery.SetActive(false);
-    //}
 
     //合體史萊姆
     public void MSlime_Reuse(Vector3 position, Quaternion rotation,int Dyeing_Color,  GameObject PlayerA,GameObject PlayerB) {

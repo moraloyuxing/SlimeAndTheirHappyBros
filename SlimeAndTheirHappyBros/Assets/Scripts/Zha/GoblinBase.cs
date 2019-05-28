@@ -5,17 +5,28 @@ using UnityEngine;
 public class GoblinBase
 {
     protected bool firstInState = true, followingPath = false, getAniInfo = false;
+    protected bool startFindPath = false;
     protected int hp, atkValue, color, pathIndex;
     protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
+    protected float backSpeed = 10.0f;
     protected float imgScale;
+    protected int minMoney, maxMoney;
 
-    protected int targetPlayer = -1;
+
+    public int GetColor
+    {
+        get
+        {
+            return color;
+        }
+    }
+
+    protected int targetPlayer = -1, targetPlayer2 = -1;
     protected float nearstPlayerDist = 5000;
     protected float[] playerDist = new float[4] { 5000, 5000, 5000, 5000 };
 
-    protected Vector3 selfPos, moveFwdDir, oldTargetPos;
-
+    protected Vector3 selfPos, moveFwdDir, hurtDir, oldTargetPos;
 
     protected Transform transform, image;
     protected Animator animator;
@@ -23,11 +34,12 @@ public class GoblinBase
     protected SpriteRenderer renderer;
 
     protected PathFinder.Path path;
+    protected PathRequestManager.PathRequest curPathRequest;
     protected GoblinManager goblinManager;
 
     public enum GoblinState
     {
-        moveIn, idle, ramble, chase, attack, hurt, die, erroeCatch
+        moveIn, idle, ramble, chase, attack, hurt, fakeHurt, die, attackBreak, erroeCatch
     }
     protected GoblinState curState = GoblinState.moveIn;
 
@@ -69,6 +81,7 @@ public class GoblinBase
         }
     }
     public virtual void SetState(GoblinState state) {
+        startFindPath = false;
         inStateTime = 0.0f;
         firstInState = true;
         curState = state;
@@ -76,6 +89,7 @@ public class GoblinBase
 
     public virtual void StateMachine()
     {
+        Debug.Log("state machine " + curState);
         inStateTime += deltaTime;
         switch (curState)
         {
@@ -100,8 +114,15 @@ public class GoblinBase
             case GoblinState.attack:
                 Attack();
                 break;
+            case GoblinState.attackBreak:
+                AttackBreak();
+                AttackBreakDetectDist();
+                break;
             case GoblinState.hurt:
                 GetHurt();
+                break;
+            case GoblinState.fakeHurt:
+                KnockBack();
                 break;
             case GoblinState.die:
                 Die();
@@ -120,7 +141,13 @@ public class GoblinBase
         float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
         if (diff <= sightDist * sightDist)
         {
-            if (diff >= atkDist * atkDist) SetState(GoblinState.chase);
+            if (diff >= atkDist * atkDist) {
+                if (!startFindPath) {
+                    Debug.Log("go calculate");
+                    CalculatePath();
+                } 
+                else Debug.Log("start find path is true");
+            } //SetState(GoblinState.chase);
             else SetState(GoblinState.attack);
         }
     }
@@ -130,12 +157,19 @@ public class GoblinBase
             SetState(GoblinState.attack);
         } 
     }
-    public virtual void OverAttackDetectDist() {
+    public virtual void AttackBreakDetectDist() {
         float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
         if (diff <= atkDist * atkDist) SetState(GoblinState.attack);
-        else SetState(GoblinState.chase);
+        else {
+            Debug.Log("go idle and ramble first ...");
+            if (!startFindPath)
+            {
+                Debug.Log("go calculate");
+                CalculatePath();
+            }
+            //SetState(GoblinState.idle);   //先進idle或ramble再尋路，以免尋路過久會不知要做啥
+        }
     }
-
 
 
     public virtual void MoveIn()
@@ -150,7 +184,7 @@ public class GoblinBase
         }
         else {
             transform.position += deltaTime * speed * moveFwdDir;
-            if (inStateTime > 1.0f) SetState(GoblinState.ramble);
+            if (inStateTime > 6.5f) SetState(GoblinState.ramble);
         }
     }
 
@@ -163,7 +197,7 @@ public class GoblinBase
             totalTime = Random.Range(0.5f, 1.5f);
         }
         else {
-            if (inStateTime > totalTime) SetState();
+            if (inStateTime > totalTime && !followingPath) SetState();   //沒有找到尋路繼續idle或ramble
         }
     }
 
@@ -196,21 +230,35 @@ public class GoblinBase
                 {
                     float degree = Random.Range(135.0f, 225.0f);
                     moveFwdDir = Quaternion.AngleAxis(degree, Vector3.up) * moveFwdDir;
+                    float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                    image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                 }
                 transform.position += deltaTime * speed * moveFwdDir;
             }
-            else SetState();
+            else if(!followingPath) SetState();   //沒有找到尋路繼續idle或ramble
         }
     }
+
+    public virtual void CalculatePath() {
+        Debug.Log("in calculate");
+        startFindPath = true;
+        followingPath = false;
+        if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+        curPathRequest =  PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+        goblinManager.CalculatePath = true;
+    }
+
     public virtual void Chase()
     {
         if (firstInState)
         {
+            Debug.Log("first in chase");
+            startFindPath = false;
             animator.SetInteger("state", 1);
-            animator.speed = 2.0f;
+            animator.speed = 1.2f;
             firstInState = false;
-            followingPath = false;
-            PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+            //followingPath = false;
+            //PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
         }
         else {
             if (inStateTime < 0.3f)
@@ -221,45 +269,51 @@ public class GoblinBase
                 if (goblinManager.PlayersMove[targetPlayer])
                 {
                     Debug.Log("request path find");
-                    PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+                    CalculatePath();
                     inStateTime = 0.0f;
                 }
             }
-            if (followingPath) {
-                Vector2 pos2D = new Vector2(selfPos.x, selfPos.z);
-                if (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
-                {
-                    if (pathIndex == path.finishLineIndex) //|| pathIndex >= path.canAttckIndex
-                    {
-                        Debug.Log("reach path goal");
-                        followingPath = false;
-                        SetState(GoblinState.attack);
-                    }
-                    else
-                    {
-                        pathIndex++;
-                        moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
-                        float scaleX = (moveFwdDir.x > .0f)?-1.0f:1.0f;
-                        image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-                    }
-                }
-                transform.position += deltaTime * speed * 2.0f * moveFwdDir;
 
+            Vector2 pos2D = new Vector2(selfPos.x, selfPos.z);
+            if (path.turnBoundaries[pathIndex].HasCrossedLine(pos2D))
+            {
+                if (pathIndex == path.finishLineIndex) //|| pathIndex >= path.canAttckIndex
+                {
+                    Debug.Log("reach path goal");
+                    followingPath = false;
+                    SetState(GoblinState.attackBreak);
+                    //OverAttackDetectDist();
+                }
+                else
+                {
+                    pathIndex++;
+                    moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
+                    float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                    image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                }
             }
+            transform.position += deltaTime * speed * 1.2f * moveFwdDir;
+
+
+            //if (followingPath) {
+
+            //}
         }
     }
     public virtual void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
         if (pathSuccessful)
         {
-
-            path = new PathFinder.Path(waypoints, selfPos, turnDist); 
-            followingPath = true;
-            pathIndex = 0;
-            moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
-            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-
+            Debug.Log("find path ready to change chase");
+            if (curState == GoblinState.idle || curState == GoblinState.ramble || curState == GoblinState.chase || curState == GoblinState.attackBreak) {
+                path = new PathFinder.Path(waypoints, selfPos, turnDist);
+                followingPath = true;
+                pathIndex = 0;
+                moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
+                float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                SetState(GoblinState.chase);
+            }     
             //StopCoroutine("FollowPath");
             //StartCoroutine("FollowPath");
         }
@@ -273,63 +327,299 @@ public class GoblinBase
         
     }
 
-
-    public virtual void DetectGethurt() {
-        Collider[]colliders =  Physics.OverlapBox(selfPos, new Vector3(0.55f, 1.4f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
-        int i = 0;
-        while (i < colliders.Length) {
-            hp--;
-            if (i == 0 && curState != GoblinState.hurt) {
-                SetState(GoblinState.hurt);
-                moveFwdDir = -Vector3.forward;
-            }
-            //Debug.Log(colliders[i].name);
-            i++;
+    public virtual void AttackBreak() {
+        if (firstInState) {
+            animator.speed = 1.0f;
+            animator.SetInteger("state", 0);
+            startFindPath = false;
         }
     }
+
+
+    //public virtual void DetectGethurt() {
+    //    Collider[]colliders =  Physics.OverlapBox(selfPos, new Vector3(0.55f, 1.4f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToGoblin"));
+    //    int i = 0;
+    //    while (i < colliders.Length) {
+    //        hp--;
+    //        if (i == 0 && curState != GoblinState.hurt) {
+    //            SetState(GoblinState.hurt);
+    //            moveFwdDir = -Vector3.forward;
+    //        }
+    //        //Debug.Log(colliders[i].name);
+    //        i++;
+    //    }
+    //}
 
     public virtual void GetHurt()
     {
         if (firstInState)
         {
-            Debug.Log("ggggggeeeet hurt");
+            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
             firstInState = false;
             //animator.SetTrigger("hurt");
             animator.Play("hurt");
             animator.SetInteger("state",3);
         }
         else {
-            transform.position += 10.0f * deltaTime * moveFwdDir;
+            if (!Physics.Raycast(selfPos, moveFwdDir, 2.0f, LayerMask.NameToLayer("barrier")))
+            {
+                transform.position += (backSpeed) * deltaTime * hurtDir;
+            }
+
+            backSpeed -= deltaTime * 15.0f;
+            if (backSpeed <= .0f) backSpeed = .0f;
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f) {
-                Debug.Log("hurrrrt  over");
                 if (hp <= 0) SetState(GoblinState.die);
-                else OverAttackDetectDist();
+                else SetState(GoblinState.attackBreak); //OverAttackDetectDist();
+                backSpeed = 10.0f;
 
             }
         }
     }
+
+    public virtual void KnockBack() {
+        if (firstInState)
+        {
+            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            firstInState = false;
+            //animator.SetTrigger("hurt");
+            //animator.Play("hurt");
+            //animator.SetInteger("state", 3);
+        }
+        else
+        {
+            if (!Physics.Raycast(selfPos, moveFwdDir, 2.0f, LayerMask.NameToLayer("barrier")))
+            {
+                transform.position += (backSpeed) * deltaTime * hurtDir;
+            }
+
+            backSpeed -= deltaTime * 30.0f;
+            if (backSpeed <= .0f) backSpeed = .0f;
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
+            if (inStateTime > 0.3f)
+            {
+                SetState(GoblinState.attackBreak); //OverAttackDetectDist();
+                backSpeed = 10.0f;
+
+            }
+        }
+    }
+
     public virtual void Die()
     {
         
     }
-    public virtual void OnGetHurt(int value)
+    public virtual void OnGettingHurt(int col, int atkValue, int playerID, Vector3 dir)
     {
+        if (col == color)
+        {
+            if (hp > 0)
+            {
+                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                hp -= atkValue;
+                targetPlayer = playerID;
+                targetPlayer2 = playerID;
+                
+                if(curState != GoblinState.hurt){
+                    hurtDir = dir.normalized;
+                    SetState(GoblinState.hurt);
+                }
+
+            }
+        }
+        else
+        {
+            targetPlayer = playerID;
+            targetPlayer2 = playerID;
+            if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt)
+            {
+                hurtDir = dir.normalized;
+                SetState(GoblinState.fakeHurt);
+            }
+            AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        }
+
+        //if (col == 1 || col == 2 || col == 4)
+        //{
+
+        //}
+        //else {
+        //    if (col == 3)
+        //    {
+        //        if ((color == 1 || color == 2 || color == 3))
+        //        {
+        //            if (hp > 0)
+        //            {
+        //                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+        //                hp -= atkValue;
+        //                targetPlayer = playerID;
+        //                targetPlayer2 = playerID;
+        //                moveFwdDir = dir.normalized;
+        //                SetState(GoblinState.hurt);
+        //            }
+        //        }
+        //        else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        //    }
+        //    else if (col == 5) {
+        //        if ((color == 1 || color == 4 || color == 5))
+        //        {
+        //            if (hp > 0)
+        //            {
+        //                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+        //                hp -= atkValue;
+        //                targetPlayer = playerID;
+        //                targetPlayer2 = playerID;
+        //                moveFwdDir = dir.normalized;
+        //                SetState(GoblinState.hurt);
+        //            }
+        //        }
+        //        else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        //    }
+        //    else if (col == 6)
+        //    {
+        //        if ((color == 2 || color == 4 || color == 6))
+        //        {
+        //            if (hp > 0)
+        //            {
+        //                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+        //                hp -= atkValue;
+        //                targetPlayer = playerID;
+        //                targetPlayer2 = playerID;
+        //                moveFwdDir = dir.normalized;
+        //                SetState(GoblinState.hurt);
+        //            }
+        //        }
+        //        else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        //    }
+        //}
+    }
+    public virtual void OnGettingHurt(int col, int atkValue, int playerID,int playerID2, Vector3 dir)
+    {
+        //if (col == 1 || col == 2 || col == 4)
+        //{
+        //    if (col == color)
+        //    {
+        //        if (hp > 0)
+        //        {
+        //            AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+        //            hp -= atkValue;
+        //            targetPlayer = playerID;
+        //            targetPlayer2 = playerID2;
+        //            moveFwdDir = dir.normalized;
+        //            SetState(GoblinState.hurt);
+        //        }
+        //    }
+        //    else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        //}
+        if(col == 3 || col == 5 || col == 6)//else
+        {
+            if (col == 3)
+            {
+                if ((color == 1 || color == 2 || color == 3))
+                {
+                    if (hp > 0)
+                    {
+                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                        hp -= atkValue;
+                        targetPlayer = playerID;
+                        targetPlayer2 = playerID2;
+                        if (curState != GoblinState.hurt)
+                        {
+                            hurtDir = dir.normalized;
+                            SetState(GoblinState.hurt);
+                        }
+                    }
+                }
+                else {
+                    targetPlayer = playerID;
+                    targetPlayer2 = playerID2;
+                    if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt)
+                    {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.fakeHurt);
+                    }
+                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                } 
+            }
+            else if (col == 5)
+            {
+                if ((color == 1 || color == 4 || color == 5))
+                {
+                    if (hp > 0)
+                    {
+                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                        hp -= atkValue;
+                        targetPlayer = playerID;
+                        targetPlayer2 = playerID2;
+                        if (curState != GoblinState.hurt)
+                        {
+                            hurtDir = dir.normalized;
+                            SetState(GoblinState.hurt);
+                        }
+                    }
+                }
+                else {
+                    targetPlayer = playerID;
+                    targetPlayer2 = playerID2;
+                    if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt)
+                    {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.fakeHurt);
+                    }
+                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                }
+            }
+            else if (col == 6)
+            {
+                if ((color == 2 || color == 4 || color == 6))
+                {
+                    if (hp > 0)
+                    {
+                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                        hp -= atkValue;
+                        targetPlayer = playerID;
+                        targetPlayer2 = playerID2;
+                        if (curState != GoblinState.hurt)
+                        {
+                            hurtDir = dir.normalized;
+                            SetState(GoblinState.hurt);
+                        }
+                    }
+                }
+                else {
+                    targetPlayer = playerID;
+                    targetPlayer2 = playerID2;
+                    if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt) {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.fakeHurt);
+                    }
+                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                } 
+            }
+        }
+    }
+
+
+    public virtual void ForceRamble() {
 
     }
 
-    public void ErroeCatch() {
+    public virtual void ErroeCatch() {
         if (firstInState)
         {
             animator.SetInteger("state", 1);
             animator.speed = 1f;
             firstInState = false;
             moveFwdDir = new Vector3(0 - selfPos.x, 0, 0 - selfPos.z).normalized;
+            float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+            image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
         }
         else {
             transform.position += deltaTime * speed * moveFwdDir;
-            if (inStateTime > 1.0f) SetState();
+            if (inStateTime > 3.0f) SetState();
         }
     }
 

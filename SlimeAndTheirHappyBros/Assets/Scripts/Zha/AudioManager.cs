@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    AudioSource soundAudio;
+    AudioSource effectAudio, bgmAudio;
 
     Dictionary<string, AudioClip> soundDictionary = new Dictionary<string, AudioClip>();
 
+    AudioClip nextMusic;
+
+    public AudioClip shoppingMusic;
+    public AudioClip[] battleMusic;
     public SoundClip[] soundClips;
 
     private static AudioManager singletonInScene;
@@ -23,7 +27,8 @@ public class AudioManager : MonoBehaviour
     void Awake()
     {
         singletonInScene = this;
-        singletonInScene.soundAudio = GetComponent<AudioSource>();
+        singletonInScene.effectAudio = transform.Find("EffectAudio").GetComponent<AudioSource>();
+        singletonInScene.bgmAudio = transform.Find("BGMAudio").GetComponent<AudioSource>();
 
         if (soundClips != null) {
             foreach (SoundClip clip in soundClips) {
@@ -38,15 +43,54 @@ public class AudioManager : MonoBehaviour
         
     }
 
+    public void PauseBGM() {
+        bgmAudio.Pause();
+    }
+
+    public void ChangeBGM(bool shopping, int curRound) {
+        
+        if (shopping) {
+            bgmAudio.Pause();
+            bgmAudio.clip = shoppingMusic;
+            StartCoroutine(OnChangingBGM());
+        }
+        else {
+            if (curRound < 3) bgmAudio.clip = battleMusic[0];
+            else if (curRound < 5) bgmAudio.clip = battleMusic[1];
+            else bgmAudio.clip = battleMusic[2];
+            bgmAudio.Play();
+        }
+        
+    }
+
+    IEnumerator OnChangingBGM() {
+        yield return new WaitForSeconds(1.5f);
+        bgmAudio.Play();
+    }
+
     public void PlaySound2D(string _name, float volume)
     {
         if (soundDictionary.ContainsKey(_name))
         {
-            soundAudio.PlayOneShot(soundDictionary[_name], volume);
+            effectAudio.PlayOneShot(soundDictionary[_name], volume);
         }
         else Debug.Log("沒有這個音檔");
     }
+    public void PlaySound2D(string _name, float volume, float pitch)
+    {
+        if (soundDictionary.ContainsKey(_name))
+        {
+            effectAudio.pitch = pitch;
+            effectAudio.PlayOneShot(soundDictionary[_name], volume);
+        }
+        else Debug.Log("沒有這個音檔");
+    }
+    IEnumerator ReturnPitch() {
 
+        yield return null;
+        effectAudio.pitch = 1.0f;
+
+    }
 }
 
 

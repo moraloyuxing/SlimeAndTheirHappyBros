@@ -11,6 +11,7 @@ public class Node : IHeapItem<Node>
     public int gridX;
     public int gridY;
     public int movementPenalty;
+    public int extentPenalty = 0;
 
     public int gCost;
     public int hCost;
@@ -55,4 +56,12 @@ public class Node : IHeapItem<Node>
         }
         return -compare;
     }
+
+    public void AddPenalty(int value) {
+
+        if (extentPenalty + value + movementPenalty <= 90) {
+            extentPenalty += value;
+        }
+    }
+
 }
