@@ -183,7 +183,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             animator.speed = 1.0f;
-            animator.SetInteger("state", 4);
+            animator.SetTrigger("die");
+            //animator.SetInteger("state", 4);
             AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
             if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
             else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);

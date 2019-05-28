@@ -147,7 +147,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
             atkCol.enabled = false;
             firstInState = false;
-            animator.Play("hurt");
+            //animator.Play("hurt");
+            animator.SetTrigger("hurt");
             animator.SetInteger("state", 3);
         }
         else
@@ -177,8 +178,10 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
+            atkCol.enabled = false;
             animator.speed = 1.0f;
-            animator.SetInteger("state", 4);
+            animator.SetTrigger("die");
+            //animator.SetInteger("state", 4);
             AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
             
             if(targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);

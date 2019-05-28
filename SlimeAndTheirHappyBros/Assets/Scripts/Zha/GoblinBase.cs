@@ -81,6 +81,7 @@ public class GoblinBase
         }
     }
     public virtual void SetState(GoblinState state) {
+        Debug.Log("set state " + state);
         startFindPath = false;
         inStateTime = 0.0f;
         firstInState = true;
@@ -356,8 +357,8 @@ public class GoblinBase
         {
             if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
             firstInState = false;
-            //animator.SetTrigger("hurt");
-            animator.Play("hurt");
+            animator.SetTrigger("hurt");
+            //animator.Play("hurt");
             animator.SetInteger("state",3);
         }
         else {
@@ -371,8 +372,8 @@ public class GoblinBase
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f) {
-                if (hp <= 0) SetState(GoblinState.die);
-                else SetState(GoblinState.attackBreak); //OverAttackDetectDist();
+                //if (hp <= 0) SetState(GoblinState.die);
+                SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
 
             }
@@ -422,10 +423,19 @@ public class GoblinBase
                 hp -= atkValue;
                 targetPlayer = playerID;
                 targetPlayer2 = playerID;
-                
-                if(curState != GoblinState.hurt){
+
+                if (hp >= 0) {
+                    if (curState != GoblinState.hurt)
+                    {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.hurt);
+                    }
+
+                }
+                else
+                {
                     hurtDir = dir.normalized;
-                    SetState(GoblinState.hurt);
+                    SetState(GoblinState.die);
                 }
 
             }
@@ -526,10 +536,15 @@ public class GoblinBase
                         hp -= atkValue;
                         targetPlayer = playerID;
                         targetPlayer2 = playerID2;
-                        if (curState != GoblinState.hurt)
-                        {
+                        if (hp >= 0){
+                            if (curState != GoblinState.hurt){
+                                hurtDir = dir.normalized;
+                                SetState(GoblinState.hurt);
+                            }
+                        }
+                        else{
                             hurtDir = dir.normalized;
-                            SetState(GoblinState.hurt);
+                            SetState(GoblinState.die);
                         }
                     }
                 }
@@ -554,10 +569,15 @@ public class GoblinBase
                         hp -= atkValue;
                         targetPlayer = playerID;
                         targetPlayer2 = playerID2;
-                        if (curState != GoblinState.hurt)
-                        {
+                        if (hp >= 0){
+                            if (curState != GoblinState.hurt) {
+                                hurtDir = dir.normalized;
+                                SetState(GoblinState.hurt);
+                            }
+                        }
+                        else{
                             hurtDir = dir.normalized;
-                            SetState(GoblinState.hurt);
+                            SetState(GoblinState.die);
                         }
                     }
                 }
@@ -582,10 +602,15 @@ public class GoblinBase
                         hp -= atkValue;
                         targetPlayer = playerID;
                         targetPlayer2 = playerID2;
-                        if (curState != GoblinState.hurt)
-                        {
+                        if (hp >= 0){
+                            if (curState != GoblinState.hurt){
+                                hurtDir = dir.normalized;
+                                SetState(GoblinState.hurt);
+                            }
+                        }
+                        else{
                             hurtDir = dir.normalized;
-                            SetState(GoblinState.hurt);
+                            SetState(GoblinState.die);
                         }
                     }
                 }
