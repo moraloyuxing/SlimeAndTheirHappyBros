@@ -47,7 +47,10 @@ public class Player_Manager : MonoBehaviour
             _goblinmanager.SetPlayersMove(i, FourPlayer[i].transform.position);
             Player_Death[i] = false;
         }
-
+        Player1_rePos(FourPlayer[0].transform.position);
+        Player2_rePos(FourPlayer[1].transform.position);
+        Player3_rePos(FourPlayer[2].transform.position);
+        Player4_rePos(FourPlayer[3].transform.position);
     }
 
     void Update()

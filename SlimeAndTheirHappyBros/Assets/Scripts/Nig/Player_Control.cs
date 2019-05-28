@@ -179,6 +179,7 @@ public class Player_Control : MonoBehaviour{
         }
 
         if (xAix > 0.0f) {
+            if (ArrowRot == -1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z*-1.0f);
             ArrowRot = 1.0f;
             //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
@@ -206,6 +207,7 @@ public class Player_Control : MonoBehaviour{
         }
 
         if (xAix < 0.0f) {
+            if (ArrowRot == 1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
             ArrowRot = -1.0f;
             //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
@@ -332,7 +334,7 @@ public class Player_Control : MonoBehaviour{
                         ExtraPriority = true;
                         //musouTime = Time.time;
                         //StateMusou = 1.5f;
-                        musouTime = 1.5f;
+                        //musouTime = 1.5f;
                         StopDetect = true;
                         GetComponent<Animator>().Play("Slime_JumpinPond");
                     }
@@ -452,6 +454,7 @@ public class Player_Control : MonoBehaviour{
         AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
         Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
+        musouTime = 2.1f;
         InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
     }
 
@@ -532,7 +535,7 @@ public class Player_Control : MonoBehaviour{
         Color_Number = 0;
         //musouTime = Time.time;
         //StateMusou = 2.55f;
-        musouTime = 4.8f;
+        //musouTime = 4.8f;
         StopDetect = true;
         GetComponent<Animator>().Play("Slime_Wash");
     }
@@ -543,7 +546,7 @@ public class Player_Control : MonoBehaviour{
         //StateMusou = 2.1f;
         //musouTime = 2.7f;
         //StopDetect = true;
-        InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
+        //InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
         _playermanager.BackWashBoard();
     }
 
