@@ -18,7 +18,7 @@ public class Item_Manager : MonoBehaviour {
     int[] Focus_Count = new int[4] { -1, -1, -1, -1 };
     bool Purchase_State = false;
     int[,] Item_Price = new int[4, 6];
-    int[] Base_Price = new int[6] { 13, 13, 12, 20, 18, 15 };
+    int[] Base_Price = new int[6] { 16, 26, 14, 17, 12, 20 };
     int[,] Item_SuperImposed = new int[4, 6];
 
     //玩家購買相關
