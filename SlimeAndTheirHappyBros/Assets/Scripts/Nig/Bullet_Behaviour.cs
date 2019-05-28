@@ -48,14 +48,14 @@ public class Bullet_Behaviour : MonoBehaviour{
         offset = Mathf.Abs(Attack_Dir.x);
         offset = Mathf.Clamp(offset, 0.5f, 0.8f);
         scaleOffset = Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
-        speed = 20.0f*Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
+        speed = 20.0f * Mathf.Pow(1.25f, xSlime.BulletSpeed_Superimposed);
         Attack_Dir *= speed;
         _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
         PenetrateMaxCount = xSlime.Base_Penetrate;
         BulletATK = xSlime.Base_ATK;
     }
 
-    public void SetAttackDir(Vector3 current_angle, Player_Control xSlime,Player_Control xSlime2, int Shader_Number){
+    public void SetAttackDir(Vector3 current_angle, Player_Control xSlime,Player_Control xSlime2, int Shader_Number,Merge_Control xMSlime){
         color = Shader_Number;
         GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
@@ -63,12 +63,12 @@ public class Bullet_Behaviour : MonoBehaviour{
         Attack_Dir = current_angle.normalized;
         offset = Mathf.Abs(Attack_Dir.x);
         offset = Mathf.Clamp(offset, 0.5f, 0.8f);
-        scaleOffset = Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
-        speed = 20.0f * Mathf.Pow(1.25f, xSlime.Bullet_Superimposed);
+        scaleOffset = Mathf.Pow(1.25f, xMSlime.Bullet_Superimposed);
+        speed = 20.0f * Mathf.Pow(1.25f, xMSlime.BulletSpeed_Superimposed);
         Attack_Dir *= speed;
         _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
-        PenetrateMaxCount = xSlime.Base_Penetrate;
-        BulletATK = xSlime.Base_ATK;
+        PenetrateMaxCount = xMSlime.Base_Penetrate;
+        BulletATK = xMSlime.Base_ATK;
     }
 
     void Update(){

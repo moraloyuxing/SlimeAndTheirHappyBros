@@ -37,7 +37,7 @@ public class Bullet_Manager : MonoBehaviour{
     }
 
 
-    public void Bullet_ReUse(Vector3 position, Quaternion rotation, Vector3 current_angle, int xSlime,int xSlime2, int Shader_Number){
+    public void Bullet_ReUse(Vector3 position, Quaternion rotation, Vector3 current_angle, int xSlime,int xSlime2, int Shader_Number,Merge_Control xMSlime){
         if (_bulletpool.Count > 0)
         {
             GameObject reuse = _bulletpool.Dequeue();
@@ -46,7 +46,7 @@ public class Bullet_Manager : MonoBehaviour{
             reuse.SetActive(true);
             Player_Control Current_Player = Four_Player[xSlime];
             Player_Control Current_Player2 = Four_Player[xSlime2];
-            reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle, Current_Player,Current_Player2, Shader_Number);
+            reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle, Current_Player,Current_Player2, Shader_Number,xMSlime);
         }
 
         else{

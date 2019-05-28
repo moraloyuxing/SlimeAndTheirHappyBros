@@ -98,6 +98,7 @@ public class Player_Control : MonoBehaviour{
     public int Speed_Superimposed = 0;
     public int Bullet_Superimposed = 0;
     public int Timer_Superimposed = 0;
+    public int BulletSpeed_Superimposed = 0;
 
     //UI連動
     public GameObject UI_Icon;
@@ -337,6 +338,7 @@ public class Player_Control : MonoBehaviour{
                         //musouTime = 1.5f;
                         StopDetect = true;
                         GetComponent<Animator>().Play("Slime_JumpinPond");
+                        DashEnd();
                     }
                 }
             }
@@ -410,6 +412,7 @@ public class Player_Control : MonoBehaviour{
                  GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;
+                CancelInvoke("Musou_Flick");
                 musouTime = 1.8f;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
                 //musouTime = Time.time;
@@ -454,6 +457,7 @@ public class Player_Control : MonoBehaviour{
         AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
         Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
+        CancelInvoke("Musou_Flick");
         musouTime = 2.1f;
         InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
     }
@@ -479,6 +483,7 @@ public class Player_Control : MonoBehaviour{
                 ReviveArea.enabled = false;
                 GetComponent<Animator>().Play("Slime_Revive");
                 AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
+                CancelInvoke("Musou_Flick");
                 musouTime = 3.0f;
                 StopDetect = true;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
@@ -548,6 +553,7 @@ public class Player_Control : MonoBehaviour{
         //StopDetect = true;
         //InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
         _playermanager.BackWashBoard();
+        DashEnd();
     }
 
     //道具加成
@@ -560,6 +566,7 @@ public class Player_Control : MonoBehaviour{
                 break;
             case 1:
                 Base_Penetrate++;
+                BulletSpeed_Superimposed++;
                 break;
             case 2:
                 Base_HP++;
@@ -578,8 +585,7 @@ public class Player_Control : MonoBehaviour{
                 Current_Speed = Base_Speed;//備份，用以DashLerp後重置
                 break;
             case 5:
-                Timer_Superimposed++;
-                //更新進合體時間
+                Timer_Superimposed++;//更新進合體時間 7秒1血(完成)
                 break;
         }
 

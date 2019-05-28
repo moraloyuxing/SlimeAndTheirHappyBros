@@ -4,8 +4,7 @@ using UnityEngine;
 
 //不會跳池，不需治療→不用Splash
 
-public class Merge_Control : MonoBehaviour
-{
+public class Merge_Control : MonoBehaviour{
 
     public GameObject Player_Manager;
     //public GameObject Merge_Sprite;
@@ -65,6 +64,8 @@ public class Merge_Control : MonoBehaviour
     bool Hint_Activate = false;
     float Hint_Moment;
     int MergeNumber = 0;
+    bool PMb_button = false;
+    bool PSb_button = false;
 
     //倒數計時
     //整數倒數 → 隔秒呼叫；計量條 → Time.deltaTime
@@ -96,7 +97,7 @@ public class Merge_Control : MonoBehaviour
     float Base_Speed = 1.0f;
     float Current_Speed = 1.0f;
     public int Base_Penetrate = 1;
-    //int Speed_Superimposed = 0;
+    public int BulletSpeed_Superimposed = 0;
     public int Bullet_Superimposed = 0;
     //int Timer_Superimposed = 0;
 
@@ -135,6 +136,8 @@ public class Merge_Control : MonoBehaviour
         Current_Color = Merge_Sprite.color;
         flicker = -0.5f;
         StopDetect = false;
+        PMb_button = false;
+        PSb_button = false;
     }
 
     void Update()
@@ -320,6 +323,15 @@ public class Merge_Control : MonoBehaviour
         {
             GetComponent<Animator>().Play("Slime_Attack");
             Shooting = true;
+        }
+
+        //分裂
+        PMb_button = Input.GetButtonDown(WhichPlayer_Moving + "Spilt");
+        PSb_button = Input.GetButtonDown(WhichPlayer_Shooting + "Spilt");
+        if (PMb_button || PSb_button) {
+            CancelInvoke("Merge_Timer");
+            Base_Timer = 0.0f;
+            Merge_Timer();
         }
 
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)
@@ -560,7 +572,7 @@ public class Merge_Control : MonoBehaviour
         Player_Control B = PlayerB.GetComponent<Player_Control>();
 
         //設定HP
-        Base_HP = 3 + A.Extra_HP + B.Extra_HP;
+        Base_HP = 3 + A.Timer_Superimposed + B.Timer_Superimposed;//至少3，至多15
         if (Base_HP > Max_HP) Base_HP = Max_HP;
         for (int k = 0; k < Max_HP; k++){
             if (k >= Base_HP) Merge_HP[k].SetActive(false);
@@ -568,10 +580,11 @@ public class Merge_Control : MonoBehaviour
         }
         //設定ATK
         Base_ATK = 5 + A.Extra_ATK + B.Extra_ATK;
-        //設定穿透
+        //設定穿透&子彈速度
         Base_Penetrate = 1 + A.Extra_Penetrate + B.Extra_Penetrate;
+        BulletSpeed_Superimposed = A.BulletSpeed_Superimposed + B.BulletSpeed_Superimposed;
         //設定合體時間
-        Base_Timer = 15.0f + (A.Timer_Superimposed + B.Timer_Superimposed) * 5.0f;
+        Base_Timer = 15.0f + (A.Timer_Superimposed + B.Timer_Superimposed) * 7.0f;
         //設定速度
         Base_Speed = 1.0f * Mathf.Pow(1.25f, (A.Speed_Superimposed + B.Speed_Superimposed));
         Current_Speed = Base_Speed;
