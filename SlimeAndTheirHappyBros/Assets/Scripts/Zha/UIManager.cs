@@ -48,7 +48,7 @@ public class UIManager : MonoBehaviour
     void Update()
     {
         if (progressMove) {
-            progressTime += Time.deltaTime*2.0f;
+            progressTime += Time.deltaTime*1.2f;
 
             goblinHeadTrans.anchoredPosition = Vector2.Lerp(oringinProgress, targetProgress, progressTime);
             if (progressTime >= 1.0f) {

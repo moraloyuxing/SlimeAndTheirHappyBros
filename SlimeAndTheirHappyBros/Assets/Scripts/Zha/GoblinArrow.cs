@@ -35,7 +35,7 @@ public class GoblinArrow : IEnemyObjectPoolUnit
         transform.localRotation = Quaternion.Euler(25,0,degree);
         collider.enabled = true;
 
-        float offset = (Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
+        float offset = 0.2f; //(Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
         flyTime =Mathf.Sqrt( dir.x * dir.x + dir.z * dir.z)* length + offset;
     }
 

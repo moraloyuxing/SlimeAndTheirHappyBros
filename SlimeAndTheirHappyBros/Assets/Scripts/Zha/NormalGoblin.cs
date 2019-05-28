@@ -153,7 +153,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         else
         {
             if (!Physics.Raycast(selfPos, moveFwdDir, 2.0f, LayerMask.NameToLayer("barrier"))) {
-                transform.position += backSpeed * deltaTime * moveFwdDir;
+                transform.position += backSpeed * deltaTime * hurtDir;
             }
             backSpeed -= deltaTime * 15.0f;
             if (backSpeed <= .0f) backSpeed = .0f;

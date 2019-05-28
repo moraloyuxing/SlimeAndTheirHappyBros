@@ -379,7 +379,7 @@ public class GoblinManager : MonoBehaviour
             money.ToActive(pos, target);
             freeMoneys.Remove(money);
             i++;
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(0.18f);
         }
     }
     IEnumerator DropMoney2(int num, Vector3 pos, int target)

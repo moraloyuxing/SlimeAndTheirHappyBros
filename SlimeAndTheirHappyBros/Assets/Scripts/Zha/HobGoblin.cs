@@ -444,87 +444,104 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     {
         if (col == 1 || col == 2 || col == 4)
         {
-            if (col == color)
+            AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+            targetPlayer = playerID;
+            targetPlayer2 = playerID;
+            if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
             {
-                if (hp > 0)
-                {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-                    hp -= atkValue;
-                    targetPlayer = playerID;
-                    targetPlayer2 = playerID;
-                    if (curState != GoblinState.hurt && !endure)
-                    {
-                        moveFwdDir = dir.normalized;
-                        SetState(GoblinState.hurt);
-                    }
-                    else if (hp <= 0) SetState(GoblinState.die);
-                }
+                hurtDir = dir.normalized;
+                SetState(GoblinState.fakeHurt);
             }
-            else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+            //if (col == color)
+            //{
+            //    if (hp > 0)
+            //    {
+            //        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+            //        hp -= atkValue;
+            //        targetPlayer = playerID;
+            //        targetPlayer2 = playerID;
+            //        if (curState != GoblinState.hurt && !endure)
+            //        {
+            //            hurtDir = dir.normalized;
+            //            SetState(GoblinState.hurt);
+            //        }
+            //        else if (hp <= 0) SetState(GoblinState.die);
+            //    }
+            //}
+            //else {
+            //    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+            //    targetPlayer = playerID;
+            //    targetPlayer2 = playerID;
+            //    if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
+            //    {
+            //        hurtDir = dir.normalized;
+            //        SetState(GoblinState.fakeHurt);
+            //    }
+            //} 
         }
-        else
-        {
-            if (col == 3)
-            {
-                if ((color == 1 || color == 2 || color == 3))
-                {
-                    if (hp > 0)
-                    {
-                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-                        hp -= atkValue;
-                        targetPlayer = playerID;
-                        targetPlayer2 = playerID;
-                        if (curState != GoblinState.hurt && !endure)
-                        {
-                            moveFwdDir = dir.normalized;
-                            SetState(GoblinState.hurt);
-                        }
-                        else if (hp <= 0) SetState(GoblinState.die);
-                    }
-                }
-                else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
-            }
-            else if (col == 5)
-            {
-                if ((color == 1 || color == 4 || color == 5))
-                {
-                    if (hp > 0)
-                    {
-                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-                        hp -= atkValue;
-                        targetPlayer = playerID;
-                        targetPlayer2 = playerID;
-                        if (curState != GoblinState.hurt && !endure)
-                        {
-                            moveFwdDir = dir.normalized;
-                            SetState(GoblinState.hurt);
-                        }
-                        else if (hp <= 0) SetState(GoblinState.die);
-                    }
-                }
-                else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
-            }
-            else if (col == 6)
-            {
-                if ((color == 2 || color == 4 || color == 6))
-                {
-                    if (hp > 0)
-                    {
-                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-                        hp -= atkValue;
-                        targetPlayer = playerID;
-                        targetPlayer2 = playerID;
-                        if (curState != GoblinState.hurt && !endure)
-                        {
-                            moveFwdDir = dir.normalized;
-                            SetState(GoblinState.hurt);
-                        }
-                        else if (hp <= 0) SetState(GoblinState.die);
-                    }
-                }
-                else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
-            }
-        }
+        //else
+        //{
+        //    if (col == 3)
+        //    {
+        //        if ((color == 1 || color == 2 || color == 3))
+        //        {
+        //            if (hp > 0)
+        //            {
+        //                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+        //                hp -= atkValue;
+        //                targetPlayer = playerID;
+        //                targetPlayer2 = playerID;
+        //                if (curState != GoblinState.hurt && !endure)
+        //                {
+        //                    hurtDir = dir.normalized;
+        //                    SetState(GoblinState.hurt);
+        //                }
+        //                else if (hp <= 0) SetState(GoblinState.die);
+        //            }
+        //        }
+        //        else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        //    }
+        //    else if (col == 5)
+        //    {
+        //        if ((color == 1 || color == 4 || color == 5))
+        //        {
+        //            if (hp > 0)
+        //            {
+        //                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+        //                hp -= atkValue;
+        //                targetPlayer = playerID;
+        //                targetPlayer2 = playerID;
+        //                if (curState != GoblinState.hurt && !endure)
+        //                {
+        //                    hurtDir = dir.normalized;
+        //                    SetState(GoblinState.hurt);
+        //                }
+        //                else if (hp <= 0) SetState(GoblinState.die);
+        //            }
+        //        }
+        //        else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        //    }
+        //    else if (col == 6)
+        //    {
+        //        if ((color == 2 || color == 4 || color == 6))
+        //        {
+        //            if (hp > 0)
+        //            {
+        //                AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+        //                hp -= atkValue;
+        //                targetPlayer = playerID;
+        //                targetPlayer2 = playerID;
+        //                if (curState != GoblinState.hurt && !endure)
+        //                {
+        //                    hurtDir = dir.normalized;
+        //                    SetState(GoblinState.hurt);
+        //                }
+        //                else if (hp <= 0) SetState(GoblinState.die);
+        //            }
+        //        }
+        //        else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        //    }
+        //}
     }
 
     public override void OnGettingHurt(int col, int atkValue, int playerID, int playerID2, Vector3 dir)
@@ -563,13 +580,23 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                         targetPlayer2 = playerID2;
                         if (curState != GoblinState.hurt && !endure)
                         {
-                            moveFwdDir = dir.normalized;
+                            hurtDir = dir.normalized;
                             SetState(GoblinState.hurt);
                         }
                         else if (hp <= 0) SetState(GoblinState.die);
                     }
                 }
-                else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                else
+                {
+                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                    targetPlayer = playerID;
+                    targetPlayer2 = playerID2;
+                    if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
+                    {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.fakeHurt);
+                    }
+                }
             }
             else if (col == 5)
             {
@@ -583,13 +610,22 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                         targetPlayer2 = playerID2;
                         if (curState != GoblinState.hurt && !endure)
                         {
-                            moveFwdDir = dir.normalized;
+                            hurtDir = dir.normalized;
                             SetState(GoblinState.hurt);
                         }
                         else if (hp <= 0) SetState(GoblinState.die);
                     }
                 }
-                else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                else {
+                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                    targetPlayer = playerID;
+                    targetPlayer2 = playerID2;
+                    if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
+                    {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.fakeHurt);
+                    }
+                }
             }
             else if (col == 6)
             {
@@ -603,13 +639,22 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                         targetPlayer2 = playerID2;
                         if (curState != GoblinState.hurt && !endure)
                         {
-                            moveFwdDir = dir.normalized;
+                            hurtDir = dir.normalized;
                             SetState(GoblinState.hurt);
                         }
                         else if (hp <= 0) SetState(GoblinState.die);
                     }
                 }
-                else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                else{
+                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                    targetPlayer = playerID;
+                    targetPlayer2 = playerID2;
+                    if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
+                    {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.fakeHurt);
+                    }
+                }
             }
         }
     }
