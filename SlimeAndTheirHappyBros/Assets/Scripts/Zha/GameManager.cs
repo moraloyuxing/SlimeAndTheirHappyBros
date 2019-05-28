@@ -116,7 +116,7 @@ public class GameManager : MonoBehaviour
         itemManager.State_Switch();
         playerManager.State_Switch();
         AudioManager.SingletonInScene.ChangeBGM(true, 0);
-        AudioManager.SingletonInScene.PlaySound2D("Round_End", 1.0f);
+        AudioManager.SingletonInScene.PlaySound2D("Round_End", 0.35f);
         uiManager.GoBreakTime();
         playerManager.DocterRound();
     }
