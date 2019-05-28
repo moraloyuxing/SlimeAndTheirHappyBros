@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     bool progressMove = false;
     int tutorialProgres = 0;
     int curRound = 1;
-    float length, progressTime = .0f;
+    float length, progressTime = .0f, totalTime = .0f;
 
     Vector2 oringinProgress, targetProgress;
 
@@ -42,20 +42,25 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         animator.SetTrigger("Tutorial");
+        oringinProgress = new Vector2(headStart, 0);
+        targetProgress = new Vector2(headEnd,0);
     }
 
     // Update is called once per frame
     void Update()
     {
         if (progressMove) {
-            progressTime += Time.deltaTime*1.2f;
-
-            goblinHeadTrans.anchoredPosition = Vector2.Lerp(oringinProgress, targetProgress, progressTime);
-            if (progressTime >= 1.0f) {
-                progressMove = false;
-                progressTime = .0f;
+            if (progressTime <= totalTime)
+            {
+                progressTime += Time.deltaTime;
+                goblinHeadTrans.anchoredPosition = Vector2.Lerp(oringinProgress, targetProgress, progressTime / totalTime);
             }
+            else progressMove = false;
         }
+    }
+
+    public void SetTotalTime(float time) {
+        totalTime = time;
     }
 
     public void SubCountDownCallBack(System.Action cbk) {
@@ -77,7 +82,9 @@ public class UIManager : MonoBehaviour
         curRound++;
         roundTxt.text = curRound.ToString();
         roundImg.sprite = RoundSprite[round];
+        goblinHeadTrans.anchoredPosition = oringinProgress;
         animator.SetTrigger("Round");
+
     }
     public void StartBreak() {
         animator.SetTrigger("BreakTime");
@@ -85,6 +92,7 @@ public class UIManager : MonoBehaviour
 
     public void CountDownEnd() {
         countDownCBK();
+        progressMove = true;
     }
 
     public void GoblinProgress(float percent) {
@@ -98,7 +106,7 @@ public class UIManager : MonoBehaviour
 
     }
     public void GoBreakTime() {
-        GoblinProgress(0);
+        //GoblinProgress(0);
         animator.Play("breakTimeIn");
     }
 

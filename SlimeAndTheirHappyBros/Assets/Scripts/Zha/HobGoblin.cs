@@ -190,7 +190,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         {
             if (inStateTime < totalTime)
             {
-                if (Physics.Raycast(selfPos, moveFwdDir, 3.0f, LayerMask.NameToLayer("barrier")))
+                if (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier")))
                 {
                     float degree = Random.Range(135.0f, 225.0f);
                     moveFwdDir = Quaternion.AngleAxis(degree, Vector3.up) * moveFwdDir;
@@ -225,7 +225,6 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if (goblinManager.PlayersMove[targetPlayer])
                 {
-                    Debug.Log("request path find");
                     //PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
                     RandomATKType();
                     CalculatePath();
@@ -239,7 +238,6 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if (pathIndex == path.finishLineIndex) //|| pathIndex >= path.canAttckIndex
                 {
-                    Debug.Log("reach path goal");
                     followingPath = false;
                     SetState(GoblinState.attackBreak);
                     //OverAttackDetectDist();
@@ -264,7 +262,6 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     {
         if (pathSuccessful)
         {
-            Debug.Log("find path ready to change chase");
             if (curState == GoblinState.idle || curState == GoblinState.ramble || curState == GoblinState.chase || curState == GoblinState.attackBreak) {
                 path = new PathFinder.Path(waypoints, selfPos, turnDist);
                 followingPath = true;
@@ -279,7 +276,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         }
         else
         {
-            Debug.Log("Can't Find");
+            SetState(GoblinState.erroeCatch);
         }
     }
 
@@ -426,7 +423,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     }
                 }
 
-                if (aniInfo.normalizedTime >= 0.99f)
+                if (aniInfo.normalizedTime >= 0.95f)
                 {
                     endure = false;
                     startAttack = false;
@@ -442,43 +439,50 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
     public override void OnGettingHurt(int col, int atkValue, int playerID,Vector3 dir)
     {
-        if (col == 1 || col == 2 || col == 4)
+        if (hp <= 0) return;  
+        AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        targetPlayer = playerID;
+        targetPlayer2 = playerID;
+        if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
         {
-            AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
-            targetPlayer = playerID;
-            targetPlayer2 = playerID;
-            if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
-            {
-                hurtDir = dir.normalized;
-                SetState(GoblinState.fakeHurt);
-            }
-            //if (col == color)
-            //{
-            //    if (hp > 0)
-            //    {
-            //        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-            //        hp -= atkValue;
-            //        targetPlayer = playerID;
-            //        targetPlayer2 = playerID;
-            //        if (curState != GoblinState.hurt && !endure)
-            //        {
-            //            hurtDir = dir.normalized;
-            //            SetState(GoblinState.hurt);
-            //        }
-            //        else if (hp <= 0) SetState(GoblinState.die);
-            //    }
-            //}
-            //else {
-            //    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
-            //    targetPlayer = playerID;
-            //    targetPlayer2 = playerID;
-            //    if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
-            //    {
-            //        hurtDir = dir.normalized;
-            //        SetState(GoblinState.fakeHurt);
-            //    }
-            //} 
+            hurtDir = dir.normalized;
+            SetState(GoblinState.fakeHurt);
         }
+         
+        //if (col == 1 || col == 2 || col == 4)
+        //{
+        //    if (col == color)
+        //    {
+        //        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+        //        hp -= atkValue;
+        //        targetPlayer = playerID;
+        //        targetPlayer2 = playerID;
+        //        if (hp > 0)
+        //        {
+        //            if (curState != GoblinState.hurt && !endure)
+        //            {
+        //                hurtDir = dir.normalized;
+        //                SetState(GoblinState.hurt);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            hurtDir = dir.normalized;
+        //            SetState(GoblinState.die);
+        //        }
+        //    }
+        //    else {
+        //        AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        //        targetPlayer = playerID;
+        //        targetPlayer2 = playerID;
+        //        if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
+        //        {
+        //            hurtDir = dir.normalized;
+        //            SetState(GoblinState.fakeHurt);
+        //        }
+        //    }
+            
+        //}
         //else
         //{
         //    if (col == 3)
@@ -546,6 +550,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
     public override void OnGettingHurt(int col, int atkValue, int playerID, int playerID2, Vector3 dir)
     {
+        if (hp <= 0) return;
         //if (col == 1 || col == 2 || col == 4)
         //{
         //    if (col == color)
@@ -572,18 +577,21 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if ((color == 1 || color == 2 || color == 3))
                 {
+                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                    hp -= atkValue;
+                    targetPlayer = playerID;
+                    targetPlayer2 = playerID2;
                     if (hp > 0)
                     {
-                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-                        hp -= atkValue;
-                        targetPlayer = playerID;
-                        targetPlayer2 = playerID2;
                         if (curState != GoblinState.hurt && !endure)
                         {
                             hurtDir = dir.normalized;
                             SetState(GoblinState.hurt);
                         }
-                        else if (hp <= 0) SetState(GoblinState.die);
+                    }
+                    else {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.die);
                     }
                 }
                 else
@@ -602,18 +610,22 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if ((color == 1 || color == 4 || color == 5))
                 {
+                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                    hp -= atkValue;
+                    targetPlayer = playerID;
+                    targetPlayer2 = playerID2;
                     if (hp > 0)
                     {
-                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-                        hp -= atkValue;
-                        targetPlayer = playerID;
-                        targetPlayer2 = playerID2;
                         if (curState != GoblinState.hurt && !endure)
                         {
                             hurtDir = dir.normalized;
                             SetState(GoblinState.hurt);
                         }
-                        else if (hp <= 0) SetState(GoblinState.die);
+                    }
+                    else
+                    {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.die);
                     }
                 }
                 else {
@@ -631,18 +643,22 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if ((color == 2 || color == 4 || color == 6))
                 {
+                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                    hp -= atkValue;
+                    targetPlayer = playerID;
+                    targetPlayer2 = playerID2;
                     if (hp > 0)
                     {
-                        AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
-                        hp -= atkValue;
-                        targetPlayer = playerID;
-                        targetPlayer2 = playerID2;
                         if (curState != GoblinState.hurt && !endure)
                         {
                             hurtDir = dir.normalized;
                             SetState(GoblinState.hurt);
                         }
-                        else if (hp <= 0) SetState(GoblinState.die);
+                    }
+                    else
+                    {
+                        hurtDir = dir.normalized;
+                        SetState(GoblinState.die);
                     }
                 }
                 else{
@@ -667,6 +683,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
             AudioManager.SingletonInScene.PlaySound2D("Hob_Death", 0.5f);
             animator.speed = 1.0f;
+            animator.SetTrigger("die");
             animator.SetInteger("state", 4);
             AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.5f);
             if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
@@ -677,7 +694,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         else
         {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.99f)
+            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.95f)
             {
                 ResetUnit();
             }
@@ -703,7 +720,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         else
         {
             transform.position += deltaTime * speed * moveFwdDir;
-            if (inStateTime > 3.0f) SetState();
+            if (inStateTime > 1.5f) SetState();
         }
     }
 

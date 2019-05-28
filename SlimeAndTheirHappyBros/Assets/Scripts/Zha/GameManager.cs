@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
             gameStates[i] = new GameState();
-            gameStates[i].Init(roundInfos[i], goblinManager, SpawnOver);
+            gameStates[i].Init(roundInfos[i], goblinManager); //SpawnOver
             for (int j = 0; j < roundInfos[i].waves.Length; j++) {
                 goblinKillsGoal[i] += roundInfos[i].waves[j].normalGoblin + roundInfos[i].waves[j].archerGoblin + roundInfos[i].waves[j].hobGoblin;
  
@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
     }
     void Start()
     {
-        
+        uiManager.SetTotalTime(roundInfos[0].waves[(roundInfos[0].maxWave - 1)].spawnTime);
     }
 
     // Update is called once per frame
@@ -89,17 +89,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SpawnOver(int curWave) {
+    //public void SpawnOver(int curWave) {
 
-        if (curWave <= roundInfos[curRound].maxWave)
-        {
-            if(curWave == 0 ) uiManager.GoblinProgress(0);
-            else uiManager.GoblinProgress((float)curWave / (float)(roundInfos[curRound].maxWave - 1));
-        }
-        else {
+    //    if (curWave <= roundInfos[curRound].maxWave)
+    //    {
+    //        if(curWave == 0 ) uiManager.GoblinProgress(0);
+    //        else uiManager.GoblinProgress((float)curWave / (float)(roundInfos[curRound].maxWave - 1));
+    //    }
+    //    else {
             
-        }
-    }
+    //    }
+    //}
 
     public void StartRound() {
         roundStart = true;
@@ -119,11 +119,14 @@ public class GameManager : MonoBehaviour
         AudioManager.SingletonInScene.PlaySound2D("Round_End", 0.35f);
         uiManager.GoBreakTime();
         playerManager.DocterRound();
+
+        uiManager.SetTotalTime(roundInfos[0].waves[(roundInfos[0].maxWave - 1)].spawnTime);
     }
     public void GoNextRound() {
         inShopping = false;
         itemManager.State_Switch();
         playerManager.State_Switch();
+
         uiManager.StartRound(curRound);
     }
 

@@ -128,7 +128,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                     float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f : speed * 3.0f;
                     transform.position += deltaTime * atkSpeed * moveFwdDir;
                 }
-                else if (aniInfo.normalizedTime >= 0.99f)
+                else if (aniInfo.normalizedTime >= 0.95f)
                 {
                     animator.SetTrigger("attackOver");
                     SetState(GoblinState.attackBreak);
@@ -153,16 +153,16 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         }
         else
         {
-            if (!Physics.Raycast(selfPos, moveFwdDir, 2.0f, LayerMask.NameToLayer("barrier"))) {
+
+            if (!Physics.Raycast(selfPos, hurtDir, 2.0f, 1 << LayerMask.NameToLayer("Barrier"))) {
                 transform.position += backSpeed * deltaTime * hurtDir;
             }
             backSpeed -= deltaTime * 15.0f;
             if (backSpeed <= .0f) backSpeed = .0f;
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
-            if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f)
+            if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.95f)
             {
-                Debug.Log("hurrrrt  over");
                 if (hp <= 0) SetState(GoblinState.die);
                 else SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
@@ -181,7 +181,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             atkCol.enabled = false;
             animator.speed = 1.0f;
             animator.SetTrigger("die");
-            //animator.SetInteger("state", 4);
+            //animator.Play("die");
+            animator.SetInteger("state", 4);
             AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
             
             if(targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
@@ -191,7 +192,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         else
         {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.99f)
+            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.95f)
             {
                 ResetUnit();
             }

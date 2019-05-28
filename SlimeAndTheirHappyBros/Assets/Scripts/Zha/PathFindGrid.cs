@@ -21,6 +21,8 @@ public class PathFindGrid : MonoBehaviour {
     int penaltyMin = int.MaxValue;
     int penaltyMax = int.MinValue;
 
+    float offsetX, offsetY;
+
     void Awake()
     {
         nodeDiameter = nodeRadius * 2.0f;
@@ -34,6 +36,8 @@ public class PathFindGrid : MonoBehaviour {
         }
 
         CreateGrid();
+        offsetX = transform.position.x;
+        offsetY = transform.position.y;
     }
 
     public int MaxSize
@@ -176,8 +180,8 @@ public class PathFindGrid : MonoBehaviour {
 
     public Node NodeFromWorldPoint(Vector3 worldPosition)
     {
-        float percentX = (worldPosition.x + gridWorldSize.x / 2) / gridWorldSize.x;
-        float percentY = (worldPosition.z + gridWorldSize.y / 2) / gridWorldSize.y;
+        float percentX = (worldPosition.x - offsetX + gridWorldSize.x / 2) / gridWorldSize.x;
+        float percentY = (worldPosition.z - offsetY + gridWorldSize.y / 2) / gridWorldSize.y;
         percentX = Mathf.Clamp01(percentX);
         percentY = Mathf.Clamp01(percentY);
 
