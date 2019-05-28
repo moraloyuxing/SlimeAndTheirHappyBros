@@ -226,7 +226,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 if (goblinManager.PlayersMove[targetPlayer])
                 {
                     //PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
-                    RandomATKType();
+
                     CalculatePath();
                     inStateTime = 0.0f;
                 }
@@ -281,7 +281,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     }
 
     void RandomATKType() {
-        attackType = Random.Range(0, 2);
+        attackType = (Random.Range(0, 100) < 70)?0:1;
         sightDist = sightDists[attackType];
         atkDist = atkDists[attackType];
     }
@@ -303,7 +303,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 firstInState = false;
                 if (attackType == 0)//Random.Range(0, 100) < 70
                 { //槌擊
-                    if (Mathf.Abs(moveFwdDir.z) > 1.0f)
+                    if (moveFwdDir.z > -0.3f || moveFwdDir.z < -1.0f)
                     {
                         animator.speed = 1.2f;
                         animator.SetInteger("state", 1);
@@ -349,9 +349,13 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 }
                 else
                 {
-                    if (Mathf.Abs(moveFwdDir.z) > 1.0f)
+                    if (moveFwdDir.z > -0.3f)
                     {
-                        moveFwdDir = new Vector3(0, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).normalized;
+                        moveFwdDir = new Vector3(0, 0, 1.0f);
+                        transform.position += speed * 1.2f * deltaTime * moveFwdDir;
+                    }
+                    else if (moveFwdDir.z < -1.0f) {
+                        moveFwdDir = new Vector3(0, 0,-1.0f);
                         transform.position += speed * 1.2f * deltaTime * moveFwdDir;
                     }
                     else
