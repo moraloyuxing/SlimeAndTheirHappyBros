@@ -62,7 +62,7 @@ public class Item_Manager : MonoBehaviour {
                             //多一判斷式→錢夠不夠
                             if (Player_Money[p] >= Item_Price[p,Focus_Count[p]]) {
                                 PlayerHasBuy[p, Focus_Count[p]] = true;
-                                AudioManager.SingletonInScene.PlaySound2D("Buy", 0.5f);
+                                AudioManager.SingletonInScene.PlaySound2D("Buy", 0.7f);
 
                                 //針對各玩家進行道具加成跟UI更新
                                 Player_BaseAbility[p].Ability_Modify(Focus_Count[p], ItemSprite[Focus_Count[p]], Item_Price[p,Focus_Count[p]]);
