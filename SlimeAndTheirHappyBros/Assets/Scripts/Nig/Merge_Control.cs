@@ -191,7 +191,7 @@ public class Merge_Control : MonoBehaviour{
 
         if (xAix > 0.0f)
         {
-
+            if (ArrowRot == -1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
             ArrowRot = 1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false)
@@ -216,12 +216,11 @@ public class Merge_Control : MonoBehaviour{
 
         if (xAix < 0.0f)
         {
-            Debug.Log("outside");
+            if (ArrowRot == 1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
             ArrowRot = -1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false)
             {
-                Debug.Log("go");
                 Merge_Sprite.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f);
                 Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
