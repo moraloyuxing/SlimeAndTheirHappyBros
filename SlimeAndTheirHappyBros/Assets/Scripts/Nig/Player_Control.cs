@@ -355,7 +355,7 @@ public class Player_Control : MonoBehaviour{
 
         //道具掉落
         if (CanDrop == true){
-            Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);//要搬走，此處非Update
+            Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);
             if (Mathf.Abs(Current_BlewOut.transform.position.x - DropX) < 0.1f && Mathf.Abs(Current_BlewOut.transform.position.z - DropZ) < 0.1f){
                 CanDrop = false;
                 Current_BlewOut = null;
@@ -680,7 +680,8 @@ public class Player_Control : MonoBehaviour{
             Random_Drop = Random.Range(0, _IteminHand.Count);
             Current_BlewOut = Instantiate(Item_BlewOut) as GameObject;
             //GameObject clone_Item = Instantiate(Item_BlewOut) as GameObject;
-            Current_BlewOut.GetComponent<SpriteRenderer>().sprite = _IteminHand[Random_Drop];
+            //Current_BlewOut.GetComponent<SpriteRenderer>().sprite = _IteminHand[Random_Drop];
+            Current_BlewOut.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = _IteminHand[Random_Drop];
             Current_BlewOut.transform.position = transform.position;
             //switch內做三樣：下修數值、更新UI、調降金額(itemmanager)
             switch (_IteminHand[Random_Drop].name) {

@@ -545,6 +545,7 @@ public class Merge_Control : MonoBehaviour{
     {
         ExtraPriority = false;
         AttackPriority = false;
+        transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
     }
 
     //短衝刺設定

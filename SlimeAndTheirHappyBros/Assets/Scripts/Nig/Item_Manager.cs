@@ -67,7 +67,7 @@ public class Item_Manager : MonoBehaviour {
                                 //針對各玩家進行道具加成跟UI更新
                                 Player_BaseAbility[p].Ability_Modify(Focus_Count[p], ItemSprite[Focus_Count[p]], Item_Price[p,Focus_Count[p]]);
                                 //Item_SuperImposed[p, Focus_Count[p]]++;//疊加狀態，同時調高下次購買金額
-                                Item_PickUp(Player_Money[p], Focus_Count[p]);
+                                Item_PickUp(p, Focus_Count[p]);
 
                                 //單回合已購買的道具，去除提示
                                 itemBeFocused[Focus_Count[p]]--;
@@ -93,7 +93,7 @@ public class Item_Manager : MonoBehaviour {
                 for (int i = 0; i < 6; i++){
                     if (itemBeFocused[i] > 0){
                         Item_Hint[i].SetActive(true);
-                        PricetoPlayer[p].text = Item_Price[p,i].ToString();
+                        if(Focus_Count[p] != -1)PricetoPlayer[p].text = Item_Price[p, Focus_Count[p]].ToString();
                     }
                     else Item_Hint[i].SetActive(false);
                 }
