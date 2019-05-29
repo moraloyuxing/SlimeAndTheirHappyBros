@@ -120,7 +120,7 @@ public class GameManager : MonoBehaviour
         uiManager.GoBreakTime();
         playerManager.DocterRound();
 
-        uiManager.SetTotalTime(roundInfos[0].waves[(roundInfos[0].maxWave - 1)].spawnTime);
+        uiManager.SetTotalTime(roundInfos[curRound].waves[(roundInfos[curRound].maxWave - 1)].spawnTime);
     }
     public void GoNextRound() {
         inShopping = false;

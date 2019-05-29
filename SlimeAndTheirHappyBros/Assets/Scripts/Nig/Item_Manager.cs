@@ -61,7 +61,7 @@ public class Item_Manager : MonoBehaviour {
 
                             //多一判斷式→錢夠不夠
                             if (Player_Money[p] >= Item_Price[p,Focus_Count[p]]) {
-                                PlayerHasBuy[p, Focus_Count[p]] = true;
+                                //PlayerHasBuy[p, Focus_Count[p]] = true;
                                 AudioManager.SingletonInScene.PlaySound2D("Buy", 0.7f);
 
                                 //針對各玩家進行道具加成跟UI更新
@@ -70,9 +70,9 @@ public class Item_Manager : MonoBehaviour {
                                 Item_PickUp(Player_Money[p], Focus_Count[p]);
 
                                 //單回合已購買的道具，去除提示
-                                //itemBeFocused[Focus_Count[p]]--;
-                                //Player_BuyHint[p].SetActive(false);
-                                //Focus_Count[p] = -1;
+                                itemBeFocused[Focus_Count[p]]--;
+                                Player_BuyHint[p].SetActive(false);
+                                Focus_Count[p] = -1;
                             }
                         }
                     }
@@ -93,7 +93,7 @@ public class Item_Manager : MonoBehaviour {
                 for (int i = 0; i < 6; i++){
                     if (itemBeFocused[i] > 0){
                         Item_Hint[i].SetActive(true);
-                        PricetoPlayer[p].text = Item_Price[p, itemBeFocused[Focus_Count[p]]].ToString();
+                        PricetoPlayer[p].text = Item_Price[p,i].ToString();
                     }
                     else Item_Hint[i].SetActive(false);
                 }

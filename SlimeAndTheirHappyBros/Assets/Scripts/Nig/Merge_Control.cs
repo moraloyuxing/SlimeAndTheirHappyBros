@@ -92,7 +92,7 @@ public class Merge_Control : MonoBehaviour{
     //各式數值
     float Base_Timer = 15.0f;
     int Base_HP = 3;
-    int Max_HP = 5;
+    int Max_HP = 15;
     public int Base_ATK = 5;
     float Base_Speed = 1.0f;
     float Current_Speed = 1.0f;

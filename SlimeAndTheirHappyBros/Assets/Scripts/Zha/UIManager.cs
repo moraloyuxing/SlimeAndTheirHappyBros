@@ -93,6 +93,7 @@ public class UIManager : MonoBehaviour
     public void CountDownEnd() {
         countDownCBK();
         progressMove = true;
+        progressTime = .0f;
     }
 
     public void GoblinProgress(float percent) {
