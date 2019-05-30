@@ -55,98 +55,95 @@ public class Player_Manager : MonoBehaviour
 
     void Update()
     {
-
+        for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
         if (Game_State){
-            for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
-
             //玩家1啟用融合
             if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true && Weak_State[0] == false)
             {
-                if (shortest_toPlayer[0] == FourPlayer[1].gameObject && Can_Merge[0] == true && Weak_State[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[1].gameObject, Color_Number[0] + Color_Number[1]); }
-                else if (shortest_toPlayer[0] == FourPlayer[2].gameObject && Can_Merge[1] == true && Weak_State[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[2].gameObject, Color_Number[0] + Color_Number[2]); }
-                else if (shortest_toPlayer[0] == FourPlayer[3].gameObject && Can_Merge[2] == true && Weak_State[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[3].gameObject, Color_Number[0] + Color_Number[3]); }
-            }
-
-            //玩家1啟用洗白
-            else if (a_button[0] && WashPriority[0] && FourPlayer[0].gameObject.activeSelf == true)
-            {
-                SetPlayerColor(0, 0);
-                pigmentManager.Change_Base_Color(0, 0);
-                FourPlayer[0].SendMessage("Hide_Hint");
-                FourPlayer[0].SendMessage("WashOutColor");
-                Check_distance();
-                WashPriority[0] = false;
-                HaveBoard = false;
-                WashingBoard.SetActive(false);
-                AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+                if (shortest_toPlayer[0] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[0].gameObject && Can_Merge[0] == true && Weak_State[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[1].gameObject, Color_Number[0] + Color_Number[1]); }
+                else if (shortest_toPlayer[0] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[0].gameObject && Can_Merge[1] == true && Weak_State[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[2].gameObject, Color_Number[0] + Color_Number[2]); }
+                else if (shortest_toPlayer[0] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[0].gameObject && Can_Merge[2] == true && Weak_State[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[3].gameObject, Color_Number[0] + Color_Number[3]); }
             }
 
             //玩家2啟用融合
             if (a_button[1] && WashPriority[1] == false && FourPlayer[1].gameObject.activeSelf == true && Weak_State[1] == false)
             {
-                if (shortest_toPlayer[1] == FourPlayer[0].gameObject && Can_Merge[0] == true && Weak_State[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[0].gameObject, Color_Number[1] + Color_Number[0]); }
-                else if (shortest_toPlayer[1] == FourPlayer[2].gameObject && Can_Merge[3] == true && Weak_State[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[2].gameObject, Color_Number[1] + Color_Number[2]); }
-                else if (shortest_toPlayer[1] == FourPlayer[3].gameObject && Can_Merge[4] == true && Weak_State[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[3].gameObject, Color_Number[1] + Color_Number[3]); }
-            }
-
-            //玩家2啟用洗白
-            else if (a_button[1] && WashPriority[1] && FourPlayer[1].gameObject.activeSelf == true)
-            {
-                SetPlayerColor(1, 0);
-                pigmentManager.Change_Base_Color(1, 0);
-                FourPlayer[1].SendMessage("Hide_Hint");
-                FourPlayer[1].SendMessage("WashOutColor");
-                Check_distance();
-                WashPriority[1] = false;
-                HaveBoard = false;
-                WashingBoard.SetActive(false);
-                AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+                if (shortest_toPlayer[1] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[1].gameObject && Can_Merge[0] == true && Weak_State[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[0].gameObject, Color_Number[1] + Color_Number[0]); }
+                else if (shortest_toPlayer[1] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[1].gameObject && Can_Merge[3] == true && Weak_State[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[2].gameObject, Color_Number[1] + Color_Number[2]); }
+                else if (shortest_toPlayer[1] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[1].gameObject && Can_Merge[4] == true && Weak_State[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[3].gameObject, Color_Number[1] + Color_Number[3]); }
             }
 
             //玩家3啟用融合
             if (a_button[2] && WashPriority[2] == false && FourPlayer[2].gameObject.activeSelf == true && Weak_State[2] == false)
             {
-                if (shortest_toPlayer[2] == FourPlayer[0].gameObject && Can_Merge[1] == true && Weak_State[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[0].gameObject, Color_Number[2] + Color_Number[0]); }
-                else if (shortest_toPlayer[2] == FourPlayer[1].gameObject && Can_Merge[3] == true && Weak_State[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[1].gameObject, Color_Number[2] + Color_Number[1]); }
-                else if (shortest_toPlayer[2] == FourPlayer[3].gameObject && Can_Merge[5] == true && Weak_State[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[3].gameObject, Color_Number[2] + Color_Number[3]); }
+                if (shortest_toPlayer[2] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[2].gameObject && Can_Merge[1] == true && Weak_State[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[0].gameObject, Color_Number[2] + Color_Number[0]); }
+                else if (shortest_toPlayer[2] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[2].gameObject && Can_Merge[3] == true && Weak_State[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[1].gameObject, Color_Number[2] + Color_Number[1]); }
+                else if (shortest_toPlayer[2] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[2].gameObject && Can_Merge[5] == true && Weak_State[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[3].gameObject, Color_Number[2] + Color_Number[3]); }
             }
-
-            //玩家3啟用洗白
-            else if (a_button[2] && WashPriority[2] && FourPlayer[2].gameObject.activeSelf == true)
-            {
-                SetPlayerColor(2, 0);
-                pigmentManager.Change_Base_Color(2, 0);
-                FourPlayer[2].SendMessage("Hide_Hint");
-                FourPlayer[2].SendMessage("WashOutColor");
-                Check_distance();
-                WashPriority[2] = false;
-                HaveBoard = false;
-                WashingBoard.SetActive(false);
-                AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
-            }
-
+           
             //玩家4啟用融合
             if (a_button[3] && WashPriority[3] == false && FourPlayer[3].gameObject.activeSelf == true && Weak_State[3] == false)
             {
-                if (shortest_toPlayer[3] == FourPlayer[0].gameObject && Can_Merge[2] == true && Weak_State[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[0].gameObject, Color_Number[3] + Color_Number[0]); }
-                else if (shortest_toPlayer[3] == FourPlayer[1].gameObject && Can_Merge[4] == true && Weak_State[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[1].gameObject, Color_Number[3] + Color_Number[1]); }
-                else if (shortest_toPlayer[3] == FourPlayer[2].gameObject && Can_Merge[5] == true && Weak_State[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[2].gameObject, Color_Number[3] + Color_Number[2]); }
-            }
-
-            //玩家4啟用洗白
-            else if (a_button[3] && WashPriority[3] && FourPlayer[3].gameObject.activeSelf == true)
-            {
-                SetPlayerColor(3, 0);
-                pigmentManager.Change_Base_Color(3, 0);
-                FourPlayer[3].SendMessage("Hide_Hint");
-                FourPlayer[3].SendMessage("WashOutColor");
-                Check_distance();
-                WashPriority[3] = false;
-                HaveBoard = false;
-                WashingBoard.SetActive(false);
-                AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+                if (shortest_toPlayer[3] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[3].gameObject && Can_Merge[2] == true && Weak_State[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[0].gameObject, Color_Number[3] + Color_Number[0]); }
+                else if (shortest_toPlayer[3] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[3].gameObject && Can_Merge[4] == true && Weak_State[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[1].gameObject, Color_Number[3] + Color_Number[1]); }
+                else if (shortest_toPlayer[3] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[3].gameObject && Can_Merge[5] == true && Weak_State[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[2].gameObject, Color_Number[3] + Color_Number[2]); }
             }
         }
+
+        //玩家1啟用洗白
+        if (a_button[0] && WashPriority[0] && FourPlayer[0].gameObject.activeSelf == true)
+        {
+            SetPlayerColor(0, 0);
+            pigmentManager.Change_Base_Color(0, 0);
+            FourPlayer[0].SendMessage("Hide_Hint");
+            FourPlayer[0].SendMessage("WashOutColor");
+            Check_distance();
+            WashPriority[0] = false;
+            HaveBoard = false;
+            WashingBoard.SetActive(false);
+            AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+        }
+        //玩家2啟用洗白
+        if (a_button[1] && WashPriority[1] && FourPlayer[1].gameObject.activeSelf == true)
+        {
+            SetPlayerColor(1, 0);
+            pigmentManager.Change_Base_Color(1, 0);
+            FourPlayer[1].SendMessage("Hide_Hint");
+            FourPlayer[1].SendMessage("WashOutColor");
+            Check_distance();
+            WashPriority[1] = false;
+            HaveBoard = false;
+            WashingBoard.SetActive(false);
+            AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+        }
+        //玩家3啟用洗白
+        if (a_button[2] && WashPriority[2] && FourPlayer[2].gameObject.activeSelf == true)
+        {
+            SetPlayerColor(2, 0);
+            pigmentManager.Change_Base_Color(2, 0);
+            FourPlayer[2].SendMessage("Hide_Hint");
+            FourPlayer[2].SendMessage("WashOutColor");
+            Check_distance();
+            WashPriority[2] = false;
+            HaveBoard = false;
+            WashingBoard.SetActive(false);
+            AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+        }
+
+        //玩家4啟用洗白
+        if (a_button[3] && WashPriority[3] && FourPlayer[3].gameObject.activeSelf == true)
+        {
+            SetPlayerColor(3, 0);
+            pigmentManager.Change_Base_Color(3, 0);
+            FourPlayer[3].SendMessage("Hide_Hint");
+            FourPlayer[3].SendMessage("WashOutColor");
+            Check_distance();
+            WashPriority[3] = false;
+            HaveBoard = false;
+            WashingBoard.SetActive(false);
+            AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+        }
+
 
         if (!Game_State) {
             bool onit = true;
@@ -178,7 +175,7 @@ public class Player_Manager : MonoBehaviour
             FourPlayer[0].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) < 5.0f && HaveBoard)
+            if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard)
             {
                 if (Color_Number[0] != 0)
                 {
@@ -186,7 +183,7 @@ public class Player_Manager : MonoBehaviour
                     SetHintType(0, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) >= 5.0f || HaveBoard == false)
+            else if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false)
             {
                 FourPlayer[0].SendMessage("Hide_Hint");
                 WashPriority[0] = false;
@@ -196,6 +193,10 @@ public class Player_Manager : MonoBehaviour
             Player_Distance[0] = Mathf.Sqrt(Mathf.Pow(FourPlayer[0].transform.position.x - FourPlayer[1].transform.position.x, 2) + Mathf.Pow(FourPlayer[0].transform.position.z - FourPlayer[1].transform.position.z, 2));//與2
             Player_Distance[1] = Mathf.Sqrt(Mathf.Pow(FourPlayer[0].transform.position.x - FourPlayer[2].transform.position.x, 2) + Mathf.Pow(FourPlayer[0].transform.position.z - FourPlayer[2].transform.position.z, 2));//與3
             Player_Distance[2] = Mathf.Sqrt(Mathf.Pow(FourPlayer[0].transform.position.x - FourPlayer[3].transform.position.x, 2) + Mathf.Pow(FourPlayer[0].transform.position.z - FourPlayer[3].transform.position.z, 2));//與4
+
+            if (Player_Death[1] == true) Player_Distance[0] = 99.7f;
+            if (Player_Death[2] == true) Player_Distance[1] = 99.8f;
+            if (Player_Death[3] == true) Player_Distance[2] = 99.9f;
 
             //比較三個玩家的距離遠近
             if (Player_Distance[0] < Player_Distance[1])
@@ -225,7 +226,7 @@ public class Player_Manager : MonoBehaviour
             FourPlayer[1].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 5.0f && HaveBoard)
+            if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard)
             {
                 if (Color_Number[1] != 0)
                 {
@@ -233,7 +234,7 @@ public class Player_Manager : MonoBehaviour
                     SetHintType(1, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) >= 5.0f || HaveBoard == false)
+            else if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false)
             {
                 FourPlayer[1].SendMessage("Hide_Hint");
                 WashPriority[1] = false;
@@ -243,6 +244,10 @@ public class Player_Manager : MonoBehaviour
             Player_Distance[0] = Mathf.Sqrt(Mathf.Pow(FourPlayer[1].transform.position.x - FourPlayer[0].transform.position.x, 2) + Mathf.Pow(FourPlayer[1].transform.position.z - FourPlayer[0].transform.position.z, 2));//與1
             Player_Distance[3] = Mathf.Sqrt(Mathf.Pow(FourPlayer[1].transform.position.x - FourPlayer[2].transform.position.x, 2) + Mathf.Pow(FourPlayer[1].transform.position.z - FourPlayer[2].transform.position.z, 2));//與3
             Player_Distance[4] = Mathf.Sqrt(Mathf.Pow(FourPlayer[1].transform.position.x - FourPlayer[3].transform.position.x, 2) + Mathf.Pow(FourPlayer[1].transform.position.z - FourPlayer[3].transform.position.z, 2));//與4
+
+            if (Player_Death[0] == true) Player_Distance[0] = 99.7f;
+            if (Player_Death[2] == true) Player_Distance[3] = 99.8f;
+            if (Player_Death[3] == true) Player_Distance[4] = 99.9f;
 
             //比較三個玩家的距離遠近
             if (Player_Distance[0] < Player_Distance[3])
@@ -274,7 +279,7 @@ public class Player_Manager : MonoBehaviour
             FourPlayer[2].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) < 5.0f && HaveBoard)
+            if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard)
             {
                 if (Color_Number[2] != 0)
                 {
@@ -282,7 +287,7 @@ public class Player_Manager : MonoBehaviour
                     SetHintType(2, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) >= 5.0f || HaveBoard == false)
+            else if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false)
             {
                 FourPlayer[2].SendMessage("Hide_Hint");
                 WashPriority[2] = false;
@@ -292,6 +297,10 @@ public class Player_Manager : MonoBehaviour
             Player_Distance[1] = Mathf.Sqrt(Mathf.Pow(FourPlayer[2].transform.position.x - FourPlayer[0].transform.position.x, 2) + Mathf.Pow(FourPlayer[2].transform.position.z - FourPlayer[0].transform.position.z, 2));//與1
             Player_Distance[3] = Mathf.Sqrt(Mathf.Pow(FourPlayer[2].transform.position.x - FourPlayer[1].transform.position.x, 2) + Mathf.Pow(FourPlayer[2].transform.position.z - FourPlayer[1].transform.position.z, 2));//與2
             Player_Distance[5] = Mathf.Sqrt(Mathf.Pow(FourPlayer[2].transform.position.x - FourPlayer[3].transform.position.x, 2) + Mathf.Pow(FourPlayer[2].transform.position.z - FourPlayer[3].transform.position.z, 2));//與4
+
+            if (Player_Death[0] == true) Player_Distance[1] = 99.7f;
+            if (Player_Death[1] == true) Player_Distance[3] = 99.8f;
+            if (Player_Death[3] == true) Player_Distance[5] = 99.9f;
 
             //比較三個玩家的距離遠近
             if (Player_Distance[1] < Player_Distance[3])
@@ -323,7 +332,7 @@ public class Player_Manager : MonoBehaviour
             FourPlayer[3].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) < 5.0f && Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) < 5.0f && HaveBoard)
+            if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard)
             {
                 if (Color_Number[3] != 0)
                 {
@@ -331,7 +340,7 @@ public class Player_Manager : MonoBehaviour
                     SetHintType(3, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) >= 5.0f || Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) >= 5.0f || HaveBoard == false)
+            else if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false)
             {
                 FourPlayer[3].SendMessage("Hide_Hint");
                 WashPriority[3] = false;
@@ -341,6 +350,10 @@ public class Player_Manager : MonoBehaviour
             Player_Distance[2] = Mathf.Sqrt(Mathf.Pow(FourPlayer[3].transform.position.x - FourPlayer[0].transform.position.x, 2) + Mathf.Pow(FourPlayer[3].transform.position.z - FourPlayer[0].transform.position.z, 2));//與1
             Player_Distance[4] = Mathf.Sqrt(Mathf.Pow(FourPlayer[3].transform.position.x - FourPlayer[1].transform.position.x, 2) + Mathf.Pow(FourPlayer[3].transform.position.z - FourPlayer[1].transform.position.z, 2));//與2
             Player_Distance[5] = Mathf.Sqrt(Mathf.Pow(FourPlayer[3].transform.position.x - FourPlayer[2].transform.position.x, 2) + Mathf.Pow(FourPlayer[3].transform.position.z - FourPlayer[2].transform.position.z, 2));//與3
+
+            if (Player_Death[0] == true) Player_Distance[2] = 99.7f;
+            if (Player_Death[1] == true) Player_Distance[4] = 99.8f;
+            if (Player_Death[2] == true) Player_Distance[5] = 99.9f;
 
             //比較三個玩家的距離遠近
             if (Player_Distance[2] < Player_Distance[4])
@@ -404,7 +417,7 @@ public class Player_Manager : MonoBehaviour
 
     void SetHintType(int pCnt, int pHint)
     {
-        if (Game_State)
+        if ((Game_State && pHint == 1) || pHint == 0)
         {
             Sprite WhichHint = Hint_Type[pHint];
             FourPlayer[pCnt].SendMessage("Show_Hint", WhichHint);

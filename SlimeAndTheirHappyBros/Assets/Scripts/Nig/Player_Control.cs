@@ -61,6 +61,7 @@ public class Player_Control : MonoBehaviour{
     //攻擊
     float right_trigger = 0.0f;
     bool Shooting = false;
+    Animation AttackSpeed_anim;
 
     //單人染色偵測
     public Transform[] Pigment = new Transform[3];//白紅黃藍
@@ -88,17 +89,28 @@ public class Player_Control : MonoBehaviour{
     int Base_HP = 3;
     float Base_Speed = 1.0f;//Dash固定為此變數+5
     float Weak_Speed = 0.6f;
-    float Current_Speed = 1.0f;//Dash後抓回
     public int Base_Penetrate = 1;
+    public float Current_Speed = 1.0f;//Dash後抓回
+    public float Base_BulletScale = 1.0f;
+    public float Base_BulletSpeed = 1.0f;
+    public float Base_BulletTime = 0.0f;
+    public float Base_AttackSpeed = 1.0f;
 
     //各式數值(額外加成)
     public int Extra_ATK = 0;
     public int Extra_HP = 0;
     public int Extra_Penetrate = 0;
     public int Speed_Superimposed = 0;
-    public int Bullet_Superimposed = 0;
     public int Timer_Superimposed = 0;
+    public int BulletScale_Superimposed = 0;
+    public int BulletTime_Superimposed = 0;
     public int BulletSpeed_Superimposed = 0;
+    public int AttackSpeed_Superimposed = 0;
+    float Speed_PercentageModify;
+    float BulletScale_PercentageModify;
+    float BulletSpeed_PercentageModify;
+    float BulletTime_PercentageModify;
+    float AttackSpeed_PercentageModify;
 
     //UI連動
     public GameObject UI_Icon;
@@ -108,6 +120,8 @@ public class Player_Control : MonoBehaviour{
     public Text HaveMoney;
     int[] ItemCount = new int[6];
     int Current_Money = 0;
+    Animator Heart_anim;
+    public Animator Money_anim;
 
     //衰弱狀態相關
     float Weak_Moment = 0.0f;
@@ -147,7 +161,8 @@ public class Player_Control : MonoBehaviour{
     void Update(){
         anim.SetBool("Walking", Walking);
         anim.SetBool("Shooting", Shooting);
-
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Attack")) anim.speed = Base_AttackSpeed;
+        else anim.speed = 1.0f;
         //受傷判定
         if (StopDetect == false)SlimeGetHurt();
         //移動&短衝刺
@@ -187,7 +202,7 @@ public class Player_Control : MonoBehaviour{
                 transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
                 Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
-                Hint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
+                Hint.transform.localScale = new Vector3(1.0f, 1.0f,1.0f);
                 BuyHint.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
                 BuyHint.transform.localPosition = new Vector3(1.3f,1.7f, -1.0f);
             }
@@ -215,7 +230,7 @@ public class Player_Control : MonoBehaviour{
                 transform.localScale = new Vector3(-1.3f, 1.3f, 1.3f);
                 Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(-0.55f, 0.55f, 0.55f);
-                Hint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
+                Hint.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
                 BuyHint.transform.localScale = new Vector3(-1.0f,1.0f,1.0f);
                 BuyHint.transform.localPosition = new Vector3(-1.3f, 1.7f, -1.0f);
             }
@@ -415,12 +430,14 @@ public class Player_Control : MonoBehaviour{
                 CancelInvoke("Musou_Flick");
                 musouTime = 1.8f;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
-                //musouTime = Time.time;
-                //StateMusou = 1.2f;
                 Base_HP--;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
                 for (int k = 0; k <Personal_HP.Length; k++) {
                     if (k < Base_HP) Personal_HP[k].SetActive(true);
+                    else if (k == Base_HP) {
+                        Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                        Heart_anim.Play("Heart_Disappear");
+                    }
                     else Personal_HP[k].SetActive(false);
                 }
 
@@ -471,7 +488,7 @@ public class Player_Control : MonoBehaviour{
         if (DeathPriority) {
             GetComponent<Animator>().Play("Slime_CureEffect");
             rescue_count++;
-
+            AudioManager.SingletonInScene.PlaySound2D("Heal", 0.5f);
             if (rescue_count >= 5){
                 rescue_count = 0;
                 Base_HP = 1 + Extra_HP;
@@ -517,7 +534,10 @@ public class Player_Control : MonoBehaviour{
     void Die_InMergeState(){
         Base_HP = 0;
         for (int k = 0; k < Personal_HP.Length; k++){
-            Personal_HP[k].SetActive(false);
+            if (Personal_HP[k].activeSelf == true) {
+                Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Disappear");
+            }
         }
 
         CancelColor();
@@ -538,50 +558,62 @@ public class Player_Control : MonoBehaviour{
     void WashOutColor() {
         ExtraPriority = true;
         Color_Number = 0;
-        //musouTime = Time.time;
-        //StateMusou = 2.55f;
-        //musouTime = 4.8f;
         StopDetect = true;
         GetComponent<Animator>().Play("Slime_Wash");
     }
 
     public void FinishClean() {
         ExtraPriority = false;
-        //musouTime = Time.time;
-        //StateMusou = 2.1f;
-        //musouTime = 2.7f;
-        //StopDetect = true;
-        //InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
         _playermanager.BackWashBoard();
         DashEnd();
     }
 
     //道具加成
     public void Ability_Modify(int ItemType, Sprite ItemSprite,int ItemPrice) {
-        //0:劍，1:子彈，2:愛心，3:放大燈，4:鞋子，5:潤滑液
+        //0:劍，1:子彈，2:愛心，3:水槍，4:鞋子，5:潤滑液
         switch (ItemType) {
             case 0:
                 Base_ATK++;
                 Extra_ATK++;
+                BulletScale_Superimposed++;//至多300%
+                BulletScale_PercentageModify = 0.40f - 0.05f * BulletScale_PercentageModify;
+                if (BulletScale_PercentageModify <= 0.1f) BulletScale_PercentageModify = 0.1f;
+                Base_BulletScale = Base_BulletScale + BulletScale_PercentageModify;
+                if (Base_BulletScale >= 3.0f) Base_BulletScale = 3.0f;
                 break;
             case 1:
                 Base_Penetrate++;
-                BulletSpeed_Superimposed++;
+                BulletTime_Superimposed++;
+                Base_BulletTime = 0.15f * BulletTime_Superimposed;
                 break;
             case 2:
                 Base_HP++;
                 Extra_HP++;
                 for (int k = 0; k < Personal_HP.Length; k++){
-                    if (k < Base_HP) Personal_HP[k].SetActive(true);
+                    if (k <= Base_HP - 2) Personal_HP[k].SetActive(true);
+                    else if (k == Base_HP - 1) {
+                        Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                        Heart_anim.Play("Heart_Gain");
+                    }
                     else Personal_HP[k].SetActive(false);
                 }
                 break;
             case 3:
-                Bullet_Superimposed++;
+                BulletSpeed_Superimposed++;
+                BulletSpeed_PercentageModify = 0.35f - 0.05f * BulletSpeed_Superimposed;
+                if (BulletSpeed_PercentageModify <= 0.1f) BulletSpeed_PercentageModify = 0.1f;
+                Base_BulletSpeed = Base_BulletSpeed + BulletSpeed_PercentageModify;
+                AttackSpeed_Superimposed++;
+                AttackSpeed_PercentageModify = 0.3f - 0.05f*AttackSpeed_Superimposed;
+                if (AttackSpeed_PercentageModify <= 0.05f) AttackSpeed_PercentageModify = 0.05f;
+                Base_AttackSpeed = Base_AttackSpeed + AttackSpeed_PercentageModify;
                 break;
             case 4:
                 Speed_Superimposed++;
-                Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                Speed_PercentageModify= 0.35f - 0.05f * Speed_Superimposed;
+                if (Speed_PercentageModify <= 0.15f) Speed_PercentageModify= 0.15f;
+                Base_Speed = Base_Speed + Speed_PercentageModify;
+                //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
                 Current_Speed = Base_Speed;//備份，用以DashLerp後重置
                 break;
             case 5:
@@ -647,7 +679,11 @@ public class Player_Control : MonoBehaviour{
         }
         Base_HP = 3 + Extra_HP;
         for (int k = 0; k < Personal_HP.Length; k++){
-            if (k < Base_HP) Personal_HP[k].SetActive(true);
+            if (k < Base_HP) {
+                Personal_HP[k].SetActive(true);
+                Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Gain");
+            } 
             else Personal_HP[k].SetActive(false);
         }
         ReviveArea.enabled = false;
@@ -688,10 +724,14 @@ public class Player_Control : MonoBehaviour{
                 case "sword":
                     Base_ATK--;
                     Extra_ATK--;
+                    BulletScale_Superimposed--;
+                    Base_BulletScale = Base_BulletScale - BulletScale_PercentageModify;
                     DropType = 0;
                     break;
                 case "bullet":
                     Base_Penetrate--;
+                    BulletTime_Superimposed--;
+                    Base_BulletTime = 0.15f * BulletTime_Superimposed;
                     DropType = 1;
                     break;
                 case "heart":
@@ -699,12 +739,16 @@ public class Player_Control : MonoBehaviour{
                     DropType = 2;
                     break;
                 case "light":
+                    BulletSpeed_Superimposed--;
+                    Base_BulletSpeed = Base_BulletSpeed - BulletSpeed_PercentageModify;
+                    AttackSpeed_Superimposed--;
+                    Base_AttackSpeed = Base_AttackSpeed + AttackSpeed_PercentageModify;
                     DropType = 3;
-                    Bullet_Superimposed--;
                     break;
                 case "shoes":
                     Speed_Superimposed--;
-                    Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                    Base_Speed = Base_Speed - Speed_PercentageModify;
+                    //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
                     Current_Speed = Base_Speed;
                     DropType = 4;
                     break;
@@ -754,10 +798,17 @@ public class Player_Control : MonoBehaviour{
             case "sword":
                 Base_ATK++;
                 Extra_ATK++;
+                BulletScale_Superimposed++;//至多300%
+                BulletScale_PercentageModify = 0.40f - 0.05f * BulletScale_PercentageModify;
+                if (BulletScale_PercentageModify <= 0.1f) BulletScale_PercentageModify = 0.1f;
+                Base_BulletScale = Base_BulletScale + BulletScale_PercentageModify;
+                if (Base_BulletScale >= 3.0f) Base_BulletScale = 3.0f;
                 PickType = 0;
                 break;
             case "bullet":
                 Base_Penetrate++;
+                BulletTime_Superimposed++;
+                Base_BulletTime = 0.15f * BulletTime_Superimposed;
                 PickType = 1;
                 break;
             case "heart":
@@ -765,18 +816,32 @@ public class Player_Control : MonoBehaviour{
                 Extra_HP++;
                 PickType = 2;
                 for (int k = 0; k < Personal_HP.Length; k++){
-                    if (k < Base_HP) Personal_HP[k].SetActive(true);
+                    if (k <= Base_HP - 2) Personal_HP[k].SetActive(true);
+                    else if (k == Base_HP - 1) {
+                        Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                        Heart_anim.Play("Heart_Gain");
+                    }
                     else Personal_HP[k].SetActive(false);
                 }
                 break;
             case "light":
-                Bullet_Superimposed++;
+                BulletSpeed_Superimposed++;
+                BulletSpeed_PercentageModify = 0.35f - 0.05f * BulletSpeed_Superimposed;
+                if (BulletSpeed_PercentageModify <= 0.1f) BulletSpeed_PercentageModify = 0.1f;
+                Base_BulletSpeed = Base_BulletSpeed + BulletSpeed_PercentageModify;
+                AttackSpeed_Superimposed++;
+                AttackSpeed_PercentageModify = 0.3f - 0.05f * AttackSpeed_Superimposed;
+                if (AttackSpeed_PercentageModify <= 0.05f) AttackSpeed_PercentageModify = 0.05f;
+                Base_AttackSpeed = Base_AttackSpeed + AttackSpeed_PercentageModify;
                 PickType = 3;
                 break;
             case "shoes":
                 Speed_Superimposed++;
-                Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
-                Current_Speed = Base_Speed;
+                Speed_PercentageModify = 0.35f - 0.05f * Speed_Superimposed;
+                if (Speed_PercentageModify <= 0.15f) Speed_PercentageModify = 0.15f;
+                Base_Speed = Base_Speed + Speed_PercentageModify;
+                //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                Current_Speed = Base_Speed;//備份，用以DashLerp後重置
                 PickType = 4;
                 break;
             case "smooth":
@@ -800,6 +865,15 @@ public class Player_Control : MonoBehaviour{
 
         //告訴商店要漲價
         _itemmanager.Item_PickUp(PlayerID, PickType);
+    }
+
+    //擊殺哥布林得到金幣時UI縮放
+    public void MoneyUI_GoBigger() {
+        Money_anim.Play("Money_GoBig");
+    }
+
+    public void MoneyUI_BackSmaller() {
+        Money_anim.Play("Money_BackSmall");
     }
 
 }

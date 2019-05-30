@@ -187,7 +187,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 2.375
+  - time: 1.875
     functionName: FinishClean
     data: 
     objectReferenceParameter: {fileID: 0}
