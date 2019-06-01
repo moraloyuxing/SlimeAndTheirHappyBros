@@ -5,9 +5,9 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     bool roundStart = false, inShopping = false;
-    bool lose = false;
+    bool lose = false, lightChange = true;
     int tutorialProgress = 0, goblinKills = 0;
-    float time = .0f;
+    float time = .0f, lightTime = .0f;
     GameState tutorialState;
     GameState[] gameStates;
     GoblinManager goblinManager;
@@ -22,8 +22,8 @@ public class GameManager : MonoBehaviour
     public StateInfo[] roundInfos;
     int[] goblinKillsGoal;
 
-
-
+    Light light;
+    public Color gameLight, shopLight;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
  
             }
         }
-
+        light = GameObject.Find("Directional Light").GetComponent<Light>();
     }
     void Start()
     {
@@ -58,6 +58,29 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K)) {
             curRound = -1;
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+        if (Input.GetKey(KeyCode.Q)) {
+            lightTime += Time.deltaTime;
+            if (!lightChange)
+            {
+                light.color = Color.Lerp(shopLight, gameLight, lightTime);
+                if (lightTime >= 1.0f)
+                {
+                    lightChange = true;
+                    lightTime = .0f;
+                    lightChange = true;
+                }
+            }
+            else {
+
+                light.color = Color.Lerp(gameLight, shopLight, lightTime);
+                if (lightTime >= 1.0f)
+                {
+                    lightChange = false;
+                    lightTime = .0f;
+                    lightChange = false;
+                }
+            }
         }
         if (test || lose) return;
         if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
@@ -76,14 +99,26 @@ public class GameManager : MonoBehaviour
         else {
             if (inShopping)
             {
-
+                if (!lightChange) {
+                    lightTime += Time.deltaTime;
+                    light.color = Color.Lerp(gameLight, shopLight, lightTime);
+                    if (lightTime >= 1.0f) {
+                        lightTime = .0f;
+                        lightChange = true;
+                    }
+                }
             }
             else {
-                if (!roundStart)
-                {
-
+                if (!lightChange) {
+                    lightTime += Time.deltaTime;
+                    light.color = Color.Lerp(shopLight, gameLight, lightTime);
+                    if (lightTime >= 1.0f)
+                    {
+                        lightTime = .0f;
+                        lightChange = true;
+                    }
                 }
-                else gameStates[curRound].Update(Time.deltaTime);
+                if (roundStart) gameStates[curRound].Update(Time.deltaTime);
             }
            
         }
@@ -112,6 +147,7 @@ public class GameManager : MonoBehaviour
         if (curRound > 10) curRound = 10;
         roundStart = false;
         inShopping = true;
+        lightChange = false;
         goblinKills = 0;
         itemManager.State_Switch();
         playerManager.State_Switch();
@@ -126,7 +162,7 @@ public class GameManager : MonoBehaviour
         inShopping = false;
         itemManager.State_Switch();
         playerManager.State_Switch();
-
+        lightChange = false;
         uiManager.StartRound(curRound);
     }
 

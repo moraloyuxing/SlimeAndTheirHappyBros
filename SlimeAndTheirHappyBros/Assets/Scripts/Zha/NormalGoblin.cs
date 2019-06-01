@@ -6,9 +6,9 @@ using UnityEngine;
 public class NormalGoblin: GoblinBase, IEnemyUnit
 {
     int maxHp;
-    float atkColOffset;
+    float atkColOffset, atkSpeedOffset = 1.0f;
     Transform atkColTrans;
-    Collider atkCol;
+    Collider atkCol, hurtAreaCol;
 
     //TestPlayerManager playerManager;
     //Player_Manager playerManager;
@@ -34,6 +34,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
+        hurtAreaCol = transform.Find("HurtArea").GetComponent<Collider>();
     }
 
     public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -57,6 +58,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
+        hurtAreaCol = transform.Find("HurtArea").GetComponent<Collider>();
     }
 
 
@@ -70,6 +72,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         selfPos = transform.position;
         renderer.material.SetInt("_colorID", col);
         color = col;
+        //SetState(GoblinState.moveIn);
     }
 
     // Update is called once per frame
@@ -122,14 +125,18 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             if (aniInfo.IsName("attack"))
             {
-                if (aniInfo.normalizedTime >= 0.46f && aniInfo.normalizedTime < 0.77f)
+                if (aniInfo.normalizedTime >= 0.46f && aniInfo.normalizedTime < 0.7f)//0.77
                 {
+
                     //Debug.DrawRay(selfPos,moveFwdDir, Color.red, 3.0f);
-                    float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f : speed * 3.0f;
+                    if (inStateTime > 0.7f) atkSpeedOffset *= 0.8f;
+                    float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f 
+                        :50.0f*atkSpeedOffset;
                     transform.position += deltaTime * atkSpeed * moveFwdDir;
                 }
                 else if (aniInfo.normalizedTime >= 0.95f)
                 {
+                    atkSpeedOffset = 1.0f;
                     animator.SetTrigger("attackOver");
                     SetState(GoblinState.attackBreak);
                     //OverAttackDetectDist();
@@ -146,6 +153,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
 
             atkCol.enabled = false;
+            atkSpeedOffset = 1.0f;
+
             firstInState = false;
             //animator.Play("hurt");
             animator.SetTrigger("hurt");
@@ -179,6 +188,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             atkCol.enabled = false;
+            atkSpeedOffset = 1.0f;
+            hurtAreaCol.enabled = false;
             animator.speed = 1.0f;
             animator.SetTrigger("die");
             //animator.Play("die");
@@ -203,8 +214,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         hp = maxHp;
         firstInState = false;
         inStateTime = .0f;
-        curState = GoblinState.moveIn;
-
+        SetState(GoblinState.moveIn);
+        hurtAreaCol.enabled = true;
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }

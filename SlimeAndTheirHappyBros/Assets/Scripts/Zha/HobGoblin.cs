@@ -14,6 +14,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     float[] atkColOffset = new float[3];
     Transform[] atkCol = new Transform[3];
     Transform hurtArea;
+    Collider hurtAreaCol;
 
     float[] sightDists = new float[2] { 15.0f, 20.0f };
     float[] atkDists = new float[2] {4.0f,  16.0f};
@@ -36,6 +37,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         atkColOffset[2] = atkCol[2].localPosition.x;
         hurtArea = t.Find("HurtArea");
         hurtAreaOffset = hurtArea.localPosition.x;
+        hurtAreaCol = hurtArea.GetComponent<Collider>();
         maxHp = info.hp;
         hp = maxHp;
         atkValue = info.atkValue;
@@ -69,6 +71,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         atkColOffset[2] = atkCol[2].localPosition.x;
         hurtArea = t.Find("HurtArea");
         hurtAreaOffset = hurtArea.localPosition.x;
+        hurtAreaCol = hurtArea.GetComponent<Collider>();
         maxHp = info.hp;
         hp = maxHp;
         atkValue = info.atkValue;
@@ -685,6 +688,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         {
             if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
 
+            hurtAreaCol.enabled = false;
             AudioManager.SingletonInScene.PlaySound2D("Hob_Death", 0.5f);
             animator.speed = 1.0f;
             animator.SetTrigger("die");
@@ -733,10 +737,12 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         hp = maxHp;
         firstInState = false;
         inStateTime = .0f;
-        curState = GoblinState.moveIn;
+        SetState(GoblinState.moveIn);
         hasShoot = false;
         endure = false;
         startAttack = false;
+        quackSound = false;
+        hurtAreaCol.enabled = true;
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }

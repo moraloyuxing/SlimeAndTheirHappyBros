@@ -11,6 +11,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     float scaleX;
     Vector3 shootPos;
     Transform shootLauncher;
+    Collider hurtAreaCol;
 
     // Start is called before the first frame update
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -32,6 +33,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
+        hurtAreaCol = transform.Find("HurtArea").GetComponent<Collider>();
     }
 
     public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -53,6 +55,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
+        hurtAreaCol = transform.Find("HurtArea").GetComponent<Collider>();
     }
 
     public void Spawn(Vector3 pos, int col)
@@ -176,6 +179,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
             if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
+            hurtAreaCol.enabled = false;
             animator.speed = 1.0f;
             animator.SetTrigger("die");
             animator.SetInteger("state", 4);
@@ -200,8 +204,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         firstInState = false;
         hasShoot = false;
         inStateTime = .0f;
-        curState = GoblinState.moveIn;
-
+        SetState(GoblinState.moveIn);
+        hurtAreaCol.enabled = true;
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }
