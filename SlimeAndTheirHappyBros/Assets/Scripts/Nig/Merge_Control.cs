@@ -581,14 +581,16 @@ public class Merge_Control : MonoBehaviour{
 
         //設定HP
         Base_HP = 3 + A.Timer_Superimposed + B.Timer_Superimposed;//至少3，至多15
+        Debug.Log(Base_HP);
         if (Base_HP > Max_HP) Base_HP = Max_HP;
         for (int k = 0; k < Max_HP; k++){
-            if (k < Base_HP) {
+            if (k < Base_HP){
                 Merge_HP[k].SetActive(true);
                 Heart_anim = Merge_HP[k].GetComponent<Animator>();
                 Heart_anim.Play("Heart_Gain");
             }
-            else Merge_HP[k].SetActive(true);
+            else Merge_HP[k].SetActive(false);
+
         }
         //設定ATK
         Base_ATK = 5 + A.Extra_ATK + B.Extra_ATK;
@@ -596,20 +598,20 @@ public class Merge_Control : MonoBehaviour{
         Base_Timer = 15.0f + (A.Timer_Superimposed + B.Timer_Superimposed) * 7.0f;
         //設定速度
         //Base_Speed = 1.0f * Mathf.Pow(1.25f, (A.Speed_Superimposed + B.Speed_Superimposed));
-        Base_Speed = (A.Current_Speed + B.Current_Speed);
+        Base_Speed = A.Current_Speed + B.Current_Speed - 1.0f;
         Current_Speed = Base_Speed;
         //設定子彈大小
-        Base_BulletScale = A.Base_BulletScale + B.Base_BulletScale;
+        Base_BulletScale = A.Base_BulletScale + B.Base_BulletScale - 1.0f;
         if (Base_BulletScale >= 6.0f) Base_BulletScale = 6.0f;
         //設定子彈速度
         //BulletSpeed_Superimposed = A.BulletSpeed_Superimposed + B.BulletSpeed_Superimposed;
-        Base_BulletSpeed = A.Base_BulletSpeed + B.Base_BulletSpeed;
+        Base_BulletSpeed = A.Base_BulletSpeed + B.Base_BulletSpeed - 1.0f;
         //設定子彈穿透數量
-        Base_Penetrate = 1 + A.Extra_Penetrate + B.Extra_Penetrate;
+        Base_Penetrate = 1+A.Extra_Penetrate + B.Extra_Penetrate;
         //設定子彈飛行距離
         Base_BulletTime = 0.15f * (A.BulletTime_Superimposed + B.BulletTime_Superimposed);
         //設定攻擊速度
-        Base_AttackSpeed = A.Base_AttackSpeed + B.Base_AttackSpeed;
+        Base_AttackSpeed = A.Base_AttackSpeed + B.Base_AttackSpeed - 1.0f;
     }
 
 

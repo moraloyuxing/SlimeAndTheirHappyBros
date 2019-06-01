@@ -11,7 +11,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     public Player_Control Rescue_Which;
     public float speed = 20.0f;
     public float alpha = -0.04f;
-    public float FadeTime = 1.5f;
+    public float FadeTime = 0.75f;
     public float recoveryTime = 2.0f;
     private float _timer;
     private Transform _myTransform;
@@ -48,7 +48,7 @@ public class Bullet_Behaviour : MonoBehaviour{
         Attack_Dir = current_angle.normalized;
         offset = Mathf.Abs(Attack_Dir.x);
         offset = Mathf.Clamp(offset, 0.5f, 0.8f);
-        scaleOffset = Mathf.Pow(1.25f, xSlime.Base_BulletScale);
+        scaleOffset = xSlime.Base_BulletScale;
         //speed = 20.0f * Mathf.Pow(1.25f, xSlime.BulletSpeed_Superimposed);
         speed = 20.0f * xSlime.Base_BulletSpeed;
         Attack_Dir *= speed;
@@ -66,7 +66,8 @@ public class Bullet_Behaviour : MonoBehaviour{
         Attack_Dir = current_angle.normalized;
         offset = Mathf.Abs(Attack_Dir.x);
         offset = Mathf.Clamp(offset, 0.5f, 0.8f);
-        scaleOffset = Mathf.Pow(1.25f, xMSlime.Bullet_Superimposed);
+        scaleOffset = xMSlime.Base_BulletScale;
+        //scaleOffset = Mathf.Pow(1.25f, xMSlime.Bullet_Superimposed);
         //speed = 20.0f * Mathf.Pow(1.25f, xMSlime.BulletSpeed_Superimposed);
         speed = 20.0f * xSlime.Base_BulletSpeed;
         Attack_Dir *= speed;
