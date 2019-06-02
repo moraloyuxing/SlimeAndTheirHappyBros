@@ -166,6 +166,7 @@ public class Player_Control : MonoBehaviour{
     }
 
     void Update(){
+        if(WhichPlayer == "Player1_")Debug.Log(StopDetect);
         anim.SetBool("Walking", Walking);
         anim.SetBool("Shooting", Shooting);
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Attack")) anim.speed = Base_AttackSpeed;
@@ -360,9 +361,6 @@ public class Player_Control : MonoBehaviour{
                         else if (i == 2) Color_Number = 4;
                         //跳池動畫
                         ExtraPriority = true;
-                        //musouTime = Time.time;
-                        //StateMusou = 1.5f;
-                        //musouTime = 1.5f;
                         StopDetect = true;
                         GetComponent<Animator>().Play("Slime_JumpinPond");
                         DashEnd();
@@ -441,7 +439,7 @@ public class Player_Control : MonoBehaviour{
                  GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;
-                CancelInvoke("Musou_Flick");
+                if(musouTime >0.0f)CancelInvoke("Musou_Flick");
                 musouTime = 1.8f;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
                 Base_HP--;
@@ -475,7 +473,7 @@ public class Player_Control : MonoBehaviour{
         AttackPriority = false;
         if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
         else if(Mathf.Abs(xAix) > 0.03f && Mathf.Abs(zAix) > 0.03f) GetComponent<Animator>().Play("Slime_Walk");
-        _playermanager.BackWashBoard();
+        //_playermanager.BackWashBoard();
     }
 
     //短衝刺設定
@@ -491,7 +489,7 @@ public class Player_Control : MonoBehaviour{
         AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
         Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
-        CancelInvoke("Musou_Flick");
+        if(musouTime>0.0f)CancelInvoke("Musou_Flick");
         musouTime = 2.1f;
         InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
     }
@@ -520,7 +518,7 @@ public class Player_Control : MonoBehaviour{
                 ReviveArea.enabled = false;
                 GetComponent<Animator>().Play("Slime_Revive");
                 AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
-                CancelInvoke("Musou_Flick");
+                if(musouTime>0.0f)CancelInvoke("Musou_Flick");
                 musouTime = 3.0f;
                 StopDetect = true;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
@@ -578,6 +576,7 @@ public class Player_Control : MonoBehaviour{
     void WashOutColor() {
         ExtraPriority = true;
         Color_Number = 0;
+        if (musouTime > 0.0f) CancelInvoke("Musou_Flick");
         StopDetect = true;
         GetComponent<Animator>().Play("Slime_Wash");
     }
@@ -596,7 +595,7 @@ public class Player_Control : MonoBehaviour{
                 Base_ATK++;
                 Extra_ATK++;
                 BulletScale_Superimposed++;//至多300%
-                BulletScale_PercentageModify = 0.40f - 0.05f * BulletScale_PercentageModify;
+                BulletScale_PercentageModify = 0.40f - 0.05f * BulletScale_Superimposed;
                 if (BulletScale_PercentageModify <= 0.1f) BulletScale_PercentageModify = 0.1f;
                 Base_BulletScale = Base_BulletScale + BulletScale_PercentageModify;
                 if (Base_BulletScale >= 3.0f) Base_BulletScale = 3.0f;
@@ -627,7 +626,7 @@ public class Player_Control : MonoBehaviour{
                 Speed_PercentageModify= 0.5f - 0.1f * Speed_Superimposed;
                 if (Speed_PercentageModify <= 0.1f) Speed_PercentageModify= 0.1f;
                 Base_Speed = Base_Speed + Speed_PercentageModify;
-                Tired_Speed = Tired_Speed + Speed_PercentageModify;
+                //Tired_Speed = Tired_Speed + Speed_PercentageModify;
                 //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
                 Current_Speed = Base_Speed;//備份，用以DashLerp後重置
                 break;
@@ -704,6 +703,7 @@ public class Player_Control : MonoBehaviour{
 
     //無敵時間閃爍
     public void Musou_Flick() {
+        Debug.Log(musouTime);
         musouTime -= 0.3f;
 
         if (musouTime < 3.0f) {
@@ -715,6 +715,7 @@ public class Player_Control : MonoBehaviour{
         if (musouTime < 0) {
             StopDetect = false;
             CancelInvoke("Musou_Flick");
+            Debug.Log("Cancel_inFunction");
             Current_Color.a = 1.0f;
             flicker = -0.5f;
             Player_Sprite.color = Current_Color;
@@ -761,8 +762,7 @@ public class Player_Control : MonoBehaviour{
                 case "shoes":
                     Speed_Superimposed--;
                     Base_Speed = Base_Speed - Speed_PercentageModify;
-                    Tired_Speed = Tired_Speed - Speed_PercentageModify;
-                    //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                    //Tired_Speed = Tired_Speed - Speed_PercentageModify;
                     Current_Speed = Base_Speed;
                     DropType = 4;
                     break;
@@ -849,7 +849,7 @@ public class Player_Control : MonoBehaviour{
                 Speed_PercentageModify = 0.35f - 0.05f * Speed_Superimposed;
                 if (Speed_PercentageModify <= 0.15f) Speed_PercentageModify = 0.15f;
                 Base_Speed = Base_Speed + Speed_PercentageModify;
-                Tired_Speed = Tired_Speed + Speed_PercentageModify;
+                //Tired_Speed = Tired_Speed + Speed_PercentageModify;
                 //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
                 Current_Speed = Base_Speed;//備份，用以DashLerp後重置
                 PickType = 4;

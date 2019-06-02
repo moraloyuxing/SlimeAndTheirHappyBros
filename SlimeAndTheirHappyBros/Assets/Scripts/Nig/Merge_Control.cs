@@ -143,6 +143,14 @@ public class Merge_Control : MonoBehaviour{
         StopDetect = false;
         PMb_button = false;
         PSb_button = false;
+        if (Merge_Sprite.transform.localScale.x < 0.0f) {
+            Merge_Control_Hint.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f);
+            Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
+        }
+        else if (Merge_Sprite.transform.localScale.x > 0.0f) {
+            Merge_Control_Hint.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        }
     }
 
     void Update()
@@ -202,7 +210,6 @@ public class Merge_Control : MonoBehaviour{
             //加個轉向(受傷、死亡......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false)
             {
-
                 Merge_Sprite.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
