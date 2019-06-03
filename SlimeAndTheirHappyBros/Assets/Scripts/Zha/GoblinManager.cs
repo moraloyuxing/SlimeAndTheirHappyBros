@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GoblinManager : MonoBehaviour
 {
+    bool gameOver = false;
     int index = 0;
     float time;
 
@@ -168,6 +169,7 @@ public class GoblinManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameOver) return;
         float dt = Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.A)) {
@@ -429,6 +431,24 @@ public class GoblinManager : MonoBehaviour
             return goblinDic[name];
         }
         else return null;
+    }
+
+    public void GameOver() {
+        gameOver = true;
+
+        for (index = 0; index < usedNormalGoblins.Count; index++)
+        {
+            usedNormalGoblins[index].SetGameOver();
+        }
+        for (index = 0; index < usedArcherGoblins.Count; index++)
+        {
+            usedArcherGoblins[index].SetGameOver();
+        }
+        for (index = 0; index < usedHobGoblins.Count; index++)
+        {
+            usedHobGoblins[index].SetGameOver();
+        }
+
     }
 
 }

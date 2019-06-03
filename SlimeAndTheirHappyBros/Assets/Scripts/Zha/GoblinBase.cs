@@ -638,4 +638,8 @@ public class GoblinBase
         }
     }
 
+    public void SetGameOver() {
+        animator.speed = .0f;
+    }
+
 }
