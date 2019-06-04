@@ -178,6 +178,7 @@ public class Player_Control : MonoBehaviour{
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
         left_trigger = Input.GetAxis(WhichPlayer + "Dash");
         if (left_trigger >0.3f && OnDash == false && Time.time > DashCD + 1.0f){
+            StopDetect = true;
             Base_Speed = Base_Speed+5.0f;
             OnDash = true;
             DuringDashLerp = true;
@@ -484,6 +485,10 @@ public class Player_Control : MonoBehaviour{
         AttackPriority = false;
     }
 
+    public void DashEnd_musou() {
+        StopDetect = false;
+    }
+
     //呼叫水花濺起
     public void PondEffect() {
         AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
@@ -703,7 +708,6 @@ public class Player_Control : MonoBehaviour{
 
     //無敵時間閃爍
     public void Musou_Flick() {
-        Debug.Log(musouTime);
         musouTime -= 0.3f;
 
         if (musouTime < 3.0f) {
@@ -715,7 +719,6 @@ public class Player_Control : MonoBehaviour{
         if (musouTime < 0) {
             StopDetect = false;
             CancelInvoke("Musou_Flick");
-            Debug.Log("Cancel_inFunction");
             Current_Color.a = 1.0f;
             flicker = -0.5f;
             Player_Sprite.color = Current_Color;

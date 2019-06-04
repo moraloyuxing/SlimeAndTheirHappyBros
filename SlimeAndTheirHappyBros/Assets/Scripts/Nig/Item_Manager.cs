@@ -20,6 +20,7 @@ public class Item_Manager : MonoBehaviour {
     int[,] Item_Price = new int[4, 6];
     int[] Base_Price = new int[6] { 16, 26, 14, 17, 12, 20 };
     int[,] Item_SuperImposed = new int[4, 6];
+    int[] Item_MaxCanBuy = new int[6] { 0, 0, 10, 0, 0, 0 };
 
     //玩家購買相關
     bool[] a_button = new bool[4];

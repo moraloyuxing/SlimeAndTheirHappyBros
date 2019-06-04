@@ -6,12 +6,12 @@ public class Bullet_Behaviour : MonoBehaviour{
     int BulletATK = 0;
     int color;
     float  offset, scaleOffset = 1.0f;
+    float FadeTime = 0.75f;
     public Player_Control WhichPlayer;
     public Player_Control WhichPlayer2;
     public Player_Control Rescue_Which;
     public float speed = 20.0f;
     public float alpha = -0.04f;
-    public float FadeTime = 0.75f;
     public float recoveryTime = 2.0f;
     private float _timer;
     private Transform _myTransform;
@@ -40,7 +40,9 @@ public class Bullet_Behaviour : MonoBehaviour{
     }
 
     public void SetAttackDir(Vector3 current_angle,Player_Control xSlime,int Shader_Number) {
+        Debug.Log(xSlime.Base_BulletTime);
         FadeTime = FadeTime + xSlime.Base_BulletTime;
+        Debug.Log(FadeTime);
         color = Shader_Number;
         GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;

@@ -18,6 +18,8 @@ public class Player_Manager : MonoBehaviour
     public GameObject WashingBoard;
     bool HaveBoard = true;
     bool[] WashPriority = new bool[4];//靠近洗衣板會有洗白優先權，混合次之
+    bool WashBoard_OnUse = false;
+    float WashMoment = 0.0f;
     public Sprite[] Hint_Type = new Sprite[2];//0→洗白；1→混合
     bool[] Weak_State = new bool[4];
 
@@ -101,6 +103,8 @@ public class Player_Manager : MonoBehaviour
             WashPriority[0] = false;
             HaveBoard = false;
             WashingBoard.SetActive(false);
+            WashBoard_OnUse = true;
+            WashMoment = Time.time;
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
         }
         //玩家2啟用洗白
@@ -114,6 +118,8 @@ public class Player_Manager : MonoBehaviour
             WashPriority[1] = false;
             HaveBoard = false;
             WashingBoard.SetActive(false);
+            WashBoard_OnUse = true;
+            WashMoment = Time.time;
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
         }
         //玩家3啟用洗白
@@ -127,6 +133,8 @@ public class Player_Manager : MonoBehaviour
             WashPriority[2] = false;
             HaveBoard = false;
             WashingBoard.SetActive(false);
+            WashBoard_OnUse = true;
+            WashMoment = Time.time;
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
         }
 
@@ -141,9 +149,15 @@ public class Player_Manager : MonoBehaviour
             WashPriority[3] = false;
             HaveBoard = false;
             WashingBoard.SetActive(false);
+            WashBoard_OnUse = true;
+            WashMoment = Time.time;
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
         }
 
+        if (WashBoard_OnUse == true && Time.time > WashMoment + 5.0f) {
+            WashBoard_OnUse = false;
+            if (WashingBoard.activeSelf == false) BackWashBoard();
+        }
 
         if (!Game_State) {
             bool onit = true;
