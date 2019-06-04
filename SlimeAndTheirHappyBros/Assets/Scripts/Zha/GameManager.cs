@@ -22,7 +22,7 @@ public class GameManager : MonoBehaviour
     public StateInfo[] roundInfos;
     int[] goblinKillsGoal;
 
-    Light light;
+    Light directLight;
     public Color gameLight, shopLight;
     // Start is called before the first frame update
     private void Awake()
@@ -45,7 +45,7 @@ public class GameManager : MonoBehaviour
  
             }
         }
-        light = GameObject.Find("Directional Light").GetComponent<Light>();
+        directLight = GameObject.Find("Directional Light").GetComponent<Light>();
     }
     void Start()
     {
@@ -63,7 +63,7 @@ public class GameManager : MonoBehaviour
             lightTime += Time.deltaTime;
             if (!lightChange)
             {
-                light.color = Color.Lerp(shopLight, gameLight, lightTime);
+                directLight.color = Color.Lerp(shopLight, gameLight, lightTime);
                 if (lightTime >= 1.0f)
                 {
                     lightChange = true;
@@ -73,7 +73,7 @@ public class GameManager : MonoBehaviour
             }
             else {
 
-                light.color = Color.Lerp(gameLight, shopLight, lightTime);
+                directLight.color = Color.Lerp(gameLight, shopLight, lightTime);
                 if (lightTime >= 1.0f)
                 {
                     lightChange = false;
@@ -101,7 +101,7 @@ public class GameManager : MonoBehaviour
             {
                 if (!lightChange) {
                     lightTime += Time.deltaTime;
-                    light.color = Color.Lerp(gameLight, shopLight, lightTime);
+                    directLight.color = Color.Lerp(gameLight, shopLight, lightTime);
                     if (lightTime >= 1.0f) {
                         lightTime = .0f;
                         lightChange = true;
@@ -111,7 +111,7 @@ public class GameManager : MonoBehaviour
             else {
                 if (!lightChange) {
                     lightTime += Time.deltaTime;
-                    light.color = Color.Lerp(shopLight, gameLight, lightTime);
+                    directLight.color = Color.Lerp(shopLight, gameLight, lightTime);
                     if (lightTime >= 1.0f)
                     {
                         lightTime = .0f;
@@ -174,6 +174,8 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoLose() {
+        lose = true;
+        goblinManager.GameOver();
         uiManager.GoLose();
         StartCoroutine(PlayAgain());
     }
