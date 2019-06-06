@@ -584,7 +584,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if ((color == 1 || color == 2 || color == 3))
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
                     hp -= atkValue;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
@@ -617,7 +617,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if ((color == 1 || color == 4 || color == 5))
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
                     hp -= atkValue;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
@@ -650,7 +650,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if ((color == 2 || color == 4 || color == 6))
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.35f);
+                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
                     hp -= atkValue;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;

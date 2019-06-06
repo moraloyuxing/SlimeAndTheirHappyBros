@@ -48,7 +48,7 @@ public class Item_Manager : MonoBehaviour {
                     float xArea = All_Player[p].position.x - All_Item[i].transform.position.x;
                     float zArea = All_Player[p].position.z - All_Item[i].transform.position.z;
 
-                    if (Mathf.Abs(xArea) < 4.0f && zArea>-5.0f && zArea <= 0.0f && PlayerHasBuy[p, i] == false){
+                    if (Mathf.Abs(xArea) < 2.0f && zArea>-5.0f && zArea <= 0.0f && PlayerHasBuy[p, i] == false){
                         CurrentDistance[p] = Mathf.Pow(All_Player[p].position.x - All_Item[i].position.x, 2) + Mathf.Pow(All_Player[p].position.z - All_Item[i].position.z, 2);
                         if (Focus_Count[p] != i){
                             if (Focus_Count[p] >= 0) { itemBeFocused[Focus_Count[p]]--; }
