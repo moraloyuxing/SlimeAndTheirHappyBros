@@ -137,7 +137,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                 else if (aniInfo.normalizedTime >= 0.95f)
                 {
                     atkSpeedOffset = 1.0f;
-                    animator.SetTrigger("attackOver");
+                    //animator.SetTrigger("attackOver");
                     SetState(GoblinState.attackBreak);
                     //OverAttackDetectDist();
                 }

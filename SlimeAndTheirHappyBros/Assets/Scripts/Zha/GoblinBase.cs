@@ -322,6 +322,7 @@ public class GoblinBase
         if (firstInState) {
             animator.speed = 1.0f;
             animator.SetInteger("state", 0);
+            animator.SetTrigger("attackOver");
             startFindPath = false;
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GoblinManager : MonoBehaviour
 {
-    bool gameOver = false;
+    bool gameOver = false, bossTime = false;
     int index = 0;
     float time;
 
@@ -38,6 +38,8 @@ public class GoblinManager : MonoBehaviour
     List<HobGoblin> freeHobGoblins, usedHobGoblins;
 
     Dictionary<string, GoblinBase> goblinDic = new Dictionary<string, GoblinBase>();
+
+    KingGoblin kingGoblin;
 
     Dictionary<string, GoblinArrow> goblinArrowsDic;
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
@@ -117,6 +119,11 @@ public class GoblinManager : MonoBehaviour
             goblinDic.Add(goblin.name, freeHobGoblins[i]);
             goblin.gameObject.SetActive(false);
         }
+
+        goblin = transform.Find("KingGoblin");
+        kingGoblin = new KingGoblin();
+        kingGoblin.Init(goblin, goblinInfo[2], this);
+        goblin.gameObject.SetActive(false);
 
 
         Transform locs = transform.Find("SpawnLocs");

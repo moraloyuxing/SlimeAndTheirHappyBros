@@ -10,7 +10,7 @@ public interface IAniEventUser
 public interface IEnemyUnit
 {
     void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager);
-    void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager);
+    //void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager);
     void Spawn(Vector3 pos, int col);
     void Update(float dt);
     void ResetUnit();

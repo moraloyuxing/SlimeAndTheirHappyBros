@@ -141,7 +141,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
                 animator.speed = 1.0f;
                 animator.SetInteger("shootDir", dir);
                 animator.SetInteger("state", 2);
-                animator.SetTrigger("attackOver");
+                //animator.SetTrigger("attackOver");
             } 
             else if (delayShoot == 2) {
                 shootPos = new Vector3(scaleX * shootLauncher.localPosition.x, shootLauncher.localPosition.y, shootLauncher.localPosition.z);

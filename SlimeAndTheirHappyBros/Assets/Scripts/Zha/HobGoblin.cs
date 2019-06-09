@@ -17,7 +17,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     Collider hurtAreaCol;
 
     float[] sightDists = new float[2] { 15.0f, 20.0f };
-    float[] atkDists = new float[2] {4.0f,  16.0f};
+    float[] atkDists = new float[2] {7.0f,  16.0f};
 
     // Start is called before the first frame update
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -43,7 +43,6 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
-        atkDist = info.atkDist;
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
         turnDist = info.turnDist;
@@ -77,7 +76,6 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         atkValue = info.atkValue;
         speed = info.speed;
         sightDist = info.sighDist;
-        atkDist = info.atkDist;
         spawnHeight = info.spawnHeight;
         goblinManager = manager;
         turnDist = info.turnDist;
@@ -319,7 +317,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                         animator.speed = 1.0f;
                         animator.SetInteger("attackType", attackType);
                         animator.SetInteger("state", 2);
-                        animator.SetTrigger("attackOver");
+                        //animator.SetTrigger("attackOver");
                         endure = true;
                     }
                 }
@@ -334,7 +332,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     animator.speed = 1.0f;
                     animator.SetInteger("attackType", attackType);
                     animator.SetInteger("state", 2);
-                    animator.SetTrigger("attackOver");
+                    //animator.SetTrigger("attackOver");
                     endure = true;
                 }
             }
@@ -345,10 +343,11 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
                 if (moveFwdDir.sqrMagnitude > atkDist * atkDist) //Mathf.Abs(moveFwdDir.z) > 1.2f && 
                 {
-                    image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-                    image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
-                    moveFwdDir = (moveFwdDir + new Vector3(-scaleX * 3.5f, 0, 0)).normalized;
-                    transform.position += speed * 1.2f * deltaTime * moveFwdDir;
+                    SetState(GoblinState.attackBreak);
+                    //image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                    //image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+                    //moveFwdDir = (moveFwdDir + new Vector3(-scaleX * 3.5f, 0, 0)).normalized;
+                    //transform.position += speed * 1.2f * deltaTime * moveFwdDir;
                 }
                 else
                 {
@@ -370,7 +369,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                         animator.speed = 1.0f;
                         animator.SetInteger("attackType", attackType);
                         animator.SetInteger("state", 2);
-                        animator.SetTrigger("attackOver");
+                        //animator.SetTrigger("attackOver");
                     }
                 }
 
@@ -418,7 +417,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     {
                         AudioManager.SingletonInScene.PlaySound2D("Leaf_Attack", 0.35f);
                         hasShoot = true;
-                        float scaleX = (goblinManager.PlayerPos[targetPlayer].x > selfPos.x) ? -1.0f : 1.0f;
+                        goblinManager.UseLeaf(launchPos + shootFace * 1.5f, shootFace);
                         for (int i = 0; i <= 1; i++)
                         {
                             Vector3 shootDir = Quaternion.AngleAxis(25.0f + i * 30, Vector3.up) * shootFace;
