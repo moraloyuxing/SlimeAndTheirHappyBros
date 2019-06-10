@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class GoblinWave : IEnemyObjectPoolUnit
 {
-    int count = 72;
-    float lifeTime = .0f;
-    Vector3[] pointPos;
+    int halfCount = 55;
+    float degree = 2;
+    float speed = 15.0f, lifeTime = .0f;
+    Vector3[] pointPos, pointVec;
     LineRenderer lineRender;
     Transform transform;
     GoblinManager goblinManager;
@@ -16,8 +17,9 @@ public class GoblinWave : IEnemyObjectPoolUnit
         transform = t;
         goblinManager = manager;
         lineRender = transform.GetComponent<LineRenderer>();
-        lineRender.positionCount = count;
-        pointPos = new Vector3[count];
+        lineRender.positionCount = halfCount*2 + 1;
+        pointPos = new Vector3[halfCount * 2 + 1];
+        pointVec = new Vector3[halfCount * 2  + 1];
         //lineRender.startWidth = 1.0f;
         //lineRender.endWidth = 1.0f;
     }
@@ -25,32 +27,48 @@ public class GoblinWave : IEnemyObjectPoolUnit
     public void Update(float dt)
     {
         lifeTime += dt;
+
+        pointPos[halfCount] += dt * speed * pointVec[halfCount];
+        lineRender.SetPosition(halfCount, pointPos[halfCount]);
+
         int i = 0;
-        while (i < count)
+        while (i <= halfCount)
         {
-            float upD = (i * 5) * Mathf.Deg2Rad;
-            float downD = (180 + i * 5) * Mathf.Deg2Rad;
-            lineRender.SetPosition(i, pointPos[i] + new Vector3(Mathf.Cos(upD), 0, Mathf.Sin(upD)));
-            lineRender.SetPosition(i + 1, pointPos[i+1] + new Vector3(Mathf.Cos(downD), 0, Mathf.Sin(downD)));
-            i += 2;
+            pointPos[halfCount - i] += dt * speed * pointVec[halfCount - i];
+            lineRender.SetPosition(halfCount - i, pointPos[halfCount - i]);
+            pointPos[halfCount + i] += dt * speed * pointVec[halfCount + i];
+            lineRender.SetPosition(halfCount + i, pointPos[halfCount + i]);
+            i ++;
         }
+
+        if (lifeTime > 5.0f) ResetUnit();
     }
 
     public void ToActive(Vector3 _pos, Vector3 _dir) {
         transform.position = _pos;
-        int i = 0;
-        while (i < count)
-        {
-            float upD = (i * 5) * Mathf.Deg2Rad;
-            float downD = (180 + i*5) * Mathf.Deg2Rad;
-            Vector3 upPoint = _pos + 10.0f * new Vector3(Mathf.Cos(upD), 0, Mathf.Sin(upD));
-            Vector3 downPoint = _pos + 10.0f * new Vector3(Mathf.Cos(downD), 0, Mathf.Sin(downD));
-            lineRender.SetPosition(i, upPoint);
-            pointPos[i] = upPoint;
-            lineRender.SetPosition(i + 1,  downPoint);
-            pointPos[i + 1] = downPoint;
 
-            i += 2;
+        lineRender.SetPosition(halfCount, _pos + new Vector3(0,0,-10.0f));
+        pointPos[halfCount] = lineRender.GetPosition(halfCount);
+        pointVec[halfCount] = new Vector3(0, 0, -1.0f);
+
+        int i = 1;
+        while (i <= halfCount)
+        {
+            float downDegree = (270 - i * degree) * Mathf.Deg2Rad;
+            float upDegree = (270 + i * degree) * Mathf.Deg2Rad;
+
+            Vector3 downVec = new Vector3(Mathf.Cos(downDegree),0,Mathf.Sin(downDegree));
+            Vector3 upVec = new Vector3(Mathf.Cos(upDegree), 0, Mathf.Sin(upDegree));
+            Vector3 downPoint = _pos + 10.0f * downVec;
+            Vector3 upPoint = _pos + 10.0f * upVec;
+
+            lineRender.SetPosition(halfCount - i, downPoint);
+            pointPos[halfCount - i] = downPoint;
+            pointVec[halfCount - i] = downVec;
+            lineRender.SetPosition(halfCount + i, upPoint);
+            pointPos[halfCount + i] = upPoint;
+            pointVec[halfCount + i] = upVec; 
+            i ++;
         }
         transform.gameObject.SetActive(true);
     }

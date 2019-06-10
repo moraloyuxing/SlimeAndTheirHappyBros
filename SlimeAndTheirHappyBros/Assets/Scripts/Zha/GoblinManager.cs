@@ -45,6 +45,7 @@ public class GoblinManager : MonoBehaviour
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
     Dictionary<string, GoblinLeaf> goblinLeafDic;
     List<GoblinLeaf> freeGoblinLeaves, usedGoblinLeaves;
+    List<GoblinWave> freeGoblinWaves, usedGoblinWaves;
     List<Money> freeMoneys, usedMoneys;
 
     public Player_Control[] Four_Player = new Player_Control[4];
@@ -154,6 +155,16 @@ public class GoblinManager : MonoBehaviour
             freeGoblinLeaves.Add(new GoblinLeaf());
             freeGoblinLeaves[i].Init(goblin, this, poolUnitInfo[1]);
             goblinLeafDic.Add(goblin.name, freeGoblinLeaves[i]);
+            goblin.gameObject.SetActive(false);
+        }
+        goblins = transform.Find("GoblinWaves");
+        freeGoblinWaves = new List<GoblinWave>();
+        usedGoblinWaves = new List<GoblinWave>();
+        for (int i = 0; i < goblins.childCount; i++)
+        {
+            goblin = goblins.GetChild(i);
+            freeGoblinWaves.Add(new GoblinWave());
+            freeGoblinWaves[i].Init(goblin, this, poolUnitInfo[1]);
             goblin.gameObject.SetActive(false);
         }
         goblins = transform.Find("Moneys");
