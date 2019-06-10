@@ -188,6 +188,7 @@ public class GoblinManager : MonoBehaviour
     void Update()
     {
         if (gameOver) return;
+
         float dt = Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.A)) {
@@ -200,6 +201,10 @@ public class GoblinManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X)) {
             SpawnHobGoblinMutiColor(1);
         }
+        if (Input.GetKeyDown(KeyCode.S)) {
+            bossTime = true;
+            kingGoblin.Spawn(Vector3.zero, 0);
+        } 
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
             usedNormalGoblins[index].Update(dt);
@@ -212,7 +217,7 @@ public class GoblinManager : MonoBehaviour
         {
             usedHobGoblins[index].Update(dt);
         }
-
+        if (bossTime) kingGoblin.Update(dt);
         if (calculatePath) PathRequestManager.ClearExtendPenalty();
 
         //if (Input.GetKeyDown(KeyCode.X)) {
@@ -230,6 +235,9 @@ public class GoblinManager : MonoBehaviour
         for (index = 0; index < usedGoblinLeaves.Count; index++)
         {
             usedGoblinLeaves[index].Update(dt);
+        }
+        for (index = 0; index < usedGoblinWaves.Count; index++) {
+            usedGoblinWaves[index].Update(dt);
         }
         for (index = 0; index < usedMoneys.Count; index++)
         {
@@ -376,6 +384,13 @@ public class GoblinManager : MonoBehaviour
         leaf.ToActive(pos, dir);
         freeGoblinLeaves.Remove(leaf);
     }
+    public void UseWave(Vector3 pos) {
+        if (freeGoblinWaves.Count <= 0) return;
+        GoblinWave wave = freeGoblinWaves[0];
+        usedGoblinWaves.Add(wave);
+        wave.ToActive(pos, new Vector3(0,0,0));
+        freeGoblinWaves.Remove(wave);
+    }
     public void UseMoney(int num, Vector3 pos, int target)
     {
         Four_Player[target].MoneyUpdate(num);//UI更新num
@@ -427,6 +442,11 @@ public class GoblinManager : MonoBehaviour
         freeGoblinLeaves.Add(leaf);
         usedGoblinLeaves.Remove(leaf);
     }
+    public void RecycleWave(GoblinWave wave) {
+        freeGoblinWaves.Add(wave);
+        usedGoblinWaves.Remove(wave);
+    }
+
     public void RecycleMoney(Money money)
     {
         freeMoneys.Add(money);

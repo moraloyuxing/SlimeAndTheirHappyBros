@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KingGoblin : IEnemyUnit
 {
-    bool firstInState = false;
+    bool firstInState = false, waveOnce = false;
     int hp;
     Animator animator;
     AnimatorStateInfo aniInfo;
@@ -31,6 +31,7 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void Update(float dt) {
+        if (Input.GetKeyDown(KeyCode.D)) SetState(KingState.waveAtk);
         switch (curState) {
             case KingState.showUp:
                 ShowUp();
@@ -50,7 +51,7 @@ public class KingGoblin : IEnemyUnit
     void ShowUp() {
         aniInfo = animator.GetCurrentAnimatorStateInfo(0);
         if (aniInfo.normalizedTime >= 0.98f) {
-            SetState(KingState.waveAtk);
+            SetState(KingState.idle);
         }
     }
     void Idle() {
@@ -65,7 +66,24 @@ public class KingGoblin : IEnemyUnit
     void WaveAtk() {
         if (!firstInState)
         {
-            animator.SetInteger("state", 1);
+            firstInState = true;
+            animator.SetInteger("state", 3);
+        }
+        else {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("hammerAttack") && aniInfo.normalizedTime >= 0.91f) {
+                if (!waveOnce) {
+                    waveOnce = true;
+                    goblinManager.UseWave(transform.position);
+                }
+                if (aniInfo.normalizedTime >= 0.98f)
+                {
+                    waveOnce = false;
+                    animator.SetInteger("state", 1);
+                    animator.SetTrigger("attackOver");
+                    SetState(KingState.idle);
+                }
+            }
         }
     }
 
@@ -73,5 +91,7 @@ public class KingGoblin : IEnemyUnit
 
     }
 
-    public void Spawn(Vector3 pos, int col) { }
+    public void Spawn(Vector3 pos, int col) {
+        transform.gameObject.SetActive(true);
+    }
 }

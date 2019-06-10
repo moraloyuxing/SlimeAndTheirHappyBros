@@ -6,7 +6,7 @@ public class GoblinWave : IEnemyObjectPoolUnit
 {
     int halfCount = 55;
     float degree = 2;
-    float speed = 15.0f, lifeTime = .0f;
+    float speed = 30.0f, lifeTime = .0f;
     Vector3[] pointPos, pointVec;
     LineRenderer lineRender;
     Transform transform;
@@ -31,7 +31,7 @@ public class GoblinWave : IEnemyObjectPoolUnit
         pointPos[halfCount] += dt * speed * pointVec[halfCount];
         lineRender.SetPosition(halfCount, pointPos[halfCount]);
 
-        int i = 0;
+        int i = 1;
         while (i <= halfCount)
         {
             pointPos[halfCount - i] += dt * speed * pointVec[halfCount - i];
@@ -45,9 +45,9 @@ public class GoblinWave : IEnemyObjectPoolUnit
     }
 
     public void ToActive(Vector3 _pos, Vector3 _dir) {
-        transform.position = _pos;
+        Vector3 pos = new Vector3(_pos.x,0,_pos.z);
 
-        lineRender.SetPosition(halfCount, _pos + new Vector3(0,0,-10.0f));
+        lineRender.SetPosition(halfCount, pos + new Vector3(0,0,-15.0f));
         pointPos[halfCount] = lineRender.GetPosition(halfCount);
         pointVec[halfCount] = new Vector3(0, 0, -1.0f);
 
@@ -59,9 +59,10 @@ public class GoblinWave : IEnemyObjectPoolUnit
 
             Vector3 downVec = new Vector3(Mathf.Cos(downDegree),0,Mathf.Sin(downDegree));
             Vector3 upVec = new Vector3(Mathf.Cos(upDegree), 0, Mathf.Sin(upDegree));
-            Vector3 downPoint = _pos + 10.0f * downVec;
-            Vector3 upPoint = _pos + 10.0f * upVec;
-
+            Debug.Log("degree: " + (270 - i * degree) + "   " + downVec);
+            Vector3 downPoint = pos + 15.0f * downVec;
+            Vector3 upPoint = pos + 15.0f * upVec;
+            Debug.Log(downPoint);
             lineRender.SetPosition(halfCount - i, downPoint);
             pointPos[halfCount - i] = downPoint;
             pointVec[halfCount - i] = downVec;
@@ -76,6 +77,7 @@ public class GoblinWave : IEnemyObjectPoolUnit
     public void ResetUnit() {
         lifeTime = .0f;
         transform.gameObject.SetActive(false);
+        goblinManager.RecycleWave(this);
 
     }
 }
