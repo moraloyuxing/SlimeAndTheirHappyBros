@@ -15,7 +15,7 @@ public class KingGoblin : IEnemyUnit
     KingState curState = KingState.showUp;
 
     enum KingState {
-        showUp, idle, punchAtk, waveAtk
+        showUp, idle, punchAtk, waveAtk, throwAtk
     }
 
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
