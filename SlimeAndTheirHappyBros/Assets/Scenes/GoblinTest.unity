@@ -39127,7 +39127,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1189742327}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 10, z: 0}
+  m_LocalPosition: {x: 0, y: 6.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1840965557}
@@ -67881,6 +67881,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoblinManager
       objectReference: {fileID: 0}
+    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: Four_Player.Array.data[0]
+      value: 
+      objectReference: {fileID: 787027116}
+    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: Four_Player.Array.data[1]
+      value: 
+      objectReference: {fileID: 1984152553}
+    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: Four_Player.Array.data[2]
+      value: 
+      objectReference: {fileID: 1020637210}
+    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: Four_Player.Array.data[3]
+      value: 
+      objectReference: {fileID: 1205777337}
     - target: {fileID: 30651016081294182, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -67936,25 +67956,5 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
-        type: 3}
-      propertyPath: Four_Player.Array.data[0]
-      value: 
-      objectReference: {fileID: 787027116}
-    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
-        type: 3}
-      propertyPath: Four_Player.Array.data[1]
-      value: 
-      objectReference: {fileID: 1984152553}
-    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
-        type: 3}
-      propertyPath: Four_Player.Array.data[2]
-      value: 
-      objectReference: {fileID: 1020637210}
-    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
-        type: 3}
-      propertyPath: Four_Player.Array.data[3]
-      value: 
-      objectReference: {fileID: 1205777337}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1, type: 3}
