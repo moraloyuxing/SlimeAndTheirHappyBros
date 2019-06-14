@@ -33654,6 +33654,26 @@ PrefabInstance:
       propertyPath: m_Name
       value: GoblinManager
       objectReference: {fileID: 0}
+    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: Four_Player.Array.data[0]
+      value: 
+      objectReference: {fileID: 1930958718}
+    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: Four_Player.Array.data[1]
+      value: 
+      objectReference: {fileID: 1517294621}
+    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: Four_Player.Array.data[2]
+      value: 
+      objectReference: {fileID: 351806365}
+    - target: {fileID: 30651016081294181, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: Four_Player.Array.data[3]
+      value: 
+      objectReference: {fileID: 1050854433}
     - target: {fileID: 30651016081294182, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
         type: 3}
       propertyPath: m_LocalPosition.x

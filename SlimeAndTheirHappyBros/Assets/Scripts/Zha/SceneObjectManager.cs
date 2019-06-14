@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class SceneObjectManager : MonoBehaviour
 {
-    bool shopBreakdown = false;
-    int aniID = 0;
-    float dt, aniTime;
-    SpriteRenderer smogRender;
-    GameObject shop, ruinShop;
+    bool shopBreakdown = false, bushBreakdown = false;
+    int[] aniID = new int[2] { 0,0};
+    float dt;
+    float[] aniTime = new float[2] { .0f,.0f};
+    SpriteRenderer shopSmogRender, bushSmogRender;
+    GameObject shop, ruinShop, bush;
 
     public Sprite[] smogAnis;
 
@@ -17,7 +18,11 @@ public class SceneObjectManager : MonoBehaviour
     {
         shop = GameObject.Find("Shop");
         ruinShop = GameObject.Find("ruin");
-        smogRender = transform.Find("Smog").GetComponent<SpriteRenderer>(); ;
+        bush = GameObject.Find("bush");
+        shopSmogRender = transform.Find("ShopSmog").GetComponent<SpriteRenderer>();
+        bushSmogRender = transform.Find("BushSmog").GetComponent<SpriteRenderer>();
+        shopSmogRender.enabled = false;
+        bushSmogRender.enabled = false;
     }
     void Start()
     {
@@ -28,31 +33,63 @@ public class SceneObjectManager : MonoBehaviour
     void Update()
     {
         dt = Time.deltaTime;
-        if (shopBreakdown) SmogAni();
+        if (shopBreakdown) ShopSmogAni();
+        if (bushBreakdown) BushSmogAni();
+
     }
 
+    public System.Action GetShopCBK() {
+        return BreakShop;
+    }
     public void BreakShop() {
+        shopSmogRender.enabled = true;
         shopBreakdown = true;
     }
+    public System.Action GetBushCBK()
+    {
+        return BreakBush;
+    }
+    public void BreakBush() {
+        bushSmogRender.enabled = true;
+        bushBreakdown = true;
+    }
 
-    void SmogAni() {
-        aniTime += dt;
-        if (aniTime > 0.06f) {
-            if (aniID >= 33) {
+    void ShopSmogAni() {
+        aniTime[0] += dt;
+        if (aniTime[0] > 0.06f) {
+            if (aniID[0] >= 33) {
                 shopBreakdown = false;
                 return;
             }
-            else if (aniID > 16) {
+            else if (aniID[0] > 16) {
                 shop.SetActive(false);
                 ruinShop.SetActive(true);
             }
-            aniTime = .0f;
-            aniID++;
-            smogRender.sprite = smogAnis[aniID];
+            aniTime[0] = .0f;
+            aniID[0]++;
+            shopSmogRender.sprite = smogAnis[aniID[0]];
             
         }
     }
 
+    void BushSmogAni() {
+        aniTime[1] += dt;
+        if (aniTime[1] > 0.06f)
+        {
+            if (aniID[1] >= 33)
+            {
+                bushBreakdown = false;
+                return;
+            }
+            else if (aniID[1] > 16)
+            {
+                bush.SetActive(false);
+            }
+            aniTime[1] = .0f;
+            aniID[1]++;
+            bushSmogRender.sprite = smogAnis[aniID[1]];
 
+        }
+    }
 
 }

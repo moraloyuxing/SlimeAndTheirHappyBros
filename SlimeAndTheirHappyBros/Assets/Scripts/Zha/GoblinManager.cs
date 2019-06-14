@@ -255,6 +255,10 @@ public class GoblinManager : MonoBehaviour
         KillGoblin = cbk;
     }
 
+    public void SubBreakShopCBK(System.Action shop, System.Action bush) {
+        kingGoblin.SubPunchCBK(shop, bush);
+    }
+
     public void SpawnNormalGoblinBaseColor(int col)
     {
         if (col == 0)

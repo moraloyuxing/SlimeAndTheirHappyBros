@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class KingGoblin : IEnemyUnit
 {
-    bool firstInState = false, waveOnce = false;
+    bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
     int hp;
+    System.Action punchShop, punchBush;
     Animator animator;
     AnimatorStateInfo aniInfo;
     Transform transform;
@@ -16,6 +17,11 @@ public class KingGoblin : IEnemyUnit
 
     enum KingState {
         showUp, idle, punchAtk, waveAtk, throwAtk
+    }
+
+    public void SubPunchCBK(System.Action shopCBK, System.Action bushCBK) {
+        punchShop = shopCBK;
+        punchBush = bushCBK;
     }
 
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
@@ -50,9 +56,29 @@ public class KingGoblin : IEnemyUnit
 
     void ShowUp() {
         aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-        if (aniInfo.normalizedTime >= 0.98f) {
-            SetState(KingState.idle);
+        if (aniInfo.normalizedTime > 0.64f) {
+            if (!punchShopOnce)
+            {
+                punchShopOnce = true;
+                punchShop();
+            }
+            else {
+                if (aniInfo.normalizedTime > 0.9f) {
+                    if (!punchBushOnce)
+                    {
+                        punchShopOnce = true;
+                        punchBush();
+                    }
+                    else {
+                        if (aniInfo.normalizedTime >= 0.98f)
+                        {
+                            SetState(KingState.idle);
+                        }
+                    }
+                }
+            }
         }
+
     }
     void Idle() {
         if (!firstInState)

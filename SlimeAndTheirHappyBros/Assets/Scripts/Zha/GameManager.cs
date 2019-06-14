@@ -51,11 +51,17 @@ public class GameManager : MonoBehaviour
             }
         }
         directLight = GameObject.Find("Directional Light").GetComponent<Light>();
+
         sceneObjectManager = GetComponent<SceneObjectManager>();
+
+
     }
     void Start()
     {
         uiManager.SetTotalTime(roundInfos[0].waves[(roundInfos[0].maxWave - 1)].spawnTime);
+        goblinManager.SubBreakShopCBK(sceneObjectManager.GetShopCBK(), sceneObjectManager.GetBushCBK());
+
+        if (test) GameObject.Find("Tutorial").SetActive(false);
     }
 
     // Update is called once per frame
