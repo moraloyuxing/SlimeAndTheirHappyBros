@@ -127,7 +127,11 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
 
         if (firstInState )
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             if (delayShoot == 0) {
                 moveFwdDir = (goblinManager.PlayerPos[targetPlayer] - selfPos).normalized;
@@ -176,7 +180,11 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             hurtAreaCol.enabled = false;

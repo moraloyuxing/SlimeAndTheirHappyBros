@@ -107,7 +107,11 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Attack", 0.18f);
             animator.SetInteger("state", 2);
@@ -150,7 +154,11 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             atkCol.enabled = false;
             atkSpeedOffset = 1.0f;
@@ -184,7 +192,11 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             atkCol.enabled = false;

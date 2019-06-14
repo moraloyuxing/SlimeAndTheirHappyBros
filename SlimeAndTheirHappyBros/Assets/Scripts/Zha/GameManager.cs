@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     UIManager uiManager;
     Item_Manager itemManager;
     Player_Manager playerManager;
+    SceneObjectManager sceneObjectManager;
 
     public static bool isBreakTime = false;
     public static int curRound = -1;
@@ -30,11 +31,15 @@ public class GameManager : MonoBehaviour
         goblinManager = GameObject.Find("GoblinManager").GetComponent<GoblinManager>();
         goblinManager.SubKillGoblinCBK(KillGoblin);
         uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
-        uiManager.SubCountDownCallBack(StartRound);
+
+        uiManager.SubCountDownCallBack(StartRound);    //註冊倒數完事件，開始關卡
+         
         itemManager = GameObject.Find("Item_Group").GetComponent<Item_Manager>() ;
         playerManager = GameObject.Find("Player_Manager").GetComponent<Player_Manager>() ;
-        playerManager.SubAltar(GoNextRound);
-        playerManager.SubDeath(GoLose);
+
+        playerManager.SubAltar(GoNextRound);  //註冊祭壇事件
+        playerManager.SubDeath(GoLose);  //註冊死亡事件
+
         goblinKillsGoal = new int[roundInfos.Length];
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
@@ -46,6 +51,7 @@ public class GameManager : MonoBehaviour
             }
         }
         directLight = GameObject.Find("Directional Light").GetComponent<Light>();
+        sceneObjectManager = GetComponent<SceneObjectManager>();
     }
     void Start()
     {
@@ -100,7 +106,7 @@ public class GameManager : MonoBehaviour
             if (inShopping)
             {
                 if (!lightChange) {
-                    lightTime += Time.deltaTime;
+                    lightTime += Time.deltaTime*0.5f;
                     directLight.color = Color.Lerp(gameLight, shopLight, lightTime);
                     if (lightTime >= 1.0f) {
                         lightTime = .0f;
@@ -110,7 +116,7 @@ public class GameManager : MonoBehaviour
             }
             else {
                 if (!lightChange) {
-                    lightTime += Time.deltaTime;
+                    lightTime += Time.deltaTime*0.5f;
                     directLight.color = Color.Lerp(shopLight, gameLight, lightTime);
                     if (lightTime >= 1.0f)
                     {
@@ -141,7 +147,7 @@ public class GameManager : MonoBehaviour
         AudioManager.SingletonInScene.ChangeBGM(false, curRound);
     }
 
-    public void RoundOver() {
+    public void RoundOver() {     //打完進商店
         //Debug.Log(curRound + "  round over");
         curRound++;
         if (curRound > 10) curRound = 10;
@@ -158,7 +164,7 @@ public class GameManager : MonoBehaviour
 
         uiManager.SetTotalTime(roundInfos[curRound].waves[(roundInfos[curRound].maxWave - 1)].spawnTime);
     }
-    public void GoNextRound() {
+    public void GoNextRound() {   //商店結束到下一關
         inShopping = false;
         itemManager.State_Switch();
         playerManager.State_Switch();

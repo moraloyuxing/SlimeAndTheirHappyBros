@@ -237,7 +237,10 @@ public class GoblinBase
     public virtual void CalculatePath() {
         startFindPath = true;
         followingPath = false;
-        if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+        if (curPathRequest != null) {
+            PathRequestManager.CancleRequest(curPathRequest);
+            curPathRequest = null;
+        } 
         curPathRequest =  PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
         goblinManager.CalculatePath = true;
     }
@@ -346,7 +349,10 @@ public class GoblinBase
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null) {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            } 
             firstInState = false;
             animator.SetTrigger("hurt");
             //animator.Play("hurt");
@@ -374,7 +380,10 @@ public class GoblinBase
     public virtual void KnockBack() {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null) {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            } 
             firstInState = false;
             //animator.SetTrigger("hurt");
             //animator.Play("hurt");

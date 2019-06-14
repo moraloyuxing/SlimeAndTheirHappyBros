@@ -293,7 +293,11 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         {
             float scaleX = .0f;
             if (firstInState) {
-                if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+                if (curPathRequest != null)
+                {
+                    PathRequestManager.CancleRequest(curPathRequest);
+                    curPathRequest = null;
+                }
 
                 moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z);
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
@@ -685,7 +689,11 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             hurtAreaCol.enabled = false;
             AudioManager.SingletonInScene.PlaySound2D("Hob_Death", 0.5f);

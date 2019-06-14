@@ -41,7 +41,7 @@ public class GoblinWave : IEnemyObjectPoolUnit
             i ++;
         }
 
-        if (lifeTime > 5.0f) ResetUnit();
+        if (lifeTime > 3.5f) ResetUnit();
     }
 
     public void ToActive(Vector3 _pos, Vector3 _dir) {
