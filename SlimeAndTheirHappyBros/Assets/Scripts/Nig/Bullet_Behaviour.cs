@@ -40,9 +40,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     }
 
     public void SetAttackDir(Vector3 current_angle,Player_Control xSlime,int Shader_Number) {
-        Debug.Log(xSlime.Base_BulletTime);
         FadeTime = FadeTime + xSlime.Base_BulletTime;
-        Debug.Log(FadeTime);
         color = Shader_Number;
         GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;

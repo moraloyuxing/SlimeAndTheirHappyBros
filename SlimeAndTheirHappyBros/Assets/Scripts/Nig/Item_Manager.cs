@@ -7,6 +7,7 @@ public class Item_Manager : MonoBehaviour {
     public SpriteRenderer Docter;
     public Transform[] All_Player = new Transform[4];//四位玩家
     public GameObject[] Player_BuyHint = new GameObject[4];
+    public GameObject[] Player_PriceHint = new GameObject[4];
     public TextMesh[] PricetoPlayer = new TextMesh[4];
 
     public Transform[] All_Item = new Transform[6];//六樣道具
@@ -18,9 +19,9 @@ public class Item_Manager : MonoBehaviour {
     int[] Focus_Count = new int[4] { -1, -1, -1, -1 };
     bool Purchase_State = false;
     int[,] Item_Price = new int[4, 6];
-    int[] Base_Price = new int[6] { 16, 26, 14, 17, 12, 20 };
+    int[] Base_Price = new int[6] { 16, 26, 18, 17, 12, 20 };
     int[,] Item_SuperImposed = new int[4, 6];
-    int[] Item_MaxCanBuy = new int[6] { 0, 0, 10, 0, 0, 0 };
+    int[] Item_MaxCanBuy = new int[6] { 99, 99, 3, 99, 10, 99 };//最大購買量
 
     //玩家購買相關
     bool[] a_button = new bool[4];
@@ -28,11 +29,16 @@ public class Item_Manager : MonoBehaviour {
     bool[,] PlayerHasBuy = new bool[4, 6];
     public Sprite[] ItemSprite = new Sprite[6];
     int[] Player_Money = new int[4];
+    public Sprite[] BuyHintType = new Sprite[2];//0→可購買+金額 ； 1→達上限
+    public SpriteRenderer[] Player_MaxBuyHint = new SpriteRenderer[4];
+
+    public NPC_Manager npcManager;
 
     void Start(){
         for (int p = 0; p < 4; p++) {
             Which_Player[p] = All_Player[p].name;
             Player_BaseAbility[p] = All_Player[p].GetComponent<Player_Control>();
+            Player_MaxBuyHint[p] = Player_BuyHint[p].GetComponent<SpriteRenderer>();
             for (int i = 0; i < 6; i++) PlayerHasBuy[p, i] = false;
         }
     }
@@ -55,13 +61,21 @@ public class Item_Manager : MonoBehaviour {
                             Focus_Count[p] = i;
                             itemBeFocused[i]++;
                             Player_BuyHint[p].SetActive(true);
+                            if (Item_SuperImposed[p, Focus_Count[p]] < Item_MaxCanBuy[Focus_Count[p]]) {
+                                Player_PriceHint[p].SetActive(true);
+                                Player_MaxBuyHint[p].sprite = BuyHintType[0];
+                            } 
+                            else {
+                                Player_PriceHint[p].SetActive(false);
+                                Player_MaxBuyHint[p].sprite = BuyHintType[1];
+                            }
                         }
 
                         if (a_button[p]){
                             Player_Money[p] = Player_BaseAbility[p].GetPlayerMoney();
 
                             //多一判斷式→錢夠不夠
-                            if (Player_Money[p] >= Item_Price[p,Focus_Count[p]]) {
+                            if (Player_Money[p] >= Item_Price[p,Focus_Count[p]] && Item_SuperImposed[p,Focus_Count[p]] < Item_MaxCanBuy[Focus_Count[p]]) {
                                 //PlayerHasBuy[p, Focus_Count[p]] = true;
                                 AudioManager.SingletonInScene.PlaySound2D("Buy", 0.7f);
 
@@ -108,10 +122,12 @@ public class Item_Manager : MonoBehaviour {
             Docter.enabled = true;
             for (int i = 0; i < 6; i++) Item_InBox[i].enabled = true;
             NewRound_toBuy();
+            npcManager.BreakTime_Start();
         }
         else {
             Docter.enabled = false;
             for (int i = 0; i < 6; i++) Item_InBox[i].enabled = false;
+            npcManager.BreakTime_End();
         }
     }
 
@@ -133,7 +149,8 @@ public class Item_Manager : MonoBehaviour {
 
     public void Item_PickUp(int PID, int ItemID) {
         Item_SuperImposed[PID, ItemID]++;
-        Item_Price[PID, ItemID] = Mathf.FloorToInt(Base_Price[ItemID] * Mathf.Pow(1.3f, Item_SuperImposed[PID, ItemID]));
+        if(ItemID != 2)Item_Price[PID, ItemID] = Mathf.FloorToInt(Base_Price[ItemID] * Mathf.Pow(1.3f, Item_SuperImposed[PID, ItemID]));
+        else Item_Price[PID, ItemID] = Mathf.FloorToInt(Base_Price[ItemID] * Mathf.Pow(2.5f, Item_SuperImposed[PID, ItemID]));
     }
 
 }
