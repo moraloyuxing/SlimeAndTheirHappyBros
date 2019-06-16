@@ -500,7 +500,7 @@ public class Merge_Control : MonoBehaviour{
     public void AttackPriorityOn()
     {
         AttackPriority = true;
-        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Shader_Number);
+        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Shader_Number,false);
         AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.5f);
     }
 
@@ -569,6 +569,11 @@ public class Merge_Control : MonoBehaviour{
         Base_Speed = Current_Speed;
         DuringDashLerp = false;
         AttackPriority = false;
+    }
+
+    public void DashEnd_musou()
+    {
+        StopDetect = false;
     }
 
     public void SpiltPriorityOn()

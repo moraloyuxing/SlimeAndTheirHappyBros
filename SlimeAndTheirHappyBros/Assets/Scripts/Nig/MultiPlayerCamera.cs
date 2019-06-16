@@ -17,6 +17,11 @@ public class MultiPlayerCamera : MonoBehaviour{
     Camera cam;
     public Transform FirstAlivePlayer;
 
+    bool isShopArea = false;
+    Vector3 ShopView = new Vector3(-27.0f,32.5f,-50.0f);
+    Vector3 Shopoffset = new Vector3(0.0f,32.0f,-45.5f);
+    bool[] PlayeratShopArea = new bool[4];
+
     void Start(){
         cam = GetComponent<Camera>();
         FirstAlivePlayer = AllPlayers[0];
@@ -32,6 +37,10 @@ public class MultiPlayerCamera : MonoBehaviour{
     void Move(){
         CenterPoint = GetCenterPoint();
         NewPosition = CenterPoint + offset;
+        if (isShopArea == true) {
+            Debug.Log("???");
+            NewPosition = ShopView/* + Shopoffset*/;
+        }
         transform.position = Vector3.SmoothDamp(transform.position, NewPosition, ref Velocity, SmoothTime);
     }
 
@@ -77,7 +86,17 @@ public class MultiPlayerCamera : MonoBehaviour{
         return greatest_total;
     }
 
+    public void Player_GoShop(int PID) {
+        PlayeratShopArea[PID] = true;
+        isShopArea = true;
+        for (int p = 0; p < 4; p++){
+            if (PlayeratShopArea[p] == false) isShopArea = false;
+        }
+    }
 
-
+    public void Player_LeaveShop(int PID) {
+        PlayeratShopArea[PID] = false;
+        isShopArea = false;
+    }
 
 }

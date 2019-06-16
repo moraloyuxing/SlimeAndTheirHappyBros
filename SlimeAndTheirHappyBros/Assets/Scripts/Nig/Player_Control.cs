@@ -61,6 +61,7 @@ public class Player_Control : MonoBehaviour{
     //攻擊
     float right_trigger = 0.0f;
     bool Shooting = false;
+    float Leaf_Shooting_Moment = 0.0f;
 
     //單人染色偵測
     public Transform[] Pigment = new Transform[3];//白紅黃藍
@@ -333,7 +334,7 @@ public class Player_Control : MonoBehaviour{
         xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
         zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
-        if (xAtk != 0.0f || zAtk != 0.0f && DeathPriority == false) {
+        if (xAtk != 0.0f || zAtk != 0.0f) {
             AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             //Attack_Direction = ( new Vector3(xAtk, 0.0f, zAtk).normalized);
@@ -347,10 +348,16 @@ public class Player_Control : MonoBehaviour{
 
         //攻擊
         right_trigger = Input.GetAxis(WhichPlayer + "Attack");
-        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
-            GetComponent<Animator>().Play("Slime_Attack");
+        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false) {
+            if (DeathPriority == false) GetComponent<Animator>().Play("Slime_Attack");
+            else {
+                AttackPriorityOn();//跳過動畫，直接射擊
+                Leaf_Shooting_Moment = Time.time;//設定計時，0.5秒後關閉
+            }
             Shooting = true;
         }
+
+        if (DeathPriority == true && Time.time > Leaf_Shooting_Moment + 0.5f) AttackPriorityOff();
 
         //單人染色偵測(by距離)
         if (ExtraPriority == false && DeathPriority == false) {
@@ -419,7 +426,7 @@ public class Player_Control : MonoBehaviour{
     //設置攻擊最高優先權
     public void AttackPriorityOn() {
         AttackPriority = true;
-        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Color_Number); //移到另外函式呼叫
+        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Color_Number,DeathPriority); //移到另外函式呼叫
         AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.55f);
     }
 
@@ -535,7 +542,7 @@ public class Player_Control : MonoBehaviour{
 
     public void DeathPriorityOff(){
         DeathPriority = false;
-        AttackPriority = false;
+        AttackPriorityOff();
     }
 
     //死亡的數值reset等等

@@ -34,7 +34,7 @@ public class NPC_Manager : MonoBehaviour{
             //巫醫部分
             if (Time.time > Trigger_Moment+2.0f && Docter_OnTalking == false) {
                 //隨機生成新對話內容
-                Random_Talk = Random.Range(0, 7);
+                Random_Talk = Random.Range(0, 6);
                 DocterTalkHint.sprite = DocterTalkType[Random_Talk];
                 DocterTalkHint.enabled = true;        
                 Docter_OnTalking = true;
