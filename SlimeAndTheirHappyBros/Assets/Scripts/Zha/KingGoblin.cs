@@ -5,7 +5,12 @@ using UnityEngine;
 public class KingGoblin : IEnemyUnit
 {
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
-    int hp;
+    int hp, punchStep = -1;
+
+    Vector3[] punchPos = new Vector3[4] { new Vector3(-3.5f, -0.1f, 19.22f), new Vector3(1.7f, -0.1f, 19.22f), new Vector3(14.57f, -0.1f, 20.54f), new Vector3(-17.52f, -0.1f, 19.85f) };
+    Vector3[] punchDir = new Vector3[4];
+    Quaternion[] punchRot = new Quaternion[4];
+
     System.Action punchShop, punchBush;
     Animator animator;
     AnimatorStateInfo aniInfo;
@@ -28,6 +33,18 @@ public class KingGoblin : IEnemyUnit
         transform = t;
         animator = transform.GetComponent<Animator>();
         goblinManager = manager;
+
+        float rad = 260.0f * Mathf.Deg2Rad;
+        punchDir[0] = new Vector3(Mathf.Cos(rad), 0, Mathf.Sin(rad));
+        punchDir[1] = new Vector3(-punchDir[0].x, 0, punchDir[0].z);
+        rad = 285.0f * Mathf.Deg2Rad;
+        punchDir[2] = new Vector3(Mathf.Cos(rad), 0, Mathf.Sin(rad));
+        punchDir[3] = new Vector3(-punchDir[2].x, 0, punchDir[2].z);
+
+        punchRot[0] = Quaternion.Euler(90f, 0, 80f);
+        punchRot[1] = Quaternion.Euler(90f, 0, 100f);
+        punchRot[2] = Quaternion.Euler(90f, 0, 105f);
+        punchRot[3] = Quaternion.Euler(90f, 0, 75f);
     }
 
     void SetState(KingState state) {
@@ -37,7 +54,7 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void Update(float dt) {
-        if (Input.GetKeyDown(KeyCode.D)) SetState(KingState.waveAtk);
+        if (Input.GetKeyDown(KeyCode.D)) SetState(KingState.punchAtk);
         switch (curState) {
             case KingState.showUp:
                 ShowUp();
@@ -83,10 +100,46 @@ public class KingGoblin : IEnemyUnit
     void Idle() {
         if (!firstInState)
         {
+            firstInState = true;
             animator.SetInteger("state", 1);
+            animator.SetTrigger("attackOver");
         }
     }
     void PunchAtk() {
+        if (!firstInState)
+        {
+            firstInState = true;
+            animator.SetInteger("state", 2);
+        }
+        else {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (punchStep < 0 && aniInfo.IsName("punchAtk")) punchStep = 0;
+            else if (punchStep == 0 && aniInfo.normalizedTime >= 0.39f)
+            {
+                goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
+                punchStep = 1;
+            }
+            else if (punchStep == 1 && aniInfo.normalizedTime >= 0.5f)
+            {
+                goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
+                punchStep = 2;
+            }
+            else if (punchStep == 2 && aniInfo.normalizedTime >= 0.57f)
+            {
+                goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
+                punchStep = 3;
+            }
+            else if (punchStep == 3 && aniInfo.normalizedTime >= 0.71f)
+            {
+                goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
+                punchStep = 4;
+            }
+            else if (punchStep == 4 && aniInfo.normalizedTime >= 0.96f)
+            {
+                punchStep = -1;
+                SetState(KingState.idle);
+            }
+        }
 
     }
     void WaveAtk() {
@@ -94,6 +147,7 @@ public class KingGoblin : IEnemyUnit
         {
             firstInState = true;
             animator.SetInteger("state", 3);
+            
         }
         else {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);

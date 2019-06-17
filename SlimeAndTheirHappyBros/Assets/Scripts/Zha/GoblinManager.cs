@@ -45,6 +45,7 @@ public class GoblinManager : MonoBehaviour
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
     Dictionary<string, GoblinLeaf> goblinLeafDic;
     List<GoblinLeaf> freeGoblinLeaves, usedGoblinLeaves;
+    List<GoblinEnergyPunch> freeGoblinPunches, usedGoblinPunches;
     List<GoblinWave> freeGoblinWaves, usedGoblinWaves;
     List<Money> freeMoneys, usedMoneys;
 
@@ -167,6 +168,16 @@ public class GoblinManager : MonoBehaviour
             freeGoblinWaves[i].Init(goblin, this, poolUnitInfo[1]);
             goblin.gameObject.SetActive(false);
         }
+        goblins = transform.Find("GoblinEnergyPunchs");
+        freeGoblinPunches = new List<GoblinEnergyPunch>();
+        usedGoblinPunches = new List<GoblinEnergyPunch>();
+        for (int i = 0; i < goblins.childCount; i++)
+        {
+            goblin = goblins.GetChild(i);
+            freeGoblinPunches.Add(new GoblinEnergyPunch());
+            freeGoblinPunches[i].Init(goblin, this, poolUnitInfo[1]);
+            goblin.gameObject.SetActive(false);
+        }
         goblins = transform.Find("Moneys");
         freeMoneys = new List<Money>();
         usedMoneys = new List<Money>();
@@ -235,6 +246,10 @@ public class GoblinManager : MonoBehaviour
         for (index = 0; index < usedGoblinLeaves.Count; index++)
         {
             usedGoblinLeaves[index].Update(dt);
+        }
+        for (index = 0; index < usedGoblinPunches.Count; index++)
+        {
+            usedGoblinPunches[index].Update(dt);
         }
         for (index = 0; index < usedGoblinWaves.Count; index++) {
             usedGoblinWaves[index].Update(dt);
@@ -388,6 +403,13 @@ public class GoblinManager : MonoBehaviour
         leaf.ToActive(pos, dir);
         freeGoblinLeaves.Remove(leaf);
     }
+    public void UsePunch(Vector3 pos, Vector3 d, Quaternion rot)
+    {
+        if (freeGoblinPunches.Count <= 0) return;
+        usedGoblinPunches.Add(freeGoblinPunches[0]);
+        freeGoblinPunches[0].ToActive(pos,d,rot);
+        freeGoblinPunches.Remove(freeGoblinPunches[0]);
+    }
     public void UseWave(Vector3 pos) {
         if (freeGoblinWaves.Count <= 0) return;
         GoblinWave wave = freeGoblinWaves[0];
@@ -445,6 +467,11 @@ public class GoblinManager : MonoBehaviour
     public void RecycleLeaf(GoblinLeaf leaf) {
         freeGoblinLeaves.Add(leaf);
         usedGoblinLeaves.Remove(leaf);
+    }
+    public void RecyclePunches(GoblinEnergyPunch punch)
+    {
+        freeGoblinPunches.Add(punch);
+        usedGoblinPunches.Remove(punch);
     }
     public void RecycleWave(GoblinWave wave) {
         freeGoblinWaves.Add(wave);
