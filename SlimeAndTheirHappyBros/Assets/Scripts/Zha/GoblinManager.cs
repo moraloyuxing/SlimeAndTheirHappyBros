@@ -409,6 +409,7 @@ public class GoblinManager : MonoBehaviour
 
     }
     IEnumerator DropMoney(int num, Vector3 pos, int target) {
+        Four_Player[target].MoneyUI_GoBigger();
         int i = 0;
         while (i < num)
         {
@@ -423,6 +424,7 @@ public class GoblinManager : MonoBehaviour
     }
     IEnumerator DropMoney2(int num, Vector3 pos, int target)
     {
+        Four_Player[target].MoneyUI_GoBigger();
         int i = 0;
         while (i < num)
         {
@@ -430,12 +432,10 @@ public class GoblinManager : MonoBehaviour
             Money money = freeMoneys[0];
             usedMoneys.Add(money);
             money.ToActive(pos, target);
-            Four_Player[target].MoneyUI_GoBigger();
             freeMoneys.Remove(money);
             i++;
             yield return new WaitForSeconds(0.3f);
         }
-        Four_Player[target].MoneyUI_BackSmaller();
     }
     public void RecycleArrow(GoblinArrow arrow) {
         freeGoblinArrows.Add(arrow);
