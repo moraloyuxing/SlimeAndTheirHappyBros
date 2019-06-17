@@ -13,6 +13,7 @@ public class Player_Manager : MonoBehaviour
     bool[] a_button = new bool[4];
     string[] Which_Player = new string[4];
     Pigment_Manager pigmentManager;
+    Animator[] Playeranim = new Animator[4];
 
     public Transform WashingPlace;
     public GameObject WashingBoard;
@@ -30,6 +31,10 @@ public class Player_Manager : MonoBehaviour
     bool[] Player_Death = new bool[4];
     bool All_Death = false;
 
+    public MultiPlayerCamera cameraatshop;
+    public Transform ShopPlace;
+    float ShopDis_x;
+    float ShopDis_z;
 
     System.Action OnAltarCBK;
     System.Action DeathCBK;
@@ -48,6 +53,7 @@ public class Player_Manager : MonoBehaviour
             FourPlayer[i].SetUp_Number(i);
             _goblinmanager.SetPlayersMove(i, FourPlayer[i].transform.position);
             Player_Death[i] = false;
+            Playeranim[i] = FourPlayer[i].gameObject.GetComponent<Animator>();
         }
         Player1_rePos(FourPlayer[0].transform.position);
         Player2_rePos(FourPlayer[1].transform.position);
@@ -57,6 +63,15 @@ public class Player_Manager : MonoBehaviour
 
     void Update()
     {
+        //測試
+        if (Input.GetKeyDown(KeyCode.L)) {
+            Player1_rePos(FourPlayer[0].transform.position);
+            Player2_rePos(FourPlayer[1].transform.position);
+            Player3_rePos(FourPlayer[2].transform.position);
+            Player4_rePos(FourPlayer[3].transform.position);
+        }
+
+
         for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
         if (Game_State){
             //玩家1啟用融合
@@ -93,7 +108,7 @@ public class Player_Manager : MonoBehaviour
         }
 
         //玩家1啟用洗白
-        if (a_button[0] && WashPriority[0] && FourPlayer[0].gameObject.activeSelf == true)
+        if (a_button[0] && WashPriority[0] && FourPlayer[0].gameObject.activeSelf == true && Player_Death[0] == false)
         {
             SetPlayerColor(0, 0);
             pigmentManager.Change_Base_Color(0, 0);
@@ -108,7 +123,7 @@ public class Player_Manager : MonoBehaviour
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
         }
         //玩家2啟用洗白
-        if (a_button[1] && WashPriority[1] && FourPlayer[1].gameObject.activeSelf == true)
+        if (a_button[1] && WashPriority[1] && FourPlayer[1].gameObject.activeSelf == true && Player_Death[1] == false)
         {
             SetPlayerColor(1, 0);
             pigmentManager.Change_Base_Color(1, 0);
@@ -123,7 +138,7 @@ public class Player_Manager : MonoBehaviour
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
         }
         //玩家3啟用洗白
-        if (a_button[2] && WashPriority[2] && FourPlayer[2].gameObject.activeSelf == true)
+        if (a_button[2] && WashPriority[2] && FourPlayer[2].gameObject.activeSelf == true && Player_Death[2] == false)
         {
             SetPlayerColor(2, 0);
             pigmentManager.Change_Base_Color(2, 0);
@@ -139,7 +154,7 @@ public class Player_Manager : MonoBehaviour
         }
 
         //玩家4啟用洗白
-        if (a_button[3] && WashPriority[3] && FourPlayer[3].gameObject.activeSelf == true)
+        if (a_button[3] && WashPriority[3] && FourPlayer[3].gameObject.activeSelf == true && Player_Death[3] == false)
         {
             SetPlayerColor(3, 0);
             pigmentManager.Change_Base_Color(3, 0);
@@ -160,6 +175,16 @@ public class Player_Manager : MonoBehaviour
         }
 
         if (!Game_State) {
+            //到商店
+            for (int p = 0; p < 4; p++) {
+                ShopDis_x = ShopPlace.position.x - FourPlayer[p].transform.position.x;
+                ShopDis_z = ShopPlace.position.z - FourPlayer[p].transform.position.z;
+
+                if (ShopDis_x >= -24.0f && ShopDis_x <= 10.0f && ShopDis_z >= -24.0f && ShopDis_z <= 10.0f) cameraatshop.Player_GoShop(p);
+                else cameraatshop.Player_LeaveShop(p);
+            }
+
+            //到祭壇
             bool onit = true;
             for (int i = 0; i < 4; i++) {
                 if (Mathf.Abs(FourPlayer[i].transform.position.x - Altar.position.x) > 10.0f || Mathf.Abs(FourPlayer[i].transform.position.z - Altar.position.z) > 10.0f) {
@@ -189,16 +214,15 @@ public class Player_Manager : MonoBehaviour
             FourPlayer[0].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard)
-            {
-                if (Color_Number[0] != 0)
-                {
+            if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
+                &&Player_Death[0] == false){
+                if (Color_Number[0] != 0){
                     WashPriority[0] = true;
                     SetHintType(0, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false)
-            {
+            else if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false
+                ||Player_Death[0] == true || Playeranim[0].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")){
                 FourPlayer[0].SendMessage("Hide_Hint");
                 WashPriority[0] = false;
             }
@@ -240,7 +264,8 @@ public class Player_Manager : MonoBehaviour
             FourPlayer[1].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard)
+            if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
+                && Player_Death[1] == false)
             {
                 if (Color_Number[1] != 0)
                 {
@@ -248,7 +273,8 @@ public class Player_Manager : MonoBehaviour
                     SetHintType(1, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false)
+            else if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false
+                || Player_Death[1] == true || Playeranim[1].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt"))
             {
                 FourPlayer[1].SendMessage("Hide_Hint");
                 WashPriority[1] = false;
@@ -293,7 +319,8 @@ public class Player_Manager : MonoBehaviour
             FourPlayer[2].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard)
+            if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
+                && Player_Death[2] == false)
             {
                 if (Color_Number[2] != 0)
                 {
@@ -301,7 +328,8 @@ public class Player_Manager : MonoBehaviour
                     SetHintType(2, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false)
+            else if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false
+                || Player_Death[2] == true || Playeranim[2].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt"))
             {
                 FourPlayer[2].SendMessage("Hide_Hint");
                 WashPriority[2] = false;
@@ -346,7 +374,8 @@ public class Player_Manager : MonoBehaviour
             FourPlayer[3].transform.position = pos;
 
             //是否接近洗白處優先判定
-            if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard)
+            if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
+                && Player_Death[3] == false)
             {
                 if (Color_Number[3] != 0)
                 {
@@ -354,7 +383,8 @@ public class Player_Manager : MonoBehaviour
                     SetHintType(3, 0);
                 }
             }
-            else if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false)
+            else if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) >= 6.0f || Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) >= 6.0f || HaveBoard == false
+                || Player_Death[3] == true || Playeranim[3].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt"))
             {
                 FourPlayer[3].SendMessage("Hide_Hint");
                 WashPriority[3] = false;

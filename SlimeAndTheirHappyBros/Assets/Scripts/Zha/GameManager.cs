@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     Item_Manager itemManager;
     Player_Manager playerManager;
     SceneObjectManager sceneObjectManager;
+    NPC_Manager npcManager;
 
     public static bool isBreakTime = false;
     public static int curRound = -1;

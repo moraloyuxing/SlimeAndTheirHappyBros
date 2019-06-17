@@ -61,7 +61,7 @@ public class Player_Control : MonoBehaviour{
     //攻擊
     float right_trigger = 0.0f;
     bool Shooting = false;
-    Animation AttackSpeed_anim;
+    float Leaf_Shooting_Moment = 0.0f;
 
     //單人染色偵測
     public Transform[] Pigment = new Transform[3];//白紅黃藍
@@ -111,6 +111,7 @@ public class Player_Control : MonoBehaviour{
     float BulletSpeed_PercentageModify;
     float BulletTime_PercentageModify;
     float AttackSpeed_PercentageModify;
+    float WalkSpeedanim = 1.0f;
 
     //UI連動
     public GameObject UI_Icon;
@@ -166,10 +167,10 @@ public class Player_Control : MonoBehaviour{
     }
 
     void Update(){
-        if(WhichPlayer == "Player1_")Debug.Log(StopDetect);
         anim.SetBool("Walking", Walking);
         anim.SetBool("Shooting", Shooting);
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Attack")) anim.speed = Base_AttackSpeed;
+        else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Walk")) anim.speed = WalkSpeedanim;
         else anim.speed = 1.0f;
         //受傷判定
         if (StopDetect == false)SlimeGetHurt();
@@ -333,7 +334,7 @@ public class Player_Control : MonoBehaviour{
         xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
         zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
-        if (xAtk != 0.0f || zAtk != 0.0f && DeathPriority == false) {
+        if (xAtk != 0.0f || zAtk != 0.0f) {
             AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             //Attack_Direction = ( new Vector3(xAtk, 0.0f, zAtk).normalized);
@@ -347,10 +348,16 @@ public class Player_Control : MonoBehaviour{
 
         //攻擊
         right_trigger = Input.GetAxis(WhichPlayer + "Attack");
-        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
-            GetComponent<Animator>().Play("Slime_Attack");
+        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false) {
+            if (DeathPriority == false) GetComponent<Animator>().Play("Slime_Attack");
+            else {
+                AttackPriorityOn();//跳過動畫，直接射擊
+                Leaf_Shooting_Moment = Time.time;//設定計時，0.5秒後關閉
+            }
             Shooting = true;
         }
+
+        if (DeathPriority == true && Time.time > Leaf_Shooting_Moment + 0.5f) AttackPriorityOff();
 
         //單人染色偵測(by距離)
         if (ExtraPriority == false && DeathPriority == false) {
@@ -419,7 +426,7 @@ public class Player_Control : MonoBehaviour{
     //設置攻擊最高優先權
     public void AttackPriorityOn() {
         AttackPriority = true;
-        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Color_Number); //移到另外函式呼叫
+        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Color_Number,DeathPriority); //移到另外函式呼叫
         AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.55f);
     }
 
@@ -535,7 +542,7 @@ public class Player_Control : MonoBehaviour{
 
     public void DeathPriorityOff(){
         DeathPriority = false;
-        AttackPriority = false;
+        AttackPriorityOff();
     }
 
     //死亡的數值reset等等
@@ -629,11 +636,13 @@ public class Player_Control : MonoBehaviour{
             case 4:
                 Speed_Superimposed++;
                 Speed_PercentageModify= 0.5f - 0.1f * Speed_Superimposed;
-                if (Speed_PercentageModify <= 0.1f) Speed_PercentageModify= 0.1f;
+                if (Speed_PercentageModify <= 0.2f) Speed_PercentageModify= 0.2f;
                 Base_Speed = Base_Speed + Speed_PercentageModify;
                 //Tired_Speed = Tired_Speed + Speed_PercentageModify;
                 //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
                 Current_Speed = Base_Speed;//備份，用以DashLerp後重置
+                WalkSpeedanim = 1.0f + 0.05f * Speed_Superimposed;
+                if (WalkSpeedanim > 1.5f) WalkSpeedanim = 1.5f;
                 break;
             case 5:
                 Timer_Superimposed++;//更新進合體時間 7秒1血(完成)
@@ -838,23 +847,25 @@ public class Player_Control : MonoBehaviour{
                 break;
             case "light":
                 BulletSpeed_Superimposed++;
-                BulletSpeed_PercentageModify = 0.35f - 0.05f * BulletSpeed_Superimposed;
+                BulletSpeed_PercentageModify = 0.25f - 0.05f * BulletSpeed_Superimposed;
                 if (BulletSpeed_PercentageModify <= 0.1f) BulletSpeed_PercentageModify = 0.1f;
                 Base_BulletSpeed = Base_BulletSpeed + BulletSpeed_PercentageModify;
                 AttackSpeed_Superimposed++;
-                AttackSpeed_PercentageModify = 0.3f - 0.05f * AttackSpeed_Superimposed;
+                AttackSpeed_PercentageModify = 0.25f - 0.05f * AttackSpeed_Superimposed;
                 if (AttackSpeed_PercentageModify <= 0.05f) AttackSpeed_PercentageModify = 0.05f;
                 Base_AttackSpeed = Base_AttackSpeed + AttackSpeed_PercentageModify;
                 PickType = 3;
                 break;
             case "shoes":
                 Speed_Superimposed++;
-                Speed_PercentageModify = 0.35f - 0.05f * Speed_Superimposed;
-                if (Speed_PercentageModify <= 0.15f) Speed_PercentageModify = 0.15f;
+                Speed_PercentageModify = 0.5f - 0.1f * Speed_Superimposed;
+                if (Speed_PercentageModify <= 0.2f) Speed_PercentageModify = 0.2f;
                 Base_Speed = Base_Speed + Speed_PercentageModify;
                 //Tired_Speed = Tired_Speed + Speed_PercentageModify;
                 //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
                 Current_Speed = Base_Speed;//備份，用以DashLerp後重置
+                WalkSpeedanim = 1.0f + 0.05f * Speed_Superimposed;
+                if (WalkSpeedanim > 1.5f) WalkSpeedanim = 1.5f;
                 PickType = 4;
                 break;
             case "smooth":
@@ -882,7 +893,7 @@ public class Player_Control : MonoBehaviour{
 
     //擊殺哥布林得到金幣時UI縮放
     public void MoneyUI_GoBigger() {
-        Money_anim.Play("Money_GoBig");
+        Money_anim.Play("Money_Zoom");
     }
 
     public void MoneyUI_BackSmaller() {
