@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player_Manager : MonoBehaviour
 {
@@ -39,6 +40,22 @@ public class Player_Manager : MonoBehaviour
     System.Action OnAltarCBK;
     System.Action DeathCBK;
 
+    //螢幕外追蹤---Start
+    public GameObject[] TracePID = new GameObject[4];
+    RectTransform[] TraceIcon = new RectTransform[4];
+    public RectTransform[] TraceArrow = new RectTransform[4];
+    Vector3[] PIDScreenPos = new Vector3[4];
+    float OutScreenDis_x;
+    float OutScreenDis_y;
+
+    Vector3 TraceCurrentDir;
+    Vector3 newDir;//相當於Attack_Direction
+    float Trace_angle;
+    float Trace_toLerp;
+
+    //螢幕外追蹤---End
+
+
     void Awake()
     {
         pigmentManager = GetComponent<Pigment_Manager>();
@@ -54,6 +71,7 @@ public class Player_Manager : MonoBehaviour
             _goblinmanager.SetPlayersMove(i, FourPlayer[i].transform.position);
             Player_Death[i] = false;
             Playeranim[i] = FourPlayer[i].gameObject.GetComponent<Animator>();
+            TraceIcon[i] = TracePID[i].GetComponent<RectTransform>();
         }
         Player1_rePos(FourPlayer[0].transform.position);
         Player2_rePos(FourPlayer[1].transform.position);
@@ -200,6 +218,8 @@ public class Player_Manager : MonoBehaviour
 
         }
 
+        PlayerTraceSystem();
+
     }
 
     public void SubAltar(System.Action cbk) {
@@ -254,9 +274,14 @@ public class Player_Manager : MonoBehaviour
                 else shortest_toPlayer[0] = FourPlayer[3].gameObject;//離4最近
             }
 
-
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
+
+            //出畫面時啟用Trace
+            PIDScreenPos[0] = Camera.main.WorldToScreenPoint(pos);
+            if (PIDScreenPos[0].x <= 0.0f || PIDScreenPos[0].x >= Screen.width || PIDScreenPos[0].y <= 0.0f || PIDScreenPos[0].y >= Screen.height) TracePID[0].SetActive(true);
+            else TracePID[0].SetActive(false);
+
         }
     }
 
@@ -311,6 +336,11 @@ public class Player_Manager : MonoBehaviour
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
+
+            //出畫面時啟用Trace
+            PIDScreenPos[1] = Camera.main.WorldToScreenPoint(pos);
+            if (PIDScreenPos[1].x <= 0.0f || PIDScreenPos[1].x >= Screen.width || PIDScreenPos[1].y <= 0.0f || PIDScreenPos[1].y >= Screen.height) TracePID[1].SetActive(true);
+            else TracePID[1].SetActive(false);
         }
 
     }
@@ -367,6 +397,10 @@ public class Player_Manager : MonoBehaviour
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
 
+            //出畫面時啟用Trace
+            PIDScreenPos[2] = Camera.main.WorldToScreenPoint(pos);
+            if (PIDScreenPos[2].x <= 0.0f || PIDScreenPos[2].x >= Screen.width || PIDScreenPos[2].y <= 0.0f || PIDScreenPos[2].y >= Screen.height) TracePID[2].SetActive(true);
+            else TracePID[2].SetActive(false);
         }
     }
 
@@ -421,6 +455,11 @@ public class Player_Manager : MonoBehaviour
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
+
+            //出畫面時啟用Trace
+            PIDScreenPos[3] = Camera.main.WorldToScreenPoint(pos);
+            if (PIDScreenPos[3].x <= 0.0f || PIDScreenPos[3].x >= Screen.width || PIDScreenPos[3].y <= 0.0f || PIDScreenPos[3].y >= Screen.height) TracePID[3].SetActive(true);
+            else TracePID[3].SetActive(false);
         }
     }
 
@@ -531,6 +570,123 @@ public class Player_Manager : MonoBehaviour
 
     public void DeathCountMinus(int PlayerID) {
         Player_Death[PlayerID] = false;
+    }
+
+
+    void PlayerTraceSystem() {
+
+        Player1_rePos(FourPlayer[0].transform.position);
+        Player2_rePos(FourPlayer[1].transform.position);
+        Player3_rePos(FourPlayer[2].transform.position);
+        Player4_rePos(FourPlayer[3].transform.position);
+
+        for (int p = 0; p < 4; p++) {
+            if (TracePID[p].activeSelf == true) {
+
+                //九宮格之369
+                if (PIDScreenPos[p].x >= Screen.width){
+                    //3
+                    if (PIDScreenPos[p].y >= Screen.height-110.0f) {
+                        //OutScreenDis_x = (Screen.height / Screen.width) * PIDScreenPos[p].x;
+                        //OutScreenDis_y = PIDScreenPos[p].y;
+
+                        //if (OutScreenDis_x >= OutScreenDis_y) TraceArrow[p].rotation = Quaternion.Euler(0, 0, 90);
+                        //else TraceArrow[p].rotation = Quaternion.Euler(0, 0, 180);
+                        //TracePID[p].transform.position = new Vector3(850.0f, 430.0f);
+
+                        TraceIcon[p].anchoredPosition = new Vector2(850.0f, 430.0f);
+                        TraceCurrentDir = TraceArrow[p].eulerAngles;
+                        newDir = new Vector3(PIDScreenPos[p].x - TraceIcon[p].anchoredPosition.x, PIDScreenPos[p].y - TraceIcon[p].anchoredPosition.y, 0.0f);
+                        Trace_angle = Mathf.Atan2(-newDir.x, newDir.y) * Mathf.Rad2Deg;
+                        Trace_toLerp = Mathf.LerpAngle(TraceCurrentDir.z, Trace_angle, 0.3f);
+                        TraceArrow[p].localEulerAngles = new Vector3(0.0f, 0.0f, Trace_toLerp);
+                    }
+
+                    //6
+                    else if (PIDScreenPos[p].y > 110.0f && PIDScreenPos[p].y < Screen.height-110.0f){
+                        TraceArrow[p].rotation = Quaternion.Euler(0, 0, 90);
+                        TraceIcon[p].anchoredPosition = new Vector2(850.0f, PIDScreenPos[p].y - 0.5f * Screen.height);
+                    }
+
+                    //9
+                    else if (PIDScreenPos[p].y <= 110.0f) {
+                        //OutScreenDis_x = -(Screen.height / Screen.width) * PIDScreenPos[p].x + Screen.height;
+                        //OutScreenDis_y = PIDScreenPos[p].y;
+
+                        //if (OutScreenDis_x >= OutScreenDis_y) TraceArrow[p].rotation = Quaternion.Euler(0, 0, 0);
+                        //else TraceArrow[p].rotation = Quaternion.Euler(0, 0, 90);
+                        //TraceArrow[p].position = new Vector3(850.0f, -430.0f);
+
+                        TraceIcon[p].anchoredPosition = new Vector2(850.0f, -430.0f);
+                        TraceCurrentDir = TraceArrow[p].eulerAngles;
+                        newDir = new Vector3(PIDScreenPos[p].x - TraceIcon[p].anchoredPosition.x, PIDScreenPos[p].y - TraceIcon[p].anchoredPosition.y, 0.0f);
+                        Trace_angle = Mathf.Atan2(-newDir.x, newDir.y) * Mathf.Rad2Deg;
+                        Trace_toLerp = Mathf.LerpAngle(TraceCurrentDir.z, Trace_angle, 0.3f);
+                        TraceArrow[p].localEulerAngles = new Vector3(0.0f, 0.0f, Trace_toLerp);
+                    }
+
+                }
+
+                //九宮格之147
+                else if (PIDScreenPos[p].x <= 0.0f){
+                    //1
+                    if (PIDScreenPos[p].y >= Screen.height-110.0f){
+                        //OutScreenDis_x = -(Screen.height / Screen.width) * PIDScreenPos[p].x + Screen.height;
+                        //OutScreenDis_y = PIDScreenPos[p].y;
+
+                        //if (OutScreenDis_x >= OutScreenDis_y) TraceArrow[p].rotation = Quaternion.Euler(0, 0, 270);
+                        //else TraceArrow[p].rotation = Quaternion.Euler(0, 0, 180);
+                        //TraceArrow[p].position = new Vector3(-850.0f, 430.0f);
+
+                        TraceIcon[p].anchoredPosition = new Vector2(-850.0f, 430.0f);
+                        TraceCurrentDir = TraceArrow[p].eulerAngles;
+                        newDir = new Vector3(PIDScreenPos[p].x - TraceIcon[p].anchoredPosition.x, PIDScreenPos[p].y - TraceIcon[p].anchoredPosition.y, 0.0f);
+                        Trace_angle = Mathf.Atan2(-newDir.x, newDir.y) * Mathf.Rad2Deg;
+                        Trace_toLerp = Mathf.LerpAngle(TraceCurrentDir.z, Trace_angle, 0.3f);
+                        TraceArrow[p].localEulerAngles = new Vector3(0.0f, 0.0f, Trace_toLerp);
+                    }
+
+                    //4
+                    else if (PIDScreenPos[p].y > 110.0f && PIDScreenPos[p].y < Screen.height-110.0f){
+                        TraceArrow[p].rotation = Quaternion.Euler(0, 0, 270);
+                        TraceIcon[p].anchoredPosition = new Vector2(-850.0f, PIDScreenPos[p].y - 0.5f * Screen.height);
+                    }
+
+                    //7
+                    else if (PIDScreenPos[p].y <= 110.0f){
+                        //OutScreenDis_x = (Screen.height / Screen.width) * PIDScreenPos[p].x;
+                        //OutScreenDis_y = PIDScreenPos[p].y;
+
+                        //if (OutScreenDis_x >= OutScreenDis_y) TraceArrow[p].rotation = Quaternion.Euler(0, 0, 0);
+                        //else TraceArrow[p].rotation = Quaternion.Euler(0, 0, 270);
+                        //TraceArrow[p].position = new Vector3(-850.0f, -430.0f);
+
+                        TraceIcon[p].anchoredPosition = new Vector2(-850.0f, -430.0f);
+                        TraceCurrentDir = TraceArrow[p].eulerAngles;
+                        newDir = new Vector3(PIDScreenPos[p].x - TraceIcon[p].anchoredPosition.x, PIDScreenPos[p].y - TraceIcon[p].anchoredPosition.y, 0.0f);
+                        Trace_angle = Mathf.Atan2(-newDir.x, newDir.y) * Mathf.Rad2Deg;
+                        Trace_toLerp = Mathf.LerpAngle(TraceCurrentDir.z, Trace_angle, 0.3f);
+                        TraceArrow[p].localEulerAngles = new Vector3(0.0f, 0.0f, Trace_toLerp);
+                    }
+
+                }
+
+                //九宮格之28
+                else if (PIDScreenPos[p].x > 110.0f && PIDScreenPos[p].x < Screen.width-110.0f) {
+                    //2
+                    if (PIDScreenPos[p].y >= Screen.height){
+                        TraceArrow[p].rotation = Quaternion.Euler(0, 0,180);
+                        TraceIcon[p].anchoredPosition = new Vector2(PIDScreenPos[p].x - 0.5f*Screen.width, 430.0f);
+                    }
+
+                    //8
+                    else if (PIDScreenPos[p].y <= 0.0f){
+                        TraceArrow[p].rotation = Quaternion.Euler(0, 0, 0);
+                        TraceIcon[p].anchoredPosition = new Vector2(PIDScreenPos[p].x - 0.5f * Screen.width, -430.0f);
+                    }
+                }
+            }
+        }
     }
 
 }
