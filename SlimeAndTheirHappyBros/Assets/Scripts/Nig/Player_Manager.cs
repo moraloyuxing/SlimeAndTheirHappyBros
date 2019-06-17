@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Player_Manager : MonoBehaviour
 {
-
+    public NPC_Manager npcmanager;
     public Player_Control[] FourPlayer = new Player_Control[4];
     bool[] Can_Merge = new bool[6];// 距離方面可以混合的兩隻史萊姆，12→13→14→23→24→34
     float[] Player_Distance = new float[6];// 12→13→14→23→24→34
@@ -192,7 +192,12 @@ public class Player_Manager : MonoBehaviour
                     break;
                 }
             }
-            if (onit) OnAltarCBK();
+            if (onit) {
+                //天使&巫醫退場
+                npcmanager.BreakTime_End();
+                OnAltarCBK();
+            }
+
         }
 
     }

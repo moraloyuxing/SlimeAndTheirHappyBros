@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Item_Manager : MonoBehaviour {
-    public SpriteRenderer Docter;
     public Transform[] All_Player = new Transform[4];//四位玩家
     public GameObject[] Player_BuyHint = new GameObject[4];
     public GameObject[] Player_PriceHint = new GameObject[4];
@@ -119,15 +118,13 @@ public class Item_Manager : MonoBehaviour {
     public void State_Switch() {
         Purchase_State = !Purchase_State;
         if (Purchase_State){
-            Docter.enabled = true;
             for (int i = 0; i < 6; i++) Item_InBox[i].enabled = true;
             NewRound_toBuy();
             npcManager.BreakTime_Start();
         }
         else {
-            Docter.enabled = false;
             for (int i = 0; i < 6; i++) Item_InBox[i].enabled = false;
-            npcManager.BreakTime_End();
+            //npcManager.BreakTime_End();
         }
     }
 
