@@ -54,7 +54,9 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void Update(float dt) {
-        if (Input.GetKeyDown(KeyCode.D)) SetState(KingState.punchAtk);
+        Debug.Log(curState);
+        if (Input.GetKeyDown(KeyCode.J) && curState == KingState.idle) SetState(KingState.waveAtk);
+        if (Input.GetKeyDown(KeyCode.K) && curState == KingState.idle) SetState(KingState.punchAtk);
         switch (curState) {
             case KingState.showUp:
                 ShowUp();
@@ -83,11 +85,11 @@ public class KingGoblin : IEnemyUnit
                 if (aniInfo.normalizedTime > 0.9f) {
                     if (!punchBushOnce)
                     {
-                        punchShopOnce = true;
+                        punchBushOnce = true;
                         punchBush();
                     }
                     else {
-                        if (aniInfo.normalizedTime >= 0.98f)
+                        if (aniInfo.normalizedTime >= 0.96f)
                         {
                             SetState(KingState.idle);
                         }

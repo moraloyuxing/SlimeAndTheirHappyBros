@@ -5,7 +5,7 @@ using UnityEngine;
 public class GoblinEnergyPunch : IEnemyObjectPoolUnit
 {
     int countID;
-    float time = .0f, speed = 30.0f;
+    float time = .0f, speed = 100.0f;
     Transform transform;
     GoblinManager goblinManager;
 

@@ -212,7 +212,7 @@ public class GoblinManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X)) {
             SpawnHobGoblinMutiColor(1);
         }
-        if (Input.GetKeyDown(KeyCode.S)) {
+        if (Input.GetKeyDown(KeyCode.H)) {
             bossTime = true;
             kingGoblin.Spawn(Vector3.zero, 0);
         } 
