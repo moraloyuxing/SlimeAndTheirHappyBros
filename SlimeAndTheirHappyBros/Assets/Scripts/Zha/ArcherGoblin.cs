@@ -11,6 +11,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     float scaleX;
     Vector3 shootPos;
     Transform shootLauncher;
+    Collider hurtAreaCol;
 
     // Start is called before the first frame update
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -32,6 +33,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
+        hurtAreaCol = transform.Find("HurtArea").GetComponent<Collider>();
     }
 
     public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -53,6 +55,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
+        hurtAreaCol = transform.Find("HurtArea").GetComponent<Collider>();
     }
 
     public void Spawn(Vector3 pos, int col)
@@ -124,13 +127,15 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
 
         if (firstInState )
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             if (delayShoot == 0) {
-                //Debug.Log("sssstart attack ");
                 moveFwdDir = (goblinManager.PlayerPos[targetPlayer] - selfPos).normalized;
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
-                //Debug.Log("scale   " + scaleX);
                 image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                 int dir = 0;
                 if (moveFwdDir.z < -0.6f) dir = 0;
@@ -140,17 +145,15 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
                 animator.speed = 1.0f;
                 animator.SetInteger("shootDir", dir);
                 animator.SetInteger("state", 2);
-                animator.SetTrigger("attackOver");
+                //animator.SetTrigger("attackOver");
             } 
             else if (delayShoot == 2) {
-                //Debug.Log("first oooover ");
                 shootPos = new Vector3(scaleX * shootLauncher.localPosition.x, shootLauncher.localPosition.y, shootLauncher.localPosition.z);
                 moveFwdDir = goblinManager.PlayerPos[targetPlayer] - (selfPos + shootPos);
                 hasShoot = false;
                 firstInState = false;
 
             }
-            //Debug.Log("delayyyyy plus");
             delayShoot++;
         }
         else
@@ -159,14 +162,12 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
             if (aniInfo.IsTag("attack"))
             {
                 if (!hasShoot && aniInfo.normalizedTime > 0.64f) {
-                    //Debug.Log("start sssssssssssshooot");
                     hasShoot = true;
                     goblinManager.UseArrow(transform.position + shootPos, moveFwdDir);
                     AudioManager.SingletonInScene.PlaySound2D("Shoot_Bow", 0.75f);
                 }
-                if (aniInfo.normalizedTime >= 0.99f)
+                if (aniInfo.normalizedTime >= 0.95f)
                 {
-                    //Debug.Log("verrrrrr attack");
                     delayShoot = 0;
                     SetState(GoblinState.attackBreak);
                     //OverAttackDetectDist();
@@ -179,10 +180,16 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
+            hurtAreaCol.enabled = false;
             animator.speed = 1.0f;
+            animator.SetTrigger("die");
             animator.SetInteger("state", 4);
             AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
             if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
@@ -192,7 +199,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         else
         {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.99f)
+            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.95f)
             {
                 ResetUnit();
             }
@@ -205,8 +212,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
         firstInState = false;
         hasShoot = false;
         inStateTime = .0f;
-        curState = GoblinState.moveIn;
-
+        SetState(GoblinState.moveIn);
+        hurtAreaCol.enabled = true;
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }

@@ -10,6 +10,14 @@ TextureImporter:
     21300010: Debut_3_5
     21300012: Debut_3_6
     21300014: Debut_3_7
+    21300016: Debut_3_8
+    21300018: Debut_3_9
+    21300020: Debut_3_10
+    21300022: Debut_3_11
+    21300024: Debut_3_12
+    21300026: Debut_3_13
+    21300028: Debut_3_14
+    21300030: Debut_3_15
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -118,6 +126,166 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
+        y: 2040
+        width: 940
+        height: 680
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cfd974b7206304f7bb3c9951ca649382
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Debut_3_1
+      rect:
+        serializedVersion: 2
+        x: 940
+        y: 2040
+        width: 940
+        height: 680
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22ea5a7ac702e4510855f809962e5ed2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Debut_3_2
+      rect:
+        serializedVersion: 2
+        x: 1880
+        y: 2040
+        width: 940
+        height: 680
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 59745c5a294ba47388833fe956dbaf1c
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Debut_3_3
+      rect:
+        serializedVersion: 2
+        x: 2820
+        y: 2040
+        width: 940
+        height: 680
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3d289bb64ad3c4461a7008ce481967e2
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Debut_3_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 1360
+        width: 940
+        height: 680
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80e703a9ee09a4b7e9e1da2dab83fd57
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Debut_3_5
+      rect:
+        serializedVersion: 2
+        x: 940
+        y: 1360
+        width: 940
+        height: 680
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dda91985855014c9895249de7414fab5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Debut_3_6
+      rect:
+        serializedVersion: 2
+        x: 1880
+        y: 1360
+        width: 940
+        height: 680
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 867c73e478c524634b51446b5f7a7c6e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Debut_3_7
+      rect:
+        serializedVersion: 2
+        x: 2820
+        y: 1360
+        width: 940
+        height: 680
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 739341a3be59749bc88fc4a3a092f491
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Debut_3_8
+      rect:
+        serializedVersion: 2
+        x: 0
         y: 680
         width: 940
         height: 680
@@ -128,13 +296,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8d983d9079e314aca95effa9fcbbd3c5
+      spriteID: e1c85bd0bb78d41ebb464dae6d9bfc18
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Debut_3_1
+      name: Debut_3_9
       rect:
         serializedVersion: 2
         x: 940
@@ -148,13 +316,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 66e9a9d664b7d4825b1ead05b835c706
+      spriteID: d09c8f74250334748ae6fec40144cb7b
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Debut_3_2
+      name: Debut_3_10
       rect:
         serializedVersion: 2
         x: 1880
@@ -168,13 +336,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: de02a6b24ed8b4bb6a3dae80cc33a387
+      spriteID: 452efdd2778e34cc1b4eb68d1ebc5726
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Debut_3_3
+      name: Debut_3_11
       rect:
         serializedVersion: 2
         x: 2820
@@ -188,13 +356,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 28a656a7bac2d45c8b617bc892146e79
+      spriteID: 8ee8bd2e72d1948a8ae57989d8f8fc20
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Debut_3_4
+      name: Debut_3_12
       rect:
         serializedVersion: 2
         x: 0
@@ -208,13 +376,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d515c31f1d7f2425ebd2c4dd1dfd505b
+      spriteID: 3290ccff4a205477d93c8c0b39b8971e
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Debut_3_5
+      name: Debut_3_13
       rect:
         serializedVersion: 2
         x: 940
@@ -228,13 +396,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 21edaf1f092d145cf8db1f80cb0bf07f
+      spriteID: 42d890ba9c50e4d688bc617735d6010d
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Debut_3_6
+      name: Debut_3_14
       rect:
         serializedVersion: 2
         x: 1880
@@ -248,13 +416,13 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4eb86ec3f19514fe29661d9802fc98d0
+      spriteID: 288f0021c62e64a1c83822977dfbe6c4
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Debut_3_7
+      name: Debut_3_15
       rect:
         serializedVersion: 2
         x: 2820
@@ -268,7 +436,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a854f0423df484e1f8a1f1ce305a08c2
+      spriteID: 32009c01b94674639b9b1b3e475ed267
       vertices: []
       indices: 
       edges: []

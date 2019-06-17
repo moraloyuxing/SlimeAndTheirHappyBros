@@ -132,9 +132,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 940
-        width: 470
-        height: 470
+        y: 611.3334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -142,7 +142,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c61c3d9e837774f679c8529dda967b9f
+      spriteID: dd39868c10ee697488ff5ec858c9cf99
       vertices: []
       indices: 
       edges: []
@@ -151,10 +151,10 @@ TextureImporter:
       name: Mix_Purple_1
       rect:
         serializedVersion: 2
-        x: 470
-        y: 940
-        width: 470
-        height: 470
+        x: 305
+        y: 611.3334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -162,7 +162,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e2d4856dc18a0432cad4fd4fe3ef8de0
+      spriteID: e01cd51a0b3140a41b911dd5da0dc1ef
       vertices: []
       indices: 
       edges: []
@@ -171,10 +171,10 @@ TextureImporter:
       name: Mix_Purple_2
       rect:
         serializedVersion: 2
-        x: 940
-        y: 940
-        width: 470
-        height: 470
+        x: 610
+        y: 611.3334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -182,7 +182,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 52d33f39f83ff4f99b7f071f35feefaa
+      spriteID: eac4a36b4b4260146b84764f8ac08dda
       vertices: []
       indices: 
       edges: []
@@ -191,10 +191,10 @@ TextureImporter:
       name: Mix_Purple_3
       rect:
         serializedVersion: 2
-        x: 1410
-        y: 940
-        width: 470
-        height: 470
+        x: 915
+        y: 611.3334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -202,7 +202,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d3c7f1ea1e75c4158838ea8eb1c9ef6a
+      spriteID: 487bf1c54f5c1da4bb1e2e93394be480
       vertices: []
       indices: 
       edges: []
@@ -211,10 +211,10 @@ TextureImporter:
       name: Mix_Purple_4
       rect:
         serializedVersion: 2
-        x: 1880
-        y: 940
-        width: 470
-        height: 470
+        x: 1220
+        y: 611.3334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -222,7 +222,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c4de83444c6a74c16a73dca6c7b3cf3b
+      spriteID: ab6651ba9d3dba645b5569ea202e23ce
       vertices: []
       indices: 
       edges: []
@@ -231,10 +231,10 @@ TextureImporter:
       name: Mix_Purple_5
       rect:
         serializedVersion: 2
-        x: 2350
-        y: 940
-        width: 470
-        height: 470
+        x: 1525
+        y: 611.3334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -242,7 +242,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d2aa0aa83c6464786b5ca6fb463896c1
+      spriteID: 6dc801d4179b2574db86bd677e2a8b76
       vertices: []
       indices: 
       edges: []
@@ -251,10 +251,10 @@ TextureImporter:
       name: Mix_Purple_6
       rect:
         serializedVersion: 2
-        x: 2820
-        y: 940
-        width: 470
-        height: 470
+        x: 1830
+        y: 611.3334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -262,7 +262,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2f496e25e883e4a69a08a4786c677e78
+      spriteID: 5e7b1b6741bf5f94b981ebd356910462
       vertices: []
       indices: 
       edges: []
@@ -271,10 +271,10 @@ TextureImporter:
       name: Mix_Purple_7
       rect:
         serializedVersion: 2
-        x: 3290
-        y: 940
-        width: 470
-        height: 470
+        x: 2135
+        y: 611.3334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -282,7 +282,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 698678e50118c46f0982373f0f291e29
+      spriteID: 040f8c94e8d9f904b962953a1d71f5c7
       vertices: []
       indices: 
       edges: []
@@ -292,9 +292,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 470
-        width: 470
-        height: 470
+        y: 306.33334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -302,7 +302,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 71462d7512fb04832afb44574e18a9b9
+      spriteID: e7a3a0a0144d7b6429888ec996feb345
       vertices: []
       indices: 
       edges: []
@@ -311,10 +311,10 @@ TextureImporter:
       name: Mix_Purple_9
       rect:
         serializedVersion: 2
-        x: 470
-        y: 470
-        width: 470
-        height: 470
+        x: 305
+        y: 306.33334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -322,7 +322,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d7ac1c281dffa418dac05037c5b46f0a
+      spriteID: efb8120b9b1541045be353870c472dd1
       vertices: []
       indices: 
       edges: []
@@ -331,10 +331,10 @@ TextureImporter:
       name: Mix_Purple_10
       rect:
         serializedVersion: 2
-        x: 940
-        y: 470
-        width: 470
-        height: 470
+        x: 610
+        y: 306.33334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -342,7 +342,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bf8143df0d1b549f8872b251b36855c3
+      spriteID: e9131fe48e0cdf348890dd1aaa1b3131
       vertices: []
       indices: 
       edges: []
@@ -351,10 +351,10 @@ TextureImporter:
       name: Mix_Purple_11
       rect:
         serializedVersion: 2
-        x: 1410
-        y: 470
-        width: 470
-        height: 470
+        x: 915
+        y: 306.33334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -362,7 +362,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cbdddcfccf5c64366897e5196d30c42b
+      spriteID: dc8cea6188e4ccd4982449fb24fd0687
       vertices: []
       indices: 
       edges: []
@@ -371,10 +371,10 @@ TextureImporter:
       name: Mix_Purple_12
       rect:
         serializedVersion: 2
-        x: 1880
-        y: 470
-        width: 470
-        height: 470
+        x: 1220
+        y: 306.33334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -382,7 +382,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57ea49005ea77476da639657175aa347
+      spriteID: db66f23216b865247877a12e434d4a77
       vertices: []
       indices: 
       edges: []
@@ -391,10 +391,10 @@ TextureImporter:
       name: Mix_Purple_13
       rect:
         serializedVersion: 2
-        x: 2350
-        y: 470
-        width: 470
-        height: 470
+        x: 1525
+        y: 306.33334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -402,7 +402,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bf15a12a37f0b4df49117c86de30d062
+      spriteID: bfa6a1e5606ecb64ebc3705f249cad58
       vertices: []
       indices: 
       edges: []
@@ -411,10 +411,10 @@ TextureImporter:
       name: Mix_Purple_14
       rect:
         serializedVersion: 2
-        x: 2820
-        y: 470
-        width: 470
-        height: 470
+        x: 1830
+        y: 306.33334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -422,7 +422,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6c6f08dc109034b4cbf1e524fc212e9a
+      spriteID: 982a8a22b106edf45941f2937725445d
       vertices: []
       indices: 
       edges: []
@@ -431,10 +431,10 @@ TextureImporter:
       name: Mix_Purple_15
       rect:
         serializedVersion: 2
-        x: 3290
-        y: 470
-        width: 470
-        height: 470
+        x: 2135
+        y: 306.33334
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -442,7 +442,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9582beb2223f746e58610a4ba66cca01
+      spriteID: 0053edd75ae91e643b7770d004d1b9ed
       vertices: []
       indices: 
       edges: []
@@ -452,9 +452,9 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 470
-        height: 470
+        y: 1.3333435
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -462,7 +462,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b3cd617028086489bb1e4adac955621f
+      spriteID: dc7906ca3540d104a893509d1b14f920
       vertices: []
       indices: 
       edges: []
@@ -471,10 +471,10 @@ TextureImporter:
       name: Mix_Purple_17
       rect:
         serializedVersion: 2
-        x: 470
-        y: 0
-        width: 470
-        height: 470
+        x: 305
+        y: 1.3333435
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -482,7 +482,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 469bbae0d1a5b4f27af851e6585f8f89
+      spriteID: ca53ea7de3189964b805fdf3df746844
       vertices: []
       indices: 
       edges: []
@@ -491,10 +491,10 @@ TextureImporter:
       name: Mix_Purple_18
       rect:
         serializedVersion: 2
-        x: 940
-        y: 0
-        width: 470
-        height: 470
+        x: 610
+        y: 1.3333435
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -502,7 +502,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 10891bf6939dc446bbddef4355a1f76d
+      spriteID: de8b2341be033164b99db365d4612fe9
       vertices: []
       indices: 
       edges: []
@@ -511,10 +511,10 @@ TextureImporter:
       name: Mix_Purple_19
       rect:
         serializedVersion: 2
-        x: 1410
-        y: 0
-        width: 470
-        height: 470
+        x: 915
+        y: 1.3333435
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -522,7 +522,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2967748ae72214b56adb59d2344d50e2
+      spriteID: f1887118adce9044d851eb9ccdfdf910
       vertices: []
       indices: 
       edges: []
@@ -531,10 +531,10 @@ TextureImporter:
       name: Mix_Purple_20
       rect:
         serializedVersion: 2
-        x: 1880
-        y: 0
-        width: 470
-        height: 470
+        x: 1220
+        y: 1.3333435
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -542,7 +542,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9df788e5f621c4036a012e39195df7a5
+      spriteID: a7ff783708e3b0b44acbd4e79f0349dd
       vertices: []
       indices: 
       edges: []
@@ -551,10 +551,10 @@ TextureImporter:
       name: Mix_Purple_21
       rect:
         serializedVersion: 2
-        x: 2350
-        y: 0
-        width: 470
-        height: 470
+        x: 1525
+        y: 1.3333435
+        width: 305.5
+        height: 305.66666
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -562,7 +562,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 425aebf6dabbd451cbbf96e8c6aab35b
+      spriteID: 7cf8bf92cdfaa5a488ec321cfdeebd85
       vertices: []
       indices: 
       edges: []

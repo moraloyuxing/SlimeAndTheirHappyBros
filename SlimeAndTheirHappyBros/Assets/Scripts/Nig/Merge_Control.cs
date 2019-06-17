@@ -4,8 +4,7 @@ using UnityEngine;
 
 //不會跳池，不需治療→不用Splash
 
-public class Merge_Control : MonoBehaviour
-{
+public class Merge_Control : MonoBehaviour{
 
     public GameObject Player_Manager;
     //public GameObject Merge_Sprite;
@@ -65,6 +64,8 @@ public class Merge_Control : MonoBehaviour
     bool Hint_Activate = false;
     float Hint_Moment;
     int MergeNumber = 0;
+    bool PMb_button = false;
+    bool PSb_button = false;
 
     //倒數計時
     //整數倒數 → 隔秒呼叫；計量條 → Time.deltaTime
@@ -74,6 +75,7 @@ public class Merge_Control : MonoBehaviour
 
     //血量
     public GameObject[] Merge_HP = new GameObject[3];
+    Animator Heart_anim;
 
     //短衝刺
     float left_trigger = 0.0f;
@@ -91,12 +93,16 @@ public class Merge_Control : MonoBehaviour
     //各式數值
     float Base_Timer = 15.0f;
     int Base_HP = 3;
-    int Max_HP = 5;
+    int Max_HP = 15;
     public int Base_ATK = 5;
     float Base_Speed = 1.0f;
     float Current_Speed = 1.0f;
+    float Base_AttackSpeed = 1.0f;
     public int Base_Penetrate = 1;
-    //int Speed_Superimposed = 0;
+    public float Base_BulletScale = 1.0f;
+    public float Base_BulletSpeed = 1.0f;
+    public float Base_BulletTime = 0.0f;
+    public int BulletSpeed_Superimposed = 0;
     public int Bullet_Superimposed = 0;
     //int Timer_Superimposed = 0;
 
@@ -135,6 +141,16 @@ public class Merge_Control : MonoBehaviour
         Current_Color = Merge_Sprite.color;
         flicker = -0.5f;
         StopDetect = false;
+        PMb_button = false;
+        PSb_button = false;
+        if (Merge_Sprite.transform.localScale.x < 0.0f) {
+            Merge_Control_Hint.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f);
+            Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
+        }
+        else if (Merge_Sprite.transform.localScale.x > 0.0f) {
+            Merge_Control_Hint.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+            Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
+        }
     }
 
     void Update()
@@ -148,7 +164,8 @@ public class Merge_Control : MonoBehaviour
 
         anim.SetBool("Walking", Walking);
         anim.SetBool("Shooting", Shooting);
-
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Attack")) anim.speed = Base_AttackSpeed;
+        else anim.speed = 1.0f;
         //受傷判定
         if (StopDetect == false) SlimeGetHurt();
 
@@ -188,12 +205,11 @@ public class Merge_Control : MonoBehaviour
 
         if (xAix > 0.0f)
         {
-
+            if (ArrowRot == -1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
             ArrowRot = 1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false)
             {
-
                 Merge_Sprite.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 Heart_Group.localScale = new Vector3(0.25f, 0.25f, 0.25f);
@@ -213,12 +229,11 @@ public class Merge_Control : MonoBehaviour
 
         if (xAix < 0.0f)
         {
-            Debug.Log("outside");
+            if (ArrowRot == 1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
             ArrowRot = -1.0f;
             //加個轉向(受傷、死亡......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false)
             {
-                Debug.Log("go");
                 Merge_Sprite.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
                 if (Merge_Control_Hint.activeSelf == true) Merge_Control_Hint.transform.localScale = new Vector3(-0.5f, 0.5f, 0.5f);
                 Heart_Group.localScale = new Vector3(-0.25f, 0.25f, 0.25f);
@@ -320,6 +335,15 @@ public class Merge_Control : MonoBehaviour
         {
             GetComponent<Animator>().Play("Slime_Attack");
             Shooting = true;
+        }
+
+        //分裂
+        PMb_button = Input.GetButtonDown(WhichPlayer_Moving + "Spilt");
+        PSb_button = Input.GetButtonDown(WhichPlayer_Shooting + "Spilt");
+        if (PMb_button || PSb_button) {
+            CancelInvoke("Merge_Timer");
+            Base_Timer = 0.0f;
+            Merge_Timer();
         }
 
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)
@@ -476,7 +500,7 @@ public class Merge_Control : MonoBehaviour
     public void AttackPriorityOn()
     {
         AttackPriority = true;
-        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Shader_Number);
+        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Shader_Number,false);
         AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.5f);
     }
 
@@ -500,13 +524,15 @@ public class Merge_Control : MonoBehaviour
                 StopDetect = true;
                 musouTime = 1.8f;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
-                //musouTime = Time.time;
-                //StateMusou = 1.8f;
                 Base_HP--;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
                 for (int k = 0; k < Max_HP; k++) {
-                    if (k >= Base_HP) Merge_HP[k].SetActive(false);
-                    else Merge_HP[k].SetActive(true);
+                    if (k < Base_HP) Merge_HP[k].SetActive(true);
+                    else if (k == Base_HP){
+                        Heart_anim = Merge_HP[k].GetComponent<Animator>();
+                        Heart_anim.Play("Heart_Disappear");
+                    }
+                    else Merge_HP[k].SetActive(false);
                 }
                 if (Base_HP == 0){
                     DeathPriority = true;
@@ -534,6 +560,7 @@ public class Merge_Control : MonoBehaviour
     {
         ExtraPriority = false;
         AttackPriority = false;
+        transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
     }
 
     //短衝刺設定
@@ -542,6 +569,11 @@ public class Merge_Control : MonoBehaviour
         Base_Speed = Current_Speed;
         DuringDashLerp = false;
         AttackPriority = false;
+    }
+
+    public void DashEnd_musou()
+    {
+        StopDetect = false;
     }
 
     public void SpiltPriorityOn()
@@ -560,23 +592,38 @@ public class Merge_Control : MonoBehaviour
         Player_Control B = PlayerB.GetComponent<Player_Control>();
 
         //設定HP
-        Base_HP = 3 + A.Extra_HP + B.Extra_HP;
+        Base_HP = 3 + A.Timer_Superimposed + B.Timer_Superimposed;//至少3，至多15
+        Debug.Log(Base_HP);
         if (Base_HP > Max_HP) Base_HP = Max_HP;
         for (int k = 0; k < Max_HP; k++){
-            if (k >= Base_HP) Merge_HP[k].SetActive(false);
-            else Merge_HP[k].SetActive(true);
+            if (k < Base_HP){
+                Merge_HP[k].SetActive(true);
+                Heart_anim = Merge_HP[k].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Gain");
+            }
+            else Merge_HP[k].SetActive(false);
+
         }
         //設定ATK
         Base_ATK = 5 + A.Extra_ATK + B.Extra_ATK;
-        //設定穿透
-        Base_Penetrate = 1 + A.Extra_Penetrate + B.Extra_Penetrate;
         //設定合體時間
-        Base_Timer = 15.0f + (A.Timer_Superimposed + B.Timer_Superimposed) * 5.0f;
+        Base_Timer = 15.0f + (A.Timer_Superimposed + B.Timer_Superimposed) * 7.0f;
         //設定速度
-        Base_Speed = 1.0f * Mathf.Pow(1.25f, (A.Speed_Superimposed + B.Speed_Superimposed));
+        //Base_Speed = 1.0f * Mathf.Pow(1.25f, (A.Speed_Superimposed + B.Speed_Superimposed));
+        Base_Speed = A.Current_Speed + B.Current_Speed - 1.0f;
         Current_Speed = Base_Speed;
-        //設定子彈大小與速度
-        Bullet_Superimposed = A.Bullet_Superimposed + B.Bullet_Superimposed;
+        //設定子彈大小
+        Base_BulletScale = A.Base_BulletScale + B.Base_BulletScale - 1.0f;
+        if (Base_BulletScale >= 6.0f) Base_BulletScale = 6.0f;
+        //設定子彈速度
+        //BulletSpeed_Superimposed = A.BulletSpeed_Superimposed + B.BulletSpeed_Superimposed;
+        Base_BulletSpeed = A.Base_BulletSpeed + B.Base_BulletSpeed - 1.0f;
+        //設定子彈穿透數量
+        Base_Penetrate = 1+A.Extra_Penetrate + B.Extra_Penetrate;
+        //設定子彈飛行距離
+        Base_BulletTime = 0.15f * (A.BulletTime_Superimposed + B.BulletTime_Superimposed);
+        //設定攻擊速度
+        Base_AttackSpeed = A.Base_AttackSpeed + B.Base_AttackSpeed - 1.0f;
     }
 
 

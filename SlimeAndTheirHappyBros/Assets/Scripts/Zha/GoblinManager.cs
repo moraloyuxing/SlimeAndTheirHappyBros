@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GoblinManager : MonoBehaviour
 {
+    bool gameOver = false, bossTime = false;
     int index = 0;
     float time;
 
@@ -38,10 +39,13 @@ public class GoblinManager : MonoBehaviour
 
     Dictionary<string, GoblinBase> goblinDic = new Dictionary<string, GoblinBase>();
 
+    KingGoblin kingGoblin;
+
     Dictionary<string, GoblinArrow> goblinArrowsDic;
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
     Dictionary<string, GoblinLeaf> goblinLeafDic;
     List<GoblinLeaf> freeGoblinLeaves, usedGoblinLeaves;
+    List<GoblinWave> freeGoblinWaves, usedGoblinWaves;
     List<Money> freeMoneys, usedMoneys;
 
     public Player_Control[] Four_Player = new Player_Control[4];
@@ -117,6 +121,11 @@ public class GoblinManager : MonoBehaviour
             goblin.gameObject.SetActive(false);
         }
 
+        goblin = transform.Find("KingGoblin");
+        kingGoblin = new KingGoblin();
+        kingGoblin.Init(goblin, goblinInfo[2], this);
+        goblin.gameObject.SetActive(false);
+
 
         Transform locs = transform.Find("SpawnLocs");
         spawnPos = new Vector3[locs.childCount];
@@ -148,6 +157,16 @@ public class GoblinManager : MonoBehaviour
             goblinLeafDic.Add(goblin.name, freeGoblinLeaves[i]);
             goblin.gameObject.SetActive(false);
         }
+        goblins = transform.Find("GoblinWaves");
+        freeGoblinWaves = new List<GoblinWave>();
+        usedGoblinWaves = new List<GoblinWave>();
+        for (int i = 0; i < goblins.childCount; i++)
+        {
+            goblin = goblins.GetChild(i);
+            freeGoblinWaves.Add(new GoblinWave());
+            freeGoblinWaves[i].Init(goblin, this, poolUnitInfo[1]);
+            goblin.gameObject.SetActive(false);
+        }
         goblins = transform.Find("Moneys");
         freeMoneys = new List<Money>();
         usedMoneys = new List<Money>();
@@ -168,6 +187,8 @@ public class GoblinManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (gameOver) return;
+
         float dt = Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.A)) {
@@ -180,6 +201,10 @@ public class GoblinManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X)) {
             SpawnHobGoblinMutiColor(1);
         }
+        if (Input.GetKeyDown(KeyCode.S)) {
+            bossTime = true;
+            kingGoblin.Spawn(Vector3.zero, 0);
+        } 
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
             usedNormalGoblins[index].Update(dt);
@@ -192,7 +217,7 @@ public class GoblinManager : MonoBehaviour
         {
             usedHobGoblins[index].Update(dt);
         }
-
+        if (bossTime) kingGoblin.Update(dt);
         if (calculatePath) PathRequestManager.ClearExtendPenalty();
 
         //if (Input.GetKeyDown(KeyCode.X)) {
@@ -211,6 +236,9 @@ public class GoblinManager : MonoBehaviour
         {
             usedGoblinLeaves[index].Update(dt);
         }
+        for (index = 0; index < usedGoblinWaves.Count; index++) {
+            usedGoblinWaves[index].Update(dt);
+        }
         for (index = 0; index < usedMoneys.Count; index++)
         {
             usedMoneys[index].Update(dt);
@@ -225,6 +253,10 @@ public class GoblinManager : MonoBehaviour
 
     public void SubKillGoblinCBK(System.Action cbk) {
         KillGoblin = cbk;
+    }
+
+    public void SubBreakShopCBK(System.Action shop, System.Action bush) {
+        kingGoblin.SubPunchCBK(shop, bush);
     }
 
     public void SpawnNormalGoblinBaseColor(int col)
@@ -356,6 +388,13 @@ public class GoblinManager : MonoBehaviour
         leaf.ToActive(pos, dir);
         freeGoblinLeaves.Remove(leaf);
     }
+    public void UseWave(Vector3 pos) {
+        if (freeGoblinWaves.Count <= 0) return;
+        GoblinWave wave = freeGoblinWaves[0];
+        usedGoblinWaves.Add(wave);
+        wave.ToActive(pos, new Vector3(0,0,0));
+        freeGoblinWaves.Remove(wave);
+    }
     public void UseMoney(int num, Vector3 pos, int target)
     {
         Four_Player[target].MoneyUpdate(num);//UI更新num
@@ -370,6 +409,7 @@ public class GoblinManager : MonoBehaviour
 
     }
     IEnumerator DropMoney(int num, Vector3 pos, int target) {
+        Four_Player[target].MoneyUI_GoBigger();
         int i = 0;
         while (i < num)
         {
@@ -384,6 +424,7 @@ public class GoblinManager : MonoBehaviour
     }
     IEnumerator DropMoney2(int num, Vector3 pos, int target)
     {
+        Four_Player[target].MoneyUI_GoBigger();
         int i = 0;
         while (i < num)
         {
@@ -405,6 +446,11 @@ public class GoblinManager : MonoBehaviour
         freeGoblinLeaves.Add(leaf);
         usedGoblinLeaves.Remove(leaf);
     }
+    public void RecycleWave(GoblinWave wave) {
+        freeGoblinWaves.Add(wave);
+        usedGoblinWaves.Remove(wave);
+    }
+
     public void RecycleMoney(Money money)
     {
         freeMoneys.Add(money);
@@ -429,6 +475,24 @@ public class GoblinManager : MonoBehaviour
             return goblinDic[name];
         }
         else return null;
+    }
+
+    public void GameOver() {
+        gameOver = true;
+
+        for (index = 0; index < usedNormalGoblins.Count; index++)
+        {
+            usedNormalGoblins[index].SetGameOver();
+        }
+        for (index = 0; index < usedArcherGoblins.Count; index++)
+        {
+            usedArcherGoblins[index].SetGameOver();
+        }
+        for (index = 0; index < usedHobGoblins.Count; index++)
+        {
+            usedHobGoblins[index].SetGameOver();
+        }
+
     }
 
 }

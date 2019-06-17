@@ -23,8 +23,8 @@ public class Create_Bullet : MonoBehaviour{
         From_MSlime = true; 
     }
 
-    public void ShootBullet(Vector3 current_angle,int Shader_Number) {
-        if(From_MSlime == false)_bulletPool.Bullet_ReUse(Player.transform.position, Hint_Arrow.transform.rotation, current_angle,PlayerID,Shader_Number);
-        else _bulletPool.Bullet_ReUse(MSlimePlayer.transform.position, Hint_Arrow.transform.rotation, current_angle, PlayerID,PlayerID2, Shader_Number);
+    public void ShootBullet(Vector3 current_angle,int Shader_Number,bool PlayerDeath) {
+        if(From_MSlime == false)_bulletPool.Bullet_ReUse(Player.transform.position, Hint_Arrow.transform.rotation, current_angle,PlayerID,Shader_Number,PlayerDeath);
+        else _bulletPool.Bullet_ReUse(MSlimePlayer.transform.position, Hint_Arrow.transform.rotation, current_angle, PlayerID,PlayerID2, Shader_Number,MSlimePlayer);
     }
 }

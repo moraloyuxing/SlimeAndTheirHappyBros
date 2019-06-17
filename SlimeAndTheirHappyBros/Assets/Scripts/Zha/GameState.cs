@@ -12,15 +12,15 @@ public class GameState
     GoblinManager goblinManager;
     StateInfo stateInfo;
 
-    System.Action<int> SpawnOverCBK;
+    //System.Action<int> SpawnOverCBK;
 
     // Start is called before the first frame update
-    public void Init(StateInfo info, GoblinManager gManager, System.Action<int> cbk)
+    public void Init(StateInfo info, GoblinManager gManager)  //System.Action<int> cbk
     {
         stateInfo = info;
         goblinManager = gManager;
         maxWave = stateInfo.maxWave;
-        SpawnOverCBK = cbk;
+        //SpawnOverCBK = cbk;
         totalGoblinPerWave = new int[maxWave];
         for (int i = 0; i < totalGoblinPerWave.Length; i++) {
             totalGoblinPerWave[i] = info.waves[i].normalGoblin;
@@ -50,7 +50,7 @@ public class GameState
 
                 i++;
             }
-            if(currentWave >0)SpawnOverCBK(currentWave);
+            //if(currentWave >0)SpawnOverCBK(currentWave);
             currentWave++;
             
             

@@ -6,9 +6,9 @@ using UnityEngine;
 public class NormalGoblin: GoblinBase, IEnemyUnit
 {
     int maxHp;
-    float atkColOffset;
+    float atkColOffset, atkSpeedOffset = 1.0f;
     Transform atkColTrans;
-    Collider atkCol;
+    Collider atkCol, hurtAreaCol;
 
     //TestPlayerManager playerManager;
     //Player_Manager playerManager;
@@ -34,6 +34,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
+        hurtAreaCol = transform.Find("HurtArea").GetComponent<Collider>();
     }
 
     public void TestInit(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager)
@@ -57,6 +58,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         turnDist = info.turnDist;
         minMoney = info.minMoney;
         maxMoney = info.maxMoney;
+        hurtAreaCol = transform.Find("HurtArea").GetComponent<Collider>();
     }
 
 
@@ -70,6 +72,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         selfPos = transform.position;
         renderer.material.SetInt("_colorID", col);
         color = col;
+        //SetState(GoblinState.moveIn);
     }
 
     // Update is called once per frame
@@ -104,7 +107,11 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Attack", 0.18f);
             animator.SetInteger("state", 2);
@@ -122,15 +129,19 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             if (aniInfo.IsName("attack"))
             {
-                if (aniInfo.normalizedTime >= 0.46f && aniInfo.normalizedTime < 0.77f)
+                if (aniInfo.normalizedTime >= 0.46f && aniInfo.normalizedTime < 0.7f)//0.77
                 {
+
                     //Debug.DrawRay(selfPos,moveFwdDir, Color.red, 3.0f);
-                    float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f : speed * 3.0f;
+                    if (inStateTime > 0.7f) atkSpeedOffset *= 0.8f;
+                    float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f 
+                        :50.0f*atkSpeedOffset;
                     transform.position += deltaTime * atkSpeed * moveFwdDir;
                 }
-                else if (aniInfo.normalizedTime >= 0.99f)
+                else if (aniInfo.normalizedTime >= 0.95f)
                 {
-                    animator.SetTrigger("attackOver");
+                    atkSpeedOffset = 1.0f;
+                    //animator.SetTrigger("attackOver");
                     SetState(GoblinState.attackBreak);
                     //OverAttackDetectDist();
                 }
@@ -143,25 +154,32 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             atkCol.enabled = false;
+            atkSpeedOffset = 1.0f;
+
             firstInState = false;
-            animator.Play("hurt");
+            //animator.Play("hurt");
+            animator.SetTrigger("hurt");
             animator.SetInteger("state", 3);
         }
         else
         {
-            if (!Physics.Raycast(selfPos, moveFwdDir, 2.0f, LayerMask.NameToLayer("barrier"))) {
+
+            if (!Physics.Raycast(selfPos, hurtDir, 2.0f, 1 << LayerMask.NameToLayer("Barrier"))) {
                 transform.position += backSpeed * deltaTime * hurtDir;
             }
             backSpeed -= deltaTime * 15.0f;
             if (backSpeed <= .0f) backSpeed = .0f;
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
-            if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.99f)
+            if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.95f)
             {
-                Debug.Log("hurrrrt  over");
                 if (hp <= 0) SetState(GoblinState.die);
                 else SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
@@ -174,10 +192,19 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     {
         if (firstInState)
         {
-            if (curPathRequest != null) PathRequestManager.CancleRequest(curPathRequest);
+            if (curPathRequest != null)
+            {
+                PathRequestManager.CancleRequest(curPathRequest);
+                curPathRequest = null;
+            }
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
+            atkCol.enabled = false;
+            atkSpeedOffset = 1.0f;
+            hurtAreaCol.enabled = false;
             animator.speed = 1.0f;
+            animator.SetTrigger("die");
+            //animator.Play("die");
             animator.SetInteger("state", 4);
             AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
             
@@ -188,7 +215,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         else
         {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.99f)
+            if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.95f)
             {
                 ResetUnit();
             }
@@ -199,8 +226,8 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         hp = maxHp;
         firstInState = false;
         inStateTime = .0f;
-        curState = GoblinState.moveIn;
-
+        SetState(GoblinState.moveIn);
+        hurtAreaCol.enabled = true;
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);
     }

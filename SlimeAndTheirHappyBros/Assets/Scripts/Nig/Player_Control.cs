@@ -26,7 +26,7 @@ public class Player_Control : MonoBehaviour{
     //優先權、無敵時間等等
     bool AttackPriority = false;
     bool ExtraPriority = false;//適用範圍：受傷、跳池塘、洗白
-    bool DeathPriority = false;
+    public bool DeathPriority = false;
     bool StopDetect = false;
     float musouTime = 0.0f; //無敵時間：受傷後、染色時
     //float StateMusou = 0.0f;
@@ -61,6 +61,7 @@ public class Player_Control : MonoBehaviour{
     //攻擊
     float right_trigger = 0.0f;
     bool Shooting = false;
+    float Leaf_Shooting_Moment = 0.0f;
 
     //單人染色偵測
     public Transform[] Pigment = new Transform[3];//白紅黃藍
@@ -79,25 +80,38 @@ public class Player_Control : MonoBehaviour{
     bool DuringDashLerp = false;
     float DashCD = 0.0f;
     float DashLerp = 0.1f;
-
+    public float Tired_Speed = 0.5f;
     //動畫插斷
     Animator anim;
 
     //各式數值(基礎)
     public int Base_ATK = 2;
     int Base_HP = 3;
-    float Base_Speed = 1.0f;//Dash固定為此變數+5
+    public float Base_Speed = 1.0f;//Dash固定為此變數+5
     float Weak_Speed = 0.6f;
-    float Current_Speed = 1.0f;//Dash後抓回
     public int Base_Penetrate = 1;
+    public float Current_Speed = 1.0f;//Dash後抓回
+    public float Base_BulletScale = 1.0f;
+    public float Base_BulletSpeed = 1.0f;
+    public float Base_BulletTime = 0.0f;
+    public float Base_AttackSpeed = 1.0f;
 
     //各式數值(額外加成)
     public int Extra_ATK = 0;
     public int Extra_HP = 0;
     public int Extra_Penetrate = 0;
     public int Speed_Superimposed = 0;
-    public int Bullet_Superimposed = 0;
     public int Timer_Superimposed = 0;
+    public int BulletScale_Superimposed = 0;
+    public int BulletTime_Superimposed = 0;
+    public int BulletSpeed_Superimposed = 0;
+    public int AttackSpeed_Superimposed = 0;
+    float Speed_PercentageModify;
+    float BulletScale_PercentageModify;
+    float BulletSpeed_PercentageModify;
+    float BulletTime_PercentageModify;
+    float AttackSpeed_PercentageModify;
+    float WalkSpeedanim = 1.0f;
 
     //UI連動
     public GameObject UI_Icon;
@@ -107,6 +121,8 @@ public class Player_Control : MonoBehaviour{
     public Text HaveMoney;
     int[] ItemCount = new int[6];
     int Current_Money = 0;
+    Animator Heart_anim;
+    public Animator Money_anim;
 
     //衰弱狀態相關
     float Weak_Moment = 0.0f;
@@ -129,6 +145,7 @@ public class Player_Control : MonoBehaviour{
     RaycastHit hit_GetItem_x;
     RaycastHit hit_GetItem_z;
     RaycastHit hit_GetItem_dir;
+    bool Already_pick = false;
 
     void Start(){
         PlayerID2 = PlayerID;
@@ -141,12 +158,20 @@ public class Player_Control : MonoBehaviour{
         Current_Color = Player_Sprite.GetComponent<SpriteRenderer>().color;
         _playermanager = _playermanager.GetComponent<Player_Manager>();
         _pigmentmanager = _pigmentmanager.GetComponent<Pigment_Manager>();
+        for (int k = 0; k < Personal_HP.Length; k++){
+            if (k < Base_HP){
+                Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Gain");
+            }
+        }
     }
 
     void Update(){
         anim.SetBool("Walking", Walking);
         anim.SetBool("Shooting", Shooting);
-
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Attack")) anim.speed = Base_AttackSpeed;
+        else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Walk")) anim.speed = WalkSpeedanim;
+        else anim.speed = 1.0f;
         //受傷判定
         if (StopDetect == false)SlimeGetHurt();
         //移動&短衝刺
@@ -154,6 +179,7 @@ public class Player_Control : MonoBehaviour{
         zAix = Input.GetAxis(WhichPlayer + "Vertical");
         left_trigger = Input.GetAxis(WhichPlayer + "Dash");
         if (left_trigger >0.3f && OnDash == false && Time.time > DashCD + 1.0f){
+            StopDetect = true;
             Base_Speed = Base_Speed+5.0f;
             OnDash = true;
             DuringDashLerp = true;
@@ -179,13 +205,14 @@ public class Player_Control : MonoBehaviour{
         }
 
         if (xAix > 0.0f) {
+            if (ArrowRot == -1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z*-1.0f);
             ArrowRot = 1.0f;
             //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
                 Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
-                Hint.transform.localScale = new Vector3(0.625f, 0.625f, 0.625f);
+                Hint.transform.localScale = new Vector3(1.0f, 1.0f,1.0f);
                 BuyHint.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
                 BuyHint.transform.localPosition = new Vector3(1.3f,1.7f, -1.0f);
             }
@@ -197,22 +224,24 @@ public class Player_Control : MonoBehaviour{
                 if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") {Right_CanMove = false;}
             }
             else {Right_CanMove = true;}
-            if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)) {
-                if (hit_GetItem_x.transform.tag == "DropItem") {
-                    GetItemFromFloor(hit_GetItem_x.transform.gameObject);
-                    Destroy(hit_GetItem_x.transform.gameObject);
-                }
-            }
+            //if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)) {
+            //    if (hit_GetItem_x.transform.tag == "DropItem"&& Already_pick == false) {
+            //        Already_pick = true;
+            //        GetItemFromFloor(hit_GetItem_x.transform.gameObject);
+            //        Destroy(hit_GetItem_x.transform.gameObject);
+            //    }
+            //}
         }
 
         if (xAix < 0.0f) {
+            if (ArrowRot == 1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
             ArrowRot = -1.0f;
             //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
             if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
                 transform.localScale = new Vector3(-1.3f, 1.3f, 1.3f);
                 Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
                 Player_Icon.transform.localScale = new Vector3(-0.55f, 0.55f, 0.55f);
-                Hint.transform.localScale = new Vector3(-0.625f, 0.625f, 0.625f);
+                Hint.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
                 BuyHint.transform.localScale = new Vector3(-1.0f,1.0f,1.0f);
                 BuyHint.transform.localPosition = new Vector3(-1.3f, 1.7f, -1.0f);
             }
@@ -224,12 +253,13 @@ public class Player_Control : MonoBehaviour{
                 if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") {Left_CanMove = false;}
             }
             else {Left_CanMove = true;}
-            if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)){
-                if (hit_GetItem_x.transform.tag == "DropItem"){
-                    GetItemFromFloor(hit_GetItem_x.transform.gameObject);
-                    Destroy(hit_GetItem_x.transform.gameObject);
-                }
-            }
+            //if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)){
+            //    if (hit_GetItem_x.transform.tag == "DropItem" && Already_pick == false){
+            //        Already_pick = true;
+            //        GetItemFromFloor(hit_GetItem_x.transform.gameObject);
+            //        Destroy(hit_GetItem_x.transform.gameObject);
+            //    }
+            //}
         }
 
         if (zAix > 0.0f) {
@@ -240,12 +270,13 @@ public class Player_Control : MonoBehaviour{
                 if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") { Up_CanMove = false;}
             }
             else {Up_CanMove = true;}
-            if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)) {
-                if (hit_GetItem_z.transform.tag == "DropItem"){
-                    GetItemFromFloor(hit_GetItem_z.transform.gameObject);
-                    Destroy(hit_GetItem_z.transform.gameObject);
-                }
-            }
+            //if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)) {
+            //    if (hit_GetItem_z.transform.tag == "DropItem" && Already_pick == false){
+            //        Already_pick = true;
+            //        GetItemFromFloor(hit_GetItem_z.transform.gameObject);
+            //        Destroy(hit_GetItem_z.transform.gameObject);
+            //    }
+            //}
         }
 
         if (zAix < 0.0f) {
@@ -256,12 +287,13 @@ public class Player_Control : MonoBehaviour{
                 if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") {Down_CanMove = false;}
             }
             else {Down_CanMove = true;}
-            if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)){
-                if (hit_GetItem_z.transform.tag == "DropItem"){
-                    GetItemFromFloor(hit_GetItem_z.transform.gameObject);
-                    Destroy(hit_GetItem_z.transform.gameObject);
-                }
-            }
+            //if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)){
+            //    if (hit_GetItem_z.transform.tag == "DropItem" && Already_pick == false){
+            //        Already_pick = true;
+            //        GetItemFromFloor(hit_GetItem_z.transform.gameObject);
+            //        Destroy(hit_GetItem_z.transform.gameObject);
+            //    }
+            //}
         }
 
         //內部障礙物偵測
@@ -280,7 +312,8 @@ public class Player_Control : MonoBehaviour{
             }
         }
         if (Physics.Raycast(GetItem_dir, out hit_GetItem_dir, 2.0f)) {
-            if (hit_GetItem_dir.transform.tag == "DropItem"){
+            if (hit_GetItem_dir.transform.tag == "DropItem" && Already_pick == false){
+                Already_pick = true;
                 GetItemFromFloor(hit_GetItem_dir.transform.gameObject);
                 Destroy(hit_GetItem_dir.transform.gameObject);
             }
@@ -294,14 +327,14 @@ public class Player_Control : MonoBehaviour{
 
         //衝刺遞減
         if (DuringDashLerp == true) {
-            Base_Speed = Mathf.Lerp(Base_Speed, 0.5f, DashLerp);
+            Base_Speed = Mathf.Lerp(Base_Speed, Tired_Speed, DashLerp);
         }
 
         //攻擊方向旋轉
         xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
         zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
-        if (xAtk != 0.0f || zAtk != 0.0f && DeathPriority == false) {
+        if (xAtk != 0.0f || zAtk != 0.0f) {
             AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
             //Attack_Direction = ( new Vector3(xAtk, 0.0f, zAtk).normalized);
@@ -315,10 +348,16 @@ public class Player_Control : MonoBehaviour{
 
         //攻擊
         right_trigger = Input.GetAxis(WhichPlayer + "Attack");
-        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false) {
-            GetComponent<Animator>().Play("Slime_Attack");
+        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false) {
+            if (DeathPriority == false) GetComponent<Animator>().Play("Slime_Attack");
+            else {
+                AttackPriorityOn();//跳過動畫，直接射擊
+                Leaf_Shooting_Moment = Time.time;//設定計時，0.5秒後關閉
+            }
             Shooting = true;
         }
+
+        if (DeathPriority == true && Time.time > Leaf_Shooting_Moment + 0.5f) AttackPriorityOff();
 
         //單人染色偵測(by距離)
         if (ExtraPriority == false && DeathPriority == false) {
@@ -330,11 +369,9 @@ public class Player_Control : MonoBehaviour{
                         else if (i == 2) Color_Number = 4;
                         //跳池動畫
                         ExtraPriority = true;
-                        //musouTime = Time.time;
-                        //StateMusou = 1.5f;
-                        musouTime = 1.5f;
                         StopDetect = true;
                         GetComponent<Animator>().Play("Slime_JumpinPond");
+                        DashEnd();
                     }
                 }
             }
@@ -351,7 +388,7 @@ public class Player_Control : MonoBehaviour{
 
         //道具掉落
         if (CanDrop == true){
-            Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);//要搬走，此處非Update
+            Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);
             if (Mathf.Abs(Current_BlewOut.transform.position.x - DropX) < 0.1f && Mathf.Abs(Current_BlewOut.transform.position.z - DropZ) < 0.1f){
                 CanDrop = false;
                 Current_BlewOut = null;
@@ -389,13 +426,15 @@ public class Player_Control : MonoBehaviour{
     //設置攻擊最高優先權
     public void AttackPriorityOn() {
         AttackPriority = true;
-        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Color_Number); //移到另外函式呼叫
+        Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Color_Number,DeathPriority); //移到另外函式呼叫
         AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.55f);
     }
 
     public void AttackPriorityOff(){
         AttackPriority = false;
         Shooting = false;
+        DuringDashLerp = false;
+        Base_Speed = Current_Speed;
     }
 
     //設置受傷&死亡最高優先權
@@ -408,16 +447,21 @@ public class Player_Control : MonoBehaviour{
                  GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;
+                if(musouTime >0.0f)CancelInvoke("Musou_Flick");
                 musouTime = 1.8f;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
-                //musouTime = Time.time;
-                //StateMusou = 1.2f;
                 Base_HP--;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
-                for (int k = 0; k <Personal_HP.Length; k++) {
-                    if (k < Base_HP) Personal_HP[k].SetActive(true);
-                    else Personal_HP[k].SetActive(false);
-                }
+                Heart_anim = Personal_HP[Base_HP].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Disappear");
+
+                //for (int k = 0; k <Personal_HP.Length; k++) {
+                //    if (k < Base_HP) Personal_HP[k].SetActive(true);
+                //    else if (k == Base_HP) {
+                //        Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                //        Heart_anim.Play("Heart_Disappear");
+                //    }
+                //}
 
                 if (Base_HP == 0){
                     DeathPriority = true;
@@ -437,6 +481,7 @@ public class Player_Control : MonoBehaviour{
         AttackPriority = false;
         if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
         else if(Mathf.Abs(xAix) > 0.03f && Mathf.Abs(zAix) > 0.03f) GetComponent<Animator>().Play("Slime_Walk");
+        //_playermanager.BackWashBoard();
     }
 
     //短衝刺設定
@@ -447,11 +492,17 @@ public class Player_Control : MonoBehaviour{
         AttackPriority = false;
     }
 
+    public void DashEnd_musou() {
+        StopDetect = false;
+    }
+
     //呼叫水花濺起
     public void PondEffect() {
         AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
         Player_Icon.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
         Player_Sprite.GetComponent<SpriteRenderer>().material.SetInt("_colorID", Color_Number);
+        if(musouTime>0.0f)CancelInvoke("Musou_Flick");
+        musouTime = 2.1f;
         InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
     }
 
@@ -464,18 +515,22 @@ public class Player_Control : MonoBehaviour{
         if (DeathPriority) {
             GetComponent<Animator>().Play("Slime_CureEffect");
             rescue_count++;
-
+            AudioManager.SingletonInScene.PlaySound2D("Heal", 0.5f);
             if (rescue_count >= 5){
                 rescue_count = 0;
                 Base_HP = 1 + Extra_HP;
                 for (int k = 0; k < Personal_HP.Length; k++){
-                    if (k < Base_HP) Personal_HP[k].SetActive(true);
-                    else Personal_HP[k].SetActive(false);
+                    if (k < Base_HP) {
+                        Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                        Heart_anim.Play("Heart_Gain");
+                    }
+                    //else Personal_HP[k].SetActive(false);
                 }
                 CancelColor();
                 ReviveArea.enabled = false;
                 GetComponent<Animator>().Play("Slime_Revive");
                 AudioManager.SingletonInScene.PlaySound2D("Revive", 0.5f);
+                if(musouTime>0.0f)CancelInvoke("Musou_Flick");
                 musouTime = 3.0f;
                 StopDetect = true;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
@@ -487,7 +542,7 @@ public class Player_Control : MonoBehaviour{
 
     public void DeathPriorityOff(){
         DeathPriority = false;
-        AttackPriority = false;
+        AttackPriorityOff();
     }
 
     //死亡的數值reset等等
@@ -507,11 +562,14 @@ public class Player_Control : MonoBehaviour{
 
     //合體狀態被擊殺
     void Die_InMergeState(){
-        Base_HP = 0;
-        for (int k = 0; k < Personal_HP.Length; k++){
-            Personal_HP[k].SetActive(false);
-        }
 
+        for (int k = 0; k < Personal_HP.Length; k++){
+            if (k < Base_HP) {
+                Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Disappear");
+            }
+        }
+        Base_HP = 0;
         CancelColor();
         DeathPriority = true;
         ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
@@ -530,53 +588,64 @@ public class Player_Control : MonoBehaviour{
     void WashOutColor() {
         ExtraPriority = true;
         Color_Number = 0;
-        //musouTime = Time.time;
-        //StateMusou = 2.55f;
-        musouTime = 4.8f;
+        if (musouTime > 0.0f) CancelInvoke("Musou_Flick");
         StopDetect = true;
         GetComponent<Animator>().Play("Slime_Wash");
     }
 
     public void FinishClean() {
         ExtraPriority = false;
-        //musouTime = Time.time;
-        //StateMusou = 2.1f;
-        //musouTime = 2.7f;
-        //StopDetect = true;
-        InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
         _playermanager.BackWashBoard();
+        DashEnd();
     }
 
     //道具加成
     public void Ability_Modify(int ItemType, Sprite ItemSprite,int ItemPrice) {
-        //0:劍，1:子彈，2:愛心，3:放大燈，4:鞋子，5:潤滑液
+        //0:劍，1:子彈，2:愛心，3:水槍，4:鞋子，5:潤滑液
         switch (ItemType) {
             case 0:
                 Base_ATK++;
                 Extra_ATK++;
+                BulletScale_Superimposed++;//至多300%
+                BulletScale_PercentageModify = 0.40f - 0.05f * BulletScale_Superimposed;
+                if (BulletScale_PercentageModify <= 0.1f) BulletScale_PercentageModify = 0.1f;
+                Base_BulletScale = Base_BulletScale + BulletScale_PercentageModify;
+                if (Base_BulletScale >= 3.0f) Base_BulletScale = 3.0f;
                 break;
             case 1:
                 Base_Penetrate++;
+                BulletTime_Superimposed++;
+                Base_BulletTime = 0.15f * BulletTime_Superimposed;
                 break;
             case 2:
                 Base_HP++;
                 Extra_HP++;
-                for (int k = 0; k < Personal_HP.Length; k++){
-                    if (k < Base_HP) Personal_HP[k].SetActive(true);
-                    else Personal_HP[k].SetActive(false);
-                }
+                Heart_anim = Personal_HP[Base_HP-1].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Gain");
                 break;
             case 3:
-                Bullet_Superimposed++;
+                BulletSpeed_Superimposed++;
+                BulletSpeed_PercentageModify = 0.25f - 0.05f * BulletSpeed_Superimposed;
+                if (BulletSpeed_PercentageModify <= 0.1f) BulletSpeed_PercentageModify = 0.1f;
+                Base_BulletSpeed = Base_BulletSpeed + BulletSpeed_PercentageModify;
+                AttackSpeed_Superimposed++;
+                AttackSpeed_PercentageModify = 0.25f - 0.05f*AttackSpeed_Superimposed;
+                if (AttackSpeed_PercentageModify <= 0.05f) AttackSpeed_PercentageModify = 0.05f;
+                Base_AttackSpeed = Base_AttackSpeed + AttackSpeed_PercentageModify;
                 break;
             case 4:
                 Speed_Superimposed++;
-                Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                Speed_PercentageModify= 0.5f - 0.1f * Speed_Superimposed;
+                if (Speed_PercentageModify <= 0.2f) Speed_PercentageModify= 0.2f;
+                Base_Speed = Base_Speed + Speed_PercentageModify;
+                //Tired_Speed = Tired_Speed + Speed_PercentageModify;
+                //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
                 Current_Speed = Base_Speed;//備份，用以DashLerp後重置
+                WalkSpeedanim = 1.0f + 0.05f * Speed_Superimposed;
+                if (WalkSpeedanim > 1.5f) WalkSpeedanim = 1.5f;
                 break;
             case 5:
-                Timer_Superimposed++;
-                //更新進合體時間
+                Timer_Superimposed++;//更新進合體時間 7秒1血(完成)
                 break;
         }
 
@@ -638,8 +707,10 @@ public class Player_Control : MonoBehaviour{
         }
         Base_HP = 3 + Extra_HP;
         for (int k = 0; k < Personal_HP.Length; k++){
-            if (k < Base_HP) Personal_HP[k].SetActive(true);
-            else Personal_HP[k].SetActive(false);
+            if (k < Base_HP) {
+                Heart_anim = Personal_HP[k].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Gain");
+            } 
         }
         ReviveArea.enabled = false;
     }
@@ -671,17 +742,22 @@ public class Player_Control : MonoBehaviour{
             Random_Drop = Random.Range(0, _IteminHand.Count);
             Current_BlewOut = Instantiate(Item_BlewOut) as GameObject;
             //GameObject clone_Item = Instantiate(Item_BlewOut) as GameObject;
-            Current_BlewOut.GetComponent<SpriteRenderer>().sprite = _IteminHand[Random_Drop];
+            //Current_BlewOut.GetComponent<SpriteRenderer>().sprite = _IteminHand[Random_Drop];
+            Current_BlewOut.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = _IteminHand[Random_Drop];
             Current_BlewOut.transform.position = transform.position;
             //switch內做三樣：下修數值、更新UI、調降金額(itemmanager)
             switch (_IteminHand[Random_Drop].name) {
                 case "sword":
                     Base_ATK--;
                     Extra_ATK--;
+                    BulletScale_Superimposed--;
+                    Base_BulletScale = Base_BulletScale - BulletScale_PercentageModify;
                     DropType = 0;
                     break;
                 case "bullet":
                     Base_Penetrate--;
+                    BulletTime_Superimposed--;
+                    Base_BulletTime = 0.15f * BulletTime_Superimposed;
                     DropType = 1;
                     break;
                 case "heart":
@@ -689,12 +765,16 @@ public class Player_Control : MonoBehaviour{
                     DropType = 2;
                     break;
                 case "light":
+                    BulletSpeed_Superimposed--;
+                    Base_BulletSpeed = Base_BulletSpeed - BulletSpeed_PercentageModify;
+                    AttackSpeed_Superimposed--;
+                    Base_AttackSpeed = Base_AttackSpeed + AttackSpeed_PercentageModify;
                     DropType = 3;
-                    Bullet_Superimposed--;
                     break;
                 case "shoes":
                     Speed_Superimposed--;
-                    Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                    Base_Speed = Base_Speed - Speed_PercentageModify;
+                    //Tired_Speed = Tired_Speed - Speed_PercentageModify;
                     Current_Speed = Base_Speed;
                     DropType = 4;
                     break;
@@ -738,35 +818,54 @@ public class Player_Control : MonoBehaviour{
     }
 
     void GetItemFromFloor(GameObject WhichItem) {
-        Sprite ItemSprite = WhichItem.GetComponent<SpriteRenderer>().sprite;
+        Sprite ItemSprite = WhichItem.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite;
         string ItemName = ItemSprite.name;
         switch (ItemName){
             case "sword":
                 Base_ATK++;
                 Extra_ATK++;
+                BulletScale_Superimposed++;//至多300%
+                BulletScale_PercentageModify = 0.40f - 0.05f * BulletScale_PercentageModify;
+                if (BulletScale_PercentageModify <= 0.1f) BulletScale_PercentageModify = 0.1f;
+                Base_BulletScale = Base_BulletScale + BulletScale_PercentageModify;
+                if (Base_BulletScale >= 3.0f) Base_BulletScale = 3.0f;
                 PickType = 0;
                 break;
             case "bullet":
                 Base_Penetrate++;
+                BulletTime_Superimposed++;
+                Base_BulletTime = 0.15f * BulletTime_Superimposed;
                 PickType = 1;
                 break;
             case "heart":
                 Base_HP++;
                 Extra_HP++;
                 PickType = 2;
-                for (int k = 0; k < Personal_HP.Length; k++){
-                    if (k < Base_HP) Personal_HP[k].SetActive(true);
-                    else Personal_HP[k].SetActive(false);
-                }
+                Heart_anim = Personal_HP[Base_HP-1].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Gain");
+                Debug.Log(Base_HP);
                 break;
             case "light":
-                Bullet_Superimposed++;
+                BulletSpeed_Superimposed++;
+                BulletSpeed_PercentageModify = 0.25f - 0.05f * BulletSpeed_Superimposed;
+                if (BulletSpeed_PercentageModify <= 0.1f) BulletSpeed_PercentageModify = 0.1f;
+                Base_BulletSpeed = Base_BulletSpeed + BulletSpeed_PercentageModify;
+                AttackSpeed_Superimposed++;
+                AttackSpeed_PercentageModify = 0.25f - 0.05f * AttackSpeed_Superimposed;
+                if (AttackSpeed_PercentageModify <= 0.05f) AttackSpeed_PercentageModify = 0.05f;
+                Base_AttackSpeed = Base_AttackSpeed + AttackSpeed_PercentageModify;
                 PickType = 3;
                 break;
             case "shoes":
                 Speed_Superimposed++;
-                Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
-                Current_Speed = Base_Speed;
+                Speed_PercentageModify = 0.5f - 0.1f * Speed_Superimposed;
+                if (Speed_PercentageModify <= 0.2f) Speed_PercentageModify = 0.2f;
+                Base_Speed = Base_Speed + Speed_PercentageModify;
+                //Tired_Speed = Tired_Speed + Speed_PercentageModify;
+                //Base_Speed = 1.0f * Mathf.Pow(1.25f, Speed_Superimposed);
+                Current_Speed = Base_Speed;//備份，用以DashLerp後重置
+                WalkSpeedanim = 1.0f + 0.05f * Speed_Superimposed;
+                if (WalkSpeedanim > 1.5f) WalkSpeedanim = 1.5f;
                 PickType = 4;
                 break;
             case "smooth":
@@ -784,12 +883,21 @@ public class Player_Control : MonoBehaviour{
             ItemStateText[PickType].gameObject.SetActive(true);
         }
         ItemStateText[PickType].text = ItemCount[PickType].ToString();
-
+        Already_pick = false;
         //存入List，待之後噴裝
         _IteminHand.Add(ItemSprite);
 
         //告訴商店要漲價
         _itemmanager.Item_PickUp(PlayerID, PickType);
+    }
+
+    //擊殺哥布林得到金幣時UI縮放
+    public void MoneyUI_GoBigger() {
+        Money_anim.Play("Money_Zoom");
+    }
+
+    public void MoneyUI_BackSmaller() {
+        Money_anim.Play("Money_BackSmall");
     }
 
 }
