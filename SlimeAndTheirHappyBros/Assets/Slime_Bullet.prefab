@@ -113,6 +113,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WhichPlayer: {fileID: 0}
+  WhichPlayer2: {fileID: 0}
+  Rescue_Which: {fileID: 0}
   speed: 10
-  FadeTime: 2
+  alpha: -0.04
   recoveryTime: 3
