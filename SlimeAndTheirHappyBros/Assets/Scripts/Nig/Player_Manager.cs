@@ -198,7 +198,7 @@ public class Player_Manager : MonoBehaviour
                 ShopDis_x = ShopPlace.position.x - FourPlayer[p].transform.position.x;
                 ShopDis_z = ShopPlace.position.z - FourPlayer[p].transform.position.z;
 
-                if (ShopDis_x >= -24.0f && ShopDis_x <= 10.0f && ShopDis_z >= -24.0f && ShopDis_z <= 10.0f) cameraatshop.Player_GoShop(p);
+                if (ShopDis_x >= -25.0f && ShopDis_x <= 12.0f && ShopDis_z >= -20.0f && ShopDis_z <= 25.5f) cameraatshop.Player_GoShop(p);
                 else cameraatshop.Player_LeaveShop(p);
             }
 
