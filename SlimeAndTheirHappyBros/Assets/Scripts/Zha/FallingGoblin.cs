@@ -48,7 +48,9 @@ public class FallingGoblin : IEnemyObjectPoolUnit
         else if (time >= 1.8f) {
             if (goblinTransform.localPosition.y > 0) {
                 fallingSpeed += addSpeed * dt;
-                goblinTransform.localPosition += new Vector3(0, -fallingSpeed, 0);
+                Vector3 nextPos = goblinTransform.localPosition + new Vector3(0, -fallingSpeed, 0);
+                if (nextPos.y < 0) goblinTransform.localPosition = new Vector3(0, 0, 0);
+                else goblinTransform.localPosition = nextPos;
             }
             else {
                 hurtCollider.enabled = false;
