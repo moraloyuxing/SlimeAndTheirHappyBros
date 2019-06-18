@@ -18,6 +18,7 @@ public class SceneObjectManager : MonoBehaviour
     {
         shop = GameObject.Find("Shop");
         ruinShop = transform.Find("ruin").gameObject;
+        ruinShop.SetActive(false);
         bush = GameObject.Find("05tree060");
         shopSmogRender = transform.Find("ShopSmog").GetComponent<SpriteRenderer>();
         bushSmogRender = transform.Find("BushSmog").GetComponent<SpriteRenderer>();

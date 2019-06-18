@@ -82,13 +82,13 @@ public class NPC_Manager : MonoBehaviour{
     public void BreakTime_Start() {
         BreakTime = true;
         Trigger_Moment = Time.time;
-        NPCanim[0].Play("Docter_In");
+        NPCanim[0].Play("Doctor_In");
         NPCanim[1].Play("Angel_In");
     }
 
     public void BreakTime_End(){
         BreakTime = false;
-        NPCanim[0].Play("Docter_Out");
+        NPCanim[0].Play("Doctor_Out");
         NPCanim[1].Play("Angel_Out");
     }
 }
