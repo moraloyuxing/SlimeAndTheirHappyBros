@@ -86,7 +86,7 @@ public class KingGoblin : IEnemyUnit
                 punchShop();
             }
             else {
-                if (aniInfo.normalizedTime > 0.9f) {
+                if (aniInfo.normalizedTime > 0.93f) {
                     if (!punchBushOnce)
                     {
                         punchBushOnce = true;
@@ -185,7 +185,13 @@ public class KingGoblin : IEnemyUnit
                     throwOnce = true;
                 }
                 if (aniInfo.normalizedTime >= 0.96f) {
-                    throwId = Random.Range(0,99) % 4;
+
+                    throwId = Random.Range(0, 99) % 4;
+                    while (goblinManager.PlayersDie[throwId]) {
+                        throwId++;
+                        if (throwId > 3) throwId = 0;
+                    }
+
                     throwOnce = false;
                     SetState(KingState.idle);
                 }
