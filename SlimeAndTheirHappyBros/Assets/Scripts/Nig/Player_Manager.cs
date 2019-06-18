@@ -45,8 +45,6 @@ public class Player_Manager : MonoBehaviour
     RectTransform[] TraceIcon = new RectTransform[4];
     public RectTransform[] TraceArrow = new RectTransform[4];
     Vector3[] PIDScreenPos = new Vector3[4];
-    float OutScreenDis_x;
-    float OutScreenDis_y;
 
     Vector3 TraceCurrentDir;
     Vector3 newDir;//相當於Attack_Direction
@@ -243,6 +241,10 @@ public class Player_Manager : MonoBehaviour
                 &&Player_Death[0] == false){
                 if (Color_Number[0] != 0){
                     WashPriority[0] = true;
+                    if (Playeranim[0].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")) {
+                        WashPriority[0] = false;
+                        FourPlayer[0].SendMessage("Hide_Hint");
+                    }
                     SetHintType(0, 0);
                 }
             }
@@ -297,9 +299,12 @@ public class Player_Manager : MonoBehaviour
             if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 && Player_Death[1] == false)
             {
-                if (Color_Number[1] != 0)
-                {
+                if (Color_Number[1] != 0){
                     WashPriority[1] = true;
+                    if (Playeranim[1].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")){
+                        WashPriority[1] = false;
+                        FourPlayer[1].SendMessage("Hide_Hint");
+                    }
                     SetHintType(1, 0);
                 }
             }
@@ -360,6 +365,10 @@ public class Player_Manager : MonoBehaviour
                 if (Color_Number[2] != 0)
                 {
                     WashPriority[2] = true;
+                    if (Playeranim[2].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")){
+                        WashPriority[2] = false;
+                        FourPlayer[2].SendMessage("Hide_Hint");
+                    }
                     SetHintType(2, 0);
                 }
             }
@@ -419,6 +428,10 @@ public class Player_Manager : MonoBehaviour
                 if (Color_Number[3] != 0)
                 {
                     WashPriority[3] = true;
+                    if (Playeranim[3].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")){
+                        WashPriority[3] = false;
+                        FourPlayer[3].SendMessage("Hide_Hint");
+                    }
                     SetHintType(3, 0);
                 }
             }
@@ -587,17 +600,10 @@ public class Player_Manager : MonoBehaviour
                 if (PIDScreenPos[p].x >= Screen.width){
                     //3
                     if (PIDScreenPos[p].y >= Screen.height-110.0f) {
-                        //OutScreenDis_x = (Screen.height / Screen.width) * PIDScreenPos[p].x;
-                        //OutScreenDis_y = PIDScreenPos[p].y;
-
-                        //if (OutScreenDis_x >= OutScreenDis_y) TraceArrow[p].rotation = Quaternion.Euler(0, 0, 90);
-                        //else TraceArrow[p].rotation = Quaternion.Euler(0, 0, 180);
-                        //TracePID[p].transform.position = new Vector3(850.0f, 430.0f);
-
                         TraceIcon[p].anchoredPosition = new Vector2(850.0f, 430.0f);
                         TraceCurrentDir = TraceArrow[p].eulerAngles;
-                        newDir = new Vector3(PIDScreenPos[p].x - TraceIcon[p].anchoredPosition.x, PIDScreenPos[p].y - TraceIcon[p].anchoredPosition.y, 0.0f);
-                        Trace_angle = Mathf.Atan2(-newDir.x, newDir.y) * Mathf.Rad2Deg;
+                        newDir = new Vector3(PIDScreenPos[p].x - (TraceIcon[p].anchoredPosition.x + 850.0f), PIDScreenPos[p].y - (TraceIcon[p].anchoredPosition.y + 430.0f), 0.0f);
+                        Trace_angle = Mathf.Atan2( newDir.y, newDir.x) * Mathf.Rad2Deg + 90.0f;
                         Trace_toLerp = Mathf.LerpAngle(TraceCurrentDir.z, Trace_angle, 0.3f);
                         TraceArrow[p].localEulerAngles = new Vector3(0.0f, 0.0f, Trace_toLerp);
                     }
@@ -610,17 +616,10 @@ public class Player_Manager : MonoBehaviour
 
                     //9
                     else if (PIDScreenPos[p].y <= 110.0f) {
-                        //OutScreenDis_x = -(Screen.height / Screen.width) * PIDScreenPos[p].x + Screen.height;
-                        //OutScreenDis_y = PIDScreenPos[p].y;
-
-                        //if (OutScreenDis_x >= OutScreenDis_y) TraceArrow[p].rotation = Quaternion.Euler(0, 0, 0);
-                        //else TraceArrow[p].rotation = Quaternion.Euler(0, 0, 90);
-                        //TraceArrow[p].position = new Vector3(850.0f, -430.0f);
-
                         TraceIcon[p].anchoredPosition = new Vector2(850.0f, -430.0f);
                         TraceCurrentDir = TraceArrow[p].eulerAngles;
-                        newDir = new Vector3(PIDScreenPos[p].x - TraceIcon[p].anchoredPosition.x, PIDScreenPos[p].y - TraceIcon[p].anchoredPosition.y, 0.0f);
-                        Trace_angle = Mathf.Atan2(-newDir.x, newDir.y) * Mathf.Rad2Deg;
+                        newDir = new Vector3(PIDScreenPos[p].x - (TraceIcon[p].anchoredPosition.x + 850.0f), PIDScreenPos[p].y - (TraceIcon[p].anchoredPosition.y + 430.0f), 0.0f);
+                        Trace_angle = Mathf.Atan2(newDir.y, newDir.x) * Mathf.Rad2Deg + 90.0f;
                         Trace_toLerp = Mathf.LerpAngle(TraceCurrentDir.z, Trace_angle, 0.3f);
                         TraceArrow[p].localEulerAngles = new Vector3(0.0f, 0.0f, Trace_toLerp);
                     }
@@ -631,17 +630,10 @@ public class Player_Manager : MonoBehaviour
                 else if (PIDScreenPos[p].x <= 0.0f){
                     //1
                     if (PIDScreenPos[p].y >= Screen.height-110.0f){
-                        //OutScreenDis_x = -(Screen.height / Screen.width) * PIDScreenPos[p].x + Screen.height;
-                        //OutScreenDis_y = PIDScreenPos[p].y;
-
-                        //if (OutScreenDis_x >= OutScreenDis_y) TraceArrow[p].rotation = Quaternion.Euler(0, 0, 270);
-                        //else TraceArrow[p].rotation = Quaternion.Euler(0, 0, 180);
-                        //TraceArrow[p].position = new Vector3(-850.0f, 430.0f);
-
                         TraceIcon[p].anchoredPosition = new Vector2(-850.0f, 430.0f);
                         TraceCurrentDir = TraceArrow[p].eulerAngles;
-                        newDir = new Vector3(PIDScreenPos[p].x - TraceIcon[p].anchoredPosition.x, PIDScreenPos[p].y - TraceIcon[p].anchoredPosition.y, 0.0f);
-                        Trace_angle = Mathf.Atan2(-newDir.x, newDir.y) * Mathf.Rad2Deg;
+                        newDir = new Vector3(PIDScreenPos[p].x - (TraceIcon[p].anchoredPosition.x + 850.0f), PIDScreenPos[p].y - (TraceIcon[p].anchoredPosition.y + 430.0f), 0.0f);
+                        Trace_angle = Mathf.Atan2(newDir.y, newDir.x) * Mathf.Rad2Deg + 90.0f;
                         Trace_toLerp = Mathf.LerpAngle(TraceCurrentDir.z, Trace_angle, 0.3f);
                         TraceArrow[p].localEulerAngles = new Vector3(0.0f, 0.0f, Trace_toLerp);
                     }
@@ -654,17 +646,10 @@ public class Player_Manager : MonoBehaviour
 
                     //7
                     else if (PIDScreenPos[p].y <= 110.0f){
-                        //OutScreenDis_x = (Screen.height / Screen.width) * PIDScreenPos[p].x;
-                        //OutScreenDis_y = PIDScreenPos[p].y;
-
-                        //if (OutScreenDis_x >= OutScreenDis_y) TraceArrow[p].rotation = Quaternion.Euler(0, 0, 0);
-                        //else TraceArrow[p].rotation = Quaternion.Euler(0, 0, 270);
-                        //TraceArrow[p].position = new Vector3(-850.0f, -430.0f);
-
                         TraceIcon[p].anchoredPosition = new Vector2(-850.0f, -430.0f);
                         TraceCurrentDir = TraceArrow[p].eulerAngles;
-                        newDir = new Vector3(PIDScreenPos[p].x - TraceIcon[p].anchoredPosition.x, PIDScreenPos[p].y - TraceIcon[p].anchoredPosition.y, 0.0f);
-                        Trace_angle = Mathf.Atan2(-newDir.x, newDir.y) * Mathf.Rad2Deg;
+                        newDir = new Vector3(PIDScreenPos[p].x - (TraceIcon[p].anchoredPosition.x + 850.0f), PIDScreenPos[p].y - (TraceIcon[p].anchoredPosition.y + 430.0f), 0.0f);
+                        Trace_angle = Mathf.Atan2(newDir.y, newDir.x) * Mathf.Rad2Deg + 90.0f;
                         Trace_toLerp = Mathf.LerpAngle(TraceCurrentDir.z, Trace_angle, 0.3f);
                         TraceArrow[p].localEulerAngles = new Vector3(0.0f, 0.0f, Trace_toLerp);
                     }

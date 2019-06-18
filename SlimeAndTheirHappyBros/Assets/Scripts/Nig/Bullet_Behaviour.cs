@@ -15,6 +15,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     public float recoveryTime = 2.0f;
     private float _timer;
     private Transform _myTransform;
+    public SpriteRenderer BulletSprite;
     Color BulletAlpha;
     Bullet_Manager bulletPool;
     Vector3 Attack_Dir;
@@ -25,7 +26,7 @@ public class Bullet_Behaviour : MonoBehaviour{
 
     void Awake(){
         _myTransform = transform;
-        BulletAlpha = GetComponent<SpriteRenderer>().color;
+        BulletAlpha = BulletSprite.GetComponent<SpriteRenderer>().color;
     }
 
     public void SetPool(Bullet_Manager pool) {
@@ -35,7 +36,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     void OnEnable(){
         _timer = Time.time;
         BulletAlpha.a = 1.0f;
-        GetComponent<SpriteRenderer>().color = BulletAlpha;
+        BulletSprite.color = BulletAlpha;
         transform.localEulerAngles = new Vector3(20.0f, transform.localEulerAngles.y, transform.localEulerAngles.z);
     }
 
@@ -53,7 +54,8 @@ public class Bullet_Behaviour : MonoBehaviour{
 
         isLeaf = PlayerDeath;
         color = Shader_Number;
-        GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
+        //GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
+        BulletSprite.material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
         WhichPlayer2 = xSlime;
         Attack_Dir = current_angle.normalized;
@@ -68,7 +70,8 @@ public class Bullet_Behaviour : MonoBehaviour{
     public void SetAttackDir(Vector3 current_angle, Player_Control xSlime,Player_Control xSlime2, int Shader_Number,Merge_Control xMSlime){
         FadeTime = FadeTime + xSlime.Base_BulletTime;
         color = Shader_Number;
-        GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
+        //GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
+        BulletSprite.material.SetInt("_colorID", Shader_Number);
         WhichPlayer = xSlime;
         WhichPlayer2 = xSlime2;
         Attack_Dir = current_angle.normalized;
@@ -88,7 +91,8 @@ public class Bullet_Behaviour : MonoBehaviour{
         if (!gameObject.activeInHierarchy) return;
         if (Time.time > _timer + FadeTime) {
             BulletAlpha.a = BulletAlpha.a + alpha;
-            GetComponent<SpriteRenderer>().color = BulletAlpha;
+            //GetComponent<SpriteRenderer>().color = BulletAlpha;
+            BulletSprite.color = BulletAlpha;
         }
 
         if (BulletAlpha.a <= 0.0f) {
@@ -131,7 +135,13 @@ public class Bullet_Behaviour : MonoBehaviour{
                 if (NowPenetrate == PenetrateMaxCount) {
                     Attack_Dir = Vector3.zero;
                     if (c.tag == "Player" || isLeaf == true) ExplosionEnd();
-                    else GetComponent<Animator>().Play("SlimeBullet_Explosion");
+                    else {
+                        BulletAlpha.a = 1.0f;
+                        //GetComponent<SpriteRenderer>().color = BulletAlpha;
+                        BulletSprite.color = BulletAlpha;
+                        GetComponent<Animator>().Play("SlimeBullet_Explosion");
+                    }
+
                 } 
             }
             i++;
@@ -147,7 +157,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     //死亡子彈為落葉，數值重置
     void LeafType_Initial() {
         GetComponent<Animator>().enabled = false;
-        FadeTime = 0.75f;//子彈存活時間
+        FadeTime = 0.375f;//子彈存活時間(落葉射程距離砍半)
         speed = 20.0f;//子彈飛行速度
         _myTransform.localScale = new Vector3(1.6f, 1.0f,1.0f);
         PenetrateMaxCount =1;//子彈穿透數量

@@ -28,8 +28,9 @@ public class Bullet_Manager : MonoBehaviour{
             reuse.transform.rotation = rotation;
             reuse.SetActive(true);
             Player_Control Current_Player = Four_Player[xSlime];
-            if (PlayerDeath == true) reuse.GetComponent<SpriteRenderer>().sprite = BulletType[1];
-            else reuse.GetComponent<SpriteRenderer>().sprite = BulletType[0];
+            if (PlayerDeath == true) reuse.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = BulletType[1];
+            else reuse.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = BulletType[0];
+            //else reuse.GetComponent<SpriteRenderer>().sprite = BulletType[0];
             reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle, Current_Player,Shader_Number,PlayerDeath);
         }
 
