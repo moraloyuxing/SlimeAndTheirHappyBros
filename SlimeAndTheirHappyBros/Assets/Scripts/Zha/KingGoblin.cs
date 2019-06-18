@@ -5,7 +5,8 @@ using UnityEngine;
 public class KingGoblin : IEnemyUnit
 {
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
-    int hp, punchStep = -1;
+    bool throwOnce = false;
+    int hp, punchStep = -1, throwId = 0;
 
     Vector3[] punchPos = new Vector3[4] { new Vector3(-3.5f, -0.1f, 19.22f), new Vector3(1.7f, -0.1f, 19.22f), new Vector3(14.57f, -0.1f, 20.54f), new Vector3(-17.52f, -0.1f, 19.85f) };
     Vector3[] punchDir = new Vector3[4];
@@ -54,9 +55,9 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void Update(float dt) {
-        Debug.Log(curState);
         if (Input.GetKeyDown(KeyCode.J) && curState == KingState.idle) SetState(KingState.waveAtk);
         if (Input.GetKeyDown(KeyCode.K) && curState == KingState.idle) SetState(KingState.punchAtk);
+        if (Input.GetKeyDown(KeyCode.L) && curState == KingState.idle) SetState(KingState.throwAtk);
         switch (curState) {
             case KingState.showUp:
                 ShowUp();
@@ -69,6 +70,9 @@ public class KingGoblin : IEnemyUnit
                 break;
             case KingState.waveAtk:
                 WaveAtk();
+                break;
+            case KingState.throwAtk:
+                ThrowAtk();
                 break;
         }
     }
@@ -161,8 +165,28 @@ public class KingGoblin : IEnemyUnit
                 if (aniInfo.normalizedTime >= 0.98f)
                 {
                     waveOnce = false;
-                    animator.SetInteger("state", 1);
-                    animator.SetTrigger("attackOver");
+                    SetState(KingState.idle);
+                }
+            }
+        }
+    }
+
+    void ThrowAtk() {
+        if (!firstInState)
+        {
+            firstInState = true;
+            animator.SetInteger("state", 4);
+        }
+        else {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("throwAtk") && aniInfo.normalizedTime >= 0.79f) {
+                if (!throwOnce) {
+                    goblinManager.UseFallingGoblin(throwId);
+                    throwOnce = true;
+                }
+                if (aniInfo.normalizedTime >= 0.96f) {
+                    throwId = Random.Range(0,99) % 4;
+                    throwOnce = false;
                     SetState(KingState.idle);
                 }
             }

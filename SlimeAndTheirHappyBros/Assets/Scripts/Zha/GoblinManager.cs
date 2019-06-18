@@ -47,6 +47,7 @@ public class GoblinManager : MonoBehaviour
     List<GoblinLeaf> freeGoblinLeaves, usedGoblinLeaves;
     List<GoblinEnergyPunch> freeGoblinPunches, usedGoblinPunches;
     List<GoblinWave> freeGoblinWaves, usedGoblinWaves;
+    List<FallingGoblin> freeFallingGoblins, usedFallingGoblin;
     List<Money> freeMoneys, usedMoneys;
 
     public Player_Control[] Four_Player = new Player_Control[4];
@@ -168,6 +169,15 @@ public class GoblinManager : MonoBehaviour
             freeGoblinWaves[i].Init(goblin, this, poolUnitInfo[1]);
             goblin.gameObject.SetActive(false);
         }
+        goblins = transform.Find("FallingGoblins");
+        freeFallingGoblins = new List<FallingGoblin>();
+        usedFallingGoblin = new List<FallingGoblin>();
+        for (int i = 0; i < goblins.childCount; i++) {
+            goblin = goblins.GetChild(i);
+            freeFallingGoblins.Add(new FallingGoblin());
+            freeFallingGoblins[i].Init(goblin, this, poolUnitInfo[1]);
+            goblin.gameObject.SetActive(false);
+        }
         goblins = transform.Find("GoblinEnergyPunchs");
         freeGoblinPunches = new List<GoblinEnergyPunch>();
         usedGoblinPunches = new List<GoblinEnergyPunch>();
@@ -253,6 +263,10 @@ public class GoblinManager : MonoBehaviour
         }
         for (index = 0; index < usedGoblinWaves.Count; index++) {
             usedGoblinWaves[index].Update(dt);
+        }
+        for (index = 0; index < usedFallingGoblin.Count; index++)
+        {
+            usedFallingGoblin[index].Update(dt);
         }
         for (index = 0; index < usedMoneys.Count; index++)
         {
@@ -417,6 +431,13 @@ public class GoblinManager : MonoBehaviour
         wave.ToActive(pos, new Vector3(0,0,0));
         freeGoblinWaves.Remove(wave);
     }
+    public void UseFallingGoblin(int id)
+    {
+        if (freeFallingGoblins.Count <= 0) return;
+        usedFallingGoblin.Add(freeFallingGoblins[0]);
+        freeFallingGoblins[0].ToActive(id);
+        freeFallingGoblins.Remove(freeFallingGoblins[0]);
+    }
     public void UseMoney(int num, Vector3 pos, int target)
     {
         Four_Player[target].MoneyUpdate(num);//UI更新num
@@ -472,6 +493,10 @@ public class GoblinManager : MonoBehaviour
     {
         freeGoblinPunches.Add(punch);
         usedGoblinPunches.Remove(punch);
+    }
+    public void RecyleFallingGoblin(FallingGoblin goblin) {
+        freeFallingGoblins.Add(goblin);
+        usedFallingGoblin.Remove(goblin);
     }
     public void RecycleWave(GoblinWave wave) {
         freeGoblinWaves.Add(wave);
