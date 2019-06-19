@@ -8,7 +8,7 @@ public class GameManager : MonoBehaviour
     bool lose = false, lightChange = true;
     int tutorialProgress = 0, goblinKills = 0;
     float time = .0f, lightTime = .0f;
-    GameState tutorialState;
+    GameState tutorialState, bossLevelState;
     GameState[] gameStates;
     GoblinManager goblinManager;
     UIManager uiManager;
@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     Player_Manager playerManager;
     SceneObjectManager sceneObjectManager;
     NPC_Manager npcManager;
+    MultiPlayerCamera cameraController;
 
     public static bool isBreakTime = false;
     public static int curRound = -1;
@@ -41,6 +42,8 @@ public class GameManager : MonoBehaviour
         playerManager.SubAltar(GoNextRound);  //註冊祭壇事件
         playerManager.SubDeath(GoLose);  //註冊死亡事件
 
+        cameraController = GameObject.Find("Main Camera").GetComponent<MultiPlayerCamera>();
+
         goblinKillsGoal = new int[roundInfos.Length];
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
@@ -51,6 +54,7 @@ public class GameManager : MonoBehaviour
  
             }
         }
+        bossLevelState = new GameState();
         directLight = GameObject.Find("Directional Light").GetComponent<Light>();
 
         sceneObjectManager = GetComponent<SceneObjectManager>();
@@ -71,6 +75,9 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F)) {
             curRound = -1;
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        }
+        if (Input.GetKeyDown(KeyCode.H)) {
+            cameraController.StartBossLevel();
         }
         if (Input.GetKey(KeyCode.Q)) {
             lightTime += Time.deltaTime;
@@ -184,6 +191,10 @@ public class GameManager : MonoBehaviour
 
         if (goblinKills >= goblinKillsGoal[curRound]) RoundOver();
         //Debug.Log("kill goblin  " + goblinKills +"    in   " +  curRound);
+    }
+
+    public void GoBossLevel() {
+
     }
 
     public void GoLose() {

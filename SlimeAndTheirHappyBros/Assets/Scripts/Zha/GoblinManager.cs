@@ -222,10 +222,6 @@ public class GoblinManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X)) {
             SpawnHobGoblinMutiColor(1);
         }
-        if (Input.GetKeyDown(KeyCode.H)) {
-            bossTime = true;
-            kingGoblin.Spawn(Vector3.zero, 0);
-        } 
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
             usedNormalGoblins[index].Update(dt);
@@ -519,6 +515,11 @@ public class GoblinManager : MonoBehaviour
     }
     public void SetPlayerRevive(int id) {
         playerDie[id] = false;
+    }
+
+    public void SpawnBoss() {
+        bossTime = true;
+        kingGoblin.Spawn(Vector3.zero, 0);
     }
 
     public GoblinBase FindGoblin(string name) {

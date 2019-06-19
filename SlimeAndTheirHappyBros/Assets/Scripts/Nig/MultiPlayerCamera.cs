@@ -17,11 +17,27 @@ public class MultiPlayerCamera : MonoBehaviour{
     Camera cam;
     public Transform FirstAlivePlayer;
 
-    bool isShopArea = false;
+    bool isShopArea = false, bossLevel = false, bossShake = false;
+    float bossMoveTime = .0f;
     Vector3 ShopView = new Vector3(-27.0f,32.5f,-50.0f);
     Vector3 Shopoffset = new Vector3(0.0f,32.0f,-45.5f);
+    Vector3 bossView = new Vector3(-3f,54f,-68.4f);
     bool[] PlayeratShopArea = new bool[4];
 
+    private static CameraShaking cameraShakingSingleton;
+    public static CameraShaking CamerashakingSingleton {
+        get {
+            if (cameraShakingSingleton == null) {
+                cameraShakingSingleton = new CameraShaking();
+            }
+            return cameraShakingSingleton;
+        }
+    }
+
+    private void Awake()
+    {
+        cameraShakingSingleton = new CameraShaking();
+    }
     void Start(){
         cam = GetComponent<Camera>();
         FirstAlivePlayer = AllPlayers[0];
@@ -29,19 +45,38 @@ public class MultiPlayerCamera : MonoBehaviour{
 
     void LateUpdate(){
         if (AllPlayers.Count == 0) return;
-        Move();
-        Zoom();
+
+        if (!bossLevel)
+        {
+            Move();
+            Zoom();
+        }
+        else {
+
+            if (bossMoveTime <= 1.0f)
+            {
+                bossMoveTime += Time.deltaTime * 0.5f;
+                transform.position = Vector3.Lerp(transform.position, bossView, bossMoveTime);
+            }
+            else {
+                bossMoveTime += Time.deltaTime;
+                if (!bossShake) cameraShakingSingleton.StartShake();
+            }
+        }
+
     }
 
 
     void Move(){
         CenterPoint = GetCenterPoint();
         NewPosition = CenterPoint + offset;
-        if (isShopArea == true) {
+        if (isShopArea == true)
+        {
             Debug.Log("???");
             NewPosition = ShopView/* + Shopoffset*/;
         }
         transform.position = Vector3.SmoothDamp(transform.position, NewPosition, ref Velocity, SmoothTime);
+        Debug.Log( NewPosition + "        " +  transform.position);
     }
 
     void Zoom() {
@@ -97,6 +132,11 @@ public class MultiPlayerCamera : MonoBehaviour{
     public void Player_LeaveShop(int PID) {
         PlayeratShopArea[PID] = false;
         isShopArea = false;
+    }
+
+    public void StartBossLevel() {
+        isShopArea = false;
+        bossLevel = true;
     }
 
 }
