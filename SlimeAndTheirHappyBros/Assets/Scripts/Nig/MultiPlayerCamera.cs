@@ -24,6 +24,8 @@ public class MultiPlayerCamera : MonoBehaviour{
     Vector3 bossView = new Vector3(-3f,54f,-68.4f);
     bool[] PlayeratShopArea = new bool[4];
 
+    System.Action callGoblinKing;
+
     private static CameraShaking cameraShakingSingleton;
     public static CameraShaking CamerashakingSingleton {
         get {
@@ -60,12 +62,27 @@ public class MultiPlayerCamera : MonoBehaviour{
             }
             else {
                 bossMoveTime += Time.deltaTime;
-                if (!bossShake) cameraShakingSingleton.StartShake();
+                if (bossMoveTime <= 1.5f)
+                {
+                    if (!bossShake) {
+                        cameraShakingSingleton.StartShake();
+                        bossShake = true;
+                    } 
+                }
+                else {
+                    if (bossShake) {
+                        callGoblinKing();
+                        bossShake = false;
+                    }
+                }
             }
         }
 
     }
 
+    public void SubKingShowUpCBK(System.Action cbk) {
+        callGoblinKing = cbk;
+    }
 
     void Move(){
         CenterPoint = GetCenterPoint();
@@ -138,5 +155,7 @@ public class MultiPlayerCamera : MonoBehaviour{
         isShopArea = false;
         bossLevel = true;
     }
+
+
 
 }
