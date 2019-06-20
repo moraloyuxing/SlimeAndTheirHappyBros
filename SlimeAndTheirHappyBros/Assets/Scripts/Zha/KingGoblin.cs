@@ -88,7 +88,7 @@ public class KingGoblin : IEnemyUnit
             render.enabled = true;
         }
 
-        if (aniInfo.normalizedTime > 0.64f) {
+        if (aniInfo.normalizedTime > 0.66f) {
             if (!punchShopOnce)
             {
                 MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f,0.5f);

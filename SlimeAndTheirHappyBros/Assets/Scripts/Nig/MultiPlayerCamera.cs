@@ -21,7 +21,8 @@ public class MultiPlayerCamera : MonoBehaviour{
     float bossMoveTime = .0f;
     Vector3 ShopView = new Vector3(-27.0f,32.5f,-50.0f);
     Vector3 Shopoffset = new Vector3(0.0f,32.0f,-45.5f);
-    Vector3 bossView = new Vector3(-3f,54f,-68.4f);
+    Vector3 bossView = new Vector3(-1.2f, 66.5f, -120.0f);
+    //Vector3 bossShowView = new Vector3(-1.2f, 66.5f, -120.0f); //new Vector3(-3f,54f,-68.4f);
     Vector3 oringinPos;
     bool[] PlayeratShopArea = new bool[4];
 
@@ -57,7 +58,7 @@ public class MultiPlayerCamera : MonoBehaviour{
         {
             Move();
             Zoom();
-            cameraShakingSingleton.Update(Time.deltaTime, NewPosition);
+            //cameraShakingSingleton.Update(Time.deltaTime, NewPosition);
         }
         else {
 
@@ -65,6 +66,7 @@ public class MultiPlayerCamera : MonoBehaviour{
             {
                 bossMoveTime += Time.deltaTime;
                 transform.position = Vector3.Lerp(oringinPos, bossView, bossMoveTime);
+                cam.fieldOfView = Mathf.Lerp(cam.fieldOfView, maxZoom, bossMoveTime);
             }
             else {
                 bossMoveTime += Time.deltaTime;
@@ -80,7 +82,6 @@ public class MultiPlayerCamera : MonoBehaviour{
                         callGoblinKing();
                         bossShake = false;
                     }
-                    if (bossMoveTime > 7.0f) bossShowUp = false;
                 }
                 cameraShakingSingleton.Update(Time.deltaTime, bossView);
             }
