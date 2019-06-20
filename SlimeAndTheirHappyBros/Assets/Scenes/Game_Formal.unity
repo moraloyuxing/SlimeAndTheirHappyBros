@@ -694,7 +694,6 @@ GameObject:
   - component: {fileID: 27706932}
   - component: {fileID: 27706935}
   - component: {fileID: 27706934}
-  - component: {fileID: 27706933}
   m_Layer: 9
   m_Name: shop
   m_TagString: Barrier
@@ -716,19 +715,6 @@ Transform:
   m_Father: {fileID: 621623317}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &27706933
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 27706931}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 11.4, y: 20, z: 1.33}
-  m_Center: {x: 5.66, y: 0, z: 1.45}
 --- !u!136 &27706934
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6364,7 +6350,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_TagString
-      value: Barrier
+      value: disappearBarrier
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_Layer
@@ -11670,7 +11656,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_TagString
-      value: Barrier
+      value: disappearBarrier
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_Layer
@@ -12563,6 +12549,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 452460330}
   m_CullTransparentMesh: 0
+--- !u!1 &453848072
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 453848073}
+  - component: {fileID: 453848074}
+  m_Layer: 9
+  m_Name: bush02
+  m_TagString: Barrier
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &453848073
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453848072}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 13.2, y: -6.12, z: 25.92}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1424545850}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &453848074
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 453848072}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 3.23
+  m_Height: 19.51
+  m_Direction: 1
+  m_Center: {x: -11.12, y: 0, z: -5.97}
 --- !u!1 &454485461
 GameObject:
   m_ObjectHideFlags: 0
@@ -15869,6 +15900,7 @@ Transform:
   - {fileID: 311516710}
   - {fileID: 27706932}
   - {fileID: 630450407}
+  - {fileID: 1436550767}
   m_Father: {fileID: 1043965144}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -18467,7 +18499,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_TagString
-      value: Barrier
+      value: disappearBarrier
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_Layer
@@ -21057,7 +21089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_TagString
-      value: Barrier
+      value: disappearBarrier
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_Layer
@@ -22002,7 +22034,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_TagString
-      value: Barrier
+      value: disappearBarrier
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_Layer
@@ -36934,6 +36966,7 @@ Transform:
   - {fileID: 1563077622}
   - {fileID: 1728494406}
   - {fileID: 167449878}
+  - {fileID: 453848073}
   m_Father: {fileID: 1043965144}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -37242,6 +37275,50 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436477142}
   m_Mesh: {fileID: 4300386, guid: 48f7cfdf92a5d6a4f9614b8db2378fd8, type: 3}
+--- !u!1 &1436550766
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1436550767}
+  - component: {fileID: 1436550768}
+  m_Layer: 9
+  m_Name: shop (1)
+  m_TagString: disappearBarrier
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1436550767
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436550766}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -30.64, y: -6.12, z: 23.32}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 621623317}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1436550768
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1436550766}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 11.4, y: 20, z: 1.33}
+  m_Center: {x: 5.66, y: 0, z: 1.45}
 --- !u!1001 &1436630623
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -45444,7 +45521,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1728494406}
   - component: {fileID: 1728494414}
-  - component: {fileID: 1728494413}
   - component: {fileID: 1728494412}
   - component: {fileID: 1728494411}
   - component: {fileID: 1728494410}
@@ -45556,20 +45632,6 @@ CapsuleCollider:
   m_Height: 19.51
   m_Direction: 1
   m_Center: {x: 6.04, y: 0, z: -5.97}
---- !u!136 &1728494413
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1728494405}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 3.23
-  m_Height: 19.51
-  m_Direction: 1
-  m_Center: {x: -11.12, y: 0, z: -5.97}
 --- !u!136 &1728494414
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46855,7 +46917,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_TagString
-      value: Barrier
+      value: disappearBarrier
       objectReference: {fileID: 0}
     - target: {fileID: 100000, guid: 6e2d3ec7ea1989a4f8007e13ba0decc8, type: 3}
       propertyPath: m_Layer

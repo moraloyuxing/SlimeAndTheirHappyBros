@@ -23,6 +23,8 @@ public class PathFindGrid : MonoBehaviour {
 
     float offsetX, offsetY;
 
+    List<Vector2> disappearBarrier = new List<Vector2>();
+
     void Awake()
     {
         nodeDiameter = nodeRadius * 2.0f;
@@ -58,7 +60,15 @@ public class PathFindGrid : MonoBehaviour {
             for (int y = 0; y < gridSizeY; y++)
             {
                 Vector3 worldPoint = worldBottomLeft + Vector3.right * (x * nodeDiameter + nodeRadius) + Vector3.forward * (y * nodeDiameter + nodeRadius);
-                bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
+                //bool walkable = !(Physics.CheckSphere(worldPoint, nodeRadius, unwalkableMask));
+                bool walkable = true;
+                Collider[] hits =  Physics.OverlapSphere(worldPoint, nodeRadius, unwalkableMask);
+                if (hits != null && hits.Length > 0) {
+                    walkable = false;
+                    if (hits.Length == 0 && hits[0].tag == "disappearBarrier") {
+                        disappearBarrier.Add(new Vector2(x, y));
+                    }
+                }
 
                 int movementPenalty = 0;
 
