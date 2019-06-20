@@ -41925,13 +41925,13 @@ MonoBehaviour:
   - clipNmae: Tree_Attack
     clip: {fileID: 8300000, guid: 7a6d9b4d70e364581b3916494f58b098, type: 3}
   - clipNmae: Currect_Color
-    clip: {fileID: 8300000, guid: ea642e8e8c09f4e638392b1e2ab9d090, type: 3}
+    clip: {fileID: 8300000, guid: da2647126d492446f8c3c80b04ee20e9, type: 3}
   - clipNmae: Dash
     clip: {fileID: 8300000, guid: abbc1a173f4e24ad781b00c4f1eaa3fe, type: 3}
   - clipNmae: Heal
     clip: {fileID: 8300000, guid: 1cde4912f89fc4127b82a73f030c4c08, type: 3}
   - clipNmae: Mistake_Color
-    clip: {fileID: 8300000, guid: f4fab37c5f7744535be646e5903ce462, type: 3}
+    clip: {fileID: 8300000, guid: 0834682f818cc40698eead4b9edd3aca, type: 3}
   - clipNmae: Mix
     clip: {fileID: 8300000, guid: de26e36bd15a04909b6d490e1d99e38e, type: 3}
   - clipNmae: Separate
@@ -41941,7 +41941,7 @@ MonoBehaviour:
   - clipNmae: Slime_Jump_Death
     clip: {fileID: 8300000, guid: 8ec221b41c9854f0ea553fa270c8d4a4, type: 3}
   - clipNmae: Slime_Shoot
-    clip: {fileID: 8300000, guid: fd02c2d532f8f45d29900fc49cfa6d0b, type: 3}
+    clip: {fileID: 8300000, guid: 1b62d83c514804b88a01bf0089063d89, type: 3}
   - clipNmae: Slime_Walk
     clip: {fileID: 8300000, guid: 2ed43942b2ee34e7da306944068b88d1, type: 3}
   - clipNmae: Washing
