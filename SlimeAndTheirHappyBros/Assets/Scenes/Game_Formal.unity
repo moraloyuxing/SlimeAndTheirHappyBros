@@ -41935,7 +41935,7 @@ MonoBehaviour:
   - clipNmae: Mix
     clip: {fileID: 8300000, guid: de26e36bd15a04909b6d490e1d99e38e, type: 3}
   - clipNmae: Separate
-    clip: {fileID: 8300000, guid: 4cbb215cf706d4761b69b218650bf35f, type: 3}
+    clip: {fileID: 8300000, guid: 4b6c7d3ed01c2439f87ee7ffa984e8eb, type: 3}
   - clipNmae: Slime_Hurt
     clip: {fileID: 8300000, guid: b4a7150d6e6df4d3bb248180fdd8f4b1, type: 3}
   - clipNmae: Slime_Jump_Death
