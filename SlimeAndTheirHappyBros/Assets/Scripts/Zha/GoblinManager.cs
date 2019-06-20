@@ -212,14 +212,14 @@ public class GoblinManager : MonoBehaviour
 
         float dt = Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.A)) {
+        if (Input.GetKeyDown(KeyCode.Z)) {
             SpawnNormalGoblinBaseColor(0);
         }
-        if (Input.GetKeyDown(KeyCode.Z)) {
+        if (Input.GetKeyDown(KeyCode.X)) {
             //SpawnNormalGoblinRandomPos(-1);
             SpawnArcherGoblinBaseColor(0);
         }
-        if (Input.GetKeyDown(KeyCode.X)) {
+        if (Input.GetKeyDown(KeyCode.C)) {
             SpawnHobGoblinMutiColor(1);
         }
 
