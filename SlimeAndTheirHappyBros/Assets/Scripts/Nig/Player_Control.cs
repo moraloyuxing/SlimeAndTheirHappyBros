@@ -615,7 +615,7 @@ public class Player_Control : MonoBehaviour{
             case 1:
                 Base_Penetrate++;
                 BulletTime_Superimposed++;
-                Base_BulletTime = 0.15f * BulletTime_Superimposed;
+                Base_BulletTime = 0.35f * BulletTime_Superimposed;
                 break;
             case 2:
                 Base_HP++;

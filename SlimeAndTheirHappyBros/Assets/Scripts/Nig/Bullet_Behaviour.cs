@@ -43,8 +43,9 @@ public class Bullet_Behaviour : MonoBehaviour{
     public void SetAttackDir(Vector3 current_angle,Player_Control xSlime,int Shader_Number,bool PlayerDeath) {
         if (PlayerDeath == false){
             GetComponent<Animator>().enabled = true;
-            FadeTime = FadeTime + xSlime.Base_BulletTime;
             speed = 20.0f * xSlime.Base_BulletSpeed;
+            //FadeTime = FadeTime + xSlime.Base_BulletTime;
+            FadeTime = FadeTime * (1.0f / xSlime.Base_BulletSpeed) * Mathf.Pow(xSlime.BulletTime_Superimposed, 1.35f);
             scaleOffset = xSlime.Base_BulletScale;
             _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
             PenetrateMaxCount = xSlime.Base_Penetrate;
@@ -68,7 +69,6 @@ public class Bullet_Behaviour : MonoBehaviour{
     }
 
     public void SetAttackDir(Vector3 current_angle, Player_Control xSlime,Player_Control xSlime2, int Shader_Number,Merge_Control xMSlime){
-        FadeTime = FadeTime + xSlime.Base_BulletTime;
         color = Shader_Number;
         //GetComponent<SpriteRenderer>().material.SetInt("_colorID", Shader_Number);
         BulletSprite.material.SetInt("_colorID", Shader_Number);
@@ -80,7 +80,9 @@ public class Bullet_Behaviour : MonoBehaviour{
         scaleOffset = xMSlime.Base_BulletScale;
         //scaleOffset = Mathf.Pow(1.25f, xMSlime.Bullet_Superimposed);
         //speed = 20.0f * Mathf.Pow(1.25f, xMSlime.BulletSpeed_Superimposed);
-        speed = 20.0f * xSlime.Base_BulletSpeed;
+        speed = 20.0f * xMSlime.Base_BulletSpeed;
+        //FadeTime = FadeTime + xSlime.Base_BulletTime;
+        FadeTime = FadeTime * (1.0f / xMSlime.Base_BulletSpeed) * Mathf.Pow(xMSlime.BulletTime_Superimposed, 1.35f);
         Attack_Dir *= speed;
         _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
         PenetrateMaxCount = xMSlime.Base_Penetrate;

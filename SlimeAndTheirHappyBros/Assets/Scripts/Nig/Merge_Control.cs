@@ -102,6 +102,7 @@ public class Merge_Control : MonoBehaviour{
     public float Base_BulletScale = 1.0f;
     public float Base_BulletSpeed = 1.0f;
     public float Base_BulletTime = 0.0f;
+    public int BulletTime_Superimposed = 0;
     public int BulletSpeed_Superimposed = 0;
     public int Bullet_Superimposed = 0;
     //int Timer_Superimposed = 0;
@@ -621,7 +622,8 @@ public class Merge_Control : MonoBehaviour{
         //設定子彈穿透數量
         Base_Penetrate = 1+A.Extra_Penetrate + B.Extra_Penetrate;
         //設定子彈飛行距離
-        Base_BulletTime = 0.15f * (A.BulletTime_Superimposed + B.BulletTime_Superimposed);
+        Base_BulletTime = 0.35f * (A.BulletTime_Superimposed + B.BulletTime_Superimposed);
+        BulletTime_Superimposed = A.BulletTime_Superimposed + B.BulletTime_Superimposed;
         //設定攻擊速度
         Base_AttackSpeed = A.Base_AttackSpeed + B.Base_AttackSpeed - 1.0f;
     }

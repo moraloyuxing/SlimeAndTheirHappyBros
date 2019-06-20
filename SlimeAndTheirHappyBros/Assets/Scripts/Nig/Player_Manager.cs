@@ -79,14 +79,6 @@ public class Player_Manager : MonoBehaviour
 
     void Update()
     {
-        //測試
-        if (Input.GetKeyDown(KeyCode.L)) {
-            Player1_rePos(FourPlayer[0].transform.position);
-            Player2_rePos(FourPlayer[1].transform.position);
-            Player3_rePos(FourPlayer[2].transform.position);
-            Player4_rePos(FourPlayer[3].transform.position);
-        }
-
 
         for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
         if (Game_State){
