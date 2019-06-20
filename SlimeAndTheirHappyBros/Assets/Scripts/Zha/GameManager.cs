@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
         playerManager.SubDeath(GoLose);  //註冊死亡事件
 
         cameraController = GameObject.Find("Main Camera").GetComponent<MultiPlayerCamera>();
+        cameraController.SubKingShowUpCBK(goblinManager.SpawnBoss);
 
         goblinKillsGoal = new int[roundInfos.Length];
         gameStates = new GameState[roundInfos.Length];
@@ -78,6 +79,7 @@ public class GameManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.H)) {
             cameraController.StartBossLevel();
+            //goblinManager.SpawnBoss();
         }
         if (Input.GetKey(KeyCode.Q)) {
             lightTime += Time.deltaTime;

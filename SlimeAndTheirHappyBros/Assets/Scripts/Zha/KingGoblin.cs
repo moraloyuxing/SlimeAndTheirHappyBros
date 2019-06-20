@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class KingGoblin : IEnemyUnit
 {
+    bool showEnable = false;
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
     bool throwOnce = false;
     int hp, punchStep = -1, throwId = 0;
@@ -16,7 +17,7 @@ public class KingGoblin : IEnemyUnit
     Animator animator;
     AnimatorStateInfo aniInfo;
     Transform transform;
-
+    SpriteRenderer render;
     GoblinManager goblinManager;
 
     KingState curState = KingState.showUp;
@@ -46,6 +47,9 @@ public class KingGoblin : IEnemyUnit
         punchRot[1] = Quaternion.Euler(90f, 0, 100f);
         punchRot[2] = Quaternion.Euler(90f, 0, 105f);
         punchRot[3] = Quaternion.Euler(90f, 0, 75f);
+
+        render = transform.Find("BossSprite").GetComponent<SpriteRenderer>();
+        render.enabled = false;
     }
 
     void SetState(KingState state) {
@@ -79,9 +83,15 @@ public class KingGoblin : IEnemyUnit
 
     void ShowUp() {
         aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+
+        if (!showEnable && aniInfo.normalizedTime > 0.15) {
+            render.enabled = true;
+        }
+
         if (aniInfo.normalizedTime > 0.64f) {
             if (!punchShopOnce)
             {
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f,0.5f);
                 punchShopOnce = true;
                 punchShop();
             }
@@ -91,6 +101,7 @@ public class KingGoblin : IEnemyUnit
                     {
                         punchBushOnce = true;
                         punchBush();
+                        MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f, 0.3f);
                     }
                     else {
                         if (aniInfo.normalizedTime >= 0.96f)

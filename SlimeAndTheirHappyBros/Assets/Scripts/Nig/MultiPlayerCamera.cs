@@ -17,20 +17,23 @@ public class MultiPlayerCamera : MonoBehaviour{
     Camera cam;
     public Transform FirstAlivePlayer;
 
-    bool isShopArea = false, bossLevel = false, bossShake = false;
+    bool isShopArea = false, bossShowUp = false, bossShake = false;
     float bossMoveTime = .0f;
     Vector3 ShopView = new Vector3(-27.0f,32.5f,-50.0f);
     Vector3 Shopoffset = new Vector3(0.0f,32.0f,-45.5f);
     Vector3 bossView = new Vector3(-3f,54f,-68.4f);
+    Vector3 oringinPos;
     bool[] PlayeratShopArea = new bool[4];
 
     System.Action callGoblinKing;
 
+    Transform t;
     private static CameraShaking cameraShakingSingleton;
     public static CameraShaking CamerashakingSingleton {
         get {
             if (cameraShakingSingleton == null) {
                 cameraShakingSingleton = new CameraShaking();
+                cameraShakingSingleton.Init();
             }
             return cameraShakingSingleton;
         }
@@ -38,34 +41,37 @@ public class MultiPlayerCamera : MonoBehaviour{
 
     private void Awake()
     {
+        
         cameraShakingSingleton = new CameraShaking();
     }
     void Start(){
         cam = GetComponent<Camera>();
         FirstAlivePlayer = AllPlayers[0];
+        cameraShakingSingleton.Init(transform);
     }
 
     void LateUpdate(){
         if (AllPlayers.Count == 0) return;
 
-        if (!bossLevel)
+        if (!bossShowUp)
         {
             Move();
             Zoom();
+            cameraShakingSingleton.Update(Time.deltaTime, NewPosition);
         }
         else {
 
             if (bossMoveTime <= 1.0f)
             {
-                bossMoveTime += Time.deltaTime * 0.5f;
-                transform.position = Vector3.Lerp(transform.position, bossView, bossMoveTime);
+                bossMoveTime += Time.deltaTime;
+                transform.position = Vector3.Lerp(oringinPos, bossView, bossMoveTime);
             }
             else {
                 bossMoveTime += Time.deltaTime;
                 if (bossMoveTime <= 1.5f)
                 {
                     if (!bossShake) {
-                        cameraShakingSingleton.StartShake();
+                        cameraShakingSingleton.StartShakeEasyOut(0.2f,1.0f,1.5f);
                         bossShake = true;
                     } 
                 }
@@ -74,9 +80,12 @@ public class MultiPlayerCamera : MonoBehaviour{
                         callGoblinKing();
                         bossShake = false;
                     }
+                    if (bossMoveTime > 7.0f) bossShowUp = false;
                 }
+                cameraShakingSingleton.Update(Time.deltaTime, bossView);
             }
         }
+
 
     }
 
@@ -153,7 +162,8 @@ public class MultiPlayerCamera : MonoBehaviour{
 
     public void StartBossLevel() {
         isShopArea = false;
-        bossLevel = true;
+        bossShowUp = true;
+        oringinPos = transform.position;
     }
 
 

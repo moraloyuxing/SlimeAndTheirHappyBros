@@ -33,7 +33,7 @@ public class GameState
     public void Update(float dt)
     {
         if (spawnOver) return;
-
+        if (Input.GetKeyDown(KeyCode.A)) time = 60000.0f;
         time += dt;
         if (time > stateInfo.waves[currentWave].spawnTime) {
             int i = 0;
