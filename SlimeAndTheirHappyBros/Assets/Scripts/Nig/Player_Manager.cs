@@ -222,15 +222,16 @@ public class Player_Manager : MonoBehaviour
 
     void Player1_rePos(Vector3 pos)
     {
+        //更新自己位置跟色況
+        FourPlayer[0].transform.position = pos;
         _goblinmanager.SetPlayersMove(0, pos);
+
         if (FourPlayer[0].gameObject.activeSelf == true)
         {
-            //更新自己位置跟色況
-            FourPlayer[0].transform.position = pos;
-
             //是否接近洗白處優先判定
             if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
-                &&Player_Death[0] == false){
+                &&Player_Death[0] == false)
+            {
                 if (Color_Number[0] != 0){
                     WashPriority[0] = true;
                     if (Playeranim[0].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")) {
@@ -270,23 +271,21 @@ public class Player_Manager : MonoBehaviour
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
-
-            //出畫面時啟用Trace
-            PIDScreenPos[0] = Camera.main.WorldToScreenPoint(pos);
-            if (PIDScreenPos[0].x <= 0.0f || PIDScreenPos[0].x >= Screen.width || PIDScreenPos[0].y <= 0.0f || PIDScreenPos[0].y >= Screen.height) TracePID[0].SetActive(true);
-            else TracePID[0].SetActive(false);
-
         }
+        //出畫面時啟用Trace
+        PIDScreenPos[0] = Camera.main.WorldToScreenPoint(pos);
+        if (PIDScreenPos[0].x <= 0.0f || PIDScreenPos[0].x >= Screen.width || PIDScreenPos[0].y <= 0.0f || PIDScreenPos[0].y >= Screen.height) TracePID[0].SetActive(true);
+        else TracePID[0].SetActive(false);
     }
 
     void Player2_rePos(Vector3 pos)
     {
+        //更新自己位置跟色況
+        FourPlayer[1].transform.position = pos;
         _goblinmanager.SetPlayersMove(1, pos);
+
         if (FourPlayer[1].gameObject.activeSelf == true)
         {
-            //更新自己位置跟色況
-            FourPlayer[1].transform.position = pos;
-
             //是否接近洗白處優先判定
             if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 && Player_Death[1] == false)
@@ -333,23 +332,21 @@ public class Player_Manager : MonoBehaviour
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
-
-            //出畫面時啟用Trace
-            PIDScreenPos[1] = Camera.main.WorldToScreenPoint(pos);
-            if (PIDScreenPos[1].x <= 0.0f || PIDScreenPos[1].x >= Screen.width || PIDScreenPos[1].y <= 0.0f || PIDScreenPos[1].y >= Screen.height) TracePID[1].SetActive(true);
-            else TracePID[1].SetActive(false);
         }
-
+        //出畫面時啟用Trace
+        PIDScreenPos[1] = Camera.main.WorldToScreenPoint(pos);
+        if (PIDScreenPos[1].x <= 0.0f || PIDScreenPos[1].x >= Screen.width || PIDScreenPos[1].y <= 0.0f || PIDScreenPos[1].y >= Screen.height) TracePID[1].SetActive(true);
+        else TracePID[1].SetActive(false);
     }
 
     void Player3_rePos(Vector3 pos)
     {
+        //更新自己位置跟色況
+        FourPlayer[2].transform.position = pos;
         _goblinmanager.SetPlayersMove(2, pos);
+
         if (FourPlayer[2].gameObject.activeSelf == true)
         {
-            //更新自己位置跟色況
-            FourPlayer[2].transform.position = pos;
-
             //是否接近洗白處優先判定
             if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 && Player_Death[2] == false)
@@ -397,22 +394,22 @@ public class Player_Manager : MonoBehaviour
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
-
-            //出畫面時啟用Trace
-            PIDScreenPos[2] = Camera.main.WorldToScreenPoint(pos);
-            if (PIDScreenPos[2].x <= 0.0f || PIDScreenPos[2].x >= Screen.width || PIDScreenPos[2].y <= 0.0f || PIDScreenPos[2].y >= Screen.height) TracePID[2].SetActive(true);
-            else TracePID[2].SetActive(false);
         }
+
+        //出畫面時啟用Trace
+        PIDScreenPos[2] = Camera.main.WorldToScreenPoint(pos);
+        if (PIDScreenPos[2].x <= 0.0f || PIDScreenPos[2].x >= Screen.width || PIDScreenPos[2].y <= 0.0f || PIDScreenPos[2].y >= Screen.height) TracePID[2].SetActive(true);
+        else TracePID[2].SetActive(false);
     }
 
     void Player4_rePos(Vector3 pos)
     {
+        //更新自己位置跟色況
+        FourPlayer[3].transform.position = pos;
         _goblinmanager.SetPlayersMove(3, pos);
+
         if (FourPlayer[3].gameObject.activeSelf == true)
         {
-            //更新自己位置跟色況
-            FourPlayer[3].transform.position = pos;
-
             //是否接近洗白處優先判定
             if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 && Player_Death[3] == false)
@@ -460,12 +457,11 @@ public class Player_Manager : MonoBehaviour
 
             //確認距離，符合的設true，剩下的看染色跟最短距離對象
             Check_distance();
-
-            //出畫面時啟用Trace
-            PIDScreenPos[3] = Camera.main.WorldToScreenPoint(pos);
-            if (PIDScreenPos[3].x <= 0.0f || PIDScreenPos[3].x >= Screen.width || PIDScreenPos[3].y <= 0.0f || PIDScreenPos[3].y >= Screen.height) TracePID[3].SetActive(true);
-            else TracePID[3].SetActive(false);
         }
+        //出畫面時啟用Trace
+        PIDScreenPos[3] = Camera.main.WorldToScreenPoint(pos);
+        if (PIDScreenPos[3].x <= 0.0f || PIDScreenPos[3].x >= Screen.width || PIDScreenPos[3].y <= 0.0f || PIDScreenPos[3].y >= Screen.height) TracePID[3].SetActive(true);
+        else TracePID[3].SetActive(false);
     }
 
 
@@ -490,17 +486,17 @@ public class Player_Manager : MonoBehaviour
         else Can_Merge[5] = false;
 
         //根據bool回傳秀出混合提示給玩家
-        if ((Can_Merge[0] == true || Can_Merge[1] == true || Can_Merge[2] == true) && WashPriority[0] == false && Weak_State[0] == false) SetHintType(0, 1);
-        else if (Can_Merge[0] == false && Can_Merge[1] == false && Can_Merge[2] == false && WashPriority[0] == false) FourPlayer[0].SendMessage("Hide_Hint");
+        if ((Can_Merge[0] == true || Can_Merge[1] == true || Can_Merge[2] == true) && WashPriority[0] == false && Weak_State[0] == false && FourPlayer[0].gameObject.activeSelf == true) {SetHintType(0, 1);} 
+        else if ((Can_Merge[0] == false && Can_Merge[1] == false && Can_Merge[2] == false && WashPriority[0] == false)/*|| FourPlayer[0].gameObject.activeSelf == false*/) FourPlayer[0].SendMessage("Hide_Hint");
 
-        if ((Can_Merge[0] == true || Can_Merge[3] == true || Can_Merge[4] == true) && WashPriority[1] == false && Weak_State[1] == false) SetHintType(1, 1);
-        else if (Can_Merge[0] == false && Can_Merge[3] == false && Can_Merge[4] == false && WashPriority[1] == false) FourPlayer[1].SendMessage("Hide_Hint");
+        if ((Can_Merge[0] == true || Can_Merge[3] == true || Can_Merge[4] == true) && WashPriority[1] == false && Weak_State[1] == false && FourPlayer[1].gameObject.activeSelf == true) SetHintType(1, 1);
+        else if ((Can_Merge[0] == false && Can_Merge[3] == false && Can_Merge[4] == false && WashPriority[1] == false)/*|| FourPlayer[1].gameObject.activeSelf == false*/) FourPlayer[1].SendMessage("Hide_Hint");
 
-        if ((Can_Merge[1] == true || Can_Merge[3] == true || Can_Merge[5] == true) && WashPriority[2] == false && Weak_State[2] == false) SetHintType(2, 1);
-        else if (Can_Merge[1] == false && Can_Merge[3] == false && Can_Merge[5] == false && WashPriority[2] == false) FourPlayer[2].SendMessage("Hide_Hint");
+        if ((Can_Merge[1] == true || Can_Merge[3] == true || Can_Merge[5] == true) && WashPriority[2] == false && Weak_State[2] == false && FourPlayer[2].gameObject.activeSelf == true) SetHintType(2, 1);
+        else if ((Can_Merge[1] == false && Can_Merge[3] == false && Can_Merge[5] == false && WashPriority[2] == false)/* || FourPlayer[2].gameObject.activeSelf == false*/) FourPlayer[2].SendMessage("Hide_Hint");
 
-        if ((Can_Merge[2] == true || Can_Merge[4] == true || Can_Merge[5] == true) && WashPriority[3] == false && Weak_State[3] == false) SetHintType(3, 1);
-        else if (Can_Merge[2] == false && Can_Merge[4] == false && Can_Merge[5] == false && WashPriority[3] == false) FourPlayer[3].SendMessage("Hide_Hint");
+        if ((Can_Merge[2] == true || Can_Merge[4] == true || Can_Merge[5] == true) && WashPriority[3] == false && Weak_State[3] == false && FourPlayer[3].gameObject.activeSelf == true) SetHintType(3, 1);
+        else if ((Can_Merge[2] == false && Can_Merge[4] == false && Can_Merge[5] == false && WashPriority[3] == false)/* || FourPlayer[3].gameObject.activeSelf == false*/) FourPlayer[3].SendMessage("Hide_Hint");
     }
 
     public void SetPlayerColor(int pCnt, int pColor)
