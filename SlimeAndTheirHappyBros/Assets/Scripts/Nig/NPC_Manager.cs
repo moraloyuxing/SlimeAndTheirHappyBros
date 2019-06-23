@@ -16,6 +16,8 @@ public class NPC_Manager : MonoBehaviour{
     int Random_Talk = 0;
     float Interval = 0.0f;
 
+    System.Action bossLevelCBK;
+
     //天使部分
     SpriteRenderer Angel_Sprite;
     public Transform AngelPos;
@@ -99,6 +101,7 @@ public class NPC_Manager : MonoBehaviour{
                 //此行呼叫進入Boss關卡
                 Shop.State_Switch();
                 BreakTime_End();
+                
             }
 
         }
@@ -123,4 +126,9 @@ public class NPC_Manager : MonoBehaviour{
         NPCanim[0].Play("Doctor_Out");
         NPCanim[1].Play("Angel_Out");
     }
+
+    public void SubBossLevelCBK(System.Action cbk) {
+        bossLevelCBK = cbk;
+    }
+
 }

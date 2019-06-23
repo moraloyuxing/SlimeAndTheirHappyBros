@@ -40,6 +40,7 @@ public class GoblinManager : MonoBehaviour
     Dictionary<string, GoblinBase> goblinDic = new Dictionary<string, GoblinBase>();
 
     KingGoblin kingGoblin;
+    GoblinSpirit goblinSpirit;
 
     Dictionary<string, GoblinArrow> goblinArrowsDic;
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
@@ -128,6 +129,10 @@ public class GoblinManager : MonoBehaviour
         kingGoblin.Init(goblin, goblinInfo[2], this);
         goblin.gameObject.SetActive(false);
 
+        goblin = transform.Find("GoblinSpirit");
+        goblinSpirit = new GoblinSpirit();
+        goblinSpirit.Init(goblin, this);
+        goblin.gameObject.SetActive(false);
 
         Transform locs = transform.Find("SpawnLocs");
         spawnPos = new Vector3[locs.childCount];
@@ -234,7 +239,10 @@ public class GoblinManager : MonoBehaviour
         {
             usedHobGoblins[index].Update(dt);
         }
-        if (bossTime) kingGoblin.Update(dt);
+        if (bossTime) {
+            kingGoblin.Update(dt);
+            goblinSpirit.Update(dt);
+        } 
         if (calculatePath) PathRequestManager.ClearExtendPenalty();
 
         //if (Input.GetKeyDown(KeyCode.X)) {
@@ -520,6 +528,7 @@ public class GoblinManager : MonoBehaviour
     public void SpawnBoss() {
         bossTime = true;
         kingGoblin.Spawn(Vector3.zero, 0);
+        goblinSpirit.Spawn(Vector3.zero, 0);
     }
 
     public GoblinBase FindGoblin(string name) {

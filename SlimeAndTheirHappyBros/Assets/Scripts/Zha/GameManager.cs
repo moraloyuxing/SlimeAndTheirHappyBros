@@ -42,6 +42,9 @@ public class GameManager : MonoBehaviour
         playerManager.SubAltar(GoNextRound);  //註冊祭壇事件
         playerManager.SubDeath(GoLose);  //註冊死亡事件
 
+        npcManager = GameObject.Find("Main Camera").GetComponent<NPC_Manager>();
+        npcManager.SubBossLevelCBK(GoBossLevel);
+
         cameraController = GameObject.Find("Main Camera").GetComponent<MultiPlayerCamera>();
         cameraController.SubKingShowUpCBK(goblinManager.SpawnBoss);
 
@@ -78,7 +81,7 @@ public class GameManager : MonoBehaviour
             UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
         if (Input.GetKeyDown(KeyCode.H)) {
-            cameraController.StartBossLevel();
+            GoBossLevel();
             //goblinManager.SpawnBoss();
         }
         if (Input.GetKey(KeyCode.Q)) {
@@ -196,7 +199,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoBossLevel() {
-
+        cameraController.StartBossLevel();
     }
 
     public void GoLose() {
