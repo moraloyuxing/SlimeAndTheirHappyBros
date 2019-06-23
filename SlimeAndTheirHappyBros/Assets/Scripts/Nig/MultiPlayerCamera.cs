@@ -99,11 +99,10 @@ public class MultiPlayerCamera : MonoBehaviour{
         NewPosition = CenterPoint + offset;
         if (isShopArea == true)
         {
-            Debug.Log("???");
             NewPosition = ShopView/* + Shopoffset*/;
         }
         transform.position = Vector3.SmoothDamp(transform.position, NewPosition, ref Velocity, SmoothTime);
-        Debug.Log( NewPosition + "        " +  transform.position);
+        //Debug.Log( NewPosition + "        " +  transform.position);
     }
 
     void Zoom() {
