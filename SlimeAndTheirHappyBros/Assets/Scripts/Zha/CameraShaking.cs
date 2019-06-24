@@ -43,7 +43,6 @@ public class CameraShaking
                 cameraTransform.position = pos + (shakeVec);
                 shakeWay *= -1.0f;
                 perTime = .0f;
-                Debug.Log(shakeLength);
             }
             
         }

@@ -5,15 +5,21 @@ using UnityEngine;
 public class GoblinSpirit:IEnemyUnit
 {
     bool firstInState = false, floatBack = false, nextAtk = false;
-    int posID = 1;
+    int posID = 1, targetPlayer = 0, deathCount = 0, attackCount = 0;
+    int color;
     float moveTime = .0f, idleTime = .0f;
     float deltaTime, stateTime = -4.0f, floatAngle = .0f, floatLength = 1.0f, floatTime = .0f, floatSpeed = 20.0f;
     Vector3 showUpPos = new Vector3(-1.65f, 2.9f, 33.0f); //18
-    Vector3 backPos, goalPos;
+    Vector3 backPos, goalPos, atkDir;
     Vector3[] idlePos = new Vector3[2] { new Vector3(-25.0f, 17.5f, 17.8f), new Vector3(22.0f,17.5f,17.8f)};
     Vector3[] atkPos = new Vector3[3] { new Vector3(-25.3f,2.2f,17.8f), new Vector3(-1.65f, 2.2f, 17.8f), new Vector3(22.0f, 2.2f, 17.8f) };
     Transform transform;
+    SpriteRenderer render;
     GoblinManager goblinManager;
+
+    Animator animator;
+    AnimatorStateInfo aniInfo;
+
     SpiritState curState = SpiritState.showUp;
     enum SpiritState {
         showUp, idle, move, circleAttack, xAttack, colorChange
@@ -25,6 +31,8 @@ public class GoblinSpirit:IEnemyUnit
     {
         transform = t;
         goblinManager = manager;
+        animator = transform.GetComponent<Animator>();
+        render = transform.GetComponent<SpriteRenderer>();
         t.Find("Sprite").GetComponent<SpriteRenderer>().enabled = false;
 
     }
@@ -62,6 +70,7 @@ public class GoblinSpirit:IEnemyUnit
     }
 
     void SetState(SpiritState state) {
+
         curState = state;
         firstInState = false;
         stateTime = .0f;
@@ -117,9 +126,11 @@ public class GoblinSpirit:IEnemyUnit
         posID = nextPos;
         goalPos = atkPos[posID];
         SetState(SpiritState.move);
+        animator.SetInteger("state", 0);
     }
     void MoveEndAttack() {
         nextAtk = false;
+        //SetState(SpiritState.circleAttack);
         if (Random.Range(0, 100) > 40) SetState(SpiritState.circleAttack);
         else SetState(SpiritState.xAttack);
     }
@@ -143,7 +154,6 @@ public class GoblinSpirit:IEnemyUnit
         stateTime += deltaTime;
         floatAngle += deltaTime * 2.0f;
         float scale = Mathf.Cos(floatAngle);
-        Debug.Log("idle angle  " +  scale);
         transform.position += deltaTime * scale *  new Vector3(0, 4.0f, 0);
         if (stateTime > idleTime) {
             int op = Random.Range(0, 100);
@@ -194,12 +204,159 @@ public class GoblinSpirit:IEnemyUnit
     }
 
     void CircleAttack() {
-        stateTime += deltaTime;
-        if (stateTime > 0.5f) AtkSetIdle();
+        if (!firstInState)
+        {
+            firstInState = true;
+            animator.SetInteger("state", 1);
+        }
+        else {
+            stateTime += deltaTime;
+            if (attackCount == 0)
+            {
+                if (stateTime > 0.3f) {
+                    atkDir = new Vector3(0, 0, -1);
+                    Vector3 pos = new Vector3(transform.position.x + 3.0f * atkDir.x, 0.1f, transform.position.z + 3.0f * atkDir.z);
+                    goblinManager.UseEnergyBall(pos, atkDir, 30.0f);
+                    for (int i = 1; i < 5; i++) {
+                        Vector3 dir = Quaternion.Euler(0, 20.0f*i , 0) * atkDir;
+                        pos = new Vector3(transform.position.x + 3.0f * dir.x, 0.1f, transform.position.z + 3.0f * dir.z);
+                        goblinManager.UseEnergyBall(pos, dir, 30.0f);
+
+                        dir = Quaternion.Euler(0, -20.0f * i, 0) * atkDir;
+                        pos = new Vector3(transform.position.x + 3.0f * dir.x, 0.1f, transform.position.z + 3.0f * dir.z);
+                        goblinManager.UseEnergyBall(pos, dir, 30.0f);
+                    }
+                    attackCount++;
+                }
+            }
+            else {
+                if (stateTime > 1.0f)
+                {
+                    for (int i = 0; i < 4; i++)
+                    {
+                        Vector3 dir = Quaternion.Euler(0, 10 + 20.0f * i, 0) * atkDir;
+                        Vector3 pos = new Vector3(transform.position.x + 3.0f * dir.x, 0.1f, transform.position.z + 3.0f * dir.z);
+                        goblinManager.UseEnergyBall(pos, dir, 30.0f);
+
+                        dir = Quaternion.Euler(0, -10 - 20.0f * i, 0) * atkDir;
+                        pos = new Vector3(transform.position.x + 3.0f * dir.x, 0.1f, transform.position.z + 3.0f * dir.z);
+                        goblinManager.UseEnergyBall(pos, dir, 30.0f);
+                    }
+                    attackCount = 0;
+                    AtkSetIdle();
+                }
+            }
+        }
     }
     void XAttack() {
-        stateTime += deltaTime;
-        if (stateTime > 0.5f) AtkSetIdle();
+        if (!firstInState)
+        {
+            firstInState = true;
+            animator.SetInteger("state", 1);
+            int t = Random.Range(0, 3);
+            while (goblinManager.PlayersDie[t]) {
+                t++;
+                deathCount++;
+                if (t > 3) t = 0;
+                if (deathCount >= 4) break;
+            }
+            targetPlayer = t;
+        }
+        else {
+            stateTime += deltaTime;
+            if (attackCount == 0) {
+                if (stateTime > 0.5f)
+                {
+                    atkDir = goblinManager.PlayerPos[targetPlayer] - transform.position;
+                    atkDir = new Vector3(atkDir.x, 0, atkDir.z).normalized;
+                    Vector3 pos = new Vector3(transform.position.x + 3.0f * atkDir.x, 0.1f, transform.position.z + 3.0f * atkDir.z);
+                    goblinManager.UseEnergyBall(pos, atkDir, 40.0f);
+
+                    for (int i = 1; i <= 2; i++)
+                    {
+                        float angle = 20.0f * i;
+                        pos = transform.position + 3.0f * (Quaternion.Euler(0, angle, 0) * atkDir);
+                        pos.y = 0.1f;
+                        goblinManager.UseEnergyBall(pos, atkDir,40.0f);
+                        pos = transform.position + 3.0f * (Quaternion.Euler(0, -angle, 0) * atkDir);
+                        pos.y = 0.1f;
+                        goblinManager.UseEnergyBall(pos, atkDir,40.0f);
+                    }
+                    attackCount++;
+                }
+            }
+            else if (attackCount == 1)
+            {
+                if (stateTime > 1.0f)
+                {
+                    float count = 3.0f;
+                    float angle = 20.0f;
+                    for (int i = 1; i < 4; i++)
+                    {
+                        Vector3 dir = Quaternion.Euler(0, angle * count, 0) * atkDir;
+                        Vector3 pos = transform.position + 6.0f * dir;
+                        pos.y = 0.1f;
+                        dir = new Vector3(-dir.z, 0, dir.x);
+                        goblinManager.UseEnergyBall(pos, dir, 20.0f);
+
+                        dir = Quaternion.Euler(0, -angle * count, 0) * atkDir;
+                        pos = transform.position + 6.0f * dir;
+                        pos.y = 0.1f;
+                        dir = new Vector3(dir.z, 0, -dir.x);
+                        goblinManager.UseEnergyBall(pos, dir,20.0f);
+
+                        count += 1.0f;
+                    }
+                    attackCount++;
+                }
+            }
+            else if (attackCount == 2)
+            {
+                if (stateTime > 1.5f)
+                {
+                    Vector3 pos = new Vector3(transform.position.x + 3.0f * atkDir.x, 0.1f, transform.position.z + 3.0f * atkDir.z);
+                    goblinManager.UseEnergyBall(pos, atkDir,40.0f);
+
+                    for (int i = 1; i <= 2; i++)
+                    {
+                        float angle = 10.0f * i;
+                        pos = transform.position + 3.0f * (Quaternion.Euler(0, angle, 0) * atkDir);
+                        pos.y = 0.1f;
+                        goblinManager.UseEnergyBall(pos, atkDir,40.0f);
+                        pos = transform.position + 3.0f * (Quaternion.Euler(0, -angle, 0) * atkDir);
+                        pos.y = 0.1f;
+                        goblinManager.UseEnergyBall(pos, atkDir,40.0f);
+                    }
+                    attackCount = 0;
+                    AtkSetIdle();
+                }
+
+            }
+            //if (aniInfo.IsName("Attack"))
+            //{
+            //    Debug.Log(" ani time " + aniInfo.normalizedTime);
+            //    if(aniInfo.normalizedTime > )
+            //}
+        }
+        //stateTime += deltaTime;
+        //if (stateTime > 0.5f) AtkSetIdle();
+    }
+
+    void ChangeColor() {
+        if (!firstInState)
+        {
+            firstInState = true;
+            animator.SetInteger("state", 2);
+        }
+        else {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("ChangeColor") && aniInfo.normalizedTime >= 0.55f) {
+
+                render.material.SetInt("_colorID", color);
+            }
+        }
+        
+
     }
 
     public void ResetUnit() {

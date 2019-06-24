@@ -7,7 +7,7 @@ public class KingGoblin : IEnemyUnit
     bool showEnable = false;
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
     bool throwOnce = false;
-    int hp, punchStep = -1, throwId = 0;
+    int hp, punchStep = -1, throwId = 0, deathCount = 0;
 
     Vector3[] punchPos = new Vector3[4] { new Vector3(-3.5f, -0.1f, 19.22f), new Vector3(1.7f, -0.1f, 19.22f), new Vector3(14.57f, -0.1f, 20.54f), new Vector3(-17.52f, -0.1f, 19.85f) };
     Vector3[] punchDir = new Vector3[4];
@@ -200,7 +200,9 @@ public class KingGoblin : IEnemyUnit
                     throwId = Random.Range(0, 99) % 4;
                     while (goblinManager.PlayersDie[throwId]) {
                         throwId++;
+                        deathCount++;
                         if (throwId > 3) throwId = 0;
+                        if (deathCount >= 4) break;
                     }
 
                     throwOnce = false;

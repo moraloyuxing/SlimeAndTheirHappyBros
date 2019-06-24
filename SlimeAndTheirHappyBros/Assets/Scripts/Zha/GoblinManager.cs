@@ -46,9 +46,10 @@ public class GoblinManager : MonoBehaviour
     List<GoblinArrow> freeGoblinArrows, usedGoblinArrows;
     Dictionary<string, GoblinLeaf> goblinLeafDic;
     List<GoblinLeaf> freeGoblinLeaves, usedGoblinLeaves;
-    List<GoblinEnergyPunch> freeGoblinPunches, usedGoblinPunches;
     List<GoblinWave> freeGoblinWaves, usedGoblinWaves;
     List<FallingGoblin> freeFallingGoblins, usedFallingGoblin;
+    List<GoblinEnergyPunch> freeGoblinPunches, usedGoblinPunches;
+    List<GoblinEnergyBall> freeGoblinBalls, usedGoblinBalls;
     List<Money> freeMoneys, usedMoneys;
 
     public Player_Control[] Four_Player = new Player_Control[4];
@@ -193,6 +194,17 @@ public class GoblinManager : MonoBehaviour
             freeGoblinPunches[i].Init(goblin, this, poolUnitInfo[1]);
             goblin.gameObject.SetActive(false);
         }
+        goblins = transform.Find("GoblinEnergyBalls");
+        freeGoblinBalls = new List<GoblinEnergyBall>();
+        usedGoblinBalls = new List<GoblinEnergyBall>();
+        for (int i = 0; i < goblins.childCount; i++)
+        {
+            goblin = goblins.GetChild(i);
+            freeGoblinBalls.Add(new GoblinEnergyBall());
+            freeGoblinBalls[i].Init(goblin, this);
+            goblin.gameObject.SetActive(false);
+        }
+
         goblins = transform.Find("Moneys");
         freeMoneys = new List<Money>();
         usedMoneys = new List<Money>();
@@ -271,6 +283,10 @@ public class GoblinManager : MonoBehaviour
         for (index = 0; index < usedFallingGoblin.Count; index++)
         {
             usedFallingGoblin[index].Update(dt);
+        }
+        for (index = 0; index < usedGoblinBalls.Count; index++)
+        {
+            usedGoblinBalls[index].Update(dt);
         }
         for (index = 0; index < usedMoneys.Count; index++)
         {
@@ -442,6 +458,13 @@ public class GoblinManager : MonoBehaviour
         freeFallingGoblins[0].ToActive(id);
         freeFallingGoblins.Remove(freeFallingGoblins[0]);
     }
+    public void UseEnergyBall(Vector3 pos, Vector3 dir, float spd)
+    {
+        if (freeGoblinBalls.Count <= 0) return;
+        usedGoblinBalls.Add(freeGoblinBalls[0]);
+        freeGoblinBalls[0].ToActive(pos, dir, spd);
+        freeGoblinBalls.Remove(freeGoblinBalls[0]);
+    }
     public void UseMoney(int num, Vector3 pos, int target)
     {
         Four_Player[target].MoneyUpdate(num);//UI更新num
@@ -506,7 +529,11 @@ public class GoblinManager : MonoBehaviour
         freeGoblinWaves.Add(wave);
         usedGoblinWaves.Remove(wave);
     }
-
+    public void RecycleEnergyBalls(GoblinEnergyBall ball)
+    {
+        freeGoblinBalls.Add(ball);
+        usedGoblinBalls.Remove(ball);
+    }
     public void RecycleMoney(Money money)
     {
         freeMoneys.Add(money);
