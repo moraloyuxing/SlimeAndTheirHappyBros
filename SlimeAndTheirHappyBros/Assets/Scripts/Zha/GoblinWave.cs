@@ -5,8 +5,9 @@ using UnityEngine;
 public class GoblinWave : IEnemyObjectPoolUnit
 {
     int halfCount = 55;
-    float degree = 2;
+    float degree = 2, radius = 15.0f;
     float speed = 30.0f, lifeTime = .0f;
+    Vector3 selfPos;
     Vector3[] pointPos, pointVec;
     LineRenderer lineRender;
     Transform transform;
@@ -27,9 +28,10 @@ public class GoblinWave : IEnemyObjectPoolUnit
     public void Update(float dt)
     {
         lifeTime += dt;
-
-        pointPos[halfCount] += dt * speed * pointVec[halfCount];
+        float perLength = dt * speed;
+        pointPos[halfCount] += perLength * pointVec[halfCount];
         lineRender.SetPosition(halfCount, pointPos[halfCount]);
+        radius += perLength;
 
         int i = 1;
         while (i <= halfCount)
@@ -41,12 +43,24 @@ public class GoblinWave : IEnemyObjectPoolUnit
             i ++;
         }
 
+        for (int j = 0; j < 4; j++) {
+            Vector3 length = new Vector3(goblinManager.PlayerPos[j].x - selfPos.x - selfPos.x,0, goblinManager.PlayerPos[j].z - selfPos.z);
+            //if (j == 0) {
+            //    Debug.Log("length " + length.magnitude);
+            //    Debug.Log("radius " + radius);
+            //}
+
+            if (Mathf.Abs(length.magnitude - radius) < 1.5f) {
+                Debug.Log("ahahahahahahahahah slime " + j + "  get hurt");
+            }
+        }
+
         if (lifeTime > 3.5f) ResetUnit();
     }
 
     public void ToActive(Vector3 _pos, Vector3 _dir) {
         Vector3 pos = new Vector3(_pos.x,0,_pos.z);
-
+        selfPos = pos;
         lineRender.SetPosition(halfCount, pos + new Vector3(0,0,-15.0f));
         pointPos[halfCount] = lineRender.GetPosition(halfCount);
         pointVec[halfCount] = new Vector3(0, 0, -1.0f);
@@ -59,10 +73,8 @@ public class GoblinWave : IEnemyObjectPoolUnit
 
             Vector3 downVec = new Vector3(Mathf.Cos(downDegree),0,Mathf.Sin(downDegree));
             Vector3 upVec = new Vector3(Mathf.Cos(upDegree), 0, Mathf.Sin(upDegree));
-            Debug.Log("degree: " + (270 - i * degree) + "   " + downVec);
             Vector3 downPoint = pos + 15.0f * downVec;
             Vector3 upPoint = pos + 15.0f * upVec;
-            Debug.Log(downPoint);
             lineRender.SetPosition(halfCount - i, downPoint);
             pointPos[halfCount - i] = downPoint;
             pointVec[halfCount - i] = downVec;

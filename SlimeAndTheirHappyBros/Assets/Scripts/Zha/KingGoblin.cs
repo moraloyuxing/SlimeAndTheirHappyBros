@@ -6,14 +6,16 @@ public class KingGoblin : IEnemyUnit
 {
     bool showEnable = false;
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
-    bool throwOnce = false;
-    int hp, punchStep = -1, throwId = 0, deathCount = 0;
+    bool throwOnce = false, goRoar = false;
+    int hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
+    int atkCount = 0, totalAtk = 1;
+    float stateTime = .0f, idleTime = 2.0f;
 
     Vector3[] punchPos = new Vector3[4] { new Vector3(-3.5f, -0.1f, 19.22f), new Vector3(1.7f, -0.1f, 19.22f), new Vector3(14.57f, -0.1f, 20.54f), new Vector3(-17.52f, -0.1f, 19.85f) };
     Vector3[] punchDir = new Vector3[4];
     Quaternion[] punchRot = new Quaternion[4];
 
-    System.Action punchShop, punchBush;
+    System.Action punchShop, punchBush, changeColor;
     Animator animator;
     AnimatorStateInfo aniInfo;
     Transform transform;
@@ -23,12 +25,16 @@ public class KingGoblin : IEnemyUnit
     KingState curState = KingState.showUp;
 
     enum KingState {
-        showUp, idle, punchAtk, waveAtk, throwAtk
+        showUp, idle, punchAtk, waveAtk, throwAtk, roar
     }
 
     public void SubPunchCBK(System.Action shopCBK, System.Action bushCBK) {
         punchShop = shopCBK;
         punchBush = bushCBK;
+    }
+
+    public void SubChangeColorCBK(System.Action cbk) {
+        changeColor = cbk;
     }
 
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
@@ -67,7 +73,7 @@ public class KingGoblin : IEnemyUnit
                 ShowUp();
                 break;
             case KingState.idle:
-                Idle();
+                Idle(dt);
                 break;
             case KingState.punchAtk:
                 PunchAtk();
@@ -77,6 +83,9 @@ public class KingGoblin : IEnemyUnit
                 break;
             case KingState.throwAtk:
                 ThrowAtk();
+                break;
+            case KingState.roar:
+                Roar();
                 break;
         }
     }
@@ -114,12 +123,36 @@ public class KingGoblin : IEnemyUnit
         }
 
     }
-    void Idle() {
+    void Idle(float dt) {
         if (!firstInState)
         {
             firstInState = true;
-            animator.SetInteger("state", 1);
-            animator.SetTrigger("attackOver");
+            if (!goRoar)
+            {
+                animator.SetInteger("state", 1);
+                animator.SetTrigger("attackOver");
+                idleTime = Random.Range(3.0f, 6.0f);
+            }
+            else {
+                goRoar = false;
+                SetState(KingState.roar);
+            } 
+        }
+        else {
+            if (goRoar) {
+                goRoar = false;
+                SetState(KingState.roar);
+                return;
+            }
+            stateTime += dt;
+            if (stateTime > idleTime)
+            {
+                stateTime = .0f;
+                int op = Random.Range(0, 120);
+                if (op < 40) SetState(KingState.punchAtk);
+                else if (op < 80) SetState(KingState.waveAtk);
+                else SetState(KingState.throwAtk);
+            }
         }
     }
     void PunchAtk() {
@@ -164,20 +197,28 @@ public class KingGoblin : IEnemyUnit
         {
             firstInState = true;
             animator.SetInteger("state", 3);
+            totalAtk = Random.Range(1,3);
             
         }
         else {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsName("hammerAttack") && aniInfo.normalizedTime >= 0.91f) {
-                if (!waveOnce) {
-                    waveOnce = true;
-                    goblinManager.UseWave(transform.position);
-                }
-                if (aniInfo.normalizedTime >= 0.98f)
-                {
-                    waveOnce = false;
+            if (aniInfo.IsName("hammerAttack") && aniInfo.normalizedTime >= (0.91f + atkCount)) {
+
+                atkCount++;
+                goblinManager.UseWave(transform.position);
+                if (atkCount >= totalAtk) {
+                    atkCount = 0;
                     SetState(KingState.idle);
                 }
+                //if (!waveOnce) {
+                //    waveOnce = true;
+                //    goblinManager.UseWave(transform.position);
+                //}
+                //if (aniInfo.normalizedTime >= 0.98f)
+                //{
+                //    waveOnce = false;
+                //    SetState(KingState.idle);
+                //}
             }
         }
     }
@@ -187,29 +228,75 @@ public class KingGoblin : IEnemyUnit
         {
             firstInState = true;
             animator.SetInteger("state", 4);
+            totalAtk = Random.Range(2,5);
         }
         else {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
-            if (aniInfo.IsName("throwAtk") && aniInfo.normalizedTime >= 0.79f) {
-                if (!throwOnce) {
-                    goblinManager.UseFallingGoblin(throwId);
-                    throwOnce = true;
+            if (aniInfo.IsName("throwAtk") && aniInfo.normalizedTime >= (0.79f + atkCount)) {
+
+                throwId = Random.Range(0, 99) % 4;
+                while (goblinManager.PlayersDie[throwId])
+                {
+                    throwId++;
+                    deathCount++;
+                    if (throwId > 3) throwId = 0;
+                    if (deathCount >= 4) break;
                 }
-                if (aniInfo.normalizedTime >= 0.96f) {
-
-                    throwId = Random.Range(0, 99) % 4;
-                    while (goblinManager.PlayersDie[throwId]) {
-                        throwId++;
-                        deathCount++;
-                        if (throwId > 3) throwId = 0;
-                        if (deathCount >= 4) break;
-                    }
-
-                    throwOnce = false;
+                goblinManager.UseFallingGoblin(throwId);
+                atkCount++;
+                if (atkCount >= totalAtk) {
+                    atkCount = 0;
                     SetState(KingState.idle);
                 }
+
+
+                //if (!throwOnce) {
+                //    goblinManager.UseFallingGoblin(throwId);
+                //    throwOnce = true;
+                //}
+                //if (aniInfo.normalizedTime >= 0.96f) {
+
+                //    throwId = Random.Range(0, 99) % 4;
+                //    while (goblinManager.PlayersDie[throwId]) {
+                //        throwId++;
+                //        deathCount++;
+                //        if (throwId > 3) throwId = 0;
+                //        if (deathCount >= 4) break;
+                //    }
+
+                //    throwOnce = false;
+
+                //}
             }
         }
+    }
+
+    void Roar() {
+        if (!firstInState)
+        {
+            firstInState = true;
+            animator.SetInteger("state", 5);
+            changeColor();
+        }
+        else {
+            aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (aniInfo.IsName("Howl") && aniInfo.normalizedTime > 0.95f) {
+                SetState(KingState.idle);
+            }
+        }
+    }
+
+    public bool IsIdle() {
+        if (curState == KingState.idle) return true;
+        else return false;
+    }
+
+    public void SetRoar() {
+        goRoar = true;
+    }
+
+    public void SetColor(int c) {
+        color = c;
     }
 
     public void ResetUnit() {

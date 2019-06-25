@@ -132,7 +132,7 @@ public class GoblinManager : MonoBehaviour
 
         goblin = transform.Find("GoblinSpirit");
         goblinSpirit = new GoblinSpirit();
-        goblinSpirit.Init(goblin, this);
+        goblinSpirit.Init(goblin, this, kingGoblin);
         goblin.gameObject.SetActive(false);
 
         Transform locs = transform.Find("SpawnLocs");

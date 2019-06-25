@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class GoblinSpirit:IEnemyUnit
 {
-    bool firstInState = false, floatBack = false, nextAtk = false;
+    bool firstInState = false, floatBack = false, nextAtk = false, goChangeColor = false, changeColorOnce = false;
     int posID = 1, targetPlayer = 0, deathCount = 0, attackCount = 0;
-    int color;
-    float moveTime = .0f, idleTime = .0f;
+    int color = 0, colorChangeNum = 0;
+    float moveTime = .0f, idleTime = 2.0f, changeColorTime = .0f;
     float deltaTime, stateTime = -4.0f, floatAngle = .0f, floatLength = 1.0f, floatTime = .0f, floatSpeed = 20.0f;
     Vector3 showUpPos = new Vector3(-1.65f, 2.9f, 33.0f); //18
     Vector3 backPos, goalPos, atkDir;
@@ -15,6 +15,7 @@ public class GoblinSpirit:IEnemyUnit
     Vector3[] atkPos = new Vector3[3] { new Vector3(-25.3f,2.2f,17.8f), new Vector3(-1.65f, 2.2f, 17.8f), new Vector3(22.0f, 2.2f, 17.8f) };
     Transform transform;
     SpriteRenderer render;
+    KingGoblin kingGoblin;
     GoblinManager goblinManager;
 
     Animator animator;
@@ -27,14 +28,22 @@ public class GoblinSpirit:IEnemyUnit
 
 
     // Start is called before the first frame update
-    public void Init(Transform t, GoblinManager manager)
+    public void Init(Transform t, GoblinManager manager, KingGoblin king)
     {
         transform = t;
         goblinManager = manager;
         animator = transform.GetComponent<Animator>();
-        render = transform.GetComponent<SpriteRenderer>();
+        render = transform.Find("Sprite").GetComponent<SpriteRenderer>();
         t.Find("Sprite").GetComponent<SpriteRenderer>().enabled = false;
+        kingGoblin = king;
+        kingGoblin.SubChangeColorCBK(SetColorState);
 
+        int op = Random.Range(0,90);
+        if (op < 30) color = 1;
+        else if (op < 61) color = 2;
+        else color = 4;
+        render.material.SetInt("_colorID", color);
+        kingGoblin.SetColor(color);
     }
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
 
@@ -65,7 +74,11 @@ public class GoblinSpirit:IEnemyUnit
                 XAttack();
                 break;
             case SpiritState.colorChange:
+                ChangeColor();
                 break;
+        }
+        if (!goChangeColor) {
+            changeColorTime += deltaTime;
         }
     }
 
@@ -135,6 +148,10 @@ public class GoblinSpirit:IEnemyUnit
         else SetState(SpiritState.xAttack);
     }
 
+    public void SetColorState() {
+        SetState(SpiritState.colorChange);
+    }
+
     void ShowUp() {
         stateTime += deltaTime;
 
@@ -151,15 +168,58 @@ public class GoblinSpirit:IEnemyUnit
     }
 
     void Idle() {
+
         stateTime += deltaTime;
         floatAngle += deltaTime * 2.0f;
         float scale = Mathf.Cos(floatAngle);
         transform.position += deltaTime * scale *  new Vector3(0, 4.0f, 0);
         if (stateTime > idleTime) {
-            int op = Random.Range(0, 100);
-            if (op < 10) SetState(SpiritState.idle);
-            else if (op < 40) IdleSetIdle();
-            else SetAtk();
+
+            if (!goChangeColor)
+            {
+                if (changeColorTime < 2.0f)
+                {
+                    Debug.Log("change color time  " + changeColorTime);
+                    int op = Random.Range(0, 100);
+                    if (op < 10) SetState(SpiritState.idle);
+                    else if (op < 40) IdleSetIdle();
+                    else SetAtk();
+                }
+                else
+                {
+                    changeColorTime = .0f;
+                    if (Random.Range(0, 100) > 80)
+                    {
+                        if (kingGoblin.IsIdle())
+                        {
+                            goChangeColor = true;
+                            colorChangeNum = 0;
+                            kingGoblin.SetRoar();
+                        }
+                        else {
+                            colorChangeNum++;
+                            if (colorChangeNum >= 3)
+                            {
+                                goChangeColor = true;
+                                colorChangeNum = 0;
+                                kingGoblin.SetRoar();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("too shame to change");
+                        colorChangeNum++;
+                        if (colorChangeNum >= 3)
+                        {
+                            goChangeColor = true;
+                            colorChangeNum = 0;
+                            kingGoblin.SetRoar();
+                        }
+                    }
+                }
+            }
+
         }
     }
 
@@ -351,8 +411,25 @@ public class GoblinSpirit:IEnemyUnit
         else {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             if (aniInfo.IsName("ChangeColor") && aniInfo.normalizedTime >= 0.55f) {
-
-                render.material.SetInt("_colorID", color);
+                if (!changeColorOnce)
+                {
+                    changeColorOnce = true;
+                    int c = (Random.Range(0, 100) % 6) + 1;
+                    if (c == color)
+                    {
+                        c += Random.Range(1, 4);
+                        if (c > 6) c -= 6;
+                    }
+                    color = c;
+                    kingGoblin.SetColor(color);
+                    render.material.SetInt("_colorID", color);
+                }
+                if (aniInfo.normalizedTime >= 0.96f) {
+                    changeColorOnce = false;
+                    IdleSetIdle();
+                    animator.SetInteger("state", 0);
+                    goChangeColor = false;
+                } 
             }
         }
         
