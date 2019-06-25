@@ -52,6 +52,8 @@ public class GoblinManager : MonoBehaviour
     List<GoblinEnergyBall> freeGoblinBalls, usedGoblinBalls;
     List<Money> freeMoneys, usedMoneys;
 
+    PathFindGrid pathGrid;
+
     public Player_Control[] Four_Player = new Player_Control[4];
     public Vector2 mapBorder;
 
@@ -219,7 +221,8 @@ public class GoblinManager : MonoBehaviour
     }
     void Start()
     {
-        mapBorder =  0.5f * GameObject.Find("PathFinding").GetComponent<PathFindGrid>().gridWorldSize;
+        pathGrid = GameObject.Find("PathFinding").GetComponent<PathFindGrid>();
+        mapBorder =  0.5f * pathGrid.gridWorldSize;
     }
 
     // Update is called once per frame
@@ -570,6 +573,10 @@ public class GoblinManager : MonoBehaviour
         {
             freeHobGoblins[i].GrowMaxHp();
         }
+    }
+
+    public void DisableBushCollider() {
+        pathGrid.DisableCollider();
     }
 
     public GoblinBase FindGoblin(string name) {

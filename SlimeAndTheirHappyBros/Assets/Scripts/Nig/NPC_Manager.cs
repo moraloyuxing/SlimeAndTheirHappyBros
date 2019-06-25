@@ -98,7 +98,7 @@ public class NPC_Manager : MonoBehaviour{
             }
 
             if (GoBossStage) {
-                //此行呼叫進入Boss關卡
+                bossLevelCBK();
                 Shop.State_Switch();
                 BreakTime_End();
                 

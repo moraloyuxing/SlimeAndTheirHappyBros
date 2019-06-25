@@ -51,7 +51,7 @@ public class GoblinWave : IEnemyObjectPoolUnit
             //}
 
             if (Mathf.Abs(length.magnitude - radius) < 1.5f) {
-                Debug.Log("ahahahahahahahahah slime " + j + "  get hurt");
+                goblinManager.Four_Player[j].SlimeGetBossCircusHurt();
             }
         }
 

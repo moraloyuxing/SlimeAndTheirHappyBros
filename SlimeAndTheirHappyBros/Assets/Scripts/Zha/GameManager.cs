@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    bool roundStart = false, inShopping = false;
+    bool roundStart = false, inShopping = false, bossLevel = false;
     bool lose = false, lightChange = true;
-    int tutorialProgress = 0, goblinKills = 0;
-    float time = .0f, lightTime = .0f;
+    int tutorialProgress = 0, goblinKills = 0, maxLevel = 10;
+    
+    float time = .0f, lightTime = .0f, bossTime = 15.0f;
     GameState tutorialState, bossLevelState;
     GameState[] gameStates;
     GoblinManager goblinManager;
@@ -108,45 +109,79 @@ public class GameManager : MonoBehaviour
             }
         }
         if (test || lose) return;
-        if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
-        if (curRound < 0)
+        if (!bossLevel)
         {
-            if(Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction") 
-                || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space)) {
-                uiManager.NextTutorial();
-                tutorialProgress++;
-                if (tutorialProgress >= 4) {
-                    curRound++;
-                    uiManager.FirstRound();
-                } 
+            if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
+            if (curRound < 0)
+            {
+                if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
+                    || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
+                {
+                    uiManager.NextTutorial();
+                    tutorialProgress++;
+                    if (tutorialProgress >= 4)
+                    {
+                        curRound++;
+                        uiManager.FirstRound();
+                    }
+                }
+            }
+            else
+            {
+                if (inShopping)
+                {
+                    if (!lightChange)
+                    {
+                        lightTime += Time.deltaTime * 0.33f;
+                        directLight.color = Color.Lerp(gameLight, shopLight, lightTime);
+                        if (lightTime >= 1.0f)
+                        {
+                            lightTime = .0f;
+                            lightChange = true;
+                        }
+                    }
+                }
+                else
+                {
+                    if (!lightChange)
+                    {
+                        lightTime += Time.deltaTime * 0.33f;
+                        directLight.color = Color.Lerp(shopLight, gameLight, lightTime);
+                        if (lightTime >= 1.0f)
+                        {
+                            lightTime = .0f;
+                            lightChange = true;
+                        }
+                    }
+                    if (roundStart) gameStates[curRound].Update(Time.deltaTime);
+                }
+
             }
         }
         else {
-            if (inShopping)
-            {
-                if (!lightChange) {
-                    lightTime += Time.deltaTime*0.33f;
-                    directLight.color = Color.Lerp(gameLight, shopLight, lightTime);
-                    if (lightTime >= 1.0f) {
-                        lightTime = .0f;
-                        lightChange = true;
-                    }
+            bossTime += Time.deltaTime;
+            if (bossTime >= 20.0f) {
+                bossTime = .0f;
+                int op = Random.Range(2,5);
+                while (op > 0) {
+                    goblinManager.SpawnNormalGoblinMutiColor(0);
+                    op--;
+                }
+                op = Random.Range(2, 5);
+                while (op > 0)
+                {
+                    goblinManager.SpawnArcherGoblinMutiColor(0);
+                    op--;
+                }
+                op = Random.Range(1, 4);
+                while (op > 0)
+                {
+                    goblinManager.SpawnHobGoblinMutiColor(0);
+                    op--;
                 }
             }
-            else {
-                if (!lightChange) {
-                    lightTime += Time.deltaTime*0.33f;
-                    directLight.color = Color.Lerp(shopLight, gameLight, lightTime);
-                    if (lightTime >= 1.0f)
-                    {
-                        lightTime = .0f;
-                        lightChange = true;
-                    }
-                }
-                if (roundStart) gameStates[curRound].Update(Time.deltaTime);
-            }
-           
         }
+        
     }
 
     //public void SpawnOver(int curWave) {
@@ -169,7 +204,7 @@ public class GameManager : MonoBehaviour
     public void RoundOver() {     //打完進商店
         //Debug.Log(curRound + "  round over");
         curRound++;
-        if (curRound > 10) curRound = 10;
+        if (curRound > maxLevel) curRound = maxLevel;
         if (curRound > 1 && ((curRound - 3) % 2) == 0) goblinManager.GrowGoblinHP();
 
 
@@ -202,7 +237,15 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoBossLevel() {
+        bossLevel = true;
         cameraController.StartBossLevel();
+        goblinManager.DisableBushCollider();
+        if (!test)
+        {
+            itemManager.State_Switch();
+            playerManager.State_Switch();
+            lightChange = false;
+        }
     }
 
     public void GoLose() {

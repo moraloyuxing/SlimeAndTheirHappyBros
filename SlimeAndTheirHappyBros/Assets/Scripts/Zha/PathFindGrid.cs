@@ -200,6 +200,12 @@ public class PathFindGrid : MonoBehaviour {
         return grid[x, y];
     }
 
+    public void DisableCollider() {
+        foreach (Vector2 xy in disappearBarrier) {
+            grid[(int)(xy.x), (int)(xy.y)].walkable = true;
+        }
+    }
+
     void OnDrawGizmos()
     {
         Gizmos.DrawWireCube(transform.position, new Vector3(gridWorldSize.x, 1, gridWorldSize.y));
