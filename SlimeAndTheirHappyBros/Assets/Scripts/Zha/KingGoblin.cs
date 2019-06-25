@@ -242,8 +242,10 @@ public class KingGoblin : IEnemyUnit
                     if (throwId > 3) throwId = 0;
                     if (deathCount >= 4) break;
                 }
+                deathCount = 0;
                 goblinManager.UseFallingGoblin(throwId);
                 atkCount++;
+                Debug.Log(atkCount + " < " + totalAtk);
                 if (atkCount >= totalAtk) {
                     atkCount = 0;
                     SetState(KingState.idle);

@@ -43,8 +43,8 @@ public class GoblinEnergyBall : IEnemyObjectPoolUnit
         {
 
             transform.position += dt * speed * flyDir;
-            if (time > 5.0f) ResetUnit();
             DetectObstacle();
+            if (time > 5.0f) ResetUnit();
         }
         else {
             if (time >0.65f) ResetUnit();
