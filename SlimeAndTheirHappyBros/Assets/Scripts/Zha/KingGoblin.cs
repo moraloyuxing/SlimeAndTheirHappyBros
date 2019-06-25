@@ -94,12 +94,15 @@ public class KingGoblin : IEnemyUnit
         aniInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         if (!showEnable && aniInfo.normalizedTime > 0.15) {
+            showEnable = true;
             render.enabled = true;
+
         }
 
         if (aniInfo.normalizedTime > 0.66f) {
             if (!punchShopOnce)
             {
+                AudioManager.SingletonInScene.PlaySound2D("HouseBoom", 0.3f);
                 MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f,0.5f);
                 punchShopOnce = true;
                 punchShop();
@@ -111,6 +114,7 @@ public class KingGoblin : IEnemyUnit
                         punchBushOnce = true;
                         punchBush();
                         MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f, 0.3f);
+                        
                     }
                     else {
                         if (aniInfo.normalizedTime >= 0.96f)
@@ -127,31 +131,40 @@ public class KingGoblin : IEnemyUnit
         if (!firstInState)
         {
             firstInState = true;
+
             if (!goRoar)
             {
                 animator.SetInteger("state", 1);
-                animator.SetTrigger("attackOver");
                 idleTime = Random.Range(3.0f, 6.0f);
+                Debug.Log("first idle  " + idleTime);
             }
             else {
+                animator.SetInteger("state", 5);
                 goRoar = false;
                 SetState(KingState.roar);
-            } 
+                Debug.Log("go roar");
+            }
+            animator.SetTrigger("attackOver");
+
         }
         else {
             if (goRoar) {
+                animator.SetInteger("state", 5);
                 goRoar = false;
                 SetState(KingState.roar);
+                Debug.Log("go roar");
                 return;
             }
             stateTime += dt;
             if (stateTime > idleTime)
             {
                 stateTime = .0f;
+
                 int op = Random.Range(0, 120);
                 if (op < 40) SetState(KingState.punchAtk);
                 else if (op < 80) SetState(KingState.waveAtk);
                 else SetState(KingState.throwAtk);
+                Debug.Log("idle end: " + op);
             }
         }
     }
@@ -168,21 +181,25 @@ public class KingGoblin : IEnemyUnit
             {
                 goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
                 punchStep = 1;
+                AudioManager.SingletonInScene.PlaySound2D("KingPunch", 0.5f);
             }
             else if (punchStep == 1 && aniInfo.normalizedTime >= 0.5f)
             {
                 goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
                 punchStep = 2;
+                AudioManager.SingletonInScene.PlaySound2D("KingPunch", 0.5f);
             }
             else if (punchStep == 2 && aniInfo.normalizedTime >= 0.57f)
             {
                 goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
                 punchStep = 3;
+                AudioManager.SingletonInScene.PlaySound2D("KingPunch", 0.5f);
             }
             else if (punchStep == 3 && aniInfo.normalizedTime >= 0.71f)
             {
                 goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
                 punchStep = 4;
+                AudioManager.SingletonInScene.PlaySound2D("KingPunch", 0.5f);
             }
             else if (punchStep == 4 && aniInfo.normalizedTime >= 0.96f)
             {
@@ -206,6 +223,8 @@ public class KingGoblin : IEnemyUnit
 
                 atkCount++;
                 goblinManager.UseWave(transform.position);
+                AudioManager.SingletonInScene.PlaySound2D("CircleAttack", 0.3f);
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f, 0.5f);
                 if (atkCount >= totalAtk) {
                     atkCount = 0;
                     SetState(KingState.idle);
@@ -244,6 +263,8 @@ public class KingGoblin : IEnemyUnit
                 }
                 deathCount = 0;
                 goblinManager.UseFallingGoblin(throwId);
+                AudioManager.SingletonInScene.PlaySound2D("KingThrow", 0.6f);
+
                 atkCount++;
                 Debug.Log(atkCount + " < " + totalAtk);
                 if (atkCount >= totalAtk) {
@@ -276,9 +297,11 @@ public class KingGoblin : IEnemyUnit
     void Roar() {
         if (!firstInState)
         {
+            Debug.Log("first roar");
             firstInState = true;
-            animator.SetInteger("state", 5);
+            //animator.SetInteger("state", 5);
             changeColor();
+            AudioManager.SingletonInScene.PlaySound2D("KingRoar", 0.5f);
         }
         else {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -312,5 +335,6 @@ public class KingGoblin : IEnemyUnit
 
     public void Spawn(Vector3 pos, int col) {
         transform.gameObject.SetActive(true);
+
     }
 }

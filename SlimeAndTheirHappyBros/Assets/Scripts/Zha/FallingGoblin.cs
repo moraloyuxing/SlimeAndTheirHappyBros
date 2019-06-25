@@ -56,6 +56,7 @@ public class FallingGoblin : IEnemyObjectPoolUnit
                 {
                     goblinTransform.localPosition = new Vector3(nextPos.x, 0, nextPos.z);
                     fallGround = true;
+                    AudioManager.SingletonInScene.PlaySound2D("ThrowOnGround", 0.3f);
 
                 }
             }

@@ -237,6 +237,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoBossLevel() {
+        AudioManager.SingletonInScene.PlaySound2D("Earthquake", 0.3f);
         bossLevel = true;
         cameraController.StartBossLevel();
         goblinManager.DisableBushCollider();

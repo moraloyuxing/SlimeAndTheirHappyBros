@@ -62,6 +62,7 @@ public class GoblinEnergyBall : IEnemyObjectPoolUnit
             collider.enabled = false;
             animator.SetTrigger("blast");
             time = .0f;
+            AudioManager.SingletonInScene.PlaySound2D("EnergyBallBoom", 0.15f);
         }
     }
 

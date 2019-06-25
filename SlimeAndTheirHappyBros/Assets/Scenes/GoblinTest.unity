@@ -15619,6 +15619,28 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: d5db1f0b7c39e4806b16cab82ec57ae1, type: 3}
   - clipNmae: Revive
     clip: {fileID: 8300000, guid: f386bdc9b2c2c4f009a1576240eb60cd, type: 3}
+  - clipNmae: Earthquake
+    clip: {fileID: 8300000, guid: d0cb42daea8414c358820b969a8832c5, type: 3}
+  - clipNmae: HouseBoom
+    clip: {fileID: 8300000, guid: 5743e484b395f4142853e2487c04a98b, type: 3}
+  - clipNmae: KingPunch
+    clip: {fileID: 8300000, guid: 4c56ac890b92a4e71835268a08f86387, type: 3}
+  - clipNmae: KingThrow
+    clip: {fileID: 8300000, guid: 2ce649bd77c7e43678e3bc13e1d0b178, type: 3}
+  - clipNmae: ThrowOnGround
+    clip: {fileID: 8300000, guid: f7dd08adf13904491908babd7f5a12d5, type: 3}
+  - clipNmae: CircleAttack
+    clip: {fileID: 8300000, guid: a35564fe1b15c4805b84984155499052, type: 3}
+  - clipNmae: KingRoar
+    clip: {fileID: 8300000, guid: 955a9f01e46024c549290291d57e4749, type: 3}
+  - clipNmae: SpiritShoot
+    clip: {fileID: 8300000, guid: 6ccc1010ed92145309dab4830ed10baa, type: 3}
+  - clipNmae: EnergyBallBoom
+    clip: {fileID: 8300000, guid: f5479a63426a247d89709c42f5e63548, type: 3}
+  - clipNmae: SpiritChangeColor
+    clip: {fileID: 8300000, guid: 4b81c65c38d9c45a3bb41969a4ae708c, type: 3}
+  - clipNmae: SpiritFireBall
+    clip: {fileID: 8300000, guid: 43dcc23d1ddee4530a3857edc2153b51, type: 3}
 --- !u!4 &563235307
 Transform:
   m_ObjectHideFlags: 0

@@ -275,8 +275,11 @@ public class GoblinSpirit:IEnemyUnit
             {
                 if (stateTime > 0.3f) {
                     atkDir = new Vector3(0, 0, -1);
+
                     Vector3 pos = new Vector3(transform.position.x + 3.0f * atkDir.x, 0.1f, transform.position.z + 3.0f * atkDir.z);
                     goblinManager.UseEnergyBall(pos, atkDir, 30.0f);
+                    AudioManager.SingletonInScene.PlaySound2D("SpiritShoot", 0.3f);
+
                     for (int i = 1; i < 5; i++) {
                         Vector3 dir = Quaternion.Euler(0, 20.0f*i , 0) * atkDir;
                         pos = new Vector3(transform.position.x + 3.0f * dir.x, 0.1f, transform.position.z + 3.0f * dir.z);
@@ -292,6 +295,7 @@ public class GoblinSpirit:IEnemyUnit
             else {
                 if (stateTime > 1.0f)
                 {
+                    AudioManager.SingletonInScene.PlaySound2D("SpiritShoot", 0.3f);
                     for (int i = 0; i < 4; i++)
                     {
                         Vector3 dir = Quaternion.Euler(0, 10 + 20.0f * i, 0) * atkDir;
@@ -331,6 +335,7 @@ public class GoblinSpirit:IEnemyUnit
                     atkDir = new Vector3(atkDir.x, 0, atkDir.z).normalized;
                     Vector3 pos = new Vector3(transform.position.x + 3.0f * atkDir.x, 0.1f, transform.position.z + 3.0f * atkDir.z);
                     goblinManager.UseEnergyBall(pos, atkDir, 40.0f);
+                    AudioManager.SingletonInScene.PlaySound2D("SpiritShoot", 0.6f);
 
                     for (int i = 1; i <= 2; i++)
                     {
@@ -351,6 +356,7 @@ public class GoblinSpirit:IEnemyUnit
                 {
                     float count = 3.0f;
                     float angle = 20.0f;
+                    AudioManager.SingletonInScene.PlaySound2D("SpiritShoot", 0.6f);
                     for (int i = 1; i < 4; i++)
                     {
                         Vector3 dir = Quaternion.Euler(0, angle * count, 0) * atkDir;
@@ -376,6 +382,7 @@ public class GoblinSpirit:IEnemyUnit
                 {
                     Vector3 pos = new Vector3(transform.position.x + 3.0f * atkDir.x, 0.1f, transform.position.z + 3.0f * atkDir.z);
                     goblinManager.UseEnergyBall(pos, atkDir,40.0f);
+                    AudioManager.SingletonInScene.PlaySound2D("SpiritShoot", 0.6f);
 
                     for (int i = 1; i <= 2; i++)
                     {
@@ -413,6 +420,7 @@ public class GoblinSpirit:IEnemyUnit
             if (aniInfo.IsName("ChangeColor") && aniInfo.normalizedTime >= 0.55f) {
                 if (!changeColorOnce)
                 {
+                    AudioManager.SingletonInScene.PlaySound2D("SpiritChangeColor", 0.6f);
                     changeColorOnce = true;
                     int c = (Random.Range(0, 100) % 6) + 1;
                     if (c == color)
