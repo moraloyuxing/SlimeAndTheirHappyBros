@@ -455,13 +455,33 @@ public class Player_Control : MonoBehaviour{
                 Heart_anim = Personal_HP[Base_HP].GetComponent<Animator>();
                 Heart_anim.Play("Heart_Disappear");
 
-                //for (int k = 0; k <Personal_HP.Length; k++) {
-                //    if (k < Base_HP) Personal_HP[k].SetActive(true);
-                //    else if (k == Base_HP) {
-                //        Heart_anim = Personal_HP[k].GetComponent<Animator>();
-                //        Heart_anim.Play("Heart_Disappear");
-                //    }
-                //}
+                if (Base_HP == 0){
+                    DeathPriority = true;
+                    ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
+                    GetComponent<Animator>().Play("Slime_Death");
+                    _playermanager._goblinmanager.SetPlayerDie(Player_Number);
+                    _playermanager.DeathCountPlus(PlayerID);
+                    AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.55f);
+                    ChooseItemtoDrop();
+                }
+            }
+        }
+    }
+
+
+    public void SlimeGetBossCircusHurt(){
+        if (StopDetect == false) {
+            if (DeathPriority == false){
+                GetComponent<Animator>().Play("Slime_Hurt");
+                ExtraPriority = true;
+                StopDetect = true;
+                if (musouTime > 0.0f) CancelInvoke("Musou_Flick");
+                musouTime = 1.8f;
+                InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
+                Base_HP--;
+                AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
+                Heart_anim = Personal_HP[Base_HP].GetComponent<Animator>();
+                Heart_anim.Play("Heart_Disappear");
 
                 if (Base_HP == 0){
                     DeathPriority = true;
@@ -475,6 +495,8 @@ public class Player_Control : MonoBehaviour{
             }
         }
     }
+
+
 
     public void HurtPriorityOff(){
         ExtraPriority = false;
