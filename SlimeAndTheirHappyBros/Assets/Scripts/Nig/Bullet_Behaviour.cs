@@ -117,12 +117,15 @@ public class Bullet_Behaviour : MonoBehaviour{
 
             if (!colliderRecord.Contains(colliders[i])) {
                 colliderRecord.Add(colliders[i]);
-                if (c.tag == "Goblin"){
+                if (c.tag == "Goblin")
+                {
                     NowPenetrate++;
-                    if (WhichPlayer != WhichPlayer2)bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, WhichPlayer2.PlayerID2, Attack_Dir);
+                    if (WhichPlayer != WhichPlayer2) bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, WhichPlayer2.PlayerID2, Attack_Dir);
                     else bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
                 }
-
+                else if (tag == "KingGoblin") {
+                    bulletPool._goblinmanager.HitKingGoblin(color, BulletATK);
+                }
                 if (c.tag == "Player" && isLeaf == false) {
                     Rescue_Which = c.GetComponent<Player_Control>();
                     Rescue_Which.GetRescued();

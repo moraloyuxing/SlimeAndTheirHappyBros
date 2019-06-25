@@ -222,7 +222,7 @@ public class GoblinManager : MonoBehaviour
     void Start()
     {
         pathGrid = GameObject.Find("PathFinding").GetComponent<PathFindGrid>();
-        mapBorder =  0.5f * pathGrid.gridWorldSize;
+        mapBorder = 0.5f * pathGrid.gridWorldSize;
     }
 
     // Update is called once per frame
@@ -257,7 +257,7 @@ public class GoblinManager : MonoBehaviour
         if (bossTime) {
             kingGoblin.Update(dt);
             goblinSpirit.Update(dt);
-        } 
+        }
         if (calculatePath) PathRequestManager.ClearExtendPenalty();
 
         //if (Input.GetKeyDown(KeyCode.X)) {
@@ -323,7 +323,7 @@ public class GoblinManager : MonoBehaviour
         if (freeNormalGoblins.Count <= 0) return;
         NormalGoblin goblin = freeNormalGoblins[0];
         usedNormalGoblins.Add(goblin);
-        Vector3 pos = spawnPos[Random.Range(0,13)];
+        Vector3 pos = spawnPos[Random.Range(0, 13)];
         goblin.Spawn(pos, col);
         goblin.UpdateAllPlayerPos();
         freeNormalGoblins.RemoveAt(0);
@@ -444,14 +444,14 @@ public class GoblinManager : MonoBehaviour
     {
         if (freeGoblinPunches.Count <= 0) return;
         usedGoblinPunches.Add(freeGoblinPunches[0]);
-        freeGoblinPunches[0].ToActive(pos,d,rot);
+        freeGoblinPunches[0].ToActive(pos, d, rot);
         freeGoblinPunches.Remove(freeGoblinPunches[0]);
     }
     public void UseWave(Vector3 pos) {
         if (freeGoblinWaves.Count <= 0) return;
         GoblinWave wave = freeGoblinWaves[0];
         usedGoblinWaves.Add(wave);
-        wave.ToActive(pos, new Vector3(0,0,0));
+        wave.ToActive(pos, new Vector3(0, 0, 0));
         freeGoblinWaves.Remove(wave);
     }
     public void UseFallingGoblin(int id)
@@ -471,7 +471,7 @@ public class GoblinManager : MonoBehaviour
     public void UseMoney(int num, Vector3 pos, int target)
     {
         Four_Player[target].MoneyUpdate(num);//UI更新num
-        StartCoroutine(DropMoney(num,pos, target));
+        StartCoroutine(DropMoney(num, pos, target));
 
     }
     public void UseMoney(int num, Vector3 pos, int target1, int target2)
@@ -513,7 +513,7 @@ public class GoblinManager : MonoBehaviour
     public void RecycleArrow(GoblinArrow arrow) {
         freeGoblinArrows.Add(arrow);
         usedGoblinArrows.Remove(arrow);
-        
+
     }
     public void RecycleLeaf(GoblinLeaf leaf) {
         freeGoblinLeaves.Add(leaf);
@@ -577,6 +577,10 @@ public class GoblinManager : MonoBehaviour
 
     public void DisableBushCollider() {
         pathGrid.DisableCollider();
+    }
+
+    public void HitKingGoblin(int color, int value) {
+        kingGoblin.GetHurt(color, value);
     }
 
     public GoblinBase FindGoblin(string name) {
