@@ -6,7 +6,6 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 {
     bool startAttack = false, endure = false, hasShoot = false;
     bool quackSound = false;
-    int maxHp;
     int attackType = 0;
     float imgOffset, hurtAreaOffset;
     Vector3 shootOffset;
@@ -282,7 +281,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     }
 
     void RandomATKType() {
-        attackType = (Random.Range(0, 100) < 70)?0:1;
+        attackType = (Random.Range(0, 100) < 50)?0:1;
         sightDist = sightDists[attackType];
         atkDist = atkDists[attackType];
     }
@@ -410,7 +409,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
                 if (attackType == 0)
                 {
-                    if (!quackSound && aniInfo.normalizedTime > 0.6f)
+                    if (!quackSound && aniInfo.normalizedTime > 0.45f)
                     {
                         quackSound = true;
                         AudioManager.SingletonInScene.PlaySound2D("Tree_Attack", 0.38f);

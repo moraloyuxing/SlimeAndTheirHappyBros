@@ -7,6 +7,7 @@ public class GoblinEnergyBall : IEnemyObjectPoolUnit
     bool blast = false;
     float time, speed = 40.0f;
     Vector3 flyDir;
+    Collider collider;
     Transform transform;
     Animator animator;
     GoblinManager goblinManager;
@@ -15,6 +16,7 @@ public class GoblinEnergyBall : IEnemyObjectPoolUnit
     {
         transform = t;
         animator = t.GetComponent<Animator>();
+        collider = transform.GetComponent<Collider>();
         goblinManager = manager;
 
     }
@@ -30,6 +32,7 @@ public class GoblinEnergyBall : IEnemyObjectPoolUnit
         flyDir = _dir;
         float angle = Mathf.Atan2(_dir.z, _dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(25.0f,0,angle);
+        collider.enabled = true;
         transform.gameObject.SetActive(true);
     }
 
@@ -56,6 +59,7 @@ public class GoblinEnergyBall : IEnemyObjectPoolUnit
         if (colliders.Length > 0)
         {
             blast = true;
+            collider.enabled = false;
             animator.SetTrigger("blast");
             time = .0f;
         }
@@ -64,6 +68,7 @@ public class GoblinEnergyBall : IEnemyObjectPoolUnit
     public void ResetUnit() {
         time = .0f;
         blast = false;
+
         transform.gameObject.SetActive(false);
         goblinManager.RecycleEnergyBalls(this);
     }

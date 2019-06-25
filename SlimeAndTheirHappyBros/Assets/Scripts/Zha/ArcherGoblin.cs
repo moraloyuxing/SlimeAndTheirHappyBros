@@ -6,7 +6,6 @@ using UnityEngine;
 public class ArcherGoblin : GoblinBase, IEnemyUnit
 {
     bool hasShoot = false;
-    int maxHp;
     int delayShoot = 0;
     float scaleX;
     Vector3 shootPos;

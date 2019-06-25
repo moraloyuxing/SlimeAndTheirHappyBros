@@ -125,7 +125,7 @@ public class GameManager : MonoBehaviour
             if (inShopping)
             {
                 if (!lightChange) {
-                    lightTime += Time.deltaTime*0.5f;
+                    lightTime += Time.deltaTime*0.33f;
                     directLight.color = Color.Lerp(gameLight, shopLight, lightTime);
                     if (lightTime >= 1.0f) {
                         lightTime = .0f;
@@ -135,7 +135,7 @@ public class GameManager : MonoBehaviour
             }
             else {
                 if (!lightChange) {
-                    lightTime += Time.deltaTime*0.5f;
+                    lightTime += Time.deltaTime*0.33f;
                     directLight.color = Color.Lerp(shopLight, gameLight, lightTime);
                     if (lightTime >= 1.0f)
                     {
@@ -170,6 +170,9 @@ public class GameManager : MonoBehaviour
         //Debug.Log(curRound + "  round over");
         curRound++;
         if (curRound > 10) curRound = 10;
+        if (curRound > 1 && ((curRound - 3) % 2) == 0) goblinManager.GrowGoblinHP();
+
+
         roundStart = false;
         inShopping = true;
         lightChange = false;

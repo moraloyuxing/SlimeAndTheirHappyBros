@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class NormalGoblin: GoblinBase, IEnemyUnit
 {
-    int maxHp;
     float atkColOffset, atkSpeedOffset = 1.0f;
     Transform atkColTrans;
     Collider atkCol, hurtAreaCol;

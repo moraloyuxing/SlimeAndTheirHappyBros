@@ -205,7 +205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efafbb6ed6437944a34c0ab01245e2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: 1
+  test: 0
   roundInfos:
   - maxWave: 3
     waves:

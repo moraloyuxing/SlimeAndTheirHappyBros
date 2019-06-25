@@ -6,7 +6,7 @@ public class GoblinBase
 {
     protected bool firstInState = true, followingPath = false, getAniInfo = false;
     protected bool startFindPath = false;
-    protected int hp, atkValue, color, pathIndex;
+    protected int hp,maxHp, atkValue, color, pathIndex;
     protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
     protected float backSpeed = 10.0f;
@@ -630,6 +630,11 @@ public class GoblinBase
 
     public virtual void ForceRamble() {
 
+    }
+
+    public virtual void GrowMaxHp() {
+        maxHp += 2;
+        hp = maxHp;
     }
 
     public virtual void ErroeCatch() {

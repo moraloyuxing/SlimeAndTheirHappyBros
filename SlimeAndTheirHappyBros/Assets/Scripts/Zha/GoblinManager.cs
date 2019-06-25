@@ -558,6 +558,20 @@ public class GoblinManager : MonoBehaviour
         goblinSpirit.Spawn(Vector3.zero, 0);
     }
 
+    public void GrowGoblinHP() {
+        for (int i = 0; i < freeNormalGoblins.Count; i++) {
+            freeNormalGoblins[i].GrowMaxHp();
+        }
+        for (int i = 0; i < freeArcherGoblins.Count; i++)
+        {
+            freeArcherGoblins[i].GrowMaxHp();
+        }
+        for (int i = 0; i < freeHobGoblins.Count; i++)
+        {
+            freeHobGoblins[i].GrowMaxHp();
+        }
+    }
+
     public GoblinBase FindGoblin(string name) {
         if (goblinDic.ContainsKey(name))
         {
