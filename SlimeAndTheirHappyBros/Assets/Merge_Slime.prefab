@@ -1517,6 +1517,8 @@ MonoBehaviour:
   Storage_Player:
   - {fileID: 0}
   - {fileID: 0}
+  ExpectSpilt: {fileID: 4902292728715853240, guid: df60423361f0bdc489ff4ae773ba5c4b,
+    type: 3}
   Merge_HP:
   - {fileID: 3794908022614685357}
   - {fileID: 7432256951808627668}
@@ -1538,6 +1540,7 @@ MonoBehaviour:
   Base_BulletScale: 1
   Base_BulletSpeed: 1
   Base_BulletTime: 0
+  BulletTime_Superimposed: 0
   BulletSpeed_Superimposed: 0
   Bullet_Superimposed: 0
 --- !u!95 &1457140753978903925

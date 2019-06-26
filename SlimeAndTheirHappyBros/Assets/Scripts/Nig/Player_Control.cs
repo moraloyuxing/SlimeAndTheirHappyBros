@@ -835,7 +835,7 @@ public class Player_Control : MonoBehaviour{
         int i = 0;
         while (i < colliders.Length) {
             Transform c = colliders[i].transform.parent;
-            if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border") CanDrop = false;
+            if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") CanDrop = false;
         }
     }
 
