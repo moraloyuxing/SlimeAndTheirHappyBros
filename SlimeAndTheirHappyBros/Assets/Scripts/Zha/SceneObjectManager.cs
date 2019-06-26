@@ -9,7 +9,7 @@ public class SceneObjectManager : MonoBehaviour
     float dt;
     float[] aniTime = new float[2] { .0f,.0f};
     SpriteRenderer shopSmogRender, bushSmogRender;
-    GameObject shop, ruinShop, bush;
+    GameObject shop, ruinShop, bush, bossBorder;
 
     public Sprite[] smogAnis;
 
@@ -24,6 +24,7 @@ public class SceneObjectManager : MonoBehaviour
         bushSmogRender = transform.Find("BushSmog").GetComponent<SpriteRenderer>();
         shopSmogRender.enabled = false;
         bushSmogRender.enabled = false;
+        bossBorder = transform.Find("BossBorder").gameObject;
     }
     void Start()
     {
@@ -91,6 +92,10 @@ public class SceneObjectManager : MonoBehaviour
             bushSmogRender.sprite = smogAnis[aniID[1]];
 
         }
+    }
+
+    public void SetBossBorderOn() {
+        bossBorder.SetActive(true);
     }
 
 }

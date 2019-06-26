@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
-    bool progressMove = false;
+    bool progressMove = false, goBoss = false;
     int tutorialProgres = 0;
     int curRound = 1;
     float length, progressTime = .0f, totalTime = .0f;
 
     Vector2 oringinProgress, targetProgress;
 
-    RectTransform goblinHeadTrans;
+    RectTransform goblinHeadTrans, bossHp;
 
     Image tutorialImg; 
     Image goblinProgress, goblinHead;
@@ -21,10 +21,11 @@ public class UIManager : MonoBehaviour
 
     Animator animator;
 
-    System.Action countDownCBK;
+    System.Action CountDownCBK, BossCountDownCBK;
 
     public float headStart, headEnd;
     public Sprite[] RoundSprite;
+    public Sprite bossRoundSpirte;
 
     // Start is called before the first frame update
     private void Awake()
@@ -36,6 +37,7 @@ public class UIManager : MonoBehaviour
 
         goblinHeadTrans = transform.Find("GoblinProgress").GetChild(0).GetComponent<RectTransform>();
         roundTxt = transform.Find("GoblinProgress").GetChild(1).GetComponent<Text>();
+        bossHp = transform.Find("KingBlood").GetChild(0).GetComponent<RectTransform>();
 
         animator = GetComponent<Animator>();
     }
@@ -64,8 +66,13 @@ public class UIManager : MonoBehaviour
     }
 
     public void SubCountDownCallBack(System.Action cbk) {
-        countDownCBK = cbk;
+        CountDownCBK = cbk;
     }
+    public void SubBossCountDownCallBack(System.Action cbk)
+    {
+        BossCountDownCBK = cbk;
+    }
+
 
     public void NextTutorial() {
         tutorialProgres++;
@@ -90,10 +97,22 @@ public class UIManager : MonoBehaviour
         animator.SetTrigger("BreakTime");
     }
 
+    public void StartBossRound() {
+        roundImg.sprite = bossRoundSpirte;
+        animator.SetTrigger("BossLevel");
+        goBoss = true;
+    }
+
     public void CountDownEnd() {
-        countDownCBK();
-        progressMove = true;
-        progressTime = .0f;
+        if (!goBoss)
+        {
+            CountDownCBK();
+            progressMove = true;
+            progressTime = .0f;
+        }
+        else {
+            BossCountDownCBK();
+        }
     }
 
     public void GoblinProgress(float percent) {
@@ -102,13 +121,13 @@ public class UIManager : MonoBehaviour
         targetProgress = new Vector2(headStart + length * percent, 0);
     }
 
-
-    public void CountDownCBK() {
-
-    }
     public void GoBreakTime() {
         //GoblinProgress(0);
         animator.Play("breakTimeIn");
+    }
+
+    public void DecreaseBossHp(float percent) {
+        bossHp.sizeDelta = new Vector2(117f, 675.0f*percent);
     }
 
     public void GoLose() {

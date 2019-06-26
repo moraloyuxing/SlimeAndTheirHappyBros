@@ -36,6 +36,7 @@ public class GameManager : MonoBehaviour
         uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
 
         uiManager.SubCountDownCallBack(StartRound);    //註冊倒數完事件，開始關卡
+        uiManager.SubBossCountDownCallBack(StartBossRound);
          
         itemManager = GameObject.Find("Item_Group").GetComponent<Item_Manager>() ;
         playerManager = GameObject.Find("Player_Manager").GetComponent<Player_Manager>() ;
@@ -44,10 +45,10 @@ public class GameManager : MonoBehaviour
         playerManager.SubDeath(GoLose);  //註冊死亡事件
 
         npcManager = GameObject.Find("Main Camera").GetComponent<NPC_Manager>();
-        npcManager.SubBossLevelCBK(GoBossLevel);
+        npcManager.SubBossLevelCBK(GoBossLevel);//註冊
 
         cameraController = GameObject.Find("Main Camera").GetComponent<MultiPlayerCamera>();
-        cameraController.SubKingShowUpCBK(goblinManager.SpawnBoss);
+        cameraController.SubKingShowUpCBK(goblinManager.SpawnBoss);//註冊
 
         goblinKillsGoal = new int[roundInfos.Length];
         gameStates = new GameState[roundInfos.Length];
@@ -70,6 +71,7 @@ public class GameManager : MonoBehaviour
     {
         uiManager.SetTotalTime(roundInfos[0].waves[(roundInfos[0].maxWave - 1)].spawnTime);
         goblinManager.SubBreakShopCBK(sceneObjectManager.GetShopCBK(), sceneObjectManager.GetBushCBK());
+        goblinManager.SubDecreaseBossHp(uiManager.DecreaseBossHp);
 
         if (test) GameObject.Find("Tutorial").SetActive(false);
     }
@@ -108,9 +110,10 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
-        if (test || lose) return;
+
         if (!bossLevel)
         {
+            if (test || lose) return;
             if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
             if (curRound < 0)
             {
@@ -159,24 +162,26 @@ public class GameManager : MonoBehaviour
             }
         }
         else {
+            return;
+            if (!roundStart)roundStart = false;
             bossTime += Time.deltaTime;
             if (bossTime >= 20.0f) {
                 bossTime = .0f;
                 int op = Random.Range(2,5);
                 while (op > 0) {
-                    goblinManager.SpawnNormalGoblinMutiColor(0);
+                    goblinManager.BossSpawnNormalGoblinMutiColor(0);
                     op--;
                 }
                 op = Random.Range(2, 5);
                 while (op > 0)
                 {
-                    goblinManager.SpawnArcherGoblinMutiColor(0);
+                    goblinManager.BossSpawnArcherGoblinMutiColor(0);
                     op--;
                 }
                 op = Random.Range(1, 4);
                 while (op > 0)
                 {
-                    goblinManager.SpawnHobGoblinMutiColor(0);
+                    goblinManager.BossSpawnHobGoblinMutiColor(0);
                     op--;
                 }
             }
@@ -199,6 +204,14 @@ public class GameManager : MonoBehaviour
     public void StartRound() {
         roundStart = true;
         AudioManager.SingletonInScene.ChangeBGM(false, curRound);
+    }
+    public void StartBossRound() {
+
+        AudioManager.SingletonInScene.ChangeBGM(false, -1);
+        AudioManager.SingletonInScene.PlaySound2D("Earthquake", 0.3f);
+        bossLevel = true;
+        cameraController.StartBossLevel();
+        goblinManager.DisableBushCollider();
     }
 
     public void RoundOver() {     //打完進商店
@@ -237,16 +250,15 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoBossLevel() {
-        AudioManager.SingletonInScene.PlaySound2D("Earthquake", 0.3f);
-        bossLevel = true;
-        cameraController.StartBossLevel();
-        goblinManager.DisableBushCollider();
-        if (!test)
+        if (inShopping)
         {
+            inShopping = false;
             itemManager.State_Switch();
             playerManager.State_Switch();
             lightChange = false;
         }
+        sceneObjectManager.SetBossBorderOn();
+        uiManager.StartBossRound();
     }
 
     public void GoLose() {

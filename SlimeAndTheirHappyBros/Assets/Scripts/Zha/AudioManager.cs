@@ -13,6 +13,7 @@ public class AudioManager : MonoBehaviour
     public AudioClip shoppingMusic;
     public AudioClip[] battleMusic;
     public SoundClip[] soundClips;
+    public AudioClip bossMusic;
 
     private static AudioManager singletonInScene;
     public static AudioManager SingletonInScene
@@ -55,7 +56,8 @@ public class AudioManager : MonoBehaviour
             StartCoroutine(OnChangingBGM());
         }
         else {
-            if (curRound < 3) bgmAudio.clip = battleMusic[0];
+            if (curRound < 0) bgmAudio.clip = bossMusic;  // boss 定curRound為-1
+            else if (curRound < 3) bgmAudio.clip = battleMusic[0];
             else if (curRound < 5) bgmAudio.clip = battleMusic[1];
             else bgmAudio.clip = battleMusic[2];
             bgmAudio.Play();

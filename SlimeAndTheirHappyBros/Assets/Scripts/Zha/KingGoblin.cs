@@ -7,7 +7,7 @@ public class KingGoblin : IEnemyUnit
     bool showEnable = false;
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
     bool throwOnce = false, goRoar = false;
-    int hp = 150, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
+    int totalHp = 150, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
     int atkCount = 0, totalAtk = 1;
     float stateTime = .0f, idleTime = 2.0f;
 
@@ -15,7 +15,9 @@ public class KingGoblin : IEnemyUnit
     Vector3[] punchDir = new Vector3[4];
     Quaternion[] punchRot = new Quaternion[4];
 
+    Collider hurtArea;
     System.Action punchShop, punchBush, changeColor;
+    System.Action<float> DecreaseHP;
     Animator animator;
     AnimatorStateInfo aniInfo;
     Transform transform;
@@ -37,7 +39,12 @@ public class KingGoblin : IEnemyUnit
         changeColor = cbk;
     }
 
+    public void SubDevreaseBossHp(System.Action<float> cbk) {
+        DecreaseHP = cbk;
+    }
+
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
+        hp = totalHp;
         transform = t;
         animator = transform.GetComponent<Animator>();
         goblinManager = manager;
@@ -56,6 +63,8 @@ public class KingGoblin : IEnemyUnit
 
         render = transform.Find("BossSprite").GetComponent<SpriteRenderer>();
         render.enabled = false;
+        hurtArea = transform.Find("HurtArea").GetComponent<Collider>();
+        hurtArea.enabled = false;
     }
 
     void SetState(KingState state) {
@@ -102,6 +111,7 @@ public class KingGoblin : IEnemyUnit
         if (aniInfo.normalizedTime > 0.66f) {
             if (!punchShopOnce)
             {
+                hurtArea.enabled = true;
                 AudioManager.SingletonInScene.PlaySound2D("HouseBoom", 0.3f);
                 MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f,0.5f);
                 punchShopOnce = true;
@@ -312,7 +322,15 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void GetHurt(int c, int value) {
-        if(color == c) hp -= value;
+        if (color == c) {
+            hp -= value;
+            Debug.Log("king hp " + hp);
+            if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
+            else {
+                DecreaseHP(0);
+            }
+
+        } 
 
     }
 

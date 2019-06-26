@@ -123,7 +123,9 @@ public class Bullet_Behaviour : MonoBehaviour{
                     if (WhichPlayer != WhichPlayer2) bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, WhichPlayer2.PlayerID2, Attack_Dir);
                     else bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
                 }
-                else if (tag == "KingGoblin") {
+                else if (c.tag == "KingGoblin") {
+                    Debug.Log("hit boss");
+                    NowPenetrate++;
                     bulletPool._goblinmanager.HitKingGoblin(color, BulletATK);
                 }
                 if (c.tag == "Player" && isLeaf == false) {

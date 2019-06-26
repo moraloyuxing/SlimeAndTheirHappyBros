@@ -347,7 +347,6 @@ public class GoblinManager : MonoBehaviour
         goblin.UpdateAllPlayerPos();
         freeNormalGoblins.RemoveAt(0);
     }
-
     public void SpawnArcherGoblinBaseColor(int col)
     {
         if (col == 0)
@@ -404,6 +403,69 @@ public class GoblinManager : MonoBehaviour
         freeHobGoblins.RemoveAt(0);
     }
 
+    public void BossSpawnNormalGoblinMutiColor(int col)
+    {
+        if (col == 0)
+        {
+            float o = Random.Range(0, 120);
+            if (o < 30) col = 1;
+            else if (o < 60) col = 2;
+            else if (o < 90) col = 4;
+            else if (o < 100) col = 3;
+            else if (o < 110) col = 5;
+            else col = 6;
+        }
+        if (freeNormalGoblins.Count <= 0) return;
+        NormalGoblin goblin = freeNormalGoblins[0];
+        usedNormalGoblins.Add(goblin);
+        int baseN = (Random.Range(0, 10) > 5) ? 2 : 10;
+        baseN += Random.Range(0, 3);
+        Vector3 pos = spawnPos[baseN];
+        goblin.Spawn(pos, col);
+        goblin.UpdateAllPlayerPos();
+        freeNormalGoblins.RemoveAt(0);
+    }
+    public void BossSpawnArcherGoblinMutiColor(int col)
+    {
+        if (col == 0)
+        {
+            float o = Random.Range(0, 120);
+            if (o < 30) col = 1;
+            else if (o < 60) col = 2;
+            else if (o < 90) col = 4;
+            else if (o < 100) col = 3;
+            else if (o < 110) col = 5;
+            else col = 6;
+        }
+        if (freeArcherGoblins.Count <= 0) return;
+        ArcherGoblin goblin = freeArcherGoblins[0];
+        usedArcherGoblins.Add(goblin);
+        int baseN = (Random.Range(0, 10) > 5) ? 2 : 10;
+        baseN += Random.Range(0, 3);
+        Vector3 pos = spawnPos[baseN];
+        goblin.Spawn(pos, col);
+        goblin.UpdateAllPlayerPos();
+        freeArcherGoblins.RemoveAt(0);
+    }
+    public void BossSpawnHobGoblinMutiColor(int col)
+    {
+        if (col == 0)
+        {
+            float o = Random.Range(0, 90);
+            if (o < 30) col = 3;
+            else if (o < 60) col = 5;
+            else col = 6;
+        }
+        if (freeHobGoblins.Count <= 0) return;
+        HobGoblin goblin = freeHobGoblins[0];
+        usedHobGoblins.Add(goblin);
+        int baseN = (Random.Range(0, 10) > 5) ? 2 : 10;
+        baseN += Random.Range(0, 3);
+        Vector3 pos = spawnPos[baseN];
+        goblin.Spawn(pos, col);
+        goblin.UpdateAllPlayerPos();
+        freeHobGoblins.RemoveAt(0);
+    }
     public void RecycleGoblin<T>(T goblin) where T : IEnemyUnit {
         if (goblin is NormalGoblin)
         {
@@ -579,6 +641,9 @@ public class GoblinManager : MonoBehaviour
         pathGrid.DisableCollider();
     }
 
+    public void SubDecreaseBossHp(System.Action<float>cbk) {
+        kingGoblin.SubDevreaseBossHp(cbk);
+    }
     public void HitKingGoblin(int color, int value) {
         kingGoblin.GetHurt(color, value);
     }
