@@ -130,6 +130,10 @@ public class UIManager : MonoBehaviour
         bossHp.sizeDelta = new Vector2(117f, 675.0f*percent);
     }
 
+    public void GoWin() {
+        animator.SetTrigger("Win");
+    }
+
     public void GoLose() {
         animator.SetTrigger("Lose");
     }

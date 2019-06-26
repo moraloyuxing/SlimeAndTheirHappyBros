@@ -644,6 +644,10 @@ public class GoblinManager : MonoBehaviour
     public void SubDecreaseBossHp(System.Action<float>cbk) {
         kingGoblin.SubDevreaseBossHp(cbk);
     }
+    public void SubGameWin(System.Action cbk)
+    {
+        kingGoblin.SubGameWin(cbk);
+    }
     public void HitKingGoblin(int color, int value) {
         kingGoblin.GetHurt(color, value);
     }
@@ -672,6 +676,25 @@ public class GoblinManager : MonoBehaviour
             usedHobGoblins[index].SetGameOver();
         }
 
+    }
+    public void GameOver(bool win)
+    {
+        gameOver = true;
+
+        for (index = 0; index < usedNormalGoblins.Count; index++)
+        {
+            usedNormalGoblins[index].SetGameOver();
+        }
+        for (index = 0; index < usedArcherGoblins.Count; index++)
+        {
+            usedArcherGoblins[index].SetGameOver();
+        }
+        for (index = 0; index < usedHobGoblins.Count; index++)
+        {
+            usedHobGoblins[index].SetGameOver();
+        }
+        kingGoblin.ResetUnit();
+        goblinSpirit.ResetUnit();
     }
 
 }

@@ -177,7 +177,7 @@ public class GoblinSpirit:IEnemyUnit
 
             if (!goChangeColor)
             {
-                if (changeColorTime < 2.0f)
+                if (changeColorTime < 15.0f)
                 {
                     Debug.Log("change color time  " + changeColorTime);
                     int op = Random.Range(0, 100);
@@ -198,7 +198,7 @@ public class GoblinSpirit:IEnemyUnit
                         }
                         else {
                             colorChangeNum++;
-                            if (colorChangeNum >= 3)
+                            if (colorChangeNum >= 2)
                             {
                                 goChangeColor = true;
                                 colorChangeNum = 0;
@@ -208,9 +208,8 @@ public class GoblinSpirit:IEnemyUnit
                     }
                     else
                     {
-                        Debug.Log("too shame to change");
                         colorChangeNum++;
-                        if (colorChangeNum >= 3)
+                        if (colorChangeNum >= 2)
                         {
                             goChangeColor = true;
                             colorChangeNum = 0;
@@ -324,6 +323,7 @@ public class GoblinSpirit:IEnemyUnit
                 if (t > 3) t = 0;
                 if (deathCount >= 4) break;
             }
+            deathCount = 0;
             targetPlayer = t;
         }
         else {
@@ -445,7 +445,7 @@ public class GoblinSpirit:IEnemyUnit
     }
 
     public void ResetUnit() {
-
+        transform.gameObject.SetActive(false);
     }
 
 }

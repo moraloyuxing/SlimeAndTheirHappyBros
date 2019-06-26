@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     bool roundStart = false, inShopping = false, bossLevel = false;
-    bool lose = false, lightChange = true;
+    bool gameOver = false, lightChange = true;
     int tutorialProgress = 0, goblinKills = 0, maxLevel = 10;
     
     float time = .0f, lightTime = .0f, bossTime = 15.0f;
@@ -72,6 +72,7 @@ public class GameManager : MonoBehaviour
         uiManager.SetTotalTime(roundInfos[0].waves[(roundInfos[0].maxWave - 1)].spawnTime);
         goblinManager.SubBreakShopCBK(sceneObjectManager.GetShopCBK(), sceneObjectManager.GetBushCBK());
         goblinManager.SubDecreaseBossHp(uiManager.DecreaseBossHp);
+        goblinManager.SubGameWin(GoWin);
 
         if (test) GameObject.Find("Tutorial").SetActive(false);
     }
@@ -113,7 +114,7 @@ public class GameManager : MonoBehaviour
 
         if (!bossLevel)
         {
-            if (test || lose) return;
+            if (test || gameOver) return;
             if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
             if (curRound < 0)
             {
@@ -162,7 +163,6 @@ public class GameManager : MonoBehaviour
             }
         }
         else {
-            return;
             if (!roundStart)roundStart = false;
             bossTime += Time.deltaTime;
             if (bossTime >= 20.0f) {
@@ -261,15 +261,22 @@ public class GameManager : MonoBehaviour
         uiManager.StartBossRound();
     }
 
+    public void GoWin() {
+        gameOver = true;
+        goblinManager.GameOver(true);
+        uiManager.GoWin();
+        StartCoroutine(PlayAgain(7.5f));
+    }
+
     public void GoLose() {
-        lose = true;
+        gameOver = true;
         goblinManager.GameOver();
         uiManager.GoLose();
-        StartCoroutine(PlayAgain());
+        StartCoroutine(PlayAgain(2.5f));
     }
-    IEnumerator PlayAgain() {
+    IEnumerator PlayAgain(float time) {
         curRound = -1;
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(time);
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
     }
 

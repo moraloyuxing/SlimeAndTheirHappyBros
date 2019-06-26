@@ -7,7 +7,7 @@ public class KingGoblin : IEnemyUnit
     bool showEnable = false;
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
     bool throwOnce = false, goRoar = false;
-    int totalHp = 150, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
+    int totalHp = 500, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
     int atkCount = 0, totalAtk = 1;
     float stateTime = .0f, idleTime = 2.0f;
 
@@ -16,7 +16,7 @@ public class KingGoblin : IEnemyUnit
     Quaternion[] punchRot = new Quaternion[4];
 
     Collider hurtArea;
-    System.Action punchShop, punchBush, changeColor;
+    System.Action punchShop, punchBush, changeColor, GameWin;
     System.Action<float> DecreaseHP;
     Animator animator;
     AnimatorStateInfo aniInfo;
@@ -41,6 +41,10 @@ public class KingGoblin : IEnemyUnit
 
     public void SubDevreaseBossHp(System.Action<float> cbk) {
         DecreaseHP = cbk;
+    }
+
+    public void SubGameWin(System.Action cbk) {
+        GameWin = cbk;
     }
 
     public void Init(Transform t, GoblinManager.GoblinInfo info, GoblinManager manager) {
@@ -328,6 +332,8 @@ public class KingGoblin : IEnemyUnit
             if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
             else {
                 DecreaseHP(0);
+                GameWin();
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f,0.7f,1.0f);
             }
 
         } 
@@ -348,7 +354,7 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void ResetUnit() {
-
+        transform.gameObject.SetActive(false);
     }
 
     public void Spawn(Vector3 pos, int col) {
