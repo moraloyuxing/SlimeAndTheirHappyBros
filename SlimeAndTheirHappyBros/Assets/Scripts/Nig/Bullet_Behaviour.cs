@@ -125,7 +125,8 @@ public class Bullet_Behaviour : MonoBehaviour{
                 }
                 else if (c.tag == "KingGoblin") {
                     Debug.Log("hit boss");
-                    NowPenetrate++;
+                    //NowPenetrate++;
+                    NowPenetrate = PenetrateMaxCount;//抵達障礙物直接給最大值，取消繼續穿透
                     bulletPool._goblinmanager.HitKingGoblin(color, BulletATK);
                 }
                 if (c.tag == "Player" && isLeaf == false) {

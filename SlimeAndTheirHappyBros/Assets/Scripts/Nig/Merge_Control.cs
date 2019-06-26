@@ -66,6 +66,11 @@ public class Merge_Control : MonoBehaviour{
     int MergeNumber = 0;
     bool PMb_button = false;
     bool PSb_button = false;
+    bool[] CanSpilt = new bool[2] { false,false};
+    bool ChooseSpiltPos = false;
+    public GameObject ExpectSpilt;
+    float[] SpiltX = new float[2];
+    float[] SpiltZ = new float[2];
 
     //倒數計時
     //整數倒數 → 隔秒呼叫；計量條 → Time.deltaTime
@@ -412,24 +417,64 @@ public class Merge_Control : MonoBehaviour{
         Start_CountDown();
     }
 
-    public void Spilt_toOriginal()
-    {
-        for (int i = 0; i < 2; i++)
-        {
-            Storage_Player[i].SetActive(true);
-            Storage_Player[i].SendMessage("Weak_State");
-        }
-        Storage_Player[0].transform.position = new Vector3(gameObject.transform.position.x - Random.Range(0.5f, 2.0f), 1.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
-        Storage_Player[1].transform.position = new Vector3(gameObject.transform.position.x + Random.Range(0.5f, 2.0f), 1.0f, gameObject.transform.position.z + Random.Range(-2.0f, 2.0f));
+    public void Spilt_toOriginal(){
 
-        if (Base_HP == 0) {
-            Storage_Player[0].SendMessage("Die_InMergeState");
-            Storage_Player[1].SendMessage("Die_InMergeState");
+        while (ChooseSpiltPos == false) {
+            Debug.Log("line 423");//僅一次
+            ChooseSpiltPos = true;
+            for (int i = 0; i < 2; i++){
+                Debug.Log("line 426");//2次
+                GameObject ExpectPos = Instantiate(ExpectSpilt) as GameObject;
+                //隨機抽選分裂後位置(前一次選定位置不適合才重選)，有算出來
+                if (i == 0 && CanSpilt[0] == false){ExpectPos.transform.position = new Vector3(gameObject.transform.position.x - Random.Range(0.5f, 2.5f), 1.0f, gameObject.transform.position.z + Random.Range(-2.5f, 2.5f));}
+                else if (i == 1 && CanSpilt[1] == false) {ExpectPos.transform.position = new Vector3(gameObject.transform.position.x + Random.Range(0.5f, 2.5f), 1.0f, gameObject.transform.position.z + Random.Range(-2.5f, 2.5f));}
+
+                if (CanSpilt[i] == false) {SpiltPosDetect(ExpectPos.transform, i);} 
+
+                if (CanSpilt[i] == true) {
+                    Debug.Log("line 438");
+                    SpiltX[i] = ExpectPos.transform.position.x;
+                    SpiltZ[i] = ExpectPos.transform.position.z;
+                    Debug.Log(SpiltX[i]+"  "+ SpiltZ[i]); //沒進去
+                }
+
+                if (CanSpilt[0] == true && CanSpilt[1] == true) ChooseSpiltPos = true;
+                Destroy(ExpectPos);
+            }
+        }
+
+        if (ChooseSpiltPos == true) {
+            for (int i = 0; i < 2; i++){
+                Storage_Player[i].SetActive(true);
+                Storage_Player[i].transform.position = new Vector3(SpiltX[i], 1.0f, SpiltZ[i]);
+                Storage_Player[i].SendMessage("Weak_State");
+            }
+
+            if (Base_HP == 0){
+                Storage_Player[0].SendMessage("Die_InMergeState");
+                Storage_Player[1].SendMessage("Die_InMergeState");
+            }
+            CanSpilt[0] = false;
+            CanSpilt[1] = false;
+            ChooseSpiltPos = false;
         }
 
         _MSlimePool.MSlime_Recovery(gameObject);
     }
 
+    void SpiltPosDetect(Transform Expect, int PID) {
+        Collider[] colliders = Physics.OverlapBox(Expect.position + new Vector3(0, -0.2f, 0), new Vector3(0.79f, 0.6f, 0.2f), Quaternion.Euler(0, 0, 0), 1 << LayerMask.NameToLayer("Barrier") | 1<<LayerMask.NameToLayer("Border"));
+        int i = 0;
+        CanSpilt[PID] = true;
+        while (i < colliders.Length) {
+            Transform c = colliders[i].transform.parent;
+            if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") {
+                CanSpilt[PID] = false;
+                ChooseSpiltPos = false;
+                Debug.Log(PID + " : Choose_Fail");
+            }
+        }
+    }
 
     void Start_CountDown()
     {
