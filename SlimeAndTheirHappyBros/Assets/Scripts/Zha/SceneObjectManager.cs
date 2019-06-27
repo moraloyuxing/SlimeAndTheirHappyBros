@@ -25,6 +25,7 @@ public class SceneObjectManager : MonoBehaviour
         shopSmogRender.enabled = false;
         bushSmogRender.enabled = false;
         bossBorder = transform.Find("BossBorder").gameObject;
+        bossBorder.SetActive(false);
     }
     void Start()
     {

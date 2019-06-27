@@ -146,6 +146,8 @@ public class Player_Control : MonoBehaviour{
     RaycastHit hit_GetItem_z;
     RaycastHit hit_GetItem_dir;
     bool Already_pick = false;
+    int DropChance = 0;
+
 
     void Start(){
         PlayerID2 = PlayerID;
@@ -387,11 +389,12 @@ public class Player_Control : MonoBehaviour{
         }
 
         //道具掉落
-        if (CanDrop == true){
+        if (CanDrop == true && DropChance <10){
             Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);
             if (Mathf.Abs(Current_BlewOut.transform.position.x - DropX) < 0.1f && Mathf.Abs(Current_BlewOut.transform.position.z - DropZ) < 0.1f){
                 CanDrop = false;
                 Current_BlewOut = null;
+                DropChance = 0;
             }
         }
     }
@@ -759,8 +762,20 @@ public class Player_Control : MonoBehaviour{
 
     //死亡噴裝
     void ChooseItemtoDrop() {
+
+        //選地點，確認是否有barrier
+        while (CanDrop == false){
+            CanDrop = true;
+            DropX = Random.Range(transform.position.x - 5.0f, transform.position.x + 5.0f);
+            DropZ = Random.Range(transform.position.z - 5.0f, transform.position.z + 5.0f);
+            GameObject ExpectPos = Instantiate(ExpectDrop) as GameObject;
+            ExpectPos.transform.position = new Vector3(DropX, 0.0f, DropZ);
+            DropPosDetect(ExpectPos.transform);
+            Destroy(ExpectPos);
+        }
+
         //有東西才掉落
-        if (_IteminHand.Count > 0) {
+        if (_IteminHand.Count > 0 &&DropChance <10) {
             Random_Drop = Random.Range(0, _IteminHand.Count);
             Current_BlewOut = Instantiate(Item_BlewOut) as GameObject;
             //GameObject clone_Item = Instantiate(Item_BlewOut) as GameObject;
@@ -816,17 +831,10 @@ public class Player_Control : MonoBehaviour{
             _itemmanager.Item_BlewOut(PlayerID, DropType);
 
             _IteminHand.Remove(_IteminHand[Random_Drop]);//從角色持有道具的list移除
-
-            //選地點，確認是否有barrier
-            while (CanDrop == false) {
-                CanDrop = true;
-                DropX = Random.Range(transform.position.x - 5.0f, transform.position.x + 5.0f);
-                DropZ = Random.Range(transform.position.z - 5.0f, transform.position.z + 5.0f);
-                GameObject ExpectPos = Instantiate(ExpectDrop) as GameObject;
-                ExpectPos.transform.position = new Vector3(DropX, 0.0f, DropZ);
-                DropPosDetect(ExpectPos.transform);
-                Destroy(ExpectPos);
-            }
+        }
+        if (DropChance >= 10 && CanDrop == true) {
+            CanDrop = false;
+            DropChance = 0;
         }
     }
 
@@ -835,7 +843,12 @@ public class Player_Control : MonoBehaviour{
         int i = 0;
         while (i < colliders.Length) {
             Transform c = colliders[i].transform.parent;
-            if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") CanDrop = false;
+            if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") {
+                CanDrop = false;
+                DropChance++;
+                if (DropChance == 10) {CanDrop = true;}
+            }
+            i++;
         }
     }
 

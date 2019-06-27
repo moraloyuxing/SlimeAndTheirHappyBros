@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class KingGoblin : IEnemyUnit
 {
-    bool showEnable = false;
+    bool showEnable = false, crackOnce = false;
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
     bool throwOnce = false, goRoar = false;
     int totalHp = 500, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
@@ -21,7 +21,7 @@ public class KingGoblin : IEnemyUnit
     Animator animator;
     AnimatorStateInfo aniInfo;
     Transform transform;
-    SpriteRenderer render;
+    SpriteRenderer render, crack;
     GoblinManager goblinManager;
 
     KingState curState = KingState.showUp;
@@ -68,6 +68,8 @@ public class KingGoblin : IEnemyUnit
         render = transform.Find("BossSprite").GetComponent<SpriteRenderer>();
         render.enabled = false;
         hurtArea = transform.Find("HurtArea").GetComponent<Collider>();
+        crack = transform.Find("crack").GetComponent<SpriteRenderer>(); ;
+        crack.enabled = false;
         hurtArea.enabled = false;
     }
 
@@ -106,6 +108,11 @@ public class KingGoblin : IEnemyUnit
     void ShowUp() {
         aniInfo = animator.GetCurrentAnimatorStateInfo(0);
 
+        if (!crackOnce && aniInfo.normalizedTime > .05f) {
+            crackOnce = true;
+            crack.enabled = true;
+        }
+
         if (!showEnable && aniInfo.normalizedTime > 0.15) {
             showEnable = true;
             render.enabled = true;
@@ -134,6 +141,7 @@ public class KingGoblin : IEnemyUnit
                         if (aniInfo.normalizedTime >= 0.96f)
                         {
                             SetState(KingState.idle);
+
                         }
                     }
                 }

@@ -7,7 +7,7 @@ public class GameManager : MonoBehaviour
     bool roundStart = false, inShopping = false, bossLevel = false;
     bool gameOver = false, lightChange = true;
     int tutorialProgress = 0, goblinKills = 0, maxLevel = 10;
-    
+    int  bossMonsterNum = 0;
     float time = .0f, lightTime = .0f, bossTime = 15.0f;
     GameState tutorialState, bossLevelState;
     GameState[] gameStates;
@@ -164,25 +164,32 @@ public class GameManager : MonoBehaviour
         }
         else {
             if (!roundStart)roundStart = false;
+            if (bossMonsterNum >= 6)  return;
             bossTime += Time.deltaTime;
             if (bossTime >= 20.0f) {
                 bossTime = .0f;
-                int op = Random.Range(2,5);
+                int op = Random.Range(1,4);
                 while (op > 0) {
                     goblinManager.BossSpawnNormalGoblinMutiColor(0);
                     op--;
+                    bossMonsterNum++;
+                    if (bossMonsterNum >= 6) return;
                 }
-                op = Random.Range(2, 5);
+                op = Random.Range(1, 4);
                 while (op > 0)
                 {
                     goblinManager.BossSpawnArcherGoblinMutiColor(0);
                     op--;
+                    bossMonsterNum++;
+                    if (bossMonsterNum >= 6) return;
                 }
                 op = Random.Range(1, 4);
                 while (op > 0)
                 {
                     goblinManager.BossSpawnHobGoblinMutiColor(0);
                     op--;
+                    bossMonsterNum++;
+                    if (bossMonsterNum >= 6) return;
                 }
             }
         }
@@ -246,6 +253,7 @@ public class GameManager : MonoBehaviour
         goblinKills++;
 
         if (goblinKills >= goblinKillsGoal[curRound]) RoundOver();
+        if(bossLevel && bossMonsterNum > 0) bossMonsterNum--;
         //Debug.Log("kill goblin  " + goblinKills +"    in   " +  curRound);
     }
 
