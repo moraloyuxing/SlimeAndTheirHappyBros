@@ -19,7 +19,7 @@ public class FallingGoblin : IEnemyObjectPoolUnit
         hurtCollider = goblinTransform.GetComponent<Collider>();
         goblinManager = manager;
         smallScale = new Vector3(1f,1f,1f);
-        totalScale = new Vector3(5.0f,5.0f,1f);
+        totalScale = new Vector3(7.0f,7.0f,1f);
     }
 
     public void ToActive(Vector3 pos, Vector3 dir)
@@ -40,7 +40,7 @@ public class FallingGoblin : IEnemyObjectPoolUnit
         if (time <= 1.25f)
         {
             Vector3 dir = new Vector3(goblinManager.PlayerPos[traceID].x - transform.position.x,.0f,goblinManager.PlayerPos[traceID].z - transform.position.z);
-            if (dir.sqrMagnitude > 0.1f) {
+            if (dir.sqrMagnitude > 0.25f) {
                 transform.position += traceSpeed * dt * dir.normalized;
             }
             scaleTime += dt*0.8f;

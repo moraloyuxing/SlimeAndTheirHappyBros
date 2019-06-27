@@ -10,7 +10,7 @@ public class GoblinArrow : IEnemyObjectPoolUnit
     float speed, degree, length;
     Vector3 moveDir;
     Collider collider;
-    Transform transform;
+    Transform transform; //arrow, shadow;
 
     GoblinManager goblinManager;
 
@@ -18,6 +18,8 @@ public class GoblinArrow : IEnemyObjectPoolUnit
     // Start is called before the first frame update
     public void Init(Transform t, GoblinManager manager, GoblinManager.PoolUnitInfo info) {
         transform = t;
+        //arrow = transform.GetChild(0);
+        //shadow = transform.GetChild(1);
         goblinManager = manager;
         speed = info.speed;
         length = info.length;
@@ -32,7 +34,9 @@ public class GoblinArrow : IEnemyObjectPoolUnit
         float baseD = -20.0f * (1.0f-Mathf.Abs(rot.x - rot.z));
         if (Mathf.Sign(rot.x * rot.z) < .0f) baseD += 5.0f;
         degree = (Mathf.Atan2(rot.z, rot.x) ) * Mathf.Rad2Deg + 90.0f + baseD;
-        transform.localRotation = Quaternion.Euler(25,0,degree);
+        //arrow.localRotation = Quaternion.Euler(25, 0, degree);
+        //shadow.localRotation = Quaternion.Euler(90, 0, degree);
+        transform.localRotation = Quaternion.Euler(25, 0, degree);
         collider.enabled = true;
 
         float offset = 0.2f; //(Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;

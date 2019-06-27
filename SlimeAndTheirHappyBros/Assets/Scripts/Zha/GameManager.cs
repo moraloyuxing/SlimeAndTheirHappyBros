@@ -166,7 +166,7 @@ public class GameManager : MonoBehaviour
             if (!roundStart)roundStart = false;
             if (bossMonsterNum >= 6)  return;
             bossTime += Time.deltaTime;
-            if (bossTime >= 20.0f) {
+            if (bossTime >= 40.0f) {
                 bossTime = .0f;
                 int op = Random.Range(1,4);
                 while (op > 0) {
