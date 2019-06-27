@@ -420,10 +420,8 @@ public class Merge_Control : MonoBehaviour{
     public void Spilt_toOriginal(){
 
         while (ChooseSpiltPos == false) {
-            Debug.Log("line 423");//僅一次
             ChooseSpiltPos = true;
             for (int i = 0; i < 2; i++){
-                Debug.Log("line 426");//2次
                 GameObject ExpectPos = Instantiate(ExpectSpilt) as GameObject;
                 //隨機抽選分裂後位置(前一次選定位置不適合才重選)，有算出來
                 if (i == 0 && CanSpilt[0] == false){ExpectPos.transform.position = new Vector3(gameObject.transform.position.x - Random.Range(0.5f, 2.5f), 1.0f, gameObject.transform.position.z + Random.Range(-2.5f, 2.5f));}
@@ -432,10 +430,8 @@ public class Merge_Control : MonoBehaviour{
                 if (CanSpilt[i] == false) {SpiltPosDetect(ExpectPos.transform, i);} 
 
                 if (CanSpilt[i] == true) {
-                    Debug.Log("line 438");
                     SpiltX[i] = ExpectPos.transform.position.x;
                     SpiltZ[i] = ExpectPos.transform.position.z;
-                    Debug.Log(SpiltX[i]+"  "+ SpiltZ[i]); //沒進去
                 }
 
                 if (CanSpilt[0] == true && CanSpilt[1] == true) ChooseSpiltPos = true;
@@ -639,7 +635,6 @@ public class Merge_Control : MonoBehaviour{
 
         //設定HP
         Base_HP = 3 + A.Timer_Superimposed + B.Timer_Superimposed;//至少3，至多15
-        Debug.Log(Base_HP);
         if (Base_HP > Max_HP) Base_HP = Max_HP;
         for (int k = 0; k < Max_HP; k++){
             if (k < Base_HP){

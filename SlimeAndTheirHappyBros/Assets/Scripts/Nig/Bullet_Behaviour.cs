@@ -6,7 +6,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     int BulletATK = 0;
     int color;
     float  offset, scaleOffset = 1.0f;
-    float FadeTime = 0.75f;
+    float FadeTime = 0.45f;
     public Player_Control WhichPlayer;
     public Player_Control WhichPlayer2;
     public Player_Control Rescue_Which;
@@ -23,6 +23,7 @@ public class Bullet_Behaviour : MonoBehaviour{
     int NowPenetrate = 0;
     bool isLeaf = false;
     List<Collider> colliderRecord = new List<Collider>();
+    public Transform ShadowPivot;
 
     void Awake(){
         _myTransform = transform;
@@ -45,7 +46,7 @@ public class Bullet_Behaviour : MonoBehaviour{
             GetComponent<Animator>().enabled = true;
             speed = 20.0f * xSlime.Base_BulletSpeed;
             //FadeTime = FadeTime + xSlime.Base_BulletTime;
-            FadeTime = FadeTime * (1.0f / xSlime.Base_BulletSpeed) * Mathf.Pow(xSlime.BulletTime_Superimposed, 1.35f);
+            FadeTime = FadeTime * (1.0f / xSlime.Base_BulletSpeed) * Mathf.Pow(1.35f,xSlime.BulletTime_Superimposed);
             scaleOffset = xSlime.Base_BulletScale;
             _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
             PenetrateMaxCount = xSlime.Base_Penetrate;
@@ -65,7 +66,7 @@ public class Bullet_Behaviour : MonoBehaviour{
 
         //speed = 20.0f * Mathf.Pow(1.25f, xSlime.BulletSpeed_Superimposed);
         Attack_Dir *= speed;
-
+        ShadowPivot.transform.localEulerAngles = new Vector3(0, 0, transform.eulerAngles.z * -1.0f);
     }
 
     public void SetAttackDir(Vector3 current_angle, Player_Control xSlime,Player_Control xSlime2, int Shader_Number,Merge_Control xMSlime){
@@ -82,11 +83,12 @@ public class Bullet_Behaviour : MonoBehaviour{
         //speed = 20.0f * Mathf.Pow(1.25f, xMSlime.BulletSpeed_Superimposed);
         speed = 20.0f * xMSlime.Base_BulletSpeed;
         //FadeTime = FadeTime + xSlime.Base_BulletTime;
-        FadeTime = FadeTime * (1.0f / xMSlime.Base_BulletSpeed) * Mathf.Pow(xMSlime.BulletTime_Superimposed, 1.35f);
+        FadeTime = FadeTime * (1.0f / xMSlime.Base_BulletSpeed) * Mathf.Pow(1.35f,xMSlime.BulletTime_Superimposed);
         Attack_Dir *= speed;
         _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
         PenetrateMaxCount = xMSlime.Base_Penetrate;
         BulletATK = xMSlime.Base_ATK;
+        ShadowPivot.transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z * -1.0f);
     }
 
     void Update(){
@@ -105,7 +107,7 @@ public class Bullet_Behaviour : MonoBehaviour{
 
         _myTransform.position += new Vector3(Attack_Dir.x*Time.deltaTime,0,Attack_Dir.z*Time.deltaTime);
         _myTransform.position = new Vector3(_myTransform.position. x, _myTransform.position.y,  _myTransform.position.z);
-        Bullet_Detect();
+        if(GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("SlimeBullet"))Bullet_Detect();
     }
 
     void Bullet_Detect() {

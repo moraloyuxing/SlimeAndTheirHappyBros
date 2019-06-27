@@ -389,13 +389,17 @@ public class Player_Control : MonoBehaviour{
         }
 
         //道具掉落
-        if (CanDrop == true && DropChance <10){
+        if (CanDrop == true && DropChance < 10){
             Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);
             if (Mathf.Abs(Current_BlewOut.transform.position.x - DropX) < 0.1f && Mathf.Abs(Current_BlewOut.transform.position.z - DropZ) < 0.1f){
                 CanDrop = false;
                 Current_BlewOut = null;
                 DropChance = 0;
             }
+        }
+
+        else if (DropChance >= 10 && CanDrop == false) {
+            DropChance = 0;
         }
     }
 
@@ -764,7 +768,7 @@ public class Player_Control : MonoBehaviour{
     void ChooseItemtoDrop() {
 
         //選地點，確認是否有barrier
-        while (CanDrop == false){
+        while (CanDrop == false && DropChance <10){
             CanDrop = true;
             DropX = Random.Range(transform.position.x - 5.0f, transform.position.x + 5.0f);
             DropZ = Random.Range(transform.position.z - 5.0f, transform.position.z + 5.0f);
@@ -832,10 +836,6 @@ public class Player_Control : MonoBehaviour{
 
             _IteminHand.Remove(_IteminHand[Random_Drop]);//從角色持有道具的list移除
         }
-        if (DropChance >= 10 && CanDrop == true) {
-            CanDrop = false;
-            DropChance = 0;
-        }
     }
 
     void DropPosDetect(Transform Expect) {
@@ -846,7 +846,7 @@ public class Player_Control : MonoBehaviour{
             if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") {
                 CanDrop = false;
                 DropChance++;
-                if (DropChance == 10) {CanDrop = true;}
+                //if (DropChance == 10) {CanDrop = true;}
             }
             i++;
         }
