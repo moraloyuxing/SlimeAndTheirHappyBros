@@ -121,6 +121,7 @@ public class Bullet_Behaviour : MonoBehaviour{
                 colliderRecord.Add(colliders[i]);
                 if (c.tag == "Goblin")
                 {
+                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(false, 0.1f,0.2f, 0.2f);
                     NowPenetrate++;
                     if (WhichPlayer != WhichPlayer2) bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, WhichPlayer2.PlayerID2, Attack_Dir);
                     else bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);

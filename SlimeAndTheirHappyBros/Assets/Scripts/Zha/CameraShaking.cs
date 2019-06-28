@@ -57,12 +57,24 @@ public class CameraShaking
     }
     public void StartShakeEasyOut(float shakeT, float endT, float strength)
     {
+        time = .0f;
         shakeTime = shakeT;
         endTime = shakeTime+endT;
         shakeLength = strength;
         inShaking = true;
         weakLevel = Time.deltaTime / endT;
     }
+    public void StartShakeEasyOut(bool weak, float shakeT, float endT, float strength)
+    {
+        if (inShaking) return;
+        time = .0f;
+        shakeTime = shakeT;
+        endTime = shakeTime + endT;
+        shakeLength = strength;
+        inShaking = true;
+        weakLevel = Time.deltaTime / endT;
+    }
+
     public void EndShake() {
 
     }

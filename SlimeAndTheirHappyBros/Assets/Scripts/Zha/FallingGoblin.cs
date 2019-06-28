@@ -19,7 +19,7 @@ public class FallingGoblin : IEnemyObjectPoolUnit
         hurtCollider = goblinTransform.GetComponent<Collider>();
         goblinManager = manager;
         smallScale = new Vector3(1f,1f,1f);
-        totalScale = new Vector3(7.0f,7.0f,1f);
+        totalScale = new Vector3(12.0f,12.0f,1f);
     }
 
     public void ToActive(Vector3 pos, Vector3 dir)
@@ -60,7 +60,10 @@ public class FallingGoblin : IEnemyObjectPoolUnit
 
                 }
             }
-            else if (hurtCollider.enabled) hurtCollider.enabled = false;
+            else if (hurtCollider.enabled) {
+                hurtCollider.enabled = false;
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.15f, 0.4f, 0.65f);
+            } 
             if (time > 4.0f) ResetUnit();
 
         }

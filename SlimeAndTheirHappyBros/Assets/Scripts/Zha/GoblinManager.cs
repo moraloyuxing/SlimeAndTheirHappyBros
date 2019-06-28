@@ -693,6 +693,12 @@ public class GoblinManager : MonoBehaviour
         {
             usedHobGoblins[index].SetGameOver();
         }
+        kingGoblin.SetGameOver();
+        goblinSpirit.SetGameOver();
+    }
+
+    IEnumerator KingDisappear() {
+        yield return new WaitForSeconds(1.0f);
         kingGoblin.ResetUnit();
         goblinSpirit.ResetUnit();
     }
