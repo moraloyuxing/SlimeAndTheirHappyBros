@@ -1,16 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class FallingGoblin : IEnemyObjectPoolUnit
 {
     bool fallGround = false;
-    int traceID = 0;
+    int traceID = 0, aniId = -1;
     float time = .0f, scaleTime = .0f, traceSpeed = 20.0f, height = 50.0f,fallingSpeed = .0f, addSpeed = 5.0f;
+    float aniTime = .0f;
     Transform transform, goblinTransform, hintTransform;
     GoblinManager goblinManager;
     Vector3 smallScale, totalScale;
     Collider hurtCollider;
+    Sprite[] fallEffect;
+
+    SpriteRenderer fallRender;
 
     public void Init(Transform t, GoblinManager manager, GoblinManager.PoolUnitInfo info) {
         transform = t;
@@ -20,6 +25,8 @@ public class FallingGoblin : IEnemyObjectPoolUnit
         goblinManager = manager;
         smallScale = new Vector3(1f,1f,1f);
         totalScale = new Vector3(12.0f,12.0f,1f);
+        fallEffect = UnityEditor.AssetDatabase.LoadAllAssetsAtPath("Assets/Image/SpriteSheet/Effect/Goblin_Drop.png").OfType<Sprite>().ToArray();
+        fallRender = transform.Find("FallSprite").GetComponent<SpriteRenderer>(); ;
     }
 
     public void ToActive(Vector3 pos, Vector3 dir)
@@ -60,10 +67,23 @@ public class FallingGoblin : IEnemyObjectPoolUnit
 
                 }
             }
-            else if (hurtCollider.enabled) {
-                hurtCollider.enabled = false;
-                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.15f, 0.4f, 0.65f);
-            } 
+            else {
+                if (aniId < 16) {
+                    aniTime += dt;
+                    if (aniTime > 0.05f)
+                    {
+                        aniTime = .0f;
+                        aniId++;
+                        fallRender.sprite = fallEffect[aniId];
+                    }
+                }
+
+                if (hurtCollider.enabled)
+                {
+                    hurtCollider.enabled = false;
+                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.15f, 0.4f, 0.65f);
+                }
+            }
             if (time > 4.0f) ResetUnit();
 
         }
@@ -78,5 +98,7 @@ public class FallingGoblin : IEnemyObjectPoolUnit
         hurtCollider.enabled = true;
         transform.gameObject.SetActive(false);
         goblinManager.RecyleFallingGoblin(this);
+        aniId = -1;
+        fallRender.sprite = null;
     }
 }
