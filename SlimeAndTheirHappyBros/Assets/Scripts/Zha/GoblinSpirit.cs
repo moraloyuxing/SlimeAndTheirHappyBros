@@ -177,7 +177,7 @@ public class GoblinSpirit:IEnemyUnit
 
             if (!goChangeColor)
             {
-                if (changeColorTime < 2.0f)
+                if (changeColorTime < 15.0f)
                 {
                     Debug.Log("change color time  " + changeColorTime);
                     int op = Random.Range(0, 100);

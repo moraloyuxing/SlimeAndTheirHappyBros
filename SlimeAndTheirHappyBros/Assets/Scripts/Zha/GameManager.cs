@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    bool roundStart = false, inShopping = false, bossLevel = false;
+    bool roundStart = false, inShopping = false, bossLevel = false, winInput = false;
     bool gameOver = false, lightChange = true;
     int tutorialProgress = 0, goblinKills = 0, maxLevel = 10;
     int  bossMonsterNum = 0;
-    float time = .0f, lightTime = .0f, bossTime = 15.0f;
+    float time = .0f, lightTime = .0f, bossTime = 10.0f;
     GameState tutorialState, bossLevelState;
     GameState[] gameStates;
     GoblinManager goblinManager;
@@ -163,8 +163,11 @@ public class GameManager : MonoBehaviour
             }
         }
         else {
-            if (!roundStart)roundStart = false;
-            if (bossMonsterNum >= 6)  return;
+            if (winInput && (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
+                    || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space) )) {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            }
+            if (gameOver || bossMonsterNum >= 6) return;
             bossTime += Time.deltaTime;
             if (bossTime >= 30.0f) {
                 bossTime = .0f;
@@ -273,7 +276,7 @@ public class GameManager : MonoBehaviour
         gameOver = true;
         goblinManager.GameOver(true);
         uiManager.GoWin();
-        StartCoroutine(PlayAgain(7.5f));
+        StartCoroutine(PlayAgainWin(4.5f));
     }
 
     public void GoLose() {
@@ -286,6 +289,12 @@ public class GameManager : MonoBehaviour
         curRound = -1;
         yield return new WaitForSeconds(time);
         UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    }
+    IEnumerator PlayAgainWin(float time)
+    {
+        curRound = -1;
+        yield return new WaitForSeconds(time);
+        winInput = true;
     }
 
 }
