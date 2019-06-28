@@ -418,7 +418,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
                     else if (quackStep == 1 && aniInfo.normalizedTime > 0.7f) {
                         quackStep++;
-                        MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.15f, 0.4f, 0.65f);
+                        MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.15f, 0.15f, 0.45f);
                     }
                 }
                 else {
