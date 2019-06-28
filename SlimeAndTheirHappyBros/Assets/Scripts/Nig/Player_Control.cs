@@ -421,7 +421,7 @@ public class Player_Control : MonoBehaviour{
     {
         GetComponent<Animator>().Play("Slime_JumpinPondEffect");
         _pigmentmanager.Change_Base_Color(Player_Number, Color_Number);
-        _playermanager.SetPlayerColor(Player_Number, Color_Number);
+        //_playermanager.SetPlayerColor(Player_Number, Color_Number);
     }
 
     //顯示/隱藏混合提示
@@ -541,6 +541,7 @@ public class Player_Control : MonoBehaviour{
 
     public void HideSplash() {
         SplashEffect.GetComponent<SpriteRenderer>().sprite = null;
+        _playermanager.SetPlayerColor(Player_Number, Color_Number);
     }
 
     //復活相關
