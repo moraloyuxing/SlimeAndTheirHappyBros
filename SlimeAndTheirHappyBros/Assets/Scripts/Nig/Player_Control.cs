@@ -147,7 +147,7 @@ public class Player_Control : MonoBehaviour{
     RaycastHit hit_GetItem_dir;
     bool Already_pick = false;
     int DropChance = 0;
-
+    bool HaveItemtoDrop = false;
 
     void Start(){
         PlayerID2 = PlayerID;
@@ -390,12 +390,16 @@ public class Player_Control : MonoBehaviour{
 
         //道具掉落
         if (CanDrop == true && DropChance < 10){
-            Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);
-            if (Mathf.Abs(Current_BlewOut.transform.position.x - DropX) < 0.1f && Mathf.Abs(Current_BlewOut.transform.position.z - DropZ) < 0.1f){
-                CanDrop = false;
-                Current_BlewOut = null;
-                DropChance = 0;
+            if (HaveItemtoDrop == true) {
+                Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);
+                if (Mathf.Abs(Current_BlewOut.transform.position.x - DropX) < 0.1f && Mathf.Abs(Current_BlewOut.transform.position.z - DropZ) < 0.1f){
+                    CanDrop = false;
+                    Current_BlewOut = null;
+                    DropChance = 0;
+                    HaveItemtoDrop = false;
+                }
             }
+
         }
 
         else if (DropChance >= 10 && CanDrop == false) {
@@ -780,6 +784,8 @@ public class Player_Control : MonoBehaviour{
 
         //有東西才掉落
         if (_IteminHand.Count > 0 &&DropChance <10) {
+            Debug.Log("Enter");
+            HaveItemtoDrop = true;
             Random_Drop = Random.Range(0, _IteminHand.Count);
             Current_BlewOut = Instantiate(Item_BlewOut) as GameObject;
             //GameObject clone_Item = Instantiate(Item_BlewOut) as GameObject;

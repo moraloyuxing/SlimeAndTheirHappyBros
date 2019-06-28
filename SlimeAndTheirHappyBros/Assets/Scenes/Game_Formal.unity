@@ -34196,10 +34196,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1501028977}
   - {fileID: 296380547}
   - {fileID: 779591947}
   - {fileID: 685374452}
+  - {fileID: 1501028977}
   - {fileID: 51123037}
   - {fileID: 1278850044}
   - {fileID: 1983349891}
@@ -63005,7 +63005,7 @@ PrefabInstance:
     - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
         type: 3}
       propertyPath: test
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70d8dfaf85a434e4791eaf895639e141, type: 3}

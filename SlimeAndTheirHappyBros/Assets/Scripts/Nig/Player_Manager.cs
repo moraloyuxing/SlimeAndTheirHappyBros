@@ -9,7 +9,7 @@ public class Player_Manager : MonoBehaviour
     public Player_Control[] FourPlayer = new Player_Control[4];
     bool[] Can_Merge = new bool[6];// 距離方面可以混合的兩隻史萊姆，12→13→14→23→24→34
     float[] Player_Distance = new float[6];// 12→13→14→23→24→34
-    GameObject[] shortest_toPlayer = new GameObject[4];//對(1 2 3 4)號玩家距離最短的對象暫存欄
+    public GameObject[] shortest_toPlayer = new GameObject[4];//對(1 2 3 4)號玩家距離最短的對象暫存欄
     int[] Color_Number = new int[4];//玩家當前顏色
     bool[] a_button = new bool[4];
     string[] Which_Player = new string[4];
