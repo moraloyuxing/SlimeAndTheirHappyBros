@@ -17928,6 +17928,7 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: d5db1f0b7c39e4806b16cab82ec57ae1, type: 3}
   - clipNmae: Revive
     clip: {fileID: 8300000, guid: f386bdc9b2c2c4f009a1576240eb60cd, type: 3}
+  bossMusic: {fileID: 0}
 --- !u!4 &772946246
 Transform:
   m_ObjectHideFlags: 0

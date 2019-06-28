@@ -53,6 +53,7 @@ public class PathFinding : MonoBehaviour {
 
             while (openSet.Count > 0)
             {
+                Debug.Log("pathfinding find path open set > 0");
                 Node currentNode = openSet.RemoveFirst();
                 closedSet.Add(currentNode);
                 //Debug.Log(currentNode.gridX + "   " + currentNode.gridY);
@@ -124,6 +125,7 @@ public class PathFinding : MonoBehaviour {
         else {
             while (currentNode != startNode)
             {
+                Debug.Log("pathfinding retracing path");
                 currentNode.AddPenalty(10);
                 path.Add(currentNode);
                 currentNode = currentNode.parent;

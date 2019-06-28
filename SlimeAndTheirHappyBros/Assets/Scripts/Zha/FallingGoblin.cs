@@ -25,7 +25,8 @@ public class FallingGoblin : IEnemyObjectPoolUnit
         goblinManager = manager;
         smallScale = new Vector3(1f,1f,1f);
         totalScale = new Vector3(12.0f,12.0f,1f);
-        fallEffect = UnityEditor.AssetDatabase.LoadAllAssetsAtPath("Assets/Image/SpriteSheet/Effect/Goblin_Drop.png").OfType<Sprite>().ToArray();
+        //fallEffect = UnityEditor.AssetDatabase.LoadAllAssetsAtPath("Assets/Image/SpriteSheet/Effect/Goblin_Drop.png").OfType<Sprite>().ToArray();
+        fallEffect = Resources.LoadAll<Sprite>("Goblin_Drop") as Sprite[];
         fallRender = transform.Find("FallSprite").GetComponent<SpriteRenderer>(); ;
     }
 

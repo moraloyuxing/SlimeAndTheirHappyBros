@@ -23,6 +23,7 @@ public class GameState
         //SpawnOverCBK = cbk;
         totalGoblinPerWave = new int[maxWave];
         for (int i = 0; i < totalGoblinPerWave.Length; i++) {
+            totalGoblinPerWave[i] = 0;
             totalGoblinPerWave[i] = info.waves[i].normalGoblin;
             if (info.waves[i].archerGoblin > totalGoblinPerWave[i]) totalGoblinPerWave[i] = info.waves[i].archerGoblin;
             if(info.waves[i].hobGoblin > totalGoblinPerWave[i]) totalGoblinPerWave[i] = info.waves[i].hobGoblin;
@@ -38,6 +39,7 @@ public class GameState
         if (time > stateInfo.waves[currentWave].spawnTime) {
             int i = 0;
             while (i < totalGoblinPerWave[currentWave]) {
+                Debug.Log("game state update");
                 if (!stateInfo.waves[currentWave].mutiColor) {
                     if (i < stateInfo.waves[currentWave].normalGoblin) goblinManager.SpawnNormalGoblinBaseColor(0);
                     if (i < stateInfo.waves[currentWave].archerGoblin) goblinManager.SpawnArcherGoblinBaseColor(0);

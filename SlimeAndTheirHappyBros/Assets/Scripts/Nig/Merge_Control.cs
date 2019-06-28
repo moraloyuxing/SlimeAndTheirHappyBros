@@ -420,6 +420,7 @@ public class Merge_Control : MonoBehaviour{
     public void Spilt_toOriginal(){
 
         while (ChooseSpiltPos == false) {
+            Debug.Log("merge control split to oringal");
             ChooseSpiltPos = true;
             for (int i = 0; i < 2; i++){
                 GameObject ExpectPos = Instantiate(ExpectSpilt) as GameObject;
@@ -460,9 +461,11 @@ public class Merge_Control : MonoBehaviour{
 
     void SpiltPosDetect(Transform Expect, int PID) {
         Collider[] colliders = Physics.OverlapBox(Expect.position + new Vector3(0, -0.2f, 0), new Vector3(0.79f, 0.6f, 0.2f), Quaternion.Euler(0, 0, 0), 1 << LayerMask.NameToLayer("Barrier") | 1<<LayerMask.NameToLayer("Border"));
+        if (colliders == null) return;
         int i = 0;
         CanSpilt[PID] = true;
         while (i < colliders.Length) {
+            Debug.Log("merge cotrol split pos detect");
             Transform c = colliders[i].transform.parent;
             if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") {
                 CanSpilt[PID] = false;
@@ -556,9 +559,11 @@ public class Merge_Control : MonoBehaviour{
     public void SlimeGetHurt()
     {
         Collider[] colliders = Physics.OverlapBox(Merge_Sprite.transform.position, new Vector3(2.3f, 1.7f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
+        if (colliders == null) return;
         int i = 0;
         while (i < colliders.Length)
         {
+            Debug.Log("merge control get hurt");
             if (i == 0)
             {
                 GetComponent<Animator>().Play("Slime_Hurt");

@@ -282,6 +282,7 @@ public class KingGoblin : IEnemyUnit
                 throwId = Random.Range(0, 99) % 4;
                 while (goblinManager.PlayersDie[throwId])
                 {
+                    Debug.Log("king goblin throw attack");
                     throwId++;
                     deathCount++;
                     if (throwId > 3) throwId = 0;

@@ -548,6 +548,7 @@ public class GoblinManager : MonoBehaviour
         int i = 0;
         while (i < num)
         {
+            Debug.Log("drop money");
             if (freeMoneys.Count <= 0) break;
             Money money = freeMoneys[0];
             usedMoneys.Add(money);
@@ -563,6 +564,7 @@ public class GoblinManager : MonoBehaviour
         int i = 0;
         while (i < num)
         {
+            Debug.Log("drop money");
             if (freeMoneys.Count <= 0) break;
             Money money = freeMoneys[0];
             usedMoneys.Add(money);
@@ -693,12 +695,13 @@ public class GoblinManager : MonoBehaviour
         {
             usedHobGoblins[index].SetGameOver();
         }
+        StartCoroutine(KingDisappear());
         kingGoblin.SetGameOver();
         goblinSpirit.SetGameOver();
     }
 
     IEnumerator KingDisappear() {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.35f);
         kingGoblin.ResetUnit();
         goblinSpirit.ResetUnit();
     }

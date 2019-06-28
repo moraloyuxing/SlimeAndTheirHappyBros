@@ -318,6 +318,7 @@ public class GoblinSpirit:IEnemyUnit
             animator.SetInteger("state", 1);
             int t = Random.Range(0, 3);
             while (goblinManager.PlayersDie[t]) {
+                Debug.Log("goblin spirit x attack");
                 t++;
                 deathCount++;
                 if (t > 3) t = 0;

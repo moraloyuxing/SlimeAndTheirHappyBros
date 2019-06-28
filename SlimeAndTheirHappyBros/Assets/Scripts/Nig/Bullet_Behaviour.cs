@@ -114,8 +114,10 @@ public class Bullet_Behaviour : MonoBehaviour{
     void Bullet_Detect() {
         Collider[]colliders = Physics.OverlapBox(_myTransform.position, scaleOffset * new Vector3(0.22f, 0.15f, 0.025f), Quaternion.Euler(25, 0, 0), 
             1 << LayerMask.NameToLayer("GoblinHurtArea") | 1<< LayerMask.NameToLayer("Barrier") | 1 << LayerMask.NameToLayer("PlayerReviveArea"));
+        if (colliders == null) return;
         int i = 0;
         while (NowPenetrate < PenetrateMaxCount && i < colliders.Length ){
+            Debug.Log("bullet behavior detect collider");
             Transform c = colliders[i].transform.parent;
 
             if (!colliderRecord.Contains(colliders[i])) {

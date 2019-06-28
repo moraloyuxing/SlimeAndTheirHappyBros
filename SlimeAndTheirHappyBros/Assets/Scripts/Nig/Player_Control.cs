@@ -776,6 +776,7 @@ public class Player_Control : MonoBehaviour{
 
         //選地點，確認是否有barrier
         while (CanDrop == false && DropChance <10){
+            Debug.Log("player control drop item");
             CanDrop = true;
             DropX = Random.Range(transform.position.x - 5.0f, transform.position.x + 5.0f);
             DropZ = Random.Range(transform.position.z - 5.0f, transform.position.z + 5.0f);
@@ -849,8 +850,10 @@ public class Player_Control : MonoBehaviour{
 
     void DropPosDetect(Transform Expect) {
         Collider[] colliders = Physics.OverlapBox(Expect.transform.position, new Vector3(2.0f, 2.0f, 2.0f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("Barrier") | 1 << LayerMask.NameToLayer("Border"));
+        if (colliders == null) return;
         int i = 0;
         while (i < colliders.Length) {
+            Debug.Log("player control drop pos detect");
             Transform c = colliders[i].transform.parent;
             if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") {
                 CanDrop = false;
