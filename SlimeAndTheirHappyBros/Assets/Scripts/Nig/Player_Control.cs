@@ -380,7 +380,7 @@ public class Player_Control : MonoBehaviour{
         }
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)、衰弱時間(速度*0.6f)
         //if (Time.time > musouTime + StateMusou && StopDetect) { StopDetect = false; }
-        if (Time.time > Weak_Moment + 10.0f && OnWeak) {
+        if (Time.time > Weak_Moment + 5.0f && OnWeak) {
             OnWeak = false;
             anim.SetBool("OnWeak", OnWeak);
             Base_Speed = Current_Speed;

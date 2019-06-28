@@ -88,7 +88,8 @@ public class Bullet_Behaviour : MonoBehaviour{
         _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
         PenetrateMaxCount = xMSlime.Base_Penetrate;
         BulletATK = xMSlime.Base_ATK;
-        ShadowPivot.transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z * -1.0f);
+        Debug.Log(transform.eulerAngles.z);
+        ShadowPivot.transform.localEulerAngles = new Vector3(0, 0, transform.eulerAngles.z * -1.0f);
     }
 
     void Update(){
