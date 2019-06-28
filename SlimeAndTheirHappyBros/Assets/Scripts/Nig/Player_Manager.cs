@@ -7,7 +7,7 @@ public class Player_Manager : MonoBehaviour
 {
     public NPC_Manager npcmanager;
     public Player_Control[] FourPlayer = new Player_Control[4];
-    bool[] Can_Merge = new bool[6];// 距離方面可以混合的兩隻史萊姆，12→13→14→23→24→34
+    public bool[] Can_Merge = new bool[6];// 距離方面可以混合的兩隻史萊姆，12→13→14→23→24→34
     float[] Player_Distance = new float[6];// 12→13→14→23→24→34
     public GameObject[] shortest_toPlayer = new GameObject[4];//對(1 2 3 4)號玩家距離最短的對象暫存欄
     int[] Color_Number = new int[4];//玩家當前顏色
@@ -19,11 +19,11 @@ public class Player_Manager : MonoBehaviour
     public Transform WashingPlace;
     public GameObject WashingBoard;
     bool HaveBoard = true;
-    bool[] WashPriority = new bool[4];//靠近洗衣板會有洗白優先權，混合次之
+    public bool[] WashPriority = new bool[4];//靠近洗衣板會有洗白優先權，混合次之
     bool WashBoard_OnUse = false;
     float WashMoment = 0.0f;
     public Sprite[] Hint_Type = new Sprite[2];//0→洗白；1→混合
-    bool[] Weak_State = new bool[4];
+    public bool[] Weak_State = new bool[4];
 
     bool Game_State = true;
     bool[] On_Altar = new bool[4];
@@ -386,7 +386,7 @@ public class Player_Manager : MonoBehaviour
 
             else
             {
-                if (Player_Distance[2] < Player_Distance[3]) shortest_toPlayer[2] = FourPlayer[1].gameObject;//離2最近
+                if (Player_Distance[3] < Player_Distance[5]) shortest_toPlayer[2] = FourPlayer[1].gameObject;//離2最近
                 else shortest_toPlayer[2] = FourPlayer[3].gameObject;//離4最近
             }
 
