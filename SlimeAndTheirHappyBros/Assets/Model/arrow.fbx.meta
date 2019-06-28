@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 55096123e3af0864983b273614025319
+guid: 47f9019e81855364296207690e0bbf57
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -8,15 +8,10 @@ ModelImporter:
     2100000: lambert2
     2300000: //RootNode
     3300000: //RootNode
-    4300000: Plane004
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lambert2
-    second: {fileID: 2100000, guid: ba401cdee62c06144aaa45fca7e51b27, type: 2}
+    4300000: polySurface5
+  externalObjects: {}
   materials:
-    importMaterials: 0
+    importMaterials: 1
     materialName: 0
     materialSearch: 1
     materialLocation: 1
