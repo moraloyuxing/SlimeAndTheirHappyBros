@@ -7,7 +7,7 @@ public class KingGoblin : IEnemyUnit
     bool showEnable = false, crackOnce = false;
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
     bool throwOnce = false, goRoar = false;
-    int totalHp = 500, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
+    int totalHp = 1200, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
     int atkCount = 0, totalAtk = 1;
     float stateTime = .0f, idleTime = 2.0f;
 
