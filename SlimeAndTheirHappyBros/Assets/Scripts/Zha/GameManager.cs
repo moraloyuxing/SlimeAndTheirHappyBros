@@ -166,16 +166,16 @@ public class GameManager : MonoBehaviour
             if (!roundStart)roundStart = false;
             if (bossMonsterNum >= 6)  return;
             bossTime += Time.deltaTime;
-            if (bossTime >= 40.0f) {
+            if (bossTime >= 30.0f) {
                 bossTime = .0f;
-                int op = Random.Range(1,4);
+                int op = Random.Range(1,3);
                 while (op > 0) {
                     goblinManager.BossSpawnNormalGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;
                     if (bossMonsterNum >= 6) return;
                 }
-                op = Random.Range(1, 4);
+                op = Random.Range(1, 3);
                 while (op > 0)
                 {
                     goblinManager.BossSpawnArcherGoblinMutiColor(0);
@@ -183,7 +183,7 @@ public class GameManager : MonoBehaviour
                     bossMonsterNum++;
                     if (bossMonsterNum >= 6) return;
                 }
-                op = Random.Range(1, 4);
+                op = Random.Range(1, 3);
                 while (op > 0)
                 {
                     goblinManager.BossSpawnHobGoblinMutiColor(0);
@@ -215,7 +215,7 @@ public class GameManager : MonoBehaviour
     public void StartBossRound() {
 
         AudioManager.SingletonInScene.ChangeBGM(false, -1);
-        AudioManager.SingletonInScene.PlaySound2D("Earthquake", 0.3f);
+        AudioManager.SingletonInScene.PlaySound2D("Earthquake", 0.26f);
         bossLevel = true;
         cameraController.StartBossLevel();
         goblinManager.DisableBushCollider();

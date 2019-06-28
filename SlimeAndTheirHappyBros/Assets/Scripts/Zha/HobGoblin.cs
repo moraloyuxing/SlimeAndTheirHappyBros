@@ -5,7 +5,7 @@ using UnityEngine;
 public class HobGoblin : GoblinBase, IEnemyUnit
 {
     bool startAttack = false, endure = false, hasShoot = false;
-    bool quackSound = false;
+    int quackStep = 0;
     int attackType = 0;
     float imgOffset, hurtAreaOffset;
     Vector3 shootOffset;
@@ -409,10 +409,16 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
                 if (attackType == 0)
                 {
-                    if (!quackSound && aniInfo.normalizedTime > 0.45f)
+                    if (quackStep == 0 && aniInfo.normalizedTime > 0.45f)
                     {
-                        quackSound = true;
+                        quackStep++;
                         AudioManager.SingletonInScene.PlaySound2D("Tree_Attack", 0.38f);
+                        
+                    }
+
+                    else if (quackStep == 1 && aniInfo.normalizedTime > 0.7f) {
+                        quackStep++;
+                        MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.15f, 0.15f, 0.45f);
                     }
                 }
                 else {
@@ -437,7 +443,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     endure = false;
                     startAttack = false;
                     hasShoot = false;
-                    quackSound = false;
+                    quackStep = 0;
                     RandomATKType();
                     SetState(GoblinState.attackBreak);
                     //OverAttackDetectDist();
@@ -747,7 +753,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         hasShoot = false;
         endure = false;
         startAttack = false;
-        quackSound = false;
+        quackStep = 0;
         hurtAreaCol.enabled = true;
         goblinManager.RecycleGoblin(this);
         transform.gameObject.SetActive(false);

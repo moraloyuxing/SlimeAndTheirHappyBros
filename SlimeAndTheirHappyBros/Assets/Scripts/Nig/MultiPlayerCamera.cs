@@ -58,7 +58,7 @@ public class MultiPlayerCamera : MonoBehaviour{
         {
             Move();
             Zoom();
-            //cameraShakingSingleton.Update(Time.deltaTime, NewPosition);
+            cameraShakingSingleton.Update(Time.deltaTime, NewPosition);
         }
         else {
 
@@ -73,7 +73,7 @@ public class MultiPlayerCamera : MonoBehaviour{
                 if (bossMoveTime <= 1.5f)
                 {
                     if (!bossShake) {
-                        cameraShakingSingleton.StartShakeEasyOut(0.2f,1.0f,1.5f);
+                        cameraShakingSingleton.StartShakeEasyOut(1.0f,2.2f,1.5f);
                         bossShake = true;
                     } 
                 }

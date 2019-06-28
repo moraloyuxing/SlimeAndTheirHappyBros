@@ -124,7 +124,7 @@ public class KingGoblin : IEnemyUnit
             {
                 hurtArea.enabled = true;
                 AudioManager.SingletonInScene.PlaySound2D("HouseBoom", 0.3f);
-                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f,0.5f);
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.8f,1.5f);
                 punchShopOnce = true;
                 punchShop();
             }
@@ -134,7 +134,7 @@ public class KingGoblin : IEnemyUnit
                     {
                         punchBushOnce = true;
                         punchBush();
-                        MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f, 0.3f);
+                        //MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f, 1.0f);
                         
                     }
                     else {
@@ -204,24 +204,28 @@ public class KingGoblin : IEnemyUnit
                 goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
                 punchStep = 1;
                 AudioManager.SingletonInScene.PlaySound2D("KingPunch", 0.5f);
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.2f, 0.5f);
             }
             else if (punchStep == 1 && aniInfo.normalizedTime >= 0.5f)
             {
                 goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
                 punchStep = 2;
                 AudioManager.SingletonInScene.PlaySound2D("KingPunch", 0.5f);
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.2f, 0.5f);
             }
             else if (punchStep == 2 && aniInfo.normalizedTime >= 0.57f)
             {
                 goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
                 punchStep = 3;
                 AudioManager.SingletonInScene.PlaySound2D("KingPunch", 0.5f);
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.2f, 0.5f);
             }
             else if (punchStep == 3 && aniInfo.normalizedTime >= 0.71f)
             {
                 goblinManager.UsePunch(punchPos[punchStep], punchDir[punchStep], punchRot[punchStep]);
                 punchStep = 4;
                 AudioManager.SingletonInScene.PlaySound2D("KingPunch", 0.5f);
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.2f, 0.5f);
             }
             else if (punchStep == 4 && aniInfo.normalizedTime >= 0.96f)
             {
@@ -246,7 +250,7 @@ public class KingGoblin : IEnemyUnit
                 atkCount++;
                 goblinManager.UseWave(transform.position);
                 AudioManager.SingletonInScene.PlaySound2D("CircleAttack", 0.3f);
-                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f, 0.5f);
+                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.1f, 0.5f, 1.0f);
                 if (atkCount >= totalAtk) {
                     atkCount = 0;
                     SetState(KingState.idle);
@@ -368,5 +372,9 @@ public class KingGoblin : IEnemyUnit
     public void Spawn(Vector3 pos, int col) {
         transform.gameObject.SetActive(true);
 
+    }
+    public void SetGameOver()
+    {
+        animator.speed = .0f;
     }
 }
