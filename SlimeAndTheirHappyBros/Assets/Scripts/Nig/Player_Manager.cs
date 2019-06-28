@@ -31,7 +31,7 @@ public class Player_Manager : MonoBehaviour
     public GoblinManager _goblinmanager;
     bool[] Player_Death = new bool[4];
     bool All_Death = false;
-
+    bool[] Player_Hurt = new bool[4] { false, false, false, false };
     public MultiPlayerCamera cameraatshop;
     public Transform ShopPlace;
     float ShopDis_x;
@@ -83,35 +83,35 @@ public class Player_Manager : MonoBehaviour
         for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
         if (Game_State){
             //玩家1啟用融合
-            if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true && Weak_State[0] == false)
+            if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true && Weak_State[0] == false && Player_Hurt[0] == false)
             {
-                if (shortest_toPlayer[0] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[0].gameObject && Can_Merge[0] == true && Weak_State[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[1].gameObject, Color_Number[0] + Color_Number[1]); }
-                else if (shortest_toPlayer[0] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[0].gameObject && Can_Merge[1] == true && Weak_State[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[2].gameObject, Color_Number[0] + Color_Number[2]); }
-                else if (shortest_toPlayer[0] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[0].gameObject && Can_Merge[2] == true && Weak_State[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[3].gameObject, Color_Number[0] + Color_Number[3]); }
+                if (shortest_toPlayer[0] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[0].gameObject && Can_Merge[0] == true && Weak_State[1] == false && Player_Hurt[1] == false) {pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[1].gameObject, Color_Number[0] + Color_Number[1]);}
+                else if (shortest_toPlayer[0] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[0].gameObject && Can_Merge[1] == true && Weak_State[2] == false && Player_Hurt[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[2].gameObject, Color_Number[0] + Color_Number[2]); }
+                else if (shortest_toPlayer[0] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[0].gameObject && Can_Merge[2] == true && Weak_State[3] == false && Player_Hurt[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[3].gameObject, Color_Number[0] + Color_Number[3]); }
             }
 
             //玩家2啟用融合
-            if (a_button[1] && WashPriority[1] == false && FourPlayer[1].gameObject.activeSelf == true && Weak_State[1] == false)
+            if (a_button[1] && WashPriority[1] == false && FourPlayer[1].gameObject.activeSelf == true && Weak_State[1] == false && Player_Hurt[1] == false)
             {
-                if (shortest_toPlayer[1] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[1].gameObject && Can_Merge[0] == true && Weak_State[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[0].gameObject, Color_Number[1] + Color_Number[0]); }
-                else if (shortest_toPlayer[1] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[1].gameObject && Can_Merge[3] == true && Weak_State[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[2].gameObject, Color_Number[1] + Color_Number[2]); }
-                else if (shortest_toPlayer[1] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[1].gameObject && Can_Merge[4] == true && Weak_State[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[3].gameObject, Color_Number[1] + Color_Number[3]); }
+                if (shortest_toPlayer[1] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[1].gameObject && Can_Merge[0] == true && Weak_State[0] == false && Player_Hurt[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[0].gameObject, Color_Number[1] + Color_Number[0]); }
+                else if (shortest_toPlayer[1] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[1].gameObject && Can_Merge[3] == true && Weak_State[2] == false && Player_Hurt[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[2].gameObject, Color_Number[1] + Color_Number[2]); }
+                else if (shortest_toPlayer[1] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[1].gameObject && Can_Merge[4] == true && Weak_State[3] == false && Player_Hurt[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[3].gameObject, Color_Number[1] + Color_Number[3]); }
             }
 
             //玩家3啟用融合
-            if (a_button[2] && WashPriority[2] == false && FourPlayer[2].gameObject.activeSelf == true && Weak_State[2] == false)
+            if (a_button[2] && WashPriority[2] == false && FourPlayer[2].gameObject.activeSelf == true && Weak_State[2] == false && Player_Hurt[2] == false)
             {
-                if (shortest_toPlayer[2] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[2].gameObject && Can_Merge[1] == true && Weak_State[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[0].gameObject, Color_Number[2] + Color_Number[0]); }
-                else if (shortest_toPlayer[2] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[2].gameObject && Can_Merge[3] == true && Weak_State[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[1].gameObject, Color_Number[2] + Color_Number[1]); }
-                else if (shortest_toPlayer[2] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[2].gameObject && Can_Merge[5] == true && Weak_State[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[3].gameObject, Color_Number[2] + Color_Number[3]); }
+                if (shortest_toPlayer[2] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[2].gameObject && Can_Merge[1] == true && Weak_State[0] == false && Player_Hurt[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[0].gameObject, Color_Number[2] + Color_Number[0]); }
+                else if (shortest_toPlayer[2] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[2].gameObject && Can_Merge[3] == true && Weak_State[1] == false && Player_Hurt[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[1].gameObject, Color_Number[2] + Color_Number[1]); }
+                else if (shortest_toPlayer[2] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[2].gameObject && Can_Merge[5] == true && Weak_State[3] == false && Player_Hurt[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[3].gameObject, Color_Number[2] + Color_Number[3]); }
             }
            
             //玩家4啟用融合
-            if (a_button[3] && WashPriority[3] == false && FourPlayer[3].gameObject.activeSelf == true && Weak_State[3] == false)
+            if (a_button[3] && WashPriority[3] == false && FourPlayer[3].gameObject.activeSelf == true && Weak_State[3] == false && Player_Hurt[3] == false)
             {
-                if (shortest_toPlayer[3] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[3].gameObject && Can_Merge[2] == true && Weak_State[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[0].gameObject, Color_Number[3] + Color_Number[0]); }
-                else if (shortest_toPlayer[3] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[3].gameObject && Can_Merge[4] == true && Weak_State[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[1].gameObject, Color_Number[3] + Color_Number[1]); }
-                else if (shortest_toPlayer[3] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[3].gameObject && Can_Merge[5] == true && Weak_State[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[2].gameObject, Color_Number[3] + Color_Number[2]); }
+                if (shortest_toPlayer[3] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[3].gameObject && Can_Merge[2] == true && Weak_State[0] == false && Player_Hurt[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[0].gameObject, Color_Number[3] + Color_Number[0]); }
+                else if (shortest_toPlayer[3] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[3].gameObject && Can_Merge[4] == true && Weak_State[1] == false && Player_Hurt[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[1].gameObject, Color_Number[3] + Color_Number[1]); }
+                else if (shortest_toPlayer[3] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[3].gameObject && Can_Merge[5] == true && Weak_State[2] == false && Player_Hurt[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[2].gameObject, Color_Number[3] + Color_Number[2]); }
             }
         }
 
@@ -551,6 +551,14 @@ public class Player_Manager : MonoBehaviour
     public void ExitWeak(int xP)
     {
         Weak_State[xP] = false;
+    }
+
+    public void StartHurt(int xP){
+        Player_Hurt[xP] = true;
+    }
+
+    public void ExitHurt(int xP){
+        Player_Hurt[xP] = false;
     }
 
     public void DocterRound() {

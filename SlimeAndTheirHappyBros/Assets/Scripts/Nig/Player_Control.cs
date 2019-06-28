@@ -456,6 +456,7 @@ public class Player_Control : MonoBehaviour{
             }
             if (DeathPriority == false) {
                  GetComponent<Animator>().Play("Slime_Hurt");
+                _playermanager.StartHurt(Player_Number);
                 ExtraPriority = true;
                 StopDetect = true;
                 if(musouTime >0.0f)CancelInvoke("Musou_Flick");
@@ -515,6 +516,7 @@ public class Player_Control : MonoBehaviour{
         if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f) GetComponent<Animator>().Play("Slime_Idle");
         else if(Mathf.Abs(xAix) > 0.03f && Mathf.Abs(zAix) > 0.03f) GetComponent<Animator>().Play("Slime_Walk");
         //_playermanager.BackWashBoard();
+        _playermanager.ExitHurt(Player_Number);
     }
 
     //短衝刺設定
