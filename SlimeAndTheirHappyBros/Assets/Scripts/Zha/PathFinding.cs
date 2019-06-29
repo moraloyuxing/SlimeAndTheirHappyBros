@@ -51,9 +51,11 @@ public class PathFinding : MonoBehaviour {
             HashSet<Node> closedSet = new HashSet<Node>();
             openSet.Add(startNode);
 
+            int loopCount = 0;
             while (openSet.Count > 0)
             {
-                Debug.Log("pathfinding find path open set > 0");
+                loopCount++;
+                if (loopCount > 10000) Debug.Log("pathfinding find path open set > 0");
                 Node currentNode = openSet.RemoveFirst();
                 closedSet.Add(currentNode);
                 //Debug.Log(currentNode.gridX + "   " + currentNode.gridY);
@@ -123,9 +125,11 @@ public class PathFinding : MonoBehaviour {
             return waypoints;
         }
         else {
+            int loopCount = 0;
             while (currentNode != startNode)
             {
-                Debug.Log("pathfinding retracing path");
+                loopCount++;
+                if (loopCount > 10000) Debug.Log("pathfinding retracing path");
                 currentNode.AddPenalty(10);
                 path.Add(currentNode);
                 currentNode = currentNode.parent;

@@ -546,9 +546,11 @@ public class GoblinManager : MonoBehaviour
     IEnumerator DropMoney(int num, Vector3 pos, int target) {
         Four_Player[target].MoneyUI_GoBigger();
         int i = 0;
+        int loopCount = 0;
         while (i < num)
         {
-            Debug.Log("drop money");
+            loopCount++;
+            if (loopCount > 10000) Debug.Log("drop money");
             if (freeMoneys.Count <= 0) break;
             Money money = freeMoneys[0];
             usedMoneys.Add(money);
@@ -562,9 +564,11 @@ public class GoblinManager : MonoBehaviour
     {
         Four_Player[target].MoneyUI_GoBigger();
         int i = 0;
+        int loopCount = 0;
         while (i < num)
         {
-            Debug.Log("drop money");
+            loopCount++;
+            if (loopCount > 10000) Debug.Log("drop money");
             if (freeMoneys.Count <= 0) break;
             Money money = freeMoneys[0];
             usedMoneys.Add(money);

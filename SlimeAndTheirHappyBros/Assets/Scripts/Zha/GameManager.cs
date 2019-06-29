@@ -172,26 +172,32 @@ public class GameManager : MonoBehaviour
             if (bossTime >= 30.0f) {
                 bossTime = .0f;
                 int op = Random.Range(1,3);
+                int loopCount = 0;
                 while (op > 0) {
-                    Debug.Log("game manager boss spawn op");
+                    loopCount++;
+                    if(loopCount > 10000)Debug.Log("game manager boss spawn op");
                     goblinManager.BossSpawnNormalGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;
                     if (bossMonsterNum >= 6) return;
                 }
                 op = Random.Range(1, 3);
+                loopCount = 0;
                 while (op > 0)
                 {
-                    Debug.Log("game manager boss spawn op");
+                    loopCount++;
+                    if (loopCount > 10000) Debug.Log("game manager boss spawn op");
                     goblinManager.BossSpawnArcherGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;
                     if (bossMonsterNum >= 6) return;
                 }
                 op = Random.Range(1, 3);
+                loopCount = 0;
                 while (op > 0)
                 {
-                    Debug.Log("game manager boss spawn op");
+                    loopCount++;
+                    if (loopCount > 10000) Debug.Log("game manager boss spawn op");
                     goblinManager.BossSpawnHobGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;

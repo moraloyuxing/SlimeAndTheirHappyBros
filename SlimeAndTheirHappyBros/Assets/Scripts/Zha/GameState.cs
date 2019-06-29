@@ -38,8 +38,10 @@ public class GameState
         time += dt;
         if (time > stateInfo.waves[currentWave].spawnTime) {
             int i = 0;
+            int loopCount = 0;
             while (i < totalGoblinPerWave[currentWave]) {
-                Debug.Log("game state update");
+                loopCount++;
+                if (loopCount > 10000) Debug.Log("game state update");
                 if (!stateInfo.waves[currentWave].mutiColor) {
                     if (i < stateInfo.waves[currentWave].normalGoblin) goblinManager.SpawnNormalGoblinBaseColor(0);
                     if (i < stateInfo.waves[currentWave].archerGoblin) goblinManager.SpawnArcherGoblinBaseColor(0);

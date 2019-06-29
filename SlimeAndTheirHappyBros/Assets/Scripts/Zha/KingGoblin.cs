@@ -280,9 +280,11 @@ public class KingGoblin : IEnemyUnit
             if (aniInfo.IsName("throwAtk") && aniInfo.normalizedTime >= (0.79f + atkCount)) {
 
                 throwId = Random.Range(0, 99) % 4;
+                int loopCount = 0;
                 while (goblinManager.PlayersDie[throwId])
                 {
-                    Debug.Log("king goblin throw attack");
+                    loopCount++;
+                    if (loopCount > 10000) Debug.Log("king goblin throw attack");
                     throwId++;
                     deathCount++;
                     if (throwId > 3) throwId = 0;
@@ -339,17 +341,61 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void GetHurt(int c, int value) {
-        if (color == c) {
-            hp -= value;
-            Debug.Log("king hp " + hp);
-            if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
-            else {
-                DecreaseHP(0);
-                GameWin();
-                MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f,0.7f,1.0f);
-            }
+        if (color == 1 || color == 2 || color == 4)
+        {
+            if (color == c)
+            {
+                hp -= value;
+                Debug.Log("king hp " + hp);
+                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
+                else
+                {
+                    DecreaseHP(0);
+                    GameWin();
+                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
+                }
 
-        } 
+            }
+        }
+        else {
+            if (color == 3 && (c == 3 || c == 1 || c == 2)) {
+                hp -= value;
+                Debug.Log("king hp " + hp);
+                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
+                else
+                {
+                    DecreaseHP(0);
+                    GameWin();
+                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
+                }
+            }
+            else if (color == 5 && (c == 5 || c == 1 || c == 4))
+            {
+                hp -= value;
+                Debug.Log("king hp " + hp);
+                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
+                else
+                {
+                    DecreaseHP(0);
+                    GameWin();
+                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
+                }
+            }
+            else if (color == 6 && (c == 6 || c == 2 || c == 4))
+            {
+                hp -= value;
+                Debug.Log("king hp " + hp);
+                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
+                else
+                {
+                    DecreaseHP(0);
+                    GameWin();
+                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
+                }
+            }
+        }
+
+
 
     }
 

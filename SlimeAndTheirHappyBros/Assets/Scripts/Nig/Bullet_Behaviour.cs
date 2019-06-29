@@ -116,8 +116,10 @@ public class Bullet_Behaviour : MonoBehaviour{
             1 << LayerMask.NameToLayer("GoblinHurtArea") | 1<< LayerMask.NameToLayer("Barrier") | 1 << LayerMask.NameToLayer("PlayerReviveArea"));
         if (colliders == null) return;
         int i = 0;
+        int loopCount = 0;
         while (NowPenetrate < PenetrateMaxCount && i < colliders.Length ){
-            Debug.Log("bullet behavior detect collider");
+            loopCount++;
+            if (loopCount > 10000) Debug.Log("bullet behavior detect collider");
             Transform c = colliders[i].transform.parent;
 
             if (!colliderRecord.Contains(colliders[i])) {

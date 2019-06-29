@@ -34,9 +34,11 @@ public class GoblinWave : IEnemyObjectPoolUnit
         radius += perLength;
 
         int i = 1;
+        int loopCount = 0;
         while (i <= halfCount)
         {
-            Debug.Log("king goblin wave");
+            loopCount++;
+            if (loopCount > 10000) Debug.Log("king goblin wave");
             pointPos[halfCount - i] += dt * speed * pointVec[halfCount - i];
             lineRender.SetPosition(halfCount - i, pointPos[halfCount - i]);
             pointPos[halfCount + i] += dt * speed * pointVec[halfCount + i];
@@ -67,9 +69,11 @@ public class GoblinWave : IEnemyObjectPoolUnit
         pointVec[halfCount] = new Vector3(0, 0, -1.0f);
 
         int i = 1;
+        int loopCount = 0;
         while (i <= halfCount)
         {
-            Debug.Log("goblin wave");
+            loopCount++;
+            if (loopCount > 10000) Debug.Log("goblin wave");
             float downDegree = (270 - i * degree) * Mathf.Deg2Rad;
             float upDegree = (270 + i * degree) * Mathf.Deg2Rad;
 

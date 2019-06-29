@@ -52,9 +52,12 @@ public class Heap<T> where T : IHeapItem<T>
 
     void SortDown(T item)
     {
+        int loopCount = 0;
         while (true)
         {
-            Debug.Log("heap sort down");
+            loopCount++;
+            if (loopCount > 10000)
+                Debug.Log("heap sort down");
             int childIndexLeft = item.HeapIndex * 2 + 1;
             int childIndexRight = item.HeapIndex * 2 + 2;
             int swapIndex = 0;
@@ -93,9 +96,11 @@ public class Heap<T> where T : IHeapItem<T>
     {
         int parentIndex = (item.HeapIndex - 1) / 2;
 
+        int loopCount = 0;
         while (true)
         {
-            Debug.Log("heap sort up");
+            loopCount++;
+            if (loopCount > 10000) Debug.Log("heap sort up");
             T parentItem = items[parentIndex];
             if (item.CompareTo(parentItem) > 0)
             {
