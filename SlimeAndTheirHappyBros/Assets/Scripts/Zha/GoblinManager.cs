@@ -550,7 +550,12 @@ public class GoblinManager : MonoBehaviour
         while (i < num)
         {
             loopCount++;
-            if (loopCount > 10000) Debug.Log("drop money");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                break;
+            }
             if (freeMoneys.Count <= 0) break;
             Money money = freeMoneys[0];
             usedMoneys.Add(money);
@@ -568,7 +573,12 @@ public class GoblinManager : MonoBehaviour
         while (i < num)
         {
             loopCount++;
-            if (loopCount > 10000) Debug.Log("drop money");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                break;
+            }
             if (freeMoneys.Count <= 0) break;
             Money money = freeMoneys[0];
             usedMoneys.Add(money);

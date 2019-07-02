@@ -175,7 +175,12 @@ public class GameManager : MonoBehaviour
                 int loopCount = 0;
                 while (op > 0) {
                     loopCount++;
-                    if(loopCount > 10000)Debug.Log("game manager boss spawn op");
+                    if(loopCount > 10000)
+                    {
+                        Debug.Break();
+                        Debug.Log("merge cotrol split pos detect    " + loopCount);
+                        return;
+                    }
                     goblinManager.BossSpawnNormalGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;
@@ -186,7 +191,12 @@ public class GameManager : MonoBehaviour
                 while (op > 0)
                 {
                     loopCount++;
-                    if (loopCount > 10000) Debug.Log("game manager boss spawn op");
+                    if (loopCount > 10000)
+                    {
+                        Debug.Break();
+                        Debug.Log("merge cotrol split pos detect    " + loopCount);
+                        return;
+                    }
                     goblinManager.BossSpawnArcherGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;
@@ -197,7 +207,12 @@ public class GameManager : MonoBehaviour
                 while (op > 0)
                 {
                     loopCount++;
-                    if (loopCount > 10000) Debug.Log("game manager boss spawn op");
+                    if (loopCount > 10000)
+                    {
+                        Debug.Break();
+                        Debug.Log("merge cotrol split pos detect    " + loopCount);
+                        return;
+                    }
                     goblinManager.BossSpawnHobGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;

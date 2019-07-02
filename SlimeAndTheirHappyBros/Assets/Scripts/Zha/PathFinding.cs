@@ -55,7 +55,12 @@ public class PathFinding : MonoBehaviour {
             while (openSet.Count > 0)
             {
                 loopCount++;
-                if (loopCount > 10000) Debug.Log("pathfinding find path open set > 0");
+                if (loopCount > 10000)
+                {
+                    Debug.Break();
+                    Debug.Log("merge cotrol split pos detect    " + loopCount);
+                    break;
+                }
                 Node currentNode = openSet.RemoveFirst();
                 closedSet.Add(currentNode);
                 //Debug.Log(currentNode.gridX + "   " + currentNode.gridY);
@@ -129,7 +134,12 @@ public class PathFinding : MonoBehaviour {
             while (currentNode != startNode)
             {
                 loopCount++;
-                if (loopCount > 10000) Debug.Log("pathfinding retracing path");
+                if (loopCount > 10000)
+                {
+                    Debug.Break();
+                    Debug.Log("merge cotrol split pos detect    " + loopCount);
+                    break;
+                }
                 currentNode.AddPenalty(10);
                 path.Add(currentNode);
                 currentNode = currentNode.parent;

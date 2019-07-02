@@ -357,6 +357,7 @@ public class GoblinBase
             animator.SetTrigger("hurt");
             //animator.Play("hurt");
             animator.SetInteger("state",3);
+            renderer.material.SetInt("_colorID", 0);
         }
         else {
             if (!Physics.Raycast(selfPos, hurtDir, 2.0f, 1 << LayerMask.NameToLayer("Barrier")))
@@ -372,7 +373,7 @@ public class GoblinBase
                 //if (hp <= 0) SetState(GoblinState.die);
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
-
+                renderer.material.SetInt("_colorID", color);
             }
         }
     }

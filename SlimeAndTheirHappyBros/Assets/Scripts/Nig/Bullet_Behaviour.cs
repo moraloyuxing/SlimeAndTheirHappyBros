@@ -119,7 +119,12 @@ public class Bullet_Behaviour : MonoBehaviour{
         int loopCount = 0;
         while (NowPenetrate < PenetrateMaxCount && i < colliders.Length ){
             loopCount++;
-            if (loopCount > 10000) Debug.Log("bullet behavior detect collider");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            }
             Transform c = colliders[i].transform.parent;
 
             if (!colliderRecord.Contains(colliders[i])) {

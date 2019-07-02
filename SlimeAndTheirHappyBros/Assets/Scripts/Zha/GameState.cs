@@ -41,7 +41,12 @@ public class GameState
             int loopCount = 0;
             while (i < totalGoblinPerWave[currentWave]) {
                 loopCount++;
-                if (loopCount > 10000) Debug.Log("game state update");
+                if (loopCount > 10000)
+                {
+                    Debug.Break();
+                    Debug.Log("merge cotrol split pos detect    " + loopCount);
+                    return;
+                }
                 if (!stateInfo.waves[currentWave].mutiColor) {
                     if (i < stateInfo.waves[currentWave].normalGoblin) goblinManager.SpawnNormalGoblinBaseColor(0);
                     if (i < stateInfo.waves[currentWave].archerGoblin) goblinManager.SpawnArcherGoblinBaseColor(0);

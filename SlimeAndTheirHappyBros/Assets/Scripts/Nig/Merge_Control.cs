@@ -422,7 +422,12 @@ public class Merge_Control : MonoBehaviour{
         int loopCount = 0;
         while (ChooseSpiltPos == false) {
             loopCount++;
-            if (loopCount > 10000) Debug.Log("merge control split to oringal");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            }
             ChooseSpiltPos = true;
             for (int i = 0; i < 2; i++){
                 GameObject ExpectPos = Instantiate(ExpectSpilt) as GameObject;
@@ -469,7 +474,11 @@ public class Merge_Control : MonoBehaviour{
         int loopCount = 0;
         while (i < colliders.Length) {
             loopCount++;
-            if (loopCount > 10000) Debug.Log("merge cotrol split pos detect");
+            if (loopCount > 10000) {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            } 
             Transform c = colliders[i].transform.parent;
             if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") {
                 CanSpilt[PID] = false;
@@ -569,7 +578,12 @@ public class Merge_Control : MonoBehaviour{
         while (i < colliders.Length)
         {
             loopCount++;
-            if (loopCount > 10000) Debug.Log("merge control get hurt");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            }
             if (i == 0)
             {
                 GetComponent<Animator>().Play("Slime_Hurt");

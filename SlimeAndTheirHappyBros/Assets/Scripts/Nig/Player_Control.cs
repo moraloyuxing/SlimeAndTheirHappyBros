@@ -778,7 +778,12 @@ public class Player_Control : MonoBehaviour{
         int loopCount = 0;
         while (CanDrop == false && DropChance <10){
             loopCount++;
-            if (loopCount > 10000) Debug.Log("player control drop item");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            }
             CanDrop = true;
             DropX = Random.Range(transform.position.x - 5.0f, transform.position.x + 5.0f);
             DropZ = Random.Range(transform.position.z - 5.0f, transform.position.z + 5.0f);
@@ -857,7 +862,12 @@ public class Player_Control : MonoBehaviour{
         int loopCount = 0;
         while (i < colliders.Length) {
             loopCount++;
-            if (loopCount > 10000) Debug.Log("player control drop pos detect");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            }
             Transform c = colliders[i].transform.parent;
             if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") {
                 CanDrop = false;

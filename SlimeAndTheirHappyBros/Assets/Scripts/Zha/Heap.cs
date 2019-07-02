@@ -57,7 +57,11 @@ public class Heap<T> where T : IHeapItem<T>
         {
             loopCount++;
             if (loopCount > 10000)
-                Debug.Log("heap sort down");
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            }
             int childIndexLeft = item.HeapIndex * 2 + 1;
             int childIndexRight = item.HeapIndex * 2 + 2;
             int swapIndex = 0;
@@ -100,7 +104,12 @@ public class Heap<T> where T : IHeapItem<T>
         while (true)
         {
             loopCount++;
-            if (loopCount > 10000) Debug.Log("heap sort up");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            }
             T parentItem = items[parentIndex];
             if (item.CompareTo(parentItem) > 0)
             {

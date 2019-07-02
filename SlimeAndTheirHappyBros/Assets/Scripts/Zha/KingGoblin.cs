@@ -284,7 +284,12 @@ public class KingGoblin : IEnemyUnit
                 while (goblinManager.PlayersDie[throwId])
                 {
                     loopCount++;
-                    if (loopCount > 10000) Debug.Log("king goblin throw attack");
+                    if (loopCount > 10000)
+                    {
+                        Debug.Break();
+                        Debug.Log("merge cotrol split pos detect    " + loopCount);
+                        return;
+                    }
                     throwId++;
                     deathCount++;
                     if (throwId > 3) throwId = 0;

@@ -166,6 +166,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             //animator.Play("hurt");
             animator.SetTrigger("hurt");
             animator.SetInteger("state", 3);
+            renderer.material.SetInt("_colorID", 0);
         }
         else
         {
@@ -182,6 +183,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                 if (hp <= 0) SetState(GoblinState.die);
                 else SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
+                renderer.material.SetInt("_colorID", color);
 
             }
         }

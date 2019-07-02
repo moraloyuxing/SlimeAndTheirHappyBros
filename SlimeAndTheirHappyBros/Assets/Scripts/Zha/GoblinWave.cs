@@ -38,7 +38,12 @@ public class GoblinWave : IEnemyObjectPoolUnit
         while (i <= halfCount)
         {
             loopCount++;
-            if (loopCount > 10000) Debug.Log("king goblin wave");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            }
             pointPos[halfCount - i] += dt * speed * pointVec[halfCount - i];
             lineRender.SetPosition(halfCount - i, pointPos[halfCount - i]);
             pointPos[halfCount + i] += dt * speed * pointVec[halfCount + i];
@@ -73,7 +78,12 @@ public class GoblinWave : IEnemyObjectPoolUnit
         while (i <= halfCount)
         {
             loopCount++;
-            if (loopCount > 10000) Debug.Log("goblin wave");
+            if (loopCount > 10000)
+            {
+                Debug.Break();
+                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                return;
+            }
             float downDegree = (270 - i * degree) * Mathf.Deg2Rad;
             float upDegree = (270 + i * degree) * Mathf.Deg2Rad;
 

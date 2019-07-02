@@ -320,7 +320,12 @@ public class GoblinSpirit:IEnemyUnit
             int loopCount = 0;
             while (goblinManager.PlayersDie[t]) {
                 loopCount++;
-                if (loopCount > 10000) Debug.Log("goblin spirit x attack");
+                if (loopCount > 10000)
+                {
+                    Debug.Break();
+                    Debug.Log("merge cotrol split pos detect    " + loopCount);
+                    return;
+                }
                 t++;
                 deathCount++;
                 if (t > 3) t = 0;

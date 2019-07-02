@@ -10569,11 +10569,19 @@ MonoBehaviour:
   - {fileID: 1517294621}
   - {fileID: 351806365}
   - {fileID: 1050854433}
+  Can_Merge: 000000000000
+  shortest_toPlayer:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   WashingPlace: {fileID: 763144471}
   WashingBoard: {fileID: 1397611167}
+  WashPriority: 00000000
   Hint_Type:
   - {fileID: 21300000, guid: f2164cde8fdb3d14a84a0365c9bd44ed, type: 3}
   - {fileID: 21300000, guid: dfc9e62d230744481814f33ae8fdc25a, type: 3}
+  Weak_State: 00000000
   Altar: {fileID: 214302512}
   _goblinmanager: {fileID: 1096239118}
   cameraatshop: {fileID: 412872801}
