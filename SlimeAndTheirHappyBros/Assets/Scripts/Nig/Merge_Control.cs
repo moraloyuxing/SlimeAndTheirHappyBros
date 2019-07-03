@@ -181,6 +181,8 @@ public class Merge_Control : MonoBehaviour{
         left_trigger = Input.GetAxis(WhichPlayer_Moving + "Dash");
         if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f)
         {
+            StopDetect = true;
+            AttackPriority = true;
             Base_Speed = Base_Speed + 5.0f;
             OnDash = true;
             DuringDashLerp = true;
