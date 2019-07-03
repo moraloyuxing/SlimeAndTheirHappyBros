@@ -14050,7 +14050,7 @@ GameObject:
   - component: {fileID: 511322329}
   - component: {fileID: 511322328}
   - component: {fileID: 511322327}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: boundary
   m_TagString: Border
   m_Icon: {fileID: 0}
@@ -63292,7 +63292,7 @@ PrefabInstance:
     - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
         type: 3}
       propertyPath: test
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
         type: 3}

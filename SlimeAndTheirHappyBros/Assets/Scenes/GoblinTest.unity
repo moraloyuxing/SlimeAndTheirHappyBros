@@ -65036,7 +65036,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blcakTransShader: {fileID: 4800000, guid: 32ec665abf07d5345a69524dba9584d5, type: 3}
-  maskScale: 0.5
+  maskScale: -0.04
 --- !u!4 &2142571903 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5432895340315113757, guid: ed4c0487061d9d343b5512bd08e358df,

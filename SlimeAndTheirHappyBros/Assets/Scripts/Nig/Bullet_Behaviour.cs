@@ -113,7 +113,7 @@ public class Bullet_Behaviour : MonoBehaviour{
 
     void Bullet_Detect() {
         Collider[]colliders = Physics.OverlapBox(_myTransform.position, scaleOffset * new Vector3(0.22f, 0.15f, 0.025f), Quaternion.Euler(25, 0, 0), 
-            1 << LayerMask.NameToLayer("GoblinHurtArea") | 1<< LayerMask.NameToLayer("Barrier") | 1 << LayerMask.NameToLayer("PlayerReviveArea"));
+            1 << LayerMask.NameToLayer("GoblinHurtArea") | 1<< LayerMask.NameToLayer("Barrier") | 1 << LayerMask.NameToLayer("PlayerReviveArea") |  1 << LayerMask.NameToLayer("Border") );
         if (colliders == null) return;
         int i = 0;
         int loopCount = 0;
@@ -147,6 +147,13 @@ public class Bullet_Behaviour : MonoBehaviour{
                 }
 
                 if (colliders[i].tag == "Barrier" || c.tag == "Barrier") {
+                    NowPenetrate++;
+                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 0.5f);
+                    NowPenetrate = PenetrateMaxCount;//抵達障礙物直接給最大值，取消繼續穿透
+                }
+
+                if (colliders[i].tag == "Border" || c.tag == "Border")
+                {
                     NowPenetrate++;
                     AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 0.5f);
                     NowPenetrate = PenetrateMaxCount;//抵達障礙物直接給最大值，取消繼續穿透
