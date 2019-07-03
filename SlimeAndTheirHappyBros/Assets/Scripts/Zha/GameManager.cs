@@ -64,7 +64,7 @@ public class GameManager : MonoBehaviour
         directLight = GameObject.Find("Directional Light").GetComponent<Light>();
 
         sceneObjectManager = GetComponent<SceneObjectManager>();
-
+        GameObject.Find("Main Camera").SetActive(false);
 
     }
     void Start()
