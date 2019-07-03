@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Camera))]
 public class MultiPlayerCamera : MonoBehaviour{
-
+    public Player_Manager _playermanager;
     public List<Transform> AllPlayers;
     public Vector3 offset;
     public float SmoothTime =2.0f;
@@ -166,6 +166,9 @@ public class MultiPlayerCamera : MonoBehaviour{
         oringinPos = transform.position;
     }
 
-
+    //結束攝影機巡迴，MainCamera呼叫
+    public void FinishTouring() {
+        //呼叫playermanager
+    }
 
 }

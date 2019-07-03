@@ -47,6 +47,7 @@ public class Player_Control : MonoBehaviour{
     bool Left_CanMove = true;
     bool Right_CanMove = true;
     bool Walking = false;
+    bool CanMove = false;
 
     //攻擊方向旋轉
     public GameObject Attack_Arrow;
@@ -169,243 +170,281 @@ public class Player_Control : MonoBehaviour{
     }
 
     void Update(){
-        anim.SetBool("Walking", Walking);
-        anim.SetBool("Shooting", Shooting);
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Attack")) anim.speed = Base_AttackSpeed;
-        else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Walk")) anim.speed = WalkSpeedanim;
-        else anim.speed = 1.0f;
-        //受傷判定
-        if (StopDetect == false)SlimeGetHurt();
-        //移動&短衝刺
-        xAix = Input.GetAxis(WhichPlayer + "Horizontal");
-        zAix = Input.GetAxis(WhichPlayer + "Vertical");
-        left_trigger = Input.GetAxis(WhichPlayer + "Dash");
-        if (left_trigger >0.3f && OnDash == false && Time.time > DashCD + 1.0f){
-            StopDetect = true;
-            AttackPriority = true;
-            Base_Speed = Base_Speed+5.0f;
-            OnDash = true;
-            DuringDashLerp = true;
-            DashCD = Time.time;
-        }
+        if (CanMove == true) {
+            anim.SetBool("Walking", Walking);
+            anim.SetBool("Shooting", Shooting);
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Attack")) anim.speed = Base_AttackSpeed;
+            else if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Walk")) anim.speed = WalkSpeedanim;
+            else anim.speed = 1.0f;
+            //受傷判定
+            if (StopDetect == false) SlimeGetHurt();
+            //移動&短衝刺
+            xAix = Input.GetAxis(WhichPlayer + "Horizontal");
+            zAix = Input.GetAxis(WhichPlayer + "Vertical");
+            left_trigger = Input.GetAxis(WhichPlayer + "Dash");
+            if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f)
+            {
+                StopDetect = true;
+                AttackPriority = true;
+                Base_Speed = Base_Speed + 5.0f;
+                OnDash = true;
+                DuringDashLerp = true;
+                DashCD = Time.time;
+            }
 
-        if (ExtraPriority == false && DeathPriority == false) {
-            if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f){
-                if (OnDash == false && DuringDashLerp == false) {Walking = true; } 
-                else if (OnDash == true){
-                    Walking = false;
-                    if (Mathf.Abs(xAix) >= Mathf.Abs(zAix)) GetComponent<Animator>().Play("Slime_DashFoward");
-                    else if (Mathf.Abs(xAix) < Mathf.Abs(zAix)){
-                        if (zAix >= 0) GetComponent<Animator>().Play("Slime_DashUp");
-                        else GetComponent<Animator>().Play("Slime_DashDown");
+            if (ExtraPriority == false && DeathPriority == false)
+            {
+                if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f)
+                {
+                    if (OnDash == false && DuringDashLerp == false) { Walking = true; }
+                    else if (OnDash == true)
+                    {
+                        Walking = false;
+                        if (Mathf.Abs(xAix) >= Mathf.Abs(zAix)) GetComponent<Animator>().Play("Slime_DashFoward");
+                        else if (Mathf.Abs(xAix) < Mathf.Abs(zAix))
+                        {
+                            if (zAix >= 0) GetComponent<Animator>().Play("Slime_DashUp");
+                            else GetComponent<Animator>().Play("Slime_DashDown");
+                        }
+                        AudioManager.SingletonInScene.PlaySound2D("Dash", 0.5f);
+                        OnDash = false;
                     }
-                    AudioManager.SingletonInScene.PlaySound2D("Dash", 0.5f);
-                    OnDash = false;
+                    _playermanager.GetPlayerRePos(Player_Number, transform.position);
                 }
-                _playermanager.GetPlayerRePos(Player_Number, transform.position);
-            }
-            else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) Walking = false;
-        }
-
-        if (xAix > 0.0f) {
-            if (ArrowRot == -1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z*-1.0f);
-            ArrowRot = 1.0f;
-            //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
-            if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
-                transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
-                Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
-                Player_Icon.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
-                Hint.transform.localScale = new Vector3(1.0f, 1.0f,1.0f);
-                BuyHint.transform.localScale = new Vector3(1.0f,1.0f,1.0f);
-                BuyHint.transform.localPosition = new Vector3(1.3f,1.7f, -1.0f);
-            }
-            Left_CanMove = true;
-
-            ray_horizontal = new Ray(transform.position, new Vector3(2.8f, 0.0f, 0.0f));
-            GetItem_x = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.8f)) {
-                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") {Right_CanMove = false;}
-            }
-            else {Right_CanMove = true;}
-            //if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)) {
-            //    if (hit_GetItem_x.transform.tag == "DropItem"&& Already_pick == false) {
-            //        Already_pick = true;
-            //        GetItemFromFloor(hit_GetItem_x.transform.gameObject);
-            //        Destroy(hit_GetItem_x.transform.gameObject);
-            //    }
-            //}
-        }
-
-        if (xAix < 0.0f) {
-            if (ArrowRot == 1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
-            ArrowRot = -1.0f;
-            //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
-            if (ExtraPriority == false && DeathPriority == false && OnDash == false) {
-                transform.localScale = new Vector3(-1.3f, 1.3f, 1.3f);
-                Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
-                Player_Icon.transform.localScale = new Vector3(-0.55f, 0.55f, 0.55f);
-                Hint.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
-                BuyHint.transform.localScale = new Vector3(-1.0f,1.0f,1.0f);
-                BuyHint.transform.localPosition = new Vector3(-1.3f, 1.7f, -1.0f);
+                else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) Walking = false;
             }
 
-            Right_CanMove = true;
-            ray_horizontal = new Ray(transform.position, new Vector3(-2.8f, 0.0f, 0.0f));
-            GetItem_x = new Ray(transform.position, new Vector3(-2.0f, 0.0f, 0.0f));
-            if (Physics.Raycast(ray_horizontal, out hit_horizontal,2.8f)){
-                if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") {Left_CanMove = false;}
-            }
-            else {Left_CanMove = true;}
-            //if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)){
-            //    if (hit_GetItem_x.transform.tag == "DropItem" && Already_pick == false){
-            //        Already_pick = true;
-            //        GetItemFromFloor(hit_GetItem_x.transform.gameObject);
-            //        Destroy(hit_GetItem_x.transform.gameObject);
-            //    }
-            //}
-        }
-
-        if (zAix > 0.0f) {
-            Down_CanMove = true;
-            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.8f));
-            GetItem_z = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.0f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical, 2.8f)){
-                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") { Up_CanMove = false;}
-            }
-            else {Up_CanMove = true;}
-            //if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)) {
-            //    if (hit_GetItem_z.transform.tag == "DropItem" && Already_pick == false){
-            //        Already_pick = true;
-            //        GetItemFromFloor(hit_GetItem_z.transform.gameObject);
-            //        Destroy(hit_GetItem_z.transform.gameObject);
-            //    }
-            //}
-        }
-
-        if (zAix < 0.0f) {
-            Up_CanMove = true;
-            ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.8f));
-            GetItem_z = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.0f));
-            if (Physics.Raycast(ray_vertical, out hit_vertical,2.8f)){
-                if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") {Down_CanMove = false;}
-            }
-            else {Down_CanMove = true;}
-            //if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)){
-            //    if (hit_GetItem_z.transform.tag == "DropItem" && Already_pick == false){
-            //        Already_pick = true;
-            //        GetItemFromFloor(hit_GetItem_z.transform.gameObject);
-            //        Destroy(hit_GetItem_z.transform.gameObject);
-            //    }
-            //}
-        }
-
-        //內部障礙物偵測
-        ray_direction = new Ray(transform.position, new Vector3(xAix, 0.0f, zAix));
-        GetItem_dir = new Ray(transform.position, new Vector3(xAix, 0.0f, zAix));
-        if (Physics.Raycast(ray_direction, out hit_direction, 2.8f)) {
-            if (hit_direction.transform.tag == "Barrier") {
-                if (Mathf.Abs(xAix) > Mathf.Abs(zAix)){
-                    Left_CanMove = false;
-                    Right_CanMove = false;
+            if (xAix > 0.0f)
+            {
+                if (ArrowRot == -1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
+                ArrowRot = 1.0f;
+                //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
+                if (ExtraPriority == false && DeathPriority == false && OnDash == false)
+                {
+                    transform.localScale = new Vector3(1.3f, 1.3f, 1.3f);
+                    Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
+                    Player_Icon.transform.localScale = new Vector3(0.55f, 0.55f, 0.55f);
+                    Hint.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    BuyHint.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    BuyHint.transform.localPosition = new Vector3(1.3f, 1.7f, -1.0f);
                 }
-                else {
-                    Up_CanMove = false;
-                    Down_CanMove = false;
+                Left_CanMove = true;
+
+                ray_horizontal = new Ray(transform.position, new Vector3(2.8f, 0.0f, 0.0f));
+                GetItem_x = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
+                if (Physics.Raycast(ray_horizontal, out hit_horizontal, 2.8f))
+                {
+                    if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") { Right_CanMove = false; }
                 }
+                else { Right_CanMove = true; }
+                //if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)) {
+                //    if (hit_GetItem_x.transform.tag == "DropItem"&& Already_pick == false) {
+                //        Already_pick = true;
+                //        GetItemFromFloor(hit_GetItem_x.transform.gameObject);
+                //        Destroy(hit_GetItem_x.transform.gameObject);
+                //    }
+                //}
             }
-        }
-        if (Physics.Raycast(GetItem_dir, out hit_GetItem_dir, 2.0f)) {
-            if (hit_GetItem_dir.transform.tag == "DropItem" && Already_pick == false){
-                Already_pick = true;
-                GetItemFromFloor(hit_GetItem_dir.transform.gameObject);
-                Destroy(hit_GetItem_dir.transform.gameObject);
+
+            if (xAix < 0.0f)
+            {
+                if (ArrowRot == 1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
+                ArrowRot = -1.0f;
+                //加個轉向(受傷、死亡、洗白、染色......等等不觸發)
+                if (ExtraPriority == false && DeathPriority == false && OnDash == false)
+                {
+                    transform.localScale = new Vector3(-1.3f, 1.3f, 1.3f);
+                    Player_Icon.transform.localPosition = new Vector3(0.0f, 1.5f, -0.5f);
+                    Player_Icon.transform.localScale = new Vector3(-0.55f, 0.55f, 0.55f);
+                    Hint.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+                    BuyHint.transform.localScale = new Vector3(-1.0f, 1.0f, 1.0f);
+                    BuyHint.transform.localPosition = new Vector3(-1.3f, 1.7f, -1.0f);
+                }
+
+                Right_CanMove = true;
+                ray_horizontal = new Ray(transform.position, new Vector3(-2.8f, 0.0f, 0.0f));
+                GetItem_x = new Ray(transform.position, new Vector3(-2.0f, 0.0f, 0.0f));
+                if (Physics.Raycast(ray_horizontal, out hit_horizontal, 2.8f))
+                {
+                    if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") { Left_CanMove = false; }
+                }
+                else { Left_CanMove = true; }
+                //if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)){
+                //    if (hit_GetItem_x.transform.tag == "DropItem" && Already_pick == false){
+                //        Already_pick = true;
+                //        GetItemFromFloor(hit_GetItem_x.transform.gameObject);
+                //        Destroy(hit_GetItem_x.transform.gameObject);
+                //    }
+                //}
             }
-        }
 
-        if (ExtraPriority == false && DeathPriority == false) {
-            if (!Up_CanMove || !Down_CanMove) zAix = .0f;
-            if (!Left_CanMove || !Right_CanMove) xAix = .0f;
-            transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 7.0f;
-        }
-
-        //衝刺遞減
-        if (DuringDashLerp == true) {
-            Base_Speed = Mathf.Lerp(Base_Speed, Tired_Speed, DashLerp);
-        }
-
-        //攻擊方向旋轉
-        xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
-        zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
-        current_angle = Attack_Arrow.transform.eulerAngles;
-        if (xAtk != 0.0f || zAtk != 0.0f) {
-            AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-            Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
-            //Attack_Direction = ( new Vector3(xAtk, 0.0f, zAtk).normalized);
-            //Atk_angle = Mathf.Atan2(-Attack_Direction.x, Attack_Direction.z) * Mathf.Rad2Deg;
-            Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
-            angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
-            Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp*ArrowRot);
-        }
-
-        else if(xAtk == 0.0f&& zAtk == 0.0f) AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
-
-        //攻擊
-        right_trigger = Input.GetAxis(WhichPlayer + "Attack");
-        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false) {
-            if (DeathPriority == false) GetComponent<Animator>().Play("Slime_Attack");
-            else {
-                AttackPriorityOn();//跳過動畫，直接射擊
-                Leaf_Shooting_Moment = Time.time;//設定計時，0.5秒後關閉
+            if (zAix > 0.0f)
+            {
+                Down_CanMove = true;
+                ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.8f));
+                GetItem_z = new Ray(transform.position, new Vector3(0.0f, 0.0f, 2.0f));
+                if (Physics.Raycast(ray_vertical, out hit_vertical, 2.8f))
+                {
+                    if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") { Up_CanMove = false; }
+                }
+                else { Up_CanMove = true; }
+                //if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)) {
+                //    if (hit_GetItem_z.transform.tag == "DropItem" && Already_pick == false){
+                //        Already_pick = true;
+                //        GetItemFromFloor(hit_GetItem_z.transform.gameObject);
+                //        Destroy(hit_GetItem_z.transform.gameObject);
+                //    }
+                //}
             }
-            Shooting = true;
-        }
 
-        if (DeathPriority == true && Time.time > Leaf_Shooting_Moment + 0.5f) AttackPriorityOff();
+            if (zAix < 0.0f)
+            {
+                Up_CanMove = true;
+                ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.8f));
+                GetItem_z = new Ray(transform.position, new Vector3(0.0f, 0.0f, -2.0f));
+                if (Physics.Raycast(ray_vertical, out hit_vertical, 2.8f))
+                {
+                    if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") { Down_CanMove = false; }
+                }
+                else { Down_CanMove = true; }
+                //if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)){
+                //    if (hit_GetItem_z.transform.tag == "DropItem" && Already_pick == false){
+                //        Already_pick = true;
+                //        GetItemFromFloor(hit_GetItem_z.transform.gameObject);
+                //        Destroy(hit_GetItem_z.transform.gameObject);
+                //    }
+                //}
+            }
 
-        //單人染色偵測(by距離)
-        if (ExtraPriority == false && DeathPriority == false) {
-            for (int i = 0; i < 3; i++){
-                if (Mathf.Abs(transform.position.x - Pigment[i].position.x) < 1.7f && Mathf.Abs(transform.position.z - Pigment[i].position.z) < 1.8f){
-                    if (Color_Number == 0) {
-                        if (i == 0) Color_Number = 1;
-                        else if(i==1) Color_Number = 2;
-                        else if (i == 2) Color_Number = 4;
-                        //跳池動畫
-                        ExtraPriority = true;
-                        StopDetect = true;
-                        GetComponent<Animator>().Play("Slime_JumpinPond");
-                        DashEnd();
+            //內部障礙物偵測
+            ray_direction = new Ray(transform.position, new Vector3(xAix, 0.0f, zAix));
+            GetItem_dir = new Ray(transform.position, new Vector3(xAix, 0.0f, zAix));
+            if (Physics.Raycast(ray_direction, out hit_direction, 2.8f))
+            {
+                if (hit_direction.transform.tag == "Barrier")
+                {
+                    if (Mathf.Abs(xAix) > Mathf.Abs(zAix))
+                    {
+                        Left_CanMove = false;
+                        Right_CanMove = false;
+                    }
+                    else
+                    {
+                        Up_CanMove = false;
+                        Down_CanMove = false;
                     }
                 }
             }
-        }
-        //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)、衰弱時間(速度*0.6f)
-        //if (Time.time > musouTime + StateMusou && StopDetect) { StopDetect = false; }
-        if (Time.time > Weak_Moment + 5.0f && OnWeak) {
-            OnWeak = false;
-            anim.SetBool("OnWeak", OnWeak);
-            Base_Speed = Current_Speed;
-            _playermanager.ExitWeak(Player_Number);
-            HideWeak();
-        }
-
-        //道具掉落
-        if (CanDrop == true && DropChance < 10){
-            if (HaveItemtoDrop == true) {
-                Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);
-                if (Mathf.Abs(Current_BlewOut.transform.position.x - DropX) < 0.1f && Mathf.Abs(Current_BlewOut.transform.position.z - DropZ) < 0.1f){
-                    CanDrop = false;
-                    Current_BlewOut = null;
-                    DropChance = 0;
-                    HaveItemtoDrop = false;
+            if (Physics.Raycast(GetItem_dir, out hit_GetItem_dir, 2.0f))
+            {
+                if (hit_GetItem_dir.transform.tag == "DropItem" && Already_pick == false)
+                {
+                    Already_pick = true;
+                    GetItemFromFloor(hit_GetItem_dir.transform.gameObject);
+                    Destroy(hit_GetItem_dir.transform.gameObject);
                 }
             }
 
-        }
+            if (ExtraPriority == false && DeathPriority == false)
+            {
+                if (!Up_CanMove || !Down_CanMove) zAix = .0f;
+                if (!Left_CanMove || !Right_CanMove) xAix = .0f;
+                transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 7.0f;
+            }
 
-        else if (DropChance >= 10 && CanDrop == false) {
-            DropChance = 0;
+            //衝刺遞減
+            if (DuringDashLerp == true)
+            {
+                Base_Speed = Mathf.Lerp(Base_Speed, Tired_Speed, DashLerp);
+            }
+
+            //攻擊方向旋轉
+            xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
+            zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
+            current_angle = Attack_Arrow.transform.eulerAngles;
+            if (xAtk != 0.0f || zAtk != 0.0f)
+            {
+                AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+                Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
+                //Attack_Direction = ( new Vector3(xAtk, 0.0f, zAtk).normalized);
+                //Atk_angle = Mathf.Atan2(-Attack_Direction.x, Attack_Direction.z) * Mathf.Rad2Deg;
+                Atk_angle = Mathf.Atan2(-xAtk, zAtk) * Mathf.Rad2Deg;
+                angle_toLerp = Mathf.LerpAngle(current_angle.z, Atk_angle, 0.3f);
+                Attack_Arrow.transform.localEulerAngles = new Vector3(60.0f, 0.0f, angle_toLerp * ArrowRot);
+            }
+
+            else if (xAtk == 0.0f && zAtk == 0.0f) AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
+
+            //攻擊
+            right_trigger = Input.GetAxis(WhichPlayer + "Attack");
+            if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false)
+            {
+                if (DeathPriority == false) GetComponent<Animator>().Play("Slime_Attack");
+                else
+                {
+                    AttackPriorityOn();//跳過動畫，直接射擊
+                    Leaf_Shooting_Moment = Time.time;//設定計時，0.5秒後關閉
+                }
+                Shooting = true;
+            }
+
+            if (DeathPriority == true && Time.time > Leaf_Shooting_Moment + 0.5f) AttackPriorityOff();
+
+            //單人染色偵測(by距離)
+            if (ExtraPriority == false && DeathPriority == false)
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (Mathf.Abs(transform.position.x - Pigment[i].position.x) < 1.7f && Mathf.Abs(transform.position.z - Pigment[i].position.z) < 1.8f)
+                    {
+                        if (Color_Number == 0)
+                        {
+                            if (i == 0) Color_Number = 1;
+                            else if (i == 1) Color_Number = 2;
+                            else if (i == 2) Color_Number = 4;
+                            //跳池動畫
+                            ExtraPriority = true;
+                            StopDetect = true;
+                            GetComponent<Animator>().Play("Slime_JumpinPond");
+                            DashEnd();
+                        }
+                    }
+                }
+            }
+            //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)、衰弱時間(速度*0.6f)
+            //if (Time.time > musouTime + StateMusou && StopDetect) { StopDetect = false; }
+            if (Time.time > Weak_Moment + 5.0f && OnWeak)
+            {
+                OnWeak = false;
+                anim.SetBool("OnWeak", OnWeak);
+                Base_Speed = Current_Speed;
+                _playermanager.ExitWeak(Player_Number);
+                HideWeak();
+            }
+
+            //道具掉落
+            if (CanDrop == true && DropChance < 10)
+            {
+                if (HaveItemtoDrop == true)
+                {
+                    Current_BlewOut.transform.position = Vector3.Lerp(Current_BlewOut.transform.position, new Vector3(DropX, 0.0f, DropZ), 0.1f);
+                    if (Mathf.Abs(Current_BlewOut.transform.position.x - DropX) < 0.1f && Mathf.Abs(Current_BlewOut.transform.position.z - DropZ) < 0.1f)
+                    {
+                        CanDrop = false;
+                        Current_BlewOut = null;
+                        DropChance = 0;
+                        HaveItemtoDrop = false;
+                    }
+                }
+
+            }
+
+            else if (DropChance >= 10 && CanDrop == false)
+            {
+                DropChance = 0;
+            }
         }
+ 
     }
 
     //設置玩家編號
@@ -963,6 +1002,10 @@ public class Player_Control : MonoBehaviour{
 
     public void MoneyUI_BackSmaller() {
         Money_anim.Play("Money_BackSmall");
+    }
+
+    public void StartPlaying() {
+        CanMove = true;
     }
 
 }

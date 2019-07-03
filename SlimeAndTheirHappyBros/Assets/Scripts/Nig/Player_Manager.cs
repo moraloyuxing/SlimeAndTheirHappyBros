@@ -50,7 +50,7 @@ public class Player_Manager : MonoBehaviour
     Vector3 newDir;//相當於Attack_Direction
     float Trace_angle;
     float Trace_toLerp;
-
+    bool CanTrace = false;
     //螢幕外追蹤---End
 
 
@@ -208,7 +208,7 @@ public class Player_Manager : MonoBehaviour
 
         }
 
-        PlayerTraceSystem();
+        if(CanTrace == true)PlayerTraceSystem();
 
     }
 
@@ -667,6 +667,13 @@ public class Player_Manager : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    public void StartPlaying() {
+        CanTrace = true;
+        for (int p = 0; p < 4; p++) {
+            FourPlayer[p].StartPlaying();
         }
     }
 
