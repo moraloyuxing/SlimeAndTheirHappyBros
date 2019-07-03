@@ -40,8 +40,8 @@ public class NPC_Manager : MonoBehaviour{
 
     void Update(){
         if (Input.GetKeyDown(KeyCode.B)) BreakTime_Start();
-        if (Input.GetKeyDown(KeyCode.N)) PIDReadyIcon[2].sprite = ReadyBossState[2];
-        if (Input.GetKeyDown(KeyCode.M)) PIDReadyIcon[3].sprite = ReadyBossState[3];
+        //if (Input.GetKeyDown(KeyCode.N)) PIDReadyIcon[2].sprite = ReadyBossState[2];
+        //if (Input.GetKeyDown(KeyCode.M)) PIDReadyIcon[3].sprite = ReadyBossState[3];
 
 
         if (BreakTime) {
@@ -122,7 +122,8 @@ public class NPC_Manager : MonoBehaviour{
             PIDReadyIcon[p].enabled = false;
             PIDReady[p] = false;
         }
-
+        Docter_OnTalking = false;
+        DocterTalkHint.enabled = false;
         NPCanim[0].Play("Doctor_Out");
         NPCanim[1].Play("Angel_Out");
     }

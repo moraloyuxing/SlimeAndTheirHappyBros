@@ -14,4 +14,5 @@ public class TestManager : MonoBehaviour{
         if (Input.GetKeyDown(KeyCode.O)) { for (int p = 0; p < 4; p++) FourPlayer[p].Ability_Modify(4, ItemSprite[4], 0); }
         if (Input.GetKeyDown(KeyCode.P)) { for (int p = 0; p < 4; p++) FourPlayer[p].Ability_Modify(5, ItemSprite[5], 0); }
     }
+
 }

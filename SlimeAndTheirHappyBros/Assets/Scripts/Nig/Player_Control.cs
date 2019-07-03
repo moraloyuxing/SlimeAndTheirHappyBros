@@ -148,6 +148,8 @@ public class Player_Control : MonoBehaviour{
     bool Already_pick = false;
     int DropChance = 0;
     bool HaveItemtoDrop = false;
+    int[] ItemCode = new int[5] { 0, 1, 3, 4, 5 };  //愛心會出問題，故移除2
+    int ItemofHeart = 0;    //愛心道具數量，若愛心數量等於所持道具數量則不噴裝
 
     void Start(){
         PlayerID2 = PlayerID;
@@ -697,7 +699,7 @@ public class Player_Control : MonoBehaviour{
         ItemStateText[ItemType].text = ItemCount[ItemType].ToString();
 
         //存入List，待之後噴裝
-        _IteminHand.Add(ItemSprite);
+        if(ItemType !=2)_IteminHand.Add(ItemSprite);
 
         //剩餘金幣
         Current_Money = Current_Money - ItemPrice;
