@@ -5711,11 +5711,19 @@ MonoBehaviour:
   - {fileID: 1359819817}
   - {fileID: 1632951142}
   - {fileID: 392003252}
+  Can_Merge: 000000000000
+  shortest_toPlayer:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   WashingPlace: {fileID: 918859516}
   WashingBoard: {fileID: 1292955987}
+  WashPriority: 00000000
   Hint_Type:
   - {fileID: 21300000, guid: f2164cde8fdb3d14a84a0365c9bd44ed, type: 3}
   - {fileID: 21300000, guid: dfc9e62d230744481814f33ae8fdc25a, type: 3}
+  Weak_State: 00000000
   Altar: {fileID: 442476449}
   _goblinmanager: {fileID: 1992549484}
   cameraatshop: {fileID: 2142023242}
@@ -64833,6 +64841,7 @@ GameObject:
   - component: {fileID: 2142023244}
   - component: {fileID: 2142023243}
   - component: {fileID: 2142023241}
+  - component: {fileID: 2142023248}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -65014,6 +65023,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 25, y: 0, z: 0}
+--- !u!114 &2142023248
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142023240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e3acf9a4f6e1944a29e450b49aa2f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blcakTransShader: {fileID: 4800000, guid: 32ec665abf07d5345a69524dba9584d5, type: 3}
+  maskScale: 0.5
 --- !u!4 &2142571903 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5432895340315113757, guid: ed4c0487061d9d343b5512bd08e358df,
