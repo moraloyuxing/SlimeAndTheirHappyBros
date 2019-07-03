@@ -10,9 +10,9 @@ public class GoblinBase
     protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
     protected float backSpeed = 10.0f;
-    protected float imgScale;
+    protected float imgScale, whiteScale = -1.0f;
     protected int minMoney, maxMoney;
-
+    
 
     public int GetColor
     {
@@ -357,12 +357,18 @@ public class GoblinBase
             animator.SetTrigger("hurt");
             //animator.Play("hurt");
             animator.SetInteger("state",3);
-            renderer.material.SetInt("_colorID", 0);
+            whiteScale = 1.0f;
+            renderer.material.SetFloat("_WhiteScale", 1.0f);
         }
         else {
             if (!Physics.Raycast(selfPos, hurtDir, 2.0f, 1 << LayerMask.NameToLayer("Barrier")))
             {
                 transform.position += (backSpeed) * deltaTime * hurtDir;
+            }
+
+            if (whiteScale > .0f) {
+                whiteScale -= deltaTime * 4.0f;
+                renderer.material.SetFloat("_WhiteScale", whiteScale);
             }
 
             backSpeed -= deltaTime * 15.0f;
@@ -374,6 +380,8 @@ public class GoblinBase
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
                 renderer.material.SetInt("_colorID", color);
+                whiteScale = -1.0f;
+                renderer.material.SetFloat("_WhiteScale", -1);
             }
         }
     }

@@ -13,6 +13,8 @@
 		_BlueColor("Blue", Color) = (0,0,1,1)
 		_PurpleColor("Purple", Color) = (1,0,1,1)
 		_GreenColor("Green", Color) = (0,1,0,1)
+		
+		[HideInInspector]_WhiteScale("white", Float) = -1
 
 		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
 		[HideInInspector] _RendererColor("RendererColor", Color) = (1,1,1,1)
@@ -56,6 +58,7 @@
 			};
 
 		float _diffTrans;
+		float _WhiteScale;
 		int _colorID;
 		fixed4 _WhiteColor;
 		fixed4 _RedColor;
@@ -98,6 +101,9 @@
 				else if (_colorID == 4)c = c * _BlueColor;
 				else if (_colorID == 5)c = c * _PurpleColor;
 				else if (_colorID == 6)c = c * _GreenColor;
+				if (_WhiteScale > 0) {
+					c.rgb += float3(_WhiteScale, _WhiteScale, _WhiteScale);
+				}
 			}
 			//if(c.x > _diffTrans) c = c*IN.color;
 				c.rgb *= c.a;
