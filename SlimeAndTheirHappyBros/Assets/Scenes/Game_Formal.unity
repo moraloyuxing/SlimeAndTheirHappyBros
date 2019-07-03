@@ -12045,6 +12045,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e75fcb5c8823da40ab1bf30cb53ebb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playermanager: {fileID: 356022418}
   AllPlayers:
   - {fileID: 1930958719}
   - {fileID: 1517294622}

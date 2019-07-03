@@ -168,7 +168,7 @@ public class MultiPlayerCamera : MonoBehaviour{
 
     //結束攝影機巡迴，MainCamera呼叫
     public void FinishTouring() {
-        //呼叫playermanager
+        _playermanager.StartPlaying();
     }
 
 }
