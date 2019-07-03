@@ -650,6 +650,7 @@ public class Player_Control : MonoBehaviour{
                 break;
             case 1:
                 Base_Penetrate++;
+                Extra_Penetrate++;
                 BulletTime_Superimposed++;
                 Base_BulletTime = 0.35f * BulletTime_Superimposed;
                 break;
@@ -814,6 +815,7 @@ public class Player_Control : MonoBehaviour{
                     break;
                 case "bullet":
                     Base_Penetrate--;
+                    Extra_Penetrate--;
                     BulletTime_Superimposed--;
                     Base_BulletTime = 0.15f * BulletTime_Superimposed;
                     DropType = 1;
@@ -894,6 +896,7 @@ public class Player_Control : MonoBehaviour{
                 break;
             case "bullet":
                 Base_Penetrate++;
+                Extra_Penetrate++;
                 BulletTime_Superimposed++;
                 Base_BulletTime = 0.15f * BulletTime_Superimposed;
                 PickType = 1;
