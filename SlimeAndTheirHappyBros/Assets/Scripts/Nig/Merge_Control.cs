@@ -467,10 +467,10 @@ public class Merge_Control : MonoBehaviour{
     }
 
     void SpiltPosDetect(Transform Expect, int PID) {
+        CanSpilt[PID] = true;
         Collider[] colliders = Physics.OverlapBox(Expect.position + new Vector3(0, -0.2f, 0), new Vector3(0.79f, 0.6f, 0.2f), Quaternion.Euler(0, 0, 0), 1 << LayerMask.NameToLayer("Barrier") | 1<<LayerMask.NameToLayer("Border"));
         if (colliders == null) return;
         int i = 0;
-        CanSpilt[PID] = true;
         int loopCount = 0;
         while (i < colliders.Length) {
             loopCount++;
