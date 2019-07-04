@@ -53,6 +53,8 @@ public class GameManager : MonoBehaviour
         cameraController = GameObject.Find("Main Camera").GetComponent<MultiPlayerCamera>();
         cameraController.SubKingShowUpCBK(goblinManager.SpawnBoss);//註冊
 
+        cameraAnimator = GameObject.Find("CameraController").GetComponent<Animator>();
+
         goblinKillsGoal = new int[roundInfos.Length];
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
@@ -67,7 +69,9 @@ public class GameManager : MonoBehaviour
         directLight = GameObject.Find("Directional Light").GetComponent<Light>();
 
         sceneObjectManager = GetComponent<SceneObjectManager>();
-        GameObject.Find("Main Camera").SetActive(false);
+
+        playerManager.InitPlayerPos();
+        cameraController.gameObject.SetActive(false);
 
     }
     void Start()
@@ -77,7 +81,12 @@ public class GameManager : MonoBehaviour
         goblinManager.SubDecreaseBossHp(uiManager.DecreaseBossHp);
         goblinManager.SubGameWin(GoWin);
 
-        if (test) GameObject.Find("Tutorial").SetActive(false);
+        if (test) {
+            GameObject.Find("Tutorial").SetActive(false);
+            cameraAnimator.SetTrigger("over");
+            cameraMotion = true;
+            playerManager.Invoke("StartPlaying", 0.1f);
+        } 
     }
 
     // Update is called once per frame
@@ -121,13 +130,25 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
             if (curRound < 0)
             {
+                if (!cameraMotion) {
+                    time += Time.deltaTime;
+                    if (time > 11.0f) {
+                        cameraAnimator.SetTrigger("over");
+                        cameraMotion = true;
+                        uiManager.StartTutorial();
+                        time = .0f;
+                    }
+                }
                 if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
                     || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
                 {
                     if (!cameraMotion)
                     {
+                        cameraAnimator.SetTrigger("over");
+                        //cameraController.gameObject.SetActive(true);
                         cameraMotion = true;
-
+                        uiManager.StartTutorial();
+                        time = .0f;
                     }
                     else {
 
@@ -136,6 +157,7 @@ public class GameManager : MonoBehaviour
                         if (tutorialProgress >= 4)
                         {
                             curRound++;
+                            playerManager.StartPlaying();
                             uiManager.FirstRound();
                         }
                     }

@@ -94,6 +94,10 @@ public class MultiPlayerCamera : MonoBehaviour{
         callGoblinKing = cbk;
     }
 
+    public void InitPlayerPos() {
+
+    }
+
     void Move(){
         CenterPoint = GetCenterPoint();
         NewPosition = CenterPoint + offset;

@@ -61,20 +61,7 @@ public class Player_Manager : MonoBehaviour
 
     void Start()
     {
-        for (int i = 0; i < 6; i++) Can_Merge[i] = false;
-        for (int i = 0; i < 4; i++)
-        {
-            Which_Player[i] = FourPlayer[i].gameObject.name;
-            FourPlayer[i].SetUp_Number(i);
-            _goblinmanager.SetPlayersMove(i, FourPlayer[i].transform.position);
-            Player_Death[i] = false;
-            Playeranim[i] = FourPlayer[i].gameObject.GetComponent<Animator>();
-            TraceIcon[i] = TracePID[i].GetComponent<RectTransform>();
-        }
-        Player1_rePos(FourPlayer[0].transform.position);
-        Player2_rePos(FourPlayer[1].transform.position);
-        Player3_rePos(FourPlayer[2].transform.position);
-        Player4_rePos(FourPlayer[3].transform.position);
+
     }
 
     void Update()
@@ -218,6 +205,23 @@ public class Player_Manager : MonoBehaviour
 
     public void SubDeath(System.Action cbk) {
         DeathCBK = cbk;
+    }
+
+    public void InitPlayerPos() {
+        for (int i = 0; i < 6; i++) Can_Merge[i] = false;
+        for (int i = 0; i < 4; i++)
+        {
+            Which_Player[i] = FourPlayer[i].gameObject.name;
+            FourPlayer[i].SetUp_Number(i);
+            _goblinmanager.SetPlayersMove(i, FourPlayer[i].transform.position);
+            Player_Death[i] = false;
+            Playeranim[i] = FourPlayer[i].gameObject.GetComponent<Animator>();
+            TraceIcon[i] = TracePID[i].GetComponent<RectTransform>();
+        }
+        Player1_rePos(FourPlayer[0].transform.position);
+        Player2_rePos(FourPlayer[1].transform.position);
+        Player3_rePos(FourPlayer[2].transform.position);
+        Player4_rePos(FourPlayer[3].transform.position);
     }
 
     void Player1_rePos(Vector3 pos)
