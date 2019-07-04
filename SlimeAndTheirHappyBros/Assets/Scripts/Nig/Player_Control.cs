@@ -822,7 +822,7 @@ public class Player_Control : MonoBehaviour{
             if (loopCount > 10000)
             {
                 Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                Debug.Log("死亡噴裝    " + loopCount);
                 return;
             }
             CanDrop = true;
@@ -907,7 +907,7 @@ public class Player_Control : MonoBehaviour{
             if (loopCount > 10000)
             {
                 Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                Debug.Log("噴裝偵測   " + loopCount);
                 return;
             }
             Transform c = colliders[i].transform.parent;

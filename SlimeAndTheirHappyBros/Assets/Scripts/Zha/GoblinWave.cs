@@ -41,7 +41,7 @@ public class GoblinWave : IEnemyObjectPoolUnit
             if (loopCount > 10000)
             {
                 Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                Debug.Log("震波 Update  " + loopCount);
                 return;
             }
             pointPos[halfCount - i] += dt * speed * pointVec[halfCount - i];
@@ -81,7 +81,7 @@ public class GoblinWave : IEnemyObjectPoolUnit
             if (loopCount > 10000)
             {
                 Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                Debug.Log("哥布林 震波  " + loopCount);
                 return;
             }
             float downDegree = (270 - i * degree) * Mathf.Deg2Rad;

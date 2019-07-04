@@ -553,7 +553,7 @@ public class GoblinManager : MonoBehaviour
             if (loopCount > 10000)
             {
                 Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                Debug.Log("掉錢   " + loopCount);
                 break;
             }
             if (freeMoneys.Count <= 0) break;
@@ -576,7 +576,7 @@ public class GoblinManager : MonoBehaviour
             if (loopCount > 10000)
             {
                 Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                Debug.Log("掉錢2  " + loopCount);
                 break;
             }
             if (freeMoneys.Count <= 0) break;

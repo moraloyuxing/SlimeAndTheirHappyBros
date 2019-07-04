@@ -43,7 +43,7 @@ public class UIManager : MonoBehaviour
     }
     void Start()
     {
-        animator.SetTrigger("Tutorial");
+        //animator.SetTrigger("Tutorial");
         oringinProgress = new Vector2(headStart, 0);
         targetProgress = new Vector2(headEnd,0);
     }
@@ -73,6 +73,9 @@ public class UIManager : MonoBehaviour
         BossCountDownCBK = cbk;
     }
 
+    public void StartTutorial() {
+        animator.SetTrigger("Tutorial");
+    }
 
     public void NextTutorial() {
         tutorialProgres++;

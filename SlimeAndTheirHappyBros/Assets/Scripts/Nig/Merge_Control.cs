@@ -427,7 +427,7 @@ public class Merge_Control : MonoBehaviour{
             if (loopCount > 10000)
             {
                 Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                Debug.Log("merge cotrol split oring   " + loopCount);
                 return;
             }
             ChooseSpiltPos = true;
@@ -583,7 +583,7 @@ public class Merge_Control : MonoBehaviour{
             if (loopCount > 10000)
             {
                 Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                Debug.Log("merge get hurt   " + loopCount);
                 return;
             }
             if (i == 0)

@@ -122,7 +122,7 @@ public class Bullet_Behaviour : MonoBehaviour{
             if (loopCount > 10000)
             {
                 Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                Debug.Log("子彈碰撞偵測  " + loopCount);
                 return;
             }
             Transform c = colliders[i].transform.parent;

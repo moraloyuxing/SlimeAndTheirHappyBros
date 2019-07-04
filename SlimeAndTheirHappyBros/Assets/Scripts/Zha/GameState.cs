@@ -44,7 +44,7 @@ public class GameState
                 if (loopCount > 10000)
                 {
                     Debug.Break();
-                    Debug.Log("merge cotrol split pos detect    " + loopCount);
+                    Debug.Log("game state update   " + loopCount);
                     return;
                 }
                 if (!stateInfo.waves[currentWave].mutiColor) {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    bool cameraMotion = false;
     bool roundStart = false, inShopping = false, bossLevel = false, winInput = false;
     bool gameOver = false, lightChange = true;
     int tutorialProgress = 0, goblinKills = 0, maxLevel = 10;
@@ -18,6 +19,8 @@ public class GameManager : MonoBehaviour
     SceneObjectManager sceneObjectManager;
     NPC_Manager npcManager;
     MultiPlayerCamera cameraController;
+
+    Animator cameraAnimator;
 
     public static bool isBreakTime = false;
     public static int curRound = -1;
@@ -121,13 +124,22 @@ public class GameManager : MonoBehaviour
                 if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
                     || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
                 {
-                    uiManager.NextTutorial();
-                    tutorialProgress++;
-                    if (tutorialProgress >= 4)
+                    if (!cameraMotion)
                     {
-                        curRound++;
-                        uiManager.FirstRound();
+                        cameraMotion = true;
+
                     }
+                    else {
+
+                        uiManager.NextTutorial();
+                        tutorialProgress++;
+                        if (tutorialProgress >= 4)
+                        {
+                            curRound++;
+                            uiManager.FirstRound();
+                        }
+                    }
+
                 }
             }
             else
@@ -178,7 +190,7 @@ public class GameManager : MonoBehaviour
                     if(loopCount > 10000)
                     {
                         Debug.Break();
-                        Debug.Log("merge cotrol split pos detect    " + loopCount);
+                        Debug.Log("boss 生 普通哥布林 " + loopCount);
                         return;
                     }
                     goblinManager.BossSpawnNormalGoblinMutiColor(0);
@@ -194,7 +206,7 @@ public class GameManager : MonoBehaviour
                     if (loopCount > 10000)
                     {
                         Debug.Break();
-                        Debug.Log("merge cotrol split pos detect    " + loopCount);
+                        Debug.Log("boss 生 弓手哥布林 " + loopCount);
                         return;
                     }
                     goblinManager.BossSpawnArcherGoblinMutiColor(0);
@@ -202,7 +214,7 @@ public class GameManager : MonoBehaviour
                     bossMonsterNum++;
                     if (bossMonsterNum >= 6) return;
                 }
-                op = Random.Range(1, 3);
+                op = Random.Range(0, 1);
                 loopCount = 0;
                 while (op > 0)
                 {
@@ -210,7 +222,7 @@ public class GameManager : MonoBehaviour
                     if (loopCount > 10000)
                     {
                         Debug.Break();
-                        Debug.Log("merge cotrol split pos detect    " + loopCount);
+                        Debug.Log("boss 生 霍布哥布林  " + loopCount);
                         return;
                     }
                     goblinManager.BossSpawnHobGoblinMutiColor(0);

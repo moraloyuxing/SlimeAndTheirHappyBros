@@ -323,7 +323,7 @@ public class GoblinSpirit:IEnemyUnit
                 if (loopCount > 10000)
                 {
                     Debug.Break();
-                    Debug.Log("merge cotrol split pos detect    " + loopCount);
+                    Debug.Log("祖靈 X攻擊    " + loopCount);
                     return;
                 }
                 t++;

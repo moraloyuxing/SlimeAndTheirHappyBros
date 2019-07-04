@@ -287,7 +287,7 @@ public class KingGoblin : IEnemyUnit
                     if (loopCount > 10000)
                     {
                         Debug.Break();
-                        Debug.Log("merge cotrol split pos detect    " + loopCount);
+                        Debug.Log("boss 丟小哥布林  " + loopCount);
                         return;
                     }
                     throwId++;
