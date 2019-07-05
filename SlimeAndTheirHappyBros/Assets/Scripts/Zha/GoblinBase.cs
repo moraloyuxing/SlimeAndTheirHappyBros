@@ -238,10 +238,10 @@ public class GoblinBase
         startFindPath = true;
         followingPath = false;
         if (curPathRequest != null) {
-            PathRequestManager.CancleRequest(transform.name, curPathRequest);
+            PathRequestManager.CancleRequest(curPathRequest);
             curPathRequest = null;
         } 
-        curPathRequest =  PathRequestManager.RequestPath(transform.name,selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+        curPathRequest =  PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
         goblinManager.CalculatePath = true;
     }
 
@@ -294,10 +294,8 @@ public class GoblinBase
             //}
         }
     }
-
     public virtual void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
-        curPathRequest = null;
         if (pathSuccessful)
         {
             if (curState == GoblinState.idle || curState == GoblinState.ramble || curState == GoblinState.chase || curState == GoblinState.attackBreak) {
@@ -381,7 +379,7 @@ public class GoblinBase
                 //if (hp <= 0) SetState(GoblinState.die);
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
-                //renderer.material.SetInt("_colorID", color);
+                renderer.material.SetInt("_colorID", color);
                 whiteScale = -1.0f;
                 renderer.material.SetFloat("_WhiteScale", -1);
             }

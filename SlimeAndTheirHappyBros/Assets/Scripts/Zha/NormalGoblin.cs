@@ -191,7 +191,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                 if (hp <= 0) SetState(GoblinState.die);
                 else SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
-                //renderer.material.SetInt("_colorID", color);
+                renderer.material.SetInt("_colorID", color);
                 whiteScale = -1.0f;
                 renderer.material.SetFloat("_WhiteScale", -1);
             }

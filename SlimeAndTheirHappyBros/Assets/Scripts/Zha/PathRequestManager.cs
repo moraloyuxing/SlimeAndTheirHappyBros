@@ -27,17 +27,6 @@ public class PathRequestManager : MonoBehaviour {
         //instance.pathRequestQueue.Enqueue(newRequest);
         instance.pathRequestList.Add(newRequest);
         instance.TryProcessNext();
-        Debug.Log("add new finding path request   " + instance.pathRequestList.IndexOf(newRequest));
-        return newRequest;
-    }
-    public static PathRequest RequestPath(string name, Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> _successCbk)
-    {
-        PathRequest newRequest = new PathRequest(pathStart, pathEnd, _successCbk);
-        //instance.pathRequestQueue.Enqueue(newRequest);
-        instance.pathRequestList.Add(newRequest);
-        Debug.Log(name + " addddddddddd new finding path request   " + instance.pathRequestList.IndexOf(newRequest));
-        instance.TryProcessNext();
-
         return newRequest;
     }
 
@@ -58,15 +47,9 @@ public class PathRequestManager : MonoBehaviour {
         }
     }
 
-    public static void CancleRequest(string name, PathRequest request)
-    {
-        Debug.Log(name + " cancle finding path request   " + instance.pathRequestList.IndexOf(request));
-        if (instance.pathRequestList.Contains(request)) instance.pathRequestList.Remove(request);
-    }
     public static void CancleRequest(PathRequest request)
     {
-        Debug.Log("  cancle finding path request   " +  instance.pathRequestList.IndexOf(request));
-        if (instance.pathRequestList.Contains(request))instance.pathRequestList.Remove(request);
+        if(instance.pathRequestList.Contains(request))instance.pathRequestList.Remove(request);
     }
 
 
@@ -74,7 +57,7 @@ public class PathRequestManager : MonoBehaviour {
     {
         currentPathRequest.callback(path, success);
         isProcessingPath = false;
-        TryProcessNext();
+        if(success) TryProcessNext();
         //if (success) {
             
         //}
