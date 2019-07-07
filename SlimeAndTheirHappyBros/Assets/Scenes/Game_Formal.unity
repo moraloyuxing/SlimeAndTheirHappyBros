@@ -10315,7 +10315,7 @@ MonoBehaviour:
   _itemmanager: {fileID: 374487915}
   Player_Sprite: {fileID: 1651425401}
   SplashEffect: {fileID: 1335730876}
-  WeakEffect: {fileID: 1921941540}
+  WeakEffect: {fileID: 1921941542}
   BuyHint: {fileID: 599878743}
   PlayerID2: 0
   DeathPriority: 0
@@ -18344,7 +18344,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 683200034}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -27522,7 +27522,7 @@ MonoBehaviour:
   _itemmanager: {fileID: 374487915}
   Player_Sprite: {fileID: 87374101}
   SplashEffect: {fileID: 2719533}
-  WeakEffect: {fileID: 683200034}
+  WeakEffect: {fileID: 683200036}
   BuyHint: {fileID: 722735401}
   PlayerID2: 0
   DeathPriority: 0
@@ -39453,7 +39453,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1502891519}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -39931,7 +39931,7 @@ MonoBehaviour:
   _itemmanager: {fileID: 374487915}
   Player_Sprite: {fileID: 955307555}
   SplashEffect: {fileID: 123939775}
-  WeakEffect: {fileID: 1871909487}
+  WeakEffect: {fileID: 1871909489}
   BuyHint: {fileID: 54195859}
   PlayerID2: 0
   DeathPriority: 0
@@ -49951,7 +49951,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1871909487}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -50988,7 +50988,7 @@ SpriteRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1921941540}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 0
   m_ReceiveShadows: 0
   m_DynamicOccludee: 1
@@ -51465,7 +51465,7 @@ MonoBehaviour:
   _itemmanager: {fileID: 374487915}
   Player_Sprite: {fileID: 1152496612}
   SplashEffect: {fileID: 1047086143}
-  WeakEffect: {fileID: 1502891519}
+  WeakEffect: {fileID: 1502891521}
   BuyHint: {fileID: 1077112956}
   PlayerID2: 0
   DeathPriority: 0

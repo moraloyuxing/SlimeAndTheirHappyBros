@@ -11,7 +11,7 @@ public class Player_Control : MonoBehaviour{
     public Item_Manager _itemmanager;
     public SpriteRenderer Player_Sprite;
     public GameObject SplashEffect;
-    public GameObject WeakEffect;
+    public SpriteRenderer WeakEffect;
     public Transform BuyHint;
     int Player_Number=0;
     public int PlayerID {
@@ -416,10 +416,11 @@ public class Player_Control : MonoBehaviour{
             if (Time.time > Weak_Moment + 5.0f && OnWeak)
             {
                 OnWeak = false;
-                anim.SetBool("OnWeak", OnWeak);
+                //anim.SetBool("OnWeak", OnWeak);
+                WeakEffect.enabled = false;
                 Base_Speed = Current_Speed;
                 _playermanager.ExitWeak(Player_Number);
-                HideWeak();
+                //HideWeak();
             }
 
             //道具掉落
@@ -656,9 +657,9 @@ public class Player_Control : MonoBehaviour{
         ChooseItemtoDrop();
     }
 
-    public void HideWeak(){
-        WeakEffect.GetComponent<SpriteRenderer>().sprite = null;
-    }
+    //public void HideWeak(){
+    //    WeakEffect.GetComponent<SpriteRenderer>().sprite = null;
+    //}
 
     //洗白相關
     void WashOutColor() {
@@ -752,7 +753,8 @@ public class Player_Control : MonoBehaviour{
         anim.SetBool("OnWeak", OnWeak);
         Weak_Speed = Base_Speed * 0.6f;
         Base_Speed = Weak_Speed;
-        GetComponent<Animator>().Play("Slime_Weak");
+        //GetComponent<Animator>().Play("Slime_Weak");
+        WeakEffect.enabled = true;
         _playermanager.StartWeak(Player_Number);
         _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
     }
@@ -761,7 +763,8 @@ public class Player_Control : MonoBehaviour{
         OnWeak = false;
         Base_Speed = Current_Speed;
         Weak_Moment = Time.time;
-        HideWeak();
+        //HideWeak();
+        WeakEffect.enabled = false;
     }
 
     //金幣
