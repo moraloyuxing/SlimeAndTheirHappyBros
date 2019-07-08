@@ -25,6 +25,7 @@ public class MultiPlayerCamera : MonoBehaviour{
     //Vector3 bossShowView = new Vector3(-1.2f, 66.5f, -120.0f); //new Vector3(-3f,54f,-68.4f);
     Vector3 oringinPos;
     bool[] PlayeratShopArea = new bool[4];
+    int inShopCount = 0;
 
     System.Action callGoblinKing;
 
@@ -153,10 +154,16 @@ public class MultiPlayerCamera : MonoBehaviour{
 
     public void Player_GoShop(int PID) {
         PlayeratShopArea[PID] = true;
-        isShopArea = true;
-        for (int p = 0; p < 4; p++){
-            if (PlayeratShopArea[p] == false) isShopArea = false;
+        isShopArea = false;
+        inShopCount = 0;
+        for (int p = 0; p < 4; p++) {
+            if (PlayeratShopArea[p] == true) inShopCount++;
+
+            if (inShopCount >= 3) isShopArea = true;
         }
+
+
+
     }
 
     public void Player_LeaveShop(int PID) {

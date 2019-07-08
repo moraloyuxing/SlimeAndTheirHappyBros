@@ -39,7 +39,7 @@ public class NPC_Manager : MonoBehaviour{
     }
 
     void Update(){
-        if (Input.GetKeyDown(KeyCode.B)) BreakTime_Start();
+        if (Input.GetKeyDown(KeyCode.B)) BreakTime_End();
         //if (Input.GetKeyDown(KeyCode.N)) PIDReadyIcon[2].sprite = ReadyBossState[2];
         //if (Input.GetKeyDown(KeyCode.M)) PIDReadyIcon[3].sprite = ReadyBossState[3];
 

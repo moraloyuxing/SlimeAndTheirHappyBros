@@ -71,6 +71,7 @@ public class Merge_Control : MonoBehaviour{
     public GameObject ExpectSpilt;
     float[] SpiltX = new float[2];
     float[] SpiltZ = new float[2];
+    bool[] AlreadySelectPos = new bool[2] { false,false};
 
     //倒數計時
     //整數倒數 → 隔秒呼叫；計量條 → Time.deltaTime
@@ -424,11 +425,20 @@ public class Merge_Control : MonoBehaviour{
         int loopCount = 0;
         while (ChooseSpiltPos == false) {
             loopCount++;
-            if (loopCount > 10000)
-            {
-                Debug.Break();
-                Debug.Log("merge cotrol split oring   " + loopCount);
-                return;
+            Debug.Log("line428的loop次數 = " + loopCount);
+            if (loopCount > 100){
+                for (int i = 0; i < 2; i++) {
+                    if (CanSpilt[i] == false) {
+                        SpiltX[i] = gameObject.transform.position.x;
+                        SpiltZ[i] = gameObject.transform.position.z;
+                        CanSpilt[i] = true;
+                        AlreadySelectPos[i] = true;
+                    }
+                }
+                Debug.Log("超過1000次，強行給定合體史萊姆座標");
+                //Debug.Break();
+                //Debug.Log("merge cotrol split oring   " + loopCount);
+                //return;
             }
             ChooseSpiltPos = true;
             for (int i = 0; i < 2; i++){
@@ -439,12 +449,13 @@ public class Merge_Control : MonoBehaviour{
 
                 if (CanSpilt[i] == false) {SpiltPosDetect(ExpectPos.transform, i);} 
 
-                if (CanSpilt[i] == true) {
+                if (CanSpilt[i] == true && AlreadySelectPos[i] == false) {
                     SpiltX[i] = ExpectPos.transform.position.x;
                     SpiltZ[i] = ExpectPos.transform.position.z;
+                    AlreadySelectPos[i] = true;
                 }
 
-                if (CanSpilt[0] == true && CanSpilt[1] == true) ChooseSpiltPos = true;
+                if (CanSpilt[0] == true && CanSpilt[1] == true) {ChooseSpiltPos = true;}
                 Destroy(ExpectPos);
             }
         }
@@ -460,6 +471,8 @@ public class Merge_Control : MonoBehaviour{
                 Storage_Player[0].SendMessage("Die_InMergeState");
                 Storage_Player[1].SendMessage("Die_InMergeState");
             }
+            AlreadySelectPos[0] = false;
+            AlreadySelectPos[1] = false;
             CanSpilt[0] = false;
             CanSpilt[1] = false;
             ChooseSpiltPos = false;
@@ -476,8 +489,9 @@ public class Merge_Control : MonoBehaviour{
         int loopCount = 0;
         while (i < colliders.Length) {
             loopCount++;
-            if (loopCount > 10000) {
-                Debug.Break();
+            Debug.Log("line492的loop次數 = " + loopCount);
+            if (loopCount > 100) {
+                //Debug.Break();
                 Debug.Log("merge cotrol split pos detect    " + loopCount);
                 return;
             } 
@@ -580,7 +594,7 @@ public class Merge_Control : MonoBehaviour{
         while (i < colliders.Length)
         {
             loopCount++;
-            if (loopCount > 10000)
+            if (loopCount > 1000)
             {
                 Debug.Break();
                 Debug.Log("merge get hurt   " + loopCount);

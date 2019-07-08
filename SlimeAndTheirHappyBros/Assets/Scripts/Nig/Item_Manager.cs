@@ -132,7 +132,8 @@ public class Item_Manager : MonoBehaviour {
         for (int p = 0; p < 4; p++){
             for (int i = 0; i < 6; i++) {
                 PlayerHasBuy[p, i] = false;
-                Item_Price[p,i] = Mathf.FloorToInt(Base_Price[i] * Mathf.Pow(1.3f, Item_SuperImposed[p,i]));//先確認有無買過該道具再調漲/維持
+                if(i!=2)Item_Price[p,i] = Mathf.FloorToInt(Base_Price[i] * Mathf.Pow(1.3f, Item_SuperImposed[p,i]));//先確認有無買過該道具再調漲/維持
+                else Item_Price[p,i] = Mathf.FloorToInt(Base_Price[i] * Mathf.Pow(2.5f, Item_SuperImposed[p, i]));
             }
         }
     }
