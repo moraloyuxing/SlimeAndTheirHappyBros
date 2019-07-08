@@ -132,6 +132,8 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
                 curPathRequest = null;
             }
 
+            blankTime = .0f;
+
             if (delayShoot == 0) {
                 moveFwdDir = (goblinManager.PlayerPos[targetPlayer] - selfPos).normalized;
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
@@ -162,7 +164,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
             {
                 if (!hasShoot && aniInfo.normalizedTime > 0.64f) {
                     hasShoot = true;
-                    goblinManager.UseArrow(transform.position + shootPos, moveFwdDir);
+                    goblinManager.UseArrow(transform.position + shootPos, moveFwdDir + new Vector3(0,-0.5f,0));
                     AudioManager.SingletonInScene.PlaySound2D("Shoot_Bow", 0.75f);
                 }
                 if (aniInfo.normalizedTime >= 0.95f)

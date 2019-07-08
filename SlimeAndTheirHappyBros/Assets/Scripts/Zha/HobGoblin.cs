@@ -11,7 +11,9 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     Vector3 shootOffset;
     Vector3 launchPos, shootFace;
     float[] atkColOffset = new float[3];
+    float[] hintOffset = new float[2];
     Transform[] atkCol = new Transform[3];
+    Transform[] atkHint = new Transform[2];
     Transform hurtArea;
     Collider hurtAreaCol;
 
@@ -28,12 +30,16 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         atkCol[0] = t.Find("AtkCollider");
         atkCol[1] = t.Find("AtkCollider (1)");
         atkCol[2] = t.Find("AtkCollider (2)");
+        atkHint[0] = t.Find("AttackHint");
+        atkHint[1] = t.Find("AttackHint (1)");
         imgScale = image.localScale.x;
         imgOffset = image.localPosition.x;
         shootOffset = t.Find("ShootPos").localPosition;
         atkColOffset[0] = atkCol[0].localPosition.x;
         atkColOffset[1] = atkCol[1].localPosition.x;
         atkColOffset[2] = atkCol[2].localPosition.x;
+        hintOffset[0] = atkHint[0].localPosition.x;
+        hintOffset[1] = atkHint[1].localPosition.x;
         hurtArea = t.Find("HurtArea");
         hurtAreaOffset = hurtArea.localPosition.x;
         hurtAreaCol = hurtArea.GetComponent<Collider>();
@@ -62,11 +68,15 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         atkCol[0] = t.Find("AtkCollider");
         atkCol[1] = t.Find("AtkCollider (1)");
         atkCol[2] = t.Find("AtkCollider (2)");
+        atkHint[0] = t.Find("AttackHint");
+        atkHint[1] = t.Find("AttackHint (1)");
         imgScale = image.localScale.x;
         imgOffset = image.localPosition.x;
         atkColOffset[0] = atkCol[0].localPosition.x;
         atkColOffset[1] = atkCol[1].localPosition.x;
         atkColOffset[2] = atkCol[2].localPosition.x;
+        hintOffset[0] = atkHint[0].localPosition.x;
+        hintOffset[1] = atkHint[1].localPosition.x;
         hurtArea = t.Find("HurtArea");
         hurtAreaOffset = hurtArea.localPosition.x;
         hurtAreaCol = hurtArea.GetComponent<Collider>();
@@ -212,6 +222,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             animator.SetInteger("state", 1);
             animator.speed = 1.2f;
             firstInState = false;
+            blankTime = .0f;
             //followingPath = false;
             //PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
         }
@@ -298,6 +309,8 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     curPathRequest = null;
                 }
 
+                blankTime = .0f;
+
                 moveFwdDir = new Vector3(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, 0, goblinManager.PlayerPos[targetPlayer].z - selfPos.z);
                 scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
                 image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
@@ -313,9 +326,12 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                         animator.SetInteger("state", 1);
                     }
                     else {
-
+                        image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                        image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+                        hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
                         atkCol[0].localPosition = new Vector3(scaleX * atkColOffset[0], atkCol[0].localPosition.y, atkCol[0].localPosition.z);
                         atkCol[1].localPosition = new Vector3(scaleX * atkColOffset[1], atkCol[1].localPosition.y, atkCol[1].localPosition.z);
+                        atkHint[0].localPosition = new Vector3(scaleX * hintOffset[0], atkHint[0].localPosition.y, atkHint[0].localPosition.z);
                         startAttack = true;
                         animator.speed = 1.0f;
                         animator.SetInteger("attackType", attackType);
@@ -327,8 +343,12 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 else {//葉子
                     //attackType = 1;
                     startAttack = true;
+                    image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                    image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+                    hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
                     atkCol[2].localPosition = new Vector3(scaleX * atkColOffset[2], atkCol[2].localPosition.y, atkCol[2].localPosition.z);
-
+                    atkHint[1].localScale = new Vector3(scaleX * 1.54f, atkHint[1].localScale.y, atkHint[1].localScale.z);
+                    atkHint[1].localPosition = new Vector3(scaleX * hintOffset[1], atkHint[1].localPosition.y, atkHint[1].localPosition.z);
                     launchPos = selfPos + new Vector3(scaleX * shootOffset.x, shootOffset.y, shootOffset.z);
                     shootFace = new Vector3(-scaleX, 0, 0);
 
@@ -365,8 +385,12 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     }
                     else
                     {
+                        image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                        image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
+                        hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
                         atkCol[0].localPosition = new Vector3(scaleX * atkColOffset[0], atkCol[0].localPosition.y, atkCol[0].localPosition.z);
                         atkCol[1].localPosition = new Vector3(scaleX * atkColOffset[1], atkCol[1].localPosition.y, atkCol[1].localPosition.z);
+                        atkHint[0].localPosition = new Vector3(scaleX * hintOffset[0], atkHint[0].localPosition.y, atkHint[0].localPosition.z);
                         startAttack = true;
                         endure = true;
                         animator.speed = 1.0f;

@@ -170,15 +170,21 @@ public class GoblinBase
     }
     public virtual void AttackBreakDetectDist() {
         float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
-        if (diff <= atkDist * atkDist) SetState(GoblinState.attack);
-        else {
-            if (!startFindPath)
+        if (diff <= sightDist * sightDist)
+        {
+            if (diff <= atkDist * atkDist) SetState(GoblinState.attack);
+            else
             {
-                CalculatePath();
+                if (!startFindPath)
+                {
+                    CalculatePath();
+                }
+                //SetState(GoblinState.idle);   //先進idle或ramble再尋路，以免尋路過久會不知要做啥
             }
-            //SetState(GoblinState.idle);   //先進idle或ramble再尋路，以免尋路過久會不知要做啥
         }
+        else SetState();
     }
+        
 
 
     public virtual void MoveIn()
@@ -260,6 +266,7 @@ public class GoblinBase
         }
         else
         {
+            Debug.Log("close player " + inStateTime);
             inStateTime += deltaTime;
             if (inStateTime > 2.0f) {
                 SetState();
@@ -309,6 +316,7 @@ public class GoblinBase
             animator.SetInteger("state", 1);
             animator.speed = 1.2f;
             firstInState = false;
+            blankTime = .0f;
             //followingPath = false;
             //PathRequestManager.RequestPath(selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
         }
@@ -448,7 +456,7 @@ public class GoblinBase
             }
 
             if (whiteScale > .0f) {
-                whiteScale -= deltaTime * 4.0f;
+                whiteScale -= deltaTime * 8.0f;
                 renderer.material.SetFloat("_WhiteScale", whiteScale);
             }
 
