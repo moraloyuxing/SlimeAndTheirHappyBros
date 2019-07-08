@@ -6251,6 +6251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 210187427}
   - component: {fileID: 210187428}
+  - component: {fileID: 210187429}
   m_Layer: 0
   m_Name: CameraController
   m_TagString: Untagged
@@ -6296,6 +6297,28 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &210187429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 210187426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b639e8490f2893d4ea704f4f163dcf71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Cut_Camera:
+  - {fileID: 1327091633}
+  - {fileID: 1535361861}
+  - {fileID: 490716188}
+  Need_Billboard:
+  - {fileID: 1930958719}
+  - {fileID: 1517294622}
+  - {fileID: 351806363}
+  - {fileID: 1050854431}
+  - {fileID: 2114688444}
 --- !u!1 &212379511
 GameObject:
   m_ObjectHideFlags: 0
@@ -63493,7 +63516,7 @@ PrefabInstance:
     - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
         type: 3}
       propertyPath: test
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
         type: 3}
