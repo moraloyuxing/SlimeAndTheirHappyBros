@@ -48,6 +48,7 @@ public class Player_Control : MonoBehaviour{
     bool Right_CanMove = true;
     bool Walking = false;
     bool CanMove = false;
+    bool OnBossDebut = false;
 
     //攻擊方向旋轉
     public GameObject Attack_Arrow;
@@ -170,6 +171,7 @@ public class Player_Control : MonoBehaviour{
     }
 
     void Update(){
+        if (Input.GetKeyDown(KeyCode.N)) OnBossDebut = !OnBossDebut;
         if (CanMove == true) {
             anim.SetBool("Walking", Walking);
             anim.SetBool("Shooting", Shooting);
@@ -179,9 +181,11 @@ public class Player_Control : MonoBehaviour{
             //受傷判定
             if (StopDetect == false) SlimeGetHurt();
             //移動&短衝刺
-            xAix = Input.GetAxis(WhichPlayer + "Horizontal");
-            zAix = Input.GetAxis(WhichPlayer + "Vertical");
-            left_trigger = Input.GetAxis(WhichPlayer + "Dash");
+            if (OnBossDebut == false) {
+                xAix = Input.GetAxis(WhichPlayer + "Horizontal");
+                zAix = Input.GetAxis(WhichPlayer + "Vertical");
+                left_trigger = Input.GetAxis(WhichPlayer + "Dash");
+            }
             if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f)
             {
                 StopDetect = true;
@@ -359,9 +363,11 @@ public class Player_Control : MonoBehaviour{
             }
 
             //攻擊方向旋轉
-            xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
-            zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
-            current_angle = Attack_Arrow.transform.eulerAngles;
+            if (OnBossDebut == false) {
+                xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
+                zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
+                current_angle = Attack_Arrow.transform.eulerAngles;
+            }
             if (xAtk != 0.0f || zAtk != 0.0f)
             {
                 AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -376,7 +382,7 @@ public class Player_Control : MonoBehaviour{
             else if (xAtk == 0.0f && zAtk == 0.0f) AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 
             //攻擊
-            right_trigger = Input.GetAxis(WhichPlayer + "Attack");
+            if (OnBossDebut == false)right_trigger = Input.GetAxis(WhichPlayer + "Attack");
             if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false)
             {
                 if (DeathPriority == false) GetComponent<Animator>().Play("Slime_Attack");
@@ -1009,6 +1015,10 @@ public class Player_Control : MonoBehaviour{
 
     public void StartPlaying() {
         CanMove = true;
+    }
+
+    public void OnBossDebut_Switch() {
+        OnBossDebut = !OnBossDebut;
     }
 
 }

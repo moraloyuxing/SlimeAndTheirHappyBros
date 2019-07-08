@@ -53,49 +53,43 @@ public class Player_Manager : MonoBehaviour
     bool CanTrace = false;
     //螢幕外追蹤---End
 
+    //Boss登場，史萊姆踩地縫傳回祭壇預設位置等相關設定---Start
+    bool OnBossDebut = false;
+    bool CheckCrack = false;
+    int SendBackCount = 0;
+    public Vector3[] Altar_SendBackPos = new Vector3[4];    //四個回送點
+    //Boss登場，史萊姆踩地縫傳回祭壇預設位置等相關設定---End
 
-    void Awake()
-    {
+    void Awake(){
         pigmentManager = GetComponent<Pigment_Manager>();
     }
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
+    void Update(){
         for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
-        if (Game_State){
+        if (Game_State && OnBossDebut == false){
             //玩家1啟用融合
-            if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true && Weak_State[0] == false && Player_Hurt[0] == false)
-            {
+            if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true && Weak_State[0] == false && Player_Hurt[0] == false){
                 if (shortest_toPlayer[0] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[0].gameObject && Can_Merge[0] == true && Weak_State[1] == false && Player_Hurt[1] == false) {pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[1].gameObject, Color_Number[0] + Color_Number[1]);}
                 else if (shortest_toPlayer[0] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[0].gameObject && Can_Merge[1] == true && Weak_State[2] == false && Player_Hurt[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[2].gameObject, Color_Number[0] + Color_Number[2]); }
                 else if (shortest_toPlayer[0] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[0].gameObject && Can_Merge[2] == true && Weak_State[3] == false && Player_Hurt[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[3].gameObject, Color_Number[0] + Color_Number[3]); }
             }
 
             //玩家2啟用融合
-            if (a_button[1] && WashPriority[1] == false && FourPlayer[1].gameObject.activeSelf == true && Weak_State[1] == false && Player_Hurt[1] == false)
-            {
+            if (a_button[1] && WashPriority[1] == false && FourPlayer[1].gameObject.activeSelf == true && Weak_State[1] == false && Player_Hurt[1] == false){
                 if (shortest_toPlayer[1] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[1].gameObject && Can_Merge[0] == true && Weak_State[0] == false && Player_Hurt[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[0].gameObject, Color_Number[1] + Color_Number[0]); }
                 else if (shortest_toPlayer[1] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[1].gameObject && Can_Merge[3] == true && Weak_State[2] == false && Player_Hurt[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[2].gameObject, Color_Number[1] + Color_Number[2]); }
                 else if (shortest_toPlayer[1] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[1].gameObject && Can_Merge[4] == true && Weak_State[3] == false && Player_Hurt[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[1].gameObject, FourPlayer[3].gameObject, Color_Number[1] + Color_Number[3]); }
             }
 
             //玩家3啟用融合
-            if (a_button[2] && WashPriority[2] == false && FourPlayer[2].gameObject.activeSelf == true && Weak_State[2] == false && Player_Hurt[2] == false)
-            {
+            if (a_button[2] && WashPriority[2] == false && FourPlayer[2].gameObject.activeSelf == true && Weak_State[2] == false && Player_Hurt[2] == false){
                 if (shortest_toPlayer[2] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[2].gameObject && Can_Merge[1] == true && Weak_State[0] == false && Player_Hurt[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[0].gameObject, Color_Number[2] + Color_Number[0]); }
                 else if (shortest_toPlayer[2] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[2].gameObject && Can_Merge[3] == true && Weak_State[1] == false && Player_Hurt[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[1].gameObject, Color_Number[2] + Color_Number[1]); }
                 else if (shortest_toPlayer[2] == FourPlayer[3].gameObject && shortest_toPlayer[3] == FourPlayer[2].gameObject && Can_Merge[5] == true && Weak_State[3] == false && Player_Hurt[3] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[2].gameObject, FourPlayer[3].gameObject, Color_Number[2] + Color_Number[3]); }
             }
            
             //玩家4啟用融合
-            if (a_button[3] && WashPriority[3] == false && FourPlayer[3].gameObject.activeSelf == true && Weak_State[3] == false && Player_Hurt[3] == false)
-            {
+            if (a_button[3] && WashPriority[3] == false && FourPlayer[3].gameObject.activeSelf == true && Weak_State[3] == false && Player_Hurt[3] == false){
                 if (shortest_toPlayer[3] == FourPlayer[0].gameObject && shortest_toPlayer[0] == FourPlayer[3].gameObject && Can_Merge[2] == true && Weak_State[0] == false && Player_Hurt[0] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[0].gameObject, Color_Number[3] + Color_Number[0]); }
                 else if (shortest_toPlayer[3] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[3].gameObject && Can_Merge[4] == true && Weak_State[1] == false && Player_Hurt[1] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[1].gameObject, Color_Number[3] + Color_Number[1]); }
                 else if (shortest_toPlayer[3] == FourPlayer[2].gameObject && shortest_toPlayer[2] == FourPlayer[3].gameObject && Can_Merge[5] == true && Weak_State[2] == false && Player_Hurt[2] == false) { pigmentManager.Change_Advanced_Color(FourPlayer[3].gameObject, FourPlayer[2].gameObject, Color_Number[3] + Color_Number[2]); }
@@ -103,8 +97,7 @@ public class Player_Manager : MonoBehaviour
         }
 
         //玩家1啟用洗白
-        if (a_button[0] && WashPriority[0] && FourPlayer[0].gameObject.activeSelf == true && Player_Death[0] == false)
-        {
+        if (a_button[0] && WashPriority[0] && FourPlayer[0].gameObject.activeSelf == true && Player_Death[0] == false && OnBossDebut == false){
             SetPlayerColor(0, 0);
             pigmentManager.Change_Base_Color(0, 0);
             FourPlayer[0].SendMessage("Hide_Hint");
@@ -118,8 +111,7 @@ public class Player_Manager : MonoBehaviour
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
         }
         //玩家2啟用洗白
-        if (a_button[1] && WashPriority[1] && FourPlayer[1].gameObject.activeSelf == true && Player_Death[1] == false)
-        {
+        if (a_button[1] && WashPriority[1] && FourPlayer[1].gameObject.activeSelf == true && Player_Death[1] == false && OnBossDebut == false){
             SetPlayerColor(1, 0);
             pigmentManager.Change_Base_Color(1, 0);
             FourPlayer[1].SendMessage("Hide_Hint");
@@ -133,8 +125,7 @@ public class Player_Manager : MonoBehaviour
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
         }
         //玩家3啟用洗白
-        if (a_button[2] && WashPriority[2] && FourPlayer[2].gameObject.activeSelf == true && Player_Death[2] == false)
-        {
+        if (a_button[2] && WashPriority[2] && FourPlayer[2].gameObject.activeSelf == true && Player_Death[2] == false && OnBossDebut == false){
             SetPlayerColor(2, 0);
             pigmentManager.Change_Base_Color(2, 0);
             FourPlayer[2].SendMessage("Hide_Hint");
@@ -149,8 +140,7 @@ public class Player_Manager : MonoBehaviour
         }
 
         //玩家4啟用洗白
-        if (a_button[3] && WashPriority[3] && FourPlayer[3].gameObject.activeSelf == true && Player_Death[3] == false)
-        {
+        if (a_button[3] && WashPriority[3] && FourPlayer[3].gameObject.activeSelf == true && Player_Death[3] == false && OnBossDebut == false){
             SetPlayerColor(3, 0);
             pigmentManager.Change_Base_Color(3, 0);
             FourPlayer[3].SendMessage("Hide_Hint");
@@ -192,11 +182,9 @@ public class Player_Manager : MonoBehaviour
                 npcmanager.BreakTime_End();
                 OnAltarCBK();
             }
-
         }
 
         if(CanTrace == true)PlayerTraceSystem();
-
     }
 
     public void SubAltar(System.Action cbk) {
@@ -230,8 +218,15 @@ public class Player_Manager : MonoBehaviour
         FourPlayer[0].transform.position = pos;
         _goblinmanager.SetPlayersMove(0, pos);
 
-        if (FourPlayer[0].gameObject.activeSelf == true)
-        {
+        if (FourPlayer[0].gameObject.activeSelf == true){
+
+            //Boss登場時的地縫偵測
+            if (CheckCrack &&FourPlayer[0].transform.position.y >= 22.0f){
+                FourPlayer[0].transform.position = Altar_SendBackPos[SendBackCount];
+                SendBackCount++;
+                if (SendBackCount > 3) SendBackCount = 0;   //理論上不會，單純以防萬一
+            }
+
             //是否接近洗白處優先判定
             if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 &&Player_Death[0] == false)
@@ -288,8 +283,14 @@ public class Player_Manager : MonoBehaviour
         FourPlayer[1].transform.position = pos;
         _goblinmanager.SetPlayersMove(1, pos);
 
-        if (FourPlayer[1].gameObject.activeSelf == true)
-        {
+        if (FourPlayer[1].gameObject.activeSelf == true){
+            //Boss登場時的地縫偵測
+            if (CheckCrack && FourPlayer[1].transform.position.y >= 22.0f){
+                FourPlayer[1].transform.position = Altar_SendBackPos[SendBackCount];
+                SendBackCount++;
+                if (SendBackCount > 3) SendBackCount = 0;   //理論上不會，單純以防萬一
+            }
+
             //是否接近洗白處優先判定
             if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 && Player_Death[1] == false)
@@ -345,6 +346,13 @@ public class Player_Manager : MonoBehaviour
 
     void Player3_rePos(Vector3 pos)
     {
+        //Boss登場時的地縫偵測
+        if (CheckCrack  && FourPlayer[2].transform.position.y >= 22.0f){
+            FourPlayer[2].transform.position = Altar_SendBackPos[SendBackCount];
+            SendBackCount++;
+            if (SendBackCount > 3) SendBackCount = 0;   //理論上不會，單純以防萬一
+        }
+
         //更新自己位置跟色況
         FourPlayer[2].transform.position = pos;
         _goblinmanager.SetPlayersMove(2, pos);
@@ -414,6 +422,13 @@ public class Player_Manager : MonoBehaviour
 
         if (FourPlayer[3].gameObject.activeSelf == true)
         {
+            //Boss登場時的地縫偵測
+            if (CheckCrack && FourPlayer[3].transform.position.y >= 22.0f){
+                FourPlayer[3].transform.position = Altar_SendBackPos[SendBackCount];
+                SendBackCount++;
+                if (SendBackCount > 3) SendBackCount = 0;   //理論上不會，單純以防萬一
+            }
+
             //是否接近洗白處優先判定
             if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 && Player_Death[3] == false)
@@ -467,7 +482,6 @@ public class Player_Manager : MonoBehaviour
         if (PIDScreenPos[3].x <= 0.0f || PIDScreenPos[3].x >= Screen.width || PIDScreenPos[3].y <= 0.0f || PIDScreenPos[3].y >= Screen.height) TracePID[3].SetActive(true);
         else TracePID[3].SetActive(false);
     }
-
 
     void Check_distance()
     {
@@ -580,11 +594,9 @@ public class Player_Manager : MonoBehaviour
         if (All_Death) DeathCBK();
     }
 
-
     public void DeathCountMinus(int PlayerID) {
         Player_Death[PlayerID] = false;
     }
-
 
     void PlayerTraceSystem() {
 
@@ -679,6 +691,20 @@ public class Player_Manager : MonoBehaviour
         for (int p = 0; p < 4; p++) {
             FourPlayer[p].StartPlaying();
         }
+    }
+
+    //Boss登場，開啟相關bool以確認玩家位置
+    public void CheckCrack_Switch() {
+        OnBossDebut = !OnBossDebut; //關閉or開放融合&洗白等操作
+        CheckCrack = !CheckCrack;   //偵測or不偵測角色是否在地縫
+
+        //暫停or重啟玩家剩餘可能操作，並確認玩家位置，超過z軸就丟回祭壇
+        for (int p = 0; p < 4; p++) { FourPlayer[p].OnBossDebut_Switch(); }
+        Player1_rePos(FourPlayer[0].transform.position);
+        Player2_rePos(FourPlayer[1].transform.position);
+        Player3_rePos(FourPlayer[2].transform.position);
+        Player4_rePos(FourPlayer[3].transform.position);
+
     }
 
 }

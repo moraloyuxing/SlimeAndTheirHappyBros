@@ -116,6 +116,7 @@ public class Merge_Control : MonoBehaviour{
     void Start()
     {
         Player_Manager = GameObject.Find("Player_Manager");
+        //Player_Manager.GetComponent<Player_Manager>().SetMerges(transform);
         ray_horizontal = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(3.8f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 3.8f));
         Current_Color = Merge_Sprite.color;
@@ -180,6 +181,7 @@ public class Merge_Control : MonoBehaviour{
         xAix = Input.GetAxis(WhichPlayer_Moving + "Horizontal");
         zAix = Input.GetAxis(WhichPlayer_Moving + "Vertical");
         left_trigger = Input.GetAxis(WhichPlayer_Moving + "Dash");
+
         if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f)
         {
             StopDetect = true;
@@ -328,6 +330,7 @@ public class Merge_Control : MonoBehaviour{
         xAtk = Input.GetAxis(WhichPlayer_Shooting + "AtkHorizontal");
         zAtk = Input.GetAxis(WhichPlayer_Shooting + "AtkVertical");
         current_angle = Attack_Arrow.transform.eulerAngles;
+
         if (xAtk != 0.0f || zAtk != 0.0f)
         {
             AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
@@ -426,7 +429,7 @@ public class Merge_Control : MonoBehaviour{
         while (ChooseSpiltPos == false) {
             loopCount++;
             Debug.Log("line428的loop次數 = " + loopCount);
-            if (loopCount > 100){
+            if (loopCount > 10){
                 for (int i = 0; i < 2; i++) {
                     if (CanSpilt[i] == false) {
                         SpiltX[i] = gameObject.transform.position.x;
@@ -435,7 +438,7 @@ public class Merge_Control : MonoBehaviour{
                         AlreadySelectPos[i] = true;
                     }
                 }
-                Debug.Log("超過1000次，強行給定合體史萊姆座標");
+                Debug.Log("超過10次，強行給定合體史萊姆座標");
                 //Debug.Break();
                 //Debug.Log("merge cotrol split oring   " + loopCount);
                 //return;
@@ -729,5 +732,4 @@ public class Merge_Control : MonoBehaviour{
         }
 
     }
-
 }

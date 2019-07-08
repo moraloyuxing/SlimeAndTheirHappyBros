@@ -6313,11 +6313,12 @@ MonoBehaviour:
   - {fileID: 1327091633}
   - {fileID: 1535361861}
   - {fileID: 490716188}
+  m_Camera: {fileID: 412872798}
   Need_Billboard:
-  - {fileID: 1930958719}
-  - {fileID: 1517294622}
-  - {fileID: 351806363}
-  - {fileID: 1050854431}
+  - {fileID: 1152496613}
+  - {fileID: 955307556}
+  - {fileID: 1651425402}
+  - {fileID: 87374100}
   - {fileID: 2114688444}
 --- !u!1 &212379511
 GameObject:
@@ -10731,6 +10732,11 @@ MonoBehaviour:
   - {fileID: 1822482791}
   - {fileID: 1317432864}
   - {fileID: 853501641}
+  Altar_SendBackPos:
+  - {x: -26, y: 1, z: -37.5}
+  - {x: -21, y: 1, z: -39.5}
+  - {x: -25.7, y: 1, z: -41.1}
+  - {x: -22.6, y: 1, z: -43}
 --- !u!1 &361038619
 GameObject:
   m_ObjectHideFlags: 0
@@ -12177,6 +12183,7 @@ MonoBehaviour:
   - {fileID: 1491608771}
   - {fileID: 1324251040}
   Shop: {fileID: 374487915}
+  _playermanager: {fileID: 0}
   DocterTalkType:
   - {fileID: 21300000, guid: baf73d40d31864437b709f34c5511403, type: 3}
   - {fileID: 21300000, guid: ae1a9b6e7d7c946179c49575c377764e, type: 3}
@@ -32664,6 +32671,11 @@ PrefabInstance:
     - target: {fileID: 30651016922998743, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
         type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 30651016604103673, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []

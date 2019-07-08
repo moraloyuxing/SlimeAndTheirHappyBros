@@ -7,6 +7,7 @@ public class NPC_Manager : MonoBehaviour{
     bool BreakTime = false;
     public Animator[] NPCanim = new Animator[2];//0→巫醫；1→天使
     public Item_Manager Shop;
+    public Player_Manager _playermanager;
     //巫醫部分
     public Sprite[] DocterTalkType = new Sprite[5];
     SpriteRenderer Docter_Sprite;
@@ -63,7 +64,7 @@ public class NPC_Manager : MonoBehaviour{
 
             //天使部分
             for (int p = 0; p < 4; p++) {
-                a_button[p] = Input.GetButtonDown(Which_Player[p] + "MultiFunction");
+                if(PlayerPos[p].gameObject.activeSelf == true)a_button[p] = Input.GetButtonDown(Which_Player[p] + "MultiFunction");
                 if (a_button[p] && NearAngel[p]) {
                     PIDReadyIcon[p].sprite = ReadyBossState[p];
                     PIDReady[p] = true;
@@ -101,7 +102,7 @@ public class NPC_Manager : MonoBehaviour{
                 bossLevelCBK();
                 Shop.State_Switch();
                 BreakTime_End();
-                
+                _playermanager.CheckCrack_Switch();
             }
 
         }
