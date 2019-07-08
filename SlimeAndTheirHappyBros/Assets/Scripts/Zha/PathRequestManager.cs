@@ -30,15 +30,29 @@ public class PathRequestManager : MonoBehaviour {
         Debug.Log("add new finding path request   " + instance.pathRequestList.IndexOf(newRequest));
         return newRequest;
     }
-    public static PathRequest RequestPath(string name, Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> _successCbk)
+    public static PathRequest RequestPath(string name,PathRequest oldRequest,  Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> _successCbk)
     {
         PathRequest newRequest = new PathRequest(pathStart, pathEnd, _successCbk);
-        //instance.pathRequestQueue.Enqueue(newRequest);
-        instance.pathRequestList.Add(newRequest);
+
+        if (instance.CheckProcessingRequest(oldRequest)) {
+            return null;
+        }
+
+        if (oldRequest != null && instance.pathRequestList.Contains(oldRequest))
+        {
+            Debug.Log(name + " reeeeeplace request   " + instance.pathRequestList.IndexOf(oldRequest));
+            instance.pathRequestList[instance.pathRequestList.IndexOf(oldRequest)] = newRequest;
+        }
+        else {
+            instance.pathRequestList.Add(newRequest);
+        }
         Debug.Log(name + " addddddddddd new finding path request   " + instance.pathRequestList.IndexOf(newRequest));
         instance.TryProcessNext();
 
         return newRequest;
+
+
+        //instance.pathRequestQueue.Enqueue(newRequest);
     }
 
     void TryProcessNext()
@@ -58,8 +72,15 @@ public class PathRequestManager : MonoBehaviour {
         }
     }
 
-    public static void CancleRequest(string name, PathRequest request)
+    bool CheckProcessingRequest(PathRequest request) {  //如果要求是正在進行搜尋回傳true
+        if (isProcessingPath && currentPathRequest == request) return true;
+        else return false;
+    }
+
+    public static void ReplaceRequest(string name, PathRequest request)
     {
+        instance.pathRequestList[instance.pathRequestList.IndexOf(request)] = null;
+
         Debug.Log(name + " cancle finding path request   " + instance.pathRequestList.IndexOf(request));
         if (instance.pathRequestList.Contains(request)) instance.pathRequestList.Remove(request);
     }
@@ -72,6 +93,7 @@ public class PathRequestManager : MonoBehaviour {
 
     public void FinishedProcessingPath(Vector3[] path, bool success)
     {
+        Debug.Log("finisg find path");
         currentPathRequest.callback(path, success);
         isProcessingPath = false;
         TryProcessNext();

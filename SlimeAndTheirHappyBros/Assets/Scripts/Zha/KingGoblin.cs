@@ -418,7 +418,9 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void ResetUnit() {
-        transform.gameObject.SetActive(false);
+        render.enabled = false;
+        hurtArea.enabled = false;
+        //transform.gameObject.SetActive(false);
     }
 
     public void Spawn(Vector3 pos, int col) {

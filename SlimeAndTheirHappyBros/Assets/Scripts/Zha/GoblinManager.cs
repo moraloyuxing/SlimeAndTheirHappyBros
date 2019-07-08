@@ -622,7 +622,6 @@ public class GoblinManager : MonoBehaviour
     }
 
     public void SetPlayersMove(int id, Vector3 pos) {
-        Debug.Log("player " + id + "  move");
         playerMove[id] = true;
         playerPos[id] = pos;
     }
