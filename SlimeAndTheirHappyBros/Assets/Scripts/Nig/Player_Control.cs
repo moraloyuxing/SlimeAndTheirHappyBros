@@ -354,6 +354,7 @@ public class Player_Control : MonoBehaviour{
                 if (!Up_CanMove || !Down_CanMove) zAix = .0f;
                 if (!Left_CanMove || !Right_CanMove) xAix = .0f;
                 transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 7.0f;
+                if(Player_Number == 0)Debug.Log("Base_Speed = " + Base_Speed);
             }
 
             //衝刺遞減
@@ -567,6 +568,10 @@ public class Player_Control : MonoBehaviour{
     }
 
     //短衝刺設定
+    public void Dash_andMerge() {
+
+    }
+
     public void DashEnd() {
         if (OnWeak) Base_Speed = Weak_Speed;
         else Base_Speed = Current_Speed;
@@ -767,10 +772,13 @@ public class Player_Control : MonoBehaviour{
 
     public void forceoutweak(){
         OnWeak = false;
-        Base_Speed = Current_Speed;
         Weak_Moment = Time.time;
-        //HideWeak();
         WeakEffect.enabled = false;
+
+        OnDash = false;
+        DuringDashLerp = false;
+        DashCD = Time.time;
+        Base_Speed = Current_Speed;
     }
 
     //金幣
