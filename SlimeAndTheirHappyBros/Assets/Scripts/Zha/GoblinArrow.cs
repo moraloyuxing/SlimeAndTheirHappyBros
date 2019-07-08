@@ -31,16 +31,21 @@ public class GoblinArrow : IEnemyObjectPoolUnit
         transform.position = pos;
         moveDir = dir.normalized;
         Vector3 rot = new Vector3(dir.x, 0, dir.z).normalized;
-        float baseD = -20.0f * (1.0f-Mathf.Abs(rot.x - rot.z));
-        if (Mathf.Sign(rot.x * rot.z) < .0f) baseD += 5.0f;
-        degree = (Mathf.Atan2(rot.z, rot.x) ) * Mathf.Rad2Deg + 90.0f + baseD;
-        //arrow.localRotation = Quaternion.Euler(25, 0, degree);
-        //shadow.localRotation = Quaternion.Euler(90, 0, degree);
-        transform.localRotation = Quaternion.Euler(25, 0, degree);
+        //float baseD = -20.0f * (1.0f-Mathf.Abs(rot.x - rot.z));
+        //if (Mathf.Sign(rot.x * rot.z) < .0f) baseD += 5.0f;
+        //degree = (Mathf.Atan2(rot.z, rot.x) ) * Mathf.Rad2Deg + 90.0f + baseD;
+        //transform.localRotation = Quaternion.Euler(25, 0, degree);
+
+        degree = (Mathf.Atan2(moveDir.z, moveDir.x)) * Mathf.Rad2Deg + 90.0f;
+        Debug.Log("x: " + moveDir.x + "  z: " + moveDir.z + "  degree: " + degree);
+        float down = Mathf.Asin(moveDir.y) * Mathf.Rad2Deg;
+        transform.localRotation = Quaternion.Euler(down-8.0f, -degree, 0);
+        //transform.localRotation *= Quaternion.Euler(down, 1 ,1);
+
         collider.enabled = true;
 
-        float offset = 0.2f; //(Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
-        flyTime =Mathf.Sqrt( dir.x * dir.x + dir.z * dir.z)* length + offset;
+        //float offset = 0.2f; //(Mathf.Abs(rot.x) > 0.95f) ? 0.08f : .0f;
+        flyTime =Mathf.Sqrt( dir.x * dir.x + dir.z * dir.z)* length;
     }
 
     public void Update(float dt) {

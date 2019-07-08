@@ -111,6 +111,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                 PathRequestManager.CancleRequest(curPathRequest);
                 curPathRequest = null;
             }
+            blankTime = .0f;
 
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Attack", 0.18f);
             animator.SetInteger("state", 2);
@@ -134,7 +135,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                     //Debug.DrawRay(selfPos,moveFwdDir, Color.red, 3.0f);
                     if (inStateTime > 0.7f) atkSpeedOffset *= 0.8f;
                     float atkSpeed = (Physics.Raycast(selfPos, moveFwdDir, 3.0f, 1 << LayerMask.NameToLayer("Barrier"))) ? .0f 
-                        :50.0f*atkSpeedOffset;
+                        :65.0f*atkSpeedOffset;
                     transform.position += deltaTime * atkSpeed * moveFwdDir;
                 }
                 else if (aniInfo.normalizedTime >= 0.95f)
@@ -178,7 +179,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
             if (whiteScale > .0f)
             {
-                whiteScale -= deltaTime * 4.0f;
+                whiteScale -= deltaTime * 8.0f;
                 renderer.material.SetFloat("_WhiteScale", whiteScale);
             }
 
