@@ -1250,7 +1250,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 8882a208246144cb9b9f933126b00f86, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b8114f9da12a4e645b9a5ea898a74b98, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -9903,7 +9903,7 @@ RectTransform:
   m_GameObject: {fileID: 338778778}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_Children: []
   m_Father: {fileID: 1822482791}
   m_RootOrder: 0
@@ -9933,7 +9933,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 6dd8095d248ac47fabc256d8de596611, type: 3}
+  m_Sprite: {fileID: 21300002, guid: a72bda23d59681945b03d3c285ea72fe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -10342,6 +10342,8 @@ MonoBehaviour:
   WeakEffect: {fileID: 1921941542}
   BuyHint: {fileID: 599878743}
   PlayerID2: 0
+  InMergeMove: 0
+  Current_Merge: {fileID: 0}
   DeathPriority: 0
   Player_Icon: {fileID: 985991901}
   Attack_Arrow: {fileID: 219557132}
@@ -26372,7 +26374,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: b859c60459a684a1da049a48f91cf7e0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dfde24e59da9ca04e9f7291b397f5939, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -27556,6 +27558,8 @@ MonoBehaviour:
   WeakEffect: {fileID: 683200036}
   BuyHint: {fileID: 722735401}
   PlayerID2: 0
+  InMergeMove: 0
+  Current_Merge: {fileID: 0}
   DeathPriority: 0
   Player_Icon: {fileID: 1907737967}
   Attack_Arrow: {fileID: 1398147385}
@@ -33309,7 +33313,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0cd1a4d8a13d14a09b736ff934df195b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a72bda23d59681945b03d3c285ea72fe, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -38542,7 +38546,7 @@ RectTransform:
   m_GameObject: {fileID: 1474000951}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_Children: []
   m_Father: {fileID: 853501641}
   m_RootOrder: 0
@@ -38572,7 +38576,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 6dd8095d248ac47fabc256d8de596611, type: 3}
+  m_Sprite: {fileID: 21300002, guid: dfde24e59da9ca04e9f7291b397f5939, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -40004,6 +40008,8 @@ MonoBehaviour:
   WeakEffect: {fileID: 1871909489}
   BuyHint: {fileID: 54195859}
   PlayerID2: 0
+  InMergeMove: 0
+  Current_Merge: {fileID: 0}
   DeathPriority: 0
   Player_Icon: {fileID: 1092669414}
   Attack_Arrow: {fileID: 2134032421}
@@ -41503,7 +41509,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 86d0b04139c864be191fe9c7706014fa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6e00cb038cc3c10489dd168b94e034b4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -50290,7 +50296,7 @@ RectTransform:
   m_GameObject: {fileID: 1889880098}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_Children: []
   m_Father: {fileID: 892826535}
   m_RootOrder: 0
@@ -50320,7 +50326,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 6dd8095d248ac47fabc256d8de596611, type: 3}
+  m_Sprite: {fileID: 21300002, guid: 6e00cb038cc3c10489dd168b94e034b4, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -51538,6 +51544,8 @@ MonoBehaviour:
   WeakEffect: {fileID: 1502891521}
   BuyHint: {fileID: 1077112956}
   PlayerID2: 0
+  InMergeMove: 0
+  Current_Merge: {fileID: 0}
   DeathPriority: 0
   Player_Icon: {fileID: 466745468}
   Attack_Arrow: {fileID: 1749218226}
@@ -56665,7 +56673,7 @@ RectTransform:
   m_GameObject: {fileID: 1951039175}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
   m_Children: []
   m_Father: {fileID: 1317432864}
   m_RootOrder: 0
@@ -56695,7 +56703,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 6dd8095d248ac47fabc256d8de596611, type: 3}
+  m_Sprite: {fileID: 21300002, guid: b8114f9da12a4e645b9a5ea898a74b98, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -63512,7 +63520,7 @@ PrefabInstance:
     - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
         type: 3}
       propertyPath: test
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70d8dfaf85a434e4791eaf895639e141, type: 3}

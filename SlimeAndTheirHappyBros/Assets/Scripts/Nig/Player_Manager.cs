@@ -697,11 +697,8 @@ public class Player_Manager : MonoBehaviour
     public void CheckCrack_Switch() {
         OnBossDebut = !OnBossDebut; //關閉or開放融合&洗白等操作
         CheckCrack = !CheckCrack;   //偵測or不偵測角色是否在地縫
-        Debug.Log("bbbbbbbbbbbblack");
         //暫停or重啟玩家剩餘可能操作，並確認玩家位置，超過z軸就丟回祭壇
-        for (int p = 0; p < 4; p++) {
-            Debug.Log("yyyyyyyyyyyyyyeeeeeeeeeeeeeeee");
-            FourPlayer[p].OnBossDebut_Switch(); }
+        for (int p = 0; p < 4; p++) {FourPlayer[p].OnBossDebut_Switch(); }
         Player1_rePos(FourPlayer[0].transform.position);
         Player2_rePos(FourPlayer[1].transform.position);
         Player3_rePos(FourPlayer[2].transform.position);

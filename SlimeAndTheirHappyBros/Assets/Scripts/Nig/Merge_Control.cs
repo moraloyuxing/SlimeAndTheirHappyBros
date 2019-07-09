@@ -403,6 +403,7 @@ public class Merge_Control : MonoBehaviour{
             Player_Shoot.GetComponent<SpriteRenderer>().sprite = Control_Icon[1];
             Attack_Arrow.GetComponent<Create_Bullet>().SetMSlimeMovingPlayer(Moving_ID,Shooting_ID);
             PlayerB.GetComponent<Player_Control>().FakeDeath();
+            PlayerA.GetComponent<Player_Control>().MergeTurn_Move(GetComponent<Merge_Control>());
         }
 
         else if (chance == 1)
@@ -415,6 +416,7 @@ public class Merge_Control : MonoBehaviour{
             Player_Shoot.GetComponent<SpriteRenderer>().sprite = Control_Icon[0];
             Attack_Arrow.GetComponent<Create_Bullet>().SetMSlimeMovingPlayer(Moving_ID,Shooting_ID);
             PlayerA.GetComponent<Player_Control>().FakeDeath();
+            PlayerB.GetComponent<Player_Control>().MergeTurn_Move(GetComponent<Merge_Control>());
         }
 
         Storage_Player[0].SetActive(false);
@@ -468,6 +470,7 @@ public class Merge_Control : MonoBehaviour{
                 Storage_Player[i].SetActive(true);
                 Storage_Player[i].transform.position = new Vector3(SpiltX[i], 1.0f, SpiltZ[i]);
                 Storage_Player[i].SendMessage("Weak_State");
+                Storage_Player[i].SendMessage("CheckAttackBySingle");
             }
 
             if (Base_HP == 0){
@@ -588,23 +591,19 @@ public class Merge_Control : MonoBehaviour{
     }
 
     //設置受傷&死亡最高優先權
-    public void SlimeGetHurt()
-    {
+    public void SlimeGetHurt(){
         Collider[] colliders = Physics.OverlapBox(Merge_Sprite.transform.position, new Vector3(2.3f, 1.7f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
         if (colliders == null) return;
         int i = 0;
         int loopCount = 0;
-        while (i < colliders.Length)
-        {
+        while (i < colliders.Length){
             loopCount++;
-            if (loopCount > 1000)
-            {
+            if (loopCount > 1000){
                 Debug.Break();
                 Debug.Log("merge get hurt   " + loopCount);
                 return;
             }
-            if (i == 0)
-            {
+            if (i == 0){
                 GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
                 StopDetect = true;
@@ -641,6 +640,47 @@ public class Merge_Control : MonoBehaviour{
             i++;
         }
     }
+
+    public void SlimeGetBossCircusHurt(){
+        if (StopDetect == false) {
+            GetComponent<Animator>().Play("Slime_Hurt");
+            ExtraPriority = true;
+            StopDetect = true;
+            if (musouTime > 0.0f) CancelInvoke("Musou_Flick");
+            musouTime = 1.8f;
+            InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
+            Base_HP--;
+            AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
+
+            for (int k = 0; k < Max_HP; k++){
+                if (k < Base_HP) Merge_HP[k].SetActive(true);
+                else if (k == Base_HP){
+                    Heart_anim = Merge_HP[k].GetComponent<Animator>();
+                    Heart_anim.Play("Heart_Disappear");
+                }
+                else Merge_HP[k].SetActive(false);
+            }
+            if (Base_HP == 0){
+                DeathPriority = true;
+                ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
+                CancelInvoke("Merge_Timer");
+                switch (MergeNumber)
+                {
+                    case 3:
+                        GetComponent<Animator>().Play("Slime_SpiltRY");
+                        break;
+                    case 5:
+                        GetComponent<Animator>().Play("Slime_SpiltRB");
+                        break;
+                    case 6:
+                        GetComponent<Animator>().Play("Slime_SpiltYB");
+                        break;
+                }
+                AudioManager.SingletonInScene.PlaySound2D("Slime_Jump_Death", 0.5f);
+            }
+        }
+    }
+
 
     public void HurtPriorityOff()
     {

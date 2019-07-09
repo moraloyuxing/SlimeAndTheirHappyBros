@@ -22,7 +22,8 @@ public class Player_Control : MonoBehaviour{
     public int PlayerID2;
     int Color_Number = 0;
     string WhichPlayer;
-    bool InMergeState = false;
+    public bool InMergeMove = false;
+    public Merge_Control Current_Merge;
 
     //優先權、無敵時間等等
     bool AttackPriority = false;
@@ -172,7 +173,6 @@ public class Player_Control : MonoBehaviour{
     }
 
     void Update(){
-        if (Player_Number == 0) Debug.Log("StopDetect = " + StopDetect);
         if (CanMove == true) {
             anim.SetBool("Walking", Walking);
             anim.SetBool("Shooting", Shooting);
@@ -502,7 +502,7 @@ public class Player_Control : MonoBehaviour{
 
 
     public void SlimeGetBossCircusHurt(){
-        if (StopDetect == false) {
+        if (StopDetect == false && InMergeMove == false){
             if (DeathPriority == false){
                 GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;
@@ -515,7 +515,8 @@ public class Player_Control : MonoBehaviour{
                 Heart_anim = Personal_HP[Base_HP].GetComponent<Animator>();
                 Heart_anim.Play("Heart_Disappear");
 
-                if (Base_HP == 0){
+                if (Base_HP == 0)
+                {
                     DeathPriority = true;
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化
                     GetComponent<Animator>().Play("Slime_Death");
@@ -526,6 +527,9 @@ public class Player_Control : MonoBehaviour{
                 }
             }
         }
+
+        else if (InMergeMove == true) {Current_Merge.SlimeGetBossCircusHurt();}
+
     }
 
 
@@ -792,7 +796,6 @@ public class Player_Control : MonoBehaviour{
         }
 
         if (musouTime < 0) {
-            Debug.Log("無敵時間結束");
             StopDetect = false;
             CancelInvoke("Musou_Flick");
             Current_Color.a = 1.0f;
@@ -800,7 +803,6 @@ public class Player_Control : MonoBehaviour{
             Player_Sprite.color = Current_Color;
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Wash") || anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_JumpinPond")){
                 StopDetect = true;
-                Debug.Log("延長無敵狀態");
             }
         }
     }
@@ -1003,6 +1005,16 @@ public class Player_Control : MonoBehaviour{
 
     public void OnBossDebut_Switch() {
         OnBossDebut = !OnBossDebut;
+    }
+
+    public void MergeTurn_Move(Merge_Control WhichMergeSlime) {
+        InMergeMove = true;
+        Current_Merge = WhichMergeSlime;
+    }
+
+    public void CheckAttackBySingle() {
+        InMergeMove = false;
+        Current_Merge = null;
     }
 
 }
