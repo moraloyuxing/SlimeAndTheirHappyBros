@@ -102,7 +102,6 @@ public class NPC_Manager : MonoBehaviour{
                 bossLevelCBK();
                 Shop.State_Switch();
                 BreakTime_End();
-                _playermanager.CheckCrack_Switch();
             }
 
         }

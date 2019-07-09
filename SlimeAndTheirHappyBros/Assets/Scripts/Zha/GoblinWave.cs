@@ -52,6 +52,7 @@ public class GoblinWave : IEnemyObjectPoolUnit
         }
 
         for (int j = 0; j < 4; j++) {
+            if (goblinManager.PlayersDie[j]) continue;
             Vector3 length = new Vector3(goblinManager.PlayerPos[j].x - selfPos.x - selfPos.x,0, goblinManager.PlayerPos[j].z - selfPos.z);
             //if (j == 0) {
             //    Debug.Log("length " + length.magnitude);

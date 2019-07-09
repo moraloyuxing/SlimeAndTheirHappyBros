@@ -31,6 +31,8 @@ public class GameManager : MonoBehaviour
 
     Light directLight;
     public Color gameLight, shopLight;
+    GameObject DawnHint;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -73,6 +75,8 @@ public class GameManager : MonoBehaviour
         playerManager.InitPlayerPos();
         cameraController.gameObject.SetActive(false);
 
+        DawnHint = GameObject.Find("NextLevel");
+        DawnHint.SetActive(false);
     }
     void Start()
     {
@@ -278,7 +282,7 @@ public class GameManager : MonoBehaviour
 
         AudioManager.SingletonInScene.ChangeBGM(false, -1);
         AudioManager.SingletonInScene.PlaySound2D("Earthquake", 0.26f);
-        playerManager.CheckCrack_Switch();
+
         bossLevel = true;
         cameraController.StartBossLevel();
         goblinManager.DisableBushCollider();
@@ -303,13 +307,21 @@ public class GameManager : MonoBehaviour
         playerManager.DocterRound();
 
         uiManager.SetTotalTime(roundInfos[curRound].waves[(roundInfos[curRound].maxWave - 1)].spawnTime);
+        StartCoroutine(OpenWaitMark());
     }
+    IEnumerator OpenWaitMark() {
+        yield return new WaitForSeconds(10.0f);
+        DawnHint.SetActive(true);
+    }
+
+
     public void GoNextRound() {   //商店結束到下一關
         inShopping = false;
         itemManager.State_Switch();
         playerManager.State_Switch();
         lightChange = false;
         uiManager.StartRound(curRound);
+        DawnHint.SetActive(false);
     }
 
     public void KillGoblin() {
@@ -329,7 +341,9 @@ public class GameManager : MonoBehaviour
             playerManager.State_Switch();
             lightChange = false;
         }
+
         sceneObjectManager.SetBossBorderOn();
+        playerManager.CheckCrack_Switch();
         uiManager.StartBossRound();
     }
 

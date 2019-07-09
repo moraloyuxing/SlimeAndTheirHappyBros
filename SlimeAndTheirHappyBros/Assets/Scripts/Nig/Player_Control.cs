@@ -354,7 +354,6 @@ public class Player_Control : MonoBehaviour{
                 if (!Up_CanMove || !Down_CanMove) zAix = .0f;
                 if (!Left_CanMove || !Right_CanMove) xAix = .0f;
                 transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 7.0f;
-                if(Player_Number == 0)Debug.Log("Base_Speed = " + Base_Speed);
             }
 
             //衝刺遞減

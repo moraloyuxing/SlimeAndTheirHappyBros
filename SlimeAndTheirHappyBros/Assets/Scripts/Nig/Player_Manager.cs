@@ -221,7 +221,7 @@ public class Player_Manager : MonoBehaviour
         if (FourPlayer[0].gameObject.activeSelf == true){
 
             //Boss登場時的地縫偵測
-            if (CheckCrack &&FourPlayer[0].transform.position.y >= 22.0f){
+            if (CheckCrack &&FourPlayer[0].transform.position.z >= 22.0f){
                 FourPlayer[0].transform.position = Altar_SendBackPos[SendBackCount];
                 SendBackCount++;
                 if (SendBackCount > 3) SendBackCount = 0;   //理論上不會，單純以防萬一
@@ -285,7 +285,7 @@ public class Player_Manager : MonoBehaviour
 
         if (FourPlayer[1].gameObject.activeSelf == true){
             //Boss登場時的地縫偵測
-            if (CheckCrack && FourPlayer[1].transform.position.y >= 22.0f){
+            if (CheckCrack && FourPlayer[1].transform.position.z >= 22.0f){
                 FourPlayer[1].transform.position = Altar_SendBackPos[SendBackCount];
                 SendBackCount++;
                 if (SendBackCount > 3) SendBackCount = 0;   //理論上不會，單純以防萬一
@@ -347,7 +347,7 @@ public class Player_Manager : MonoBehaviour
     void Player3_rePos(Vector3 pos)
     {
         //Boss登場時的地縫偵測
-        if (CheckCrack  && FourPlayer[2].transform.position.y >= 22.0f){
+        if (CheckCrack  && FourPlayer[2].transform.position.z >= 22.0f){
             FourPlayer[2].transform.position = Altar_SendBackPos[SendBackCount];
             SendBackCount++;
             if (SendBackCount > 3) SendBackCount = 0;   //理論上不會，單純以防萬一
@@ -423,7 +423,7 @@ public class Player_Manager : MonoBehaviour
         if (FourPlayer[3].gameObject.activeSelf == true)
         {
             //Boss登場時的地縫偵測
-            if (CheckCrack && FourPlayer[3].transform.position.y >= 22.0f){
+            if (CheckCrack && FourPlayer[3].transform.position.z >= 22.0f){
                 FourPlayer[3].transform.position = Altar_SendBackPos[SendBackCount];
                 SendBackCount++;
                 if (SendBackCount > 3) SendBackCount = 0;   //理論上不會，單純以防萬一
@@ -697,9 +697,11 @@ public class Player_Manager : MonoBehaviour
     public void CheckCrack_Switch() {
         OnBossDebut = !OnBossDebut; //關閉or開放融合&洗白等操作
         CheckCrack = !CheckCrack;   //偵測or不偵測角色是否在地縫
-
+        Debug.Log("bbbbbbbbbbbblack");
         //暫停or重啟玩家剩餘可能操作，並確認玩家位置，超過z軸就丟回祭壇
-        for (int p = 0; p < 4; p++) { FourPlayer[p].OnBossDebut_Switch(); }
+        for (int p = 0; p < 4; p++) {
+            Debug.Log("yyyyyyyyyyyyyyeeeeeeeeeeeeeeee");
+            FourPlayer[p].OnBossDebut_Switch(); }
         Player1_rePos(FourPlayer[0].transform.position);
         Player2_rePos(FourPlayer[1].transform.position);
         Player3_rePos(FourPlayer[2].transform.position);
