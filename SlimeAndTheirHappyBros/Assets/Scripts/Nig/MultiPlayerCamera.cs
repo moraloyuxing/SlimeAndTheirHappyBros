@@ -82,6 +82,7 @@ public class MultiPlayerCamera : MonoBehaviour{
                     if (bossShake) {
                         callGoblinKing();
                         bossShake = false;
+                        _playermanager.CheckCrack_Switch();
                     }
                 }
                 cameraShakingSingleton.Update(Time.deltaTime, bossView);

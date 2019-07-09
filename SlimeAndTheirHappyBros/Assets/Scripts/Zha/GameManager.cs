@@ -278,6 +278,7 @@ public class GameManager : MonoBehaviour
 
         AudioManager.SingletonInScene.ChangeBGM(false, -1);
         AudioManager.SingletonInScene.PlaySound2D("Earthquake", 0.26f);
+        playerManager.CheckCrack_Switch();
         bossLevel = true;
         cameraController.StartBossLevel();
         goblinManager.DisableBushCollider();
