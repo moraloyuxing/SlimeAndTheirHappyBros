@@ -22,6 +22,7 @@ public class Player_Control : MonoBehaviour{
     public int PlayerID2;
     int Color_Number = 0;
     string WhichPlayer;
+    bool InMergeState = false;
 
     //優先權、無敵時間等等
     bool AttackPriority = false;
@@ -171,7 +172,7 @@ public class Player_Control : MonoBehaviour{
     }
 
     void Update(){
-        if (Input.GetKeyDown(KeyCode.N)) OnBossDebut = !OnBossDebut;
+        if (Player_Number == 0) Debug.Log("StopDetect = " + StopDetect);
         if (CanMove == true) {
             anim.SetBool("Walking", Walking);
             anim.SetBool("Shooting", Shooting);
@@ -241,13 +242,6 @@ public class Player_Control : MonoBehaviour{
                     if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") { Right_CanMove = false; }
                 }
                 else { Right_CanMove = true; }
-                //if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)) {
-                //    if (hit_GetItem_x.transform.tag == "DropItem"&& Already_pick == false) {
-                //        Already_pick = true;
-                //        GetItemFromFloor(hit_GetItem_x.transform.gameObject);
-                //        Destroy(hit_GetItem_x.transform.gameObject);
-                //    }
-                //}
             }
 
             if (xAix < 0.0f)
@@ -273,13 +267,6 @@ public class Player_Control : MonoBehaviour{
                     if (hit_horizontal.transform.tag == "Border" || hit_horizontal.transform.tag == "Barrier") { Left_CanMove = false; }
                 }
                 else { Left_CanMove = true; }
-                //if (Physics.Raycast(GetItem_x, out hit_GetItem_x, 2.0f)){
-                //    if (hit_GetItem_x.transform.tag == "DropItem" && Already_pick == false){
-                //        Already_pick = true;
-                //        GetItemFromFloor(hit_GetItem_x.transform.gameObject);
-                //        Destroy(hit_GetItem_x.transform.gameObject);
-                //    }
-                //}
             }
 
             if (zAix > 0.0f)
@@ -292,13 +279,6 @@ public class Player_Control : MonoBehaviour{
                     if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") { Up_CanMove = false; }
                 }
                 else { Up_CanMove = true; }
-                //if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)) {
-                //    if (hit_GetItem_z.transform.tag == "DropItem" && Already_pick == false){
-                //        Already_pick = true;
-                //        GetItemFromFloor(hit_GetItem_z.transform.gameObject);
-                //        Destroy(hit_GetItem_z.transform.gameObject);
-                //    }
-                //}
             }
 
             if (zAix < 0.0f)
@@ -311,13 +291,6 @@ public class Player_Control : MonoBehaviour{
                     if (hit_vertical.transform.tag == "Border" || hit_vertical.transform.tag == "Barrier") { Down_CanMove = false; }
                 }
                 else { Down_CanMove = true; }
-                //if (Physics.Raycast(GetItem_z, out hit_GetItem_z, 2.0f)){
-                //    if (hit_GetItem_z.transform.tag == "DropItem" && Already_pick == false){
-                //        Already_pick = true;
-                //        GetItemFromFloor(hit_GetItem_z.transform.gameObject);
-                //        Destroy(hit_GetItem_z.transform.gameObject);
-                //    }
-                //}
             }
 
             //內部障礙物偵測
@@ -353,7 +326,7 @@ public class Player_Control : MonoBehaviour{
             {
                 if (!Up_CanMove || !Down_CanMove) zAix = .0f;
                 if (!Left_CanMove || !Right_CanMove) xAix = .0f;
-                transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 7.0f;
+                if(OnBossDebut == false)transform.position += new Vector3(xAix, 0, zAix).normalized * Base_Speed * Time.deltaTime * 7.0f;
             }
 
             //衝刺遞減

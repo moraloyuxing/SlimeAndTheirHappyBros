@@ -33,6 +33,7 @@ public class NPC_Manager : MonoBehaviour{
     public SpriteRenderer[] PIDReadyIcon = new SpriteRenderer[4];
     bool GoBossStage = false;
     bool[] PIDReady = new bool[4] { false, false, false, false };
+    public bool Angel_Ready = false;
 
     void Start(){
         for (int p = 0; p < 4; p++) {Which_Player[p] = PlayerPos[p].gameObject.name;}
@@ -41,9 +42,6 @@ public class NPC_Manager : MonoBehaviour{
 
     void Update(){
         if (Input.GetKeyDown(KeyCode.B)) BreakTime_End();
-        //if (Input.GetKeyDown(KeyCode.N)) PIDReadyIcon[2].sprite = ReadyBossState[2];
-        //if (Input.GetKeyDown(KeyCode.M)) PIDReadyIcon[3].sprite = ReadyBossState[3];
-
 
         if (BreakTime) {
             //巫醫部分
@@ -77,7 +75,7 @@ public class NPC_Manager : MonoBehaviour{
                 AngelTalkHint.enabled = false;
                 for (int i = 0; i < 4; i++) { PIDReadyIcon[i].enabled = false; }
                 //任一玩家靠近就全開
-                if (NearAngel[p]){
+                if (NearAngel[p] && Angel_Ready == true){
                     AngelTalkHint.enabled = true;
                     for (int i = 0; i < 4; i++) { PIDReadyIcon[i].enabled = true; }
                     break;
@@ -86,7 +84,7 @@ public class NPC_Manager : MonoBehaviour{
 
             for (int p = 0; p < 4; p++) {
                 AngelDistance[p] = Mathf.Pow(PlayerPos[p].position.x - AngelPos.position.x, 2) + Mathf.Pow(PlayerPos[p].position.z - AngelPos.position.z, 2);
-                if (AngelDistance[p] <= 9.0f)NearAngel[p] = true;
+                if (AngelDistance[p] <= 16.0f)NearAngel[p] = true;
                 else NearAngel[p] = false;
             }
 
@@ -124,6 +122,7 @@ public class NPC_Manager : MonoBehaviour{
         }
         Docter_OnTalking = false;
         DocterTalkHint.enabled = false;
+        Angel_Ready = false;
         NPCanim[0].Play("Doctor_Out");
         NPCanim[1].Play("Angel_Out");
     }
@@ -131,5 +130,6 @@ public class NPC_Manager : MonoBehaviour{
     public void SubBossLevelCBK(System.Action cbk) {
         bossLevelCBK = cbk;
     }
+
 
 }

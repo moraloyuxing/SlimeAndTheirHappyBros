@@ -159,17 +159,18 @@ public class MultiPlayerCamera : MonoBehaviour{
         inShopCount = 0;
         for (int p = 0; p < 4; p++) {
             if (PlayeratShopArea[p] == true) inShopCount++;
-
             if (inShopCount >= 3) isShopArea = true;
         }
-
-
-
     }
 
     public void Player_LeaveShop(int PID) {
         PlayeratShopArea[PID] = false;
         isShopArea = false;
+        inShopCount = 0;
+        for (int p = 0; p < 4; p++){
+            if (PlayeratShopArea[p] == true) inShopCount++;
+            if (inShopCount >= 3) isShopArea = true;
+        }
     }
 
     public void StartBossLevel() {
