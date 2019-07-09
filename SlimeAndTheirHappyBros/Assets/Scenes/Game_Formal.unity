@@ -9525,10 +9525,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 100000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
-      propertyPath: m_Name
-      value: arrow
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.35
@@ -9572,6 +9568,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
+      propertyPath: m_Name
+      value: arrow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
@@ -35528,6 +35528,7 @@ GameObject:
   - component: {fileID: 1327091631}
   - component: {fileID: 1327091633}
   - component: {fileID: 1327091632}
+  - component: {fileID: 1327091634}
   m_Layer: 0
   m_Name: StartCamera1
   m_TagString: Untagged
@@ -35604,6 +35605,20 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &1327091634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1327091630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e3acf9a4f6e1944a29e450b49aa2f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blcakTransShader: {fileID: 4800000, guid: 32ec665abf07d5345a69524dba9584d5, type: 3}
+  maskScale: 0
 --- !u!1 &1328360362
 GameObject:
   m_ObjectHideFlags: 0
@@ -61543,6 +61558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efafbb6ed6437944a34c0ab01245e2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraTransEfect: {fileID: 0}
   test: 0
   roundInfos:
   - maxWave: 3
@@ -63527,203 +63543,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
         type: 3}
-      propertyPath: test
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[1].waves.Array.data[2].hobGoblin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[2].waves.Array.data[0].hobGoblin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[2].waves.Array.data[0].normalGoblin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[2].waves.Array.data[1].archerGoblin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[2].waves.Array.data[3].hobGoblin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[2].waves.Array.data[3].archerGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[3].waves.Array.data[0].hobGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[3].waves.Array.data[0].normalGoblin
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[3].waves.Array.data[1].normalGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[3].waves.Array.data[1].hobGoblin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[3].waves.Array.data[2].hobGoblin
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[3].waves.Array.data[3].hobGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[3].waves.Array.data[3].normalGoblin
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[4].waves.Array.data[0].hobGoblin
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[4].waves.Array.data[0].normalGoblin
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[4].waves.Array.data[1].hobGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[4].waves.Array.data[2].hobGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[4].waves.Array.data[2].normalGoblin
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[4].waves.Array.data[3].normalGoblin
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[4].waves.Array.data[4].hobGoblin
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[5].waves.Array.data[0].hobGoblin
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[5].waves.Array.data[2].hobGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[5].waves.Array.data[3].archerGoblin
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[5].waves.Array.data[3].hobGoblin
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[5].waves.Array.data[4].hobGoblin
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[6].waves.Array.data[0].hobGoblin
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[6].waves.Array.data[2].hobGoblin
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[6].waves.Array.data[3].hobGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[7].waves.Array.data[0].hobGoblin
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[7].waves.Array.data[1].hobGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[7].waves.Array.data[1].normalGoblin
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[7].waves.Array.data[4].hobGoblin
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[7].waves.Array.data[5].hobGoblin
-      value: 8
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[8].waves.Array.data[0].normalGoblin
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[8].waves.Array.data[1].hobGoblin
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[8].waves.Array.data[3].hobGoblin
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[8].waves.Array.data[2].hobGoblin
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[8].waves.Array.data[4].hobGoblin
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
-        type: 3}
-      propertyPath: roundInfos.Array.data[8].waves.Array.data[5].hobGoblin
-      value: 10
-      objectReference: {fileID: 0}
+      propertyPath: cameraTransEfect
+      value: 
+      objectReference: {fileID: 1327091634}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70d8dfaf85a434e4791eaf895639e141, type: 3}

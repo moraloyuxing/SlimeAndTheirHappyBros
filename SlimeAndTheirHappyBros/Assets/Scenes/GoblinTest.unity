@@ -1290,6 +1290,7 @@ GameObject:
   - component: {fileID: 69728534}
   - component: {fileID: 69728536}
   - component: {fileID: 69728535}
+  - component: {fileID: 69728537}
   m_Layer: 0
   m_Name: StartCamera1
   m_TagString: Untagged
@@ -1366,6 +1367,20 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &69728537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 69728533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9e3acf9a4f6e1944a29e450b49aa2f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  blcakTransShader: {fileID: 4800000, guid: 32ec665abf07d5345a69524dba9584d5, type: 3}
+  maskScale: 5
 --- !u!1 &71871657
 GameObject:
   m_ObjectHideFlags: 0
@@ -3372,10 +3387,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 100000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
-      propertyPath: m_Name
-      value: arrow
-      objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0
@@ -3419,6 +3430,10 @@ PrefabInstance:
     - target: {fileID: 400000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
+      propertyPath: m_Name
+      value: arrow
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 47f9019e81855364296207690e0bbf57, type: 3}
@@ -5882,6 +5897,11 @@ MonoBehaviour:
   - {fileID: 1336981625}
   - {fileID: 1898681772}
   - {fileID: 1209126656}
+  Altar_SendBackPos:
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 0, z: 0}
 --- !u!1001 &208128036
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -11937,6 +11957,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efafbb6ed6437944a34c0ab01245e2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraTransEfect: {fileID: 0}
   test: 0
   roundInfos:
   - maxWave: 3
@@ -13378,7 +13399,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blcakTransShader: {fileID: 4800000, guid: 32ec665abf07d5345a69524dba9584d5, type: 3}
-  maskScale: 5
+  maskScale: 2.5
 --- !u!114 &464263233
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13395,6 +13416,7 @@ MonoBehaviour:
   - {fileID: 201634108}
   - {fileID: 1333731727}
   Shop: {fileID: 33309382}
+  _playermanager: {fileID: 0}
   DocterTalkType:
   - {fileID: 21300000, guid: baf73d40d31864437b709f34c5511403, type: 3}
   - {fileID: 21300000, guid: ae1a9b6e7d7c946179c49575c377764e, type: 3}
@@ -50830,9 +50852,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4643901618432965340, guid: 70d8dfaf85a434e4791eaf895639e141,
         type: 3}
-      propertyPath: test
-      value: 1
-      objectReference: {fileID: 0}
+      propertyPath: cameraTransEfect
+      value: 
+      objectReference: {fileID: 69728537}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 70d8dfaf85a434e4791eaf895639e141, type: 3}
 --- !u!1001 &1569649695
@@ -61510,11 +61532,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1551067514, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300014, guid: 636a33c3c2f5648e39df59bd42b552c6,
-        type: 3}
     - target: {fileID: 30651016480195326, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -61530,6 +61547,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1551067514, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300014, guid: 636a33c3c2f5648e39df59bd42b552c6,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1, type: 3}
 --- !u!114 &1992549484 stripped
@@ -65566,6 +65588,7 @@ MonoBehaviour:
   - {fileID: 201634108}
   - {fileID: 1333731727}
   Shop: {fileID: 33309382}
+  _playermanager: {fileID: 0}
   DocterTalkType:
   - {fileID: 21300000, guid: baf73d40d31864437b709f34c5511403, type: 3}
   - {fileID: 21300000, guid: ae1a9b6e7d7c946179c49575c377764e, type: 3}

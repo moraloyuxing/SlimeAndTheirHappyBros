@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour
     SceneObjectManager sceneObjectManager;
     NPC_Manager npcManager;
     MultiPlayerCamera cameraController;
-
+    public CameraTrasnsEffect cameraTransEfect;
     Animator cameraAnimator;
 
     public static bool isBreakTime = false;
@@ -86,7 +86,8 @@ public class GameManager : MonoBehaviour
             cameraAnimator.SetTrigger("over");
             cameraMotion = true;
             playerManager.Invoke("StartPlaying", 0.1f);
-        } 
+        }
+        cameraTransEfect.GoTransIn();
     }
 
     // Update is called once per frame

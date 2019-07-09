@@ -15,7 +15,11 @@ public class JoinGame : MonoBehaviour{
     float Ready_Moment;
 
     public Image BlackPanel;
+    public GameObject Title;
     float alpha = 0.02f;
+
+    bool tranOce = false;
+    public CameraTrasnsEffect cameraTransEffect;
 
     void Start(){
         for (int i = 0; i < 4; i++) {
@@ -40,10 +44,16 @@ public class JoinGame : MonoBehaviour{
             }
         }
 
-        if (Ready_Count == 4 && Time.time > Ready_Moment + 2.0f) {
+        if (Ready_Count == 4 && Time.time > Ready_Moment + 1.0f) {
+            if (!tranOce) {
+                Title.SetActive(false);
+                cameraTransEffect.GoTransOut();
+                tranOce = true;
+            }
 
-            BlackPanel.color = new Color(0.0f, 0.0f, 0.0f, BlackPanel.color.a + alpha);
-            if (BlackPanel.color.a >= 1.0f) SceneManager.LoadScene(1);
+            if (Time.time > Ready_Moment + 4.0f) SceneManager.LoadScene(1);
+            //BlackPanel.color = new Color(0.0f, 0.0f, 0.0f, BlackPanel.color.a + alpha);
+            //if (BlackPanel.color.a >= 1.0f) SceneManager.LoadScene(1);
         }
 
     }

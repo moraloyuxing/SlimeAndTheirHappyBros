@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class CameraTrasnsEffect : MonoBehaviour
 {
+    bool transIn = false, transOut = false;
     public Shader blcakTransShader;
-    public float maskScale;
+    public float maskScale = 2.5f;
 
     Material curMat;
 
@@ -33,10 +34,38 @@ public class CameraTrasnsEffect : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (transIn) {
+            maskScale += Time.deltaTime;
+            if (maskScale > 2.5f)
+            {
+                transIn = false;
+                maskScale = -10.0f;
+                this.enabled = false;
+            }
+        }
+        else if (transOut) {
+            maskScale -= Time.deltaTime*2.0f;
+            if (maskScale <= .0f)
+            {
+                transOut = false;
+                maskScale = .0f;
+            }
+        }
+    }
+
+    public void GoTransIn() {
+        transIn = true;
+        maskScale = .0f;
+
+    }
+    public void GoTransOut() {
+        transOut = true;
+        maskScale = 2.5f;
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
+        //if (maskScale < -1.0f) return;
         if (blcakTransShader != null)
         {
             material.SetFloat("_MaskScale", maskScale);

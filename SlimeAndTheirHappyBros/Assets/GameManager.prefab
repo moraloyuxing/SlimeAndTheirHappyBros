@@ -250,7 +250,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6efafbb6ed6437944a34c0ab01245e2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  test: 0
+  cameraTransEfect: {fileID: 0}
+  test: 1
   roundInfos:
   - maxWave: 3
     waves:
@@ -284,18 +285,18 @@ MonoBehaviour:
     - spawnTime: 30
       normalGoblin: 2
       archerGoblin: 2
-      hobGoblin: 2
+      hobGoblin: 1
       mutiColor: 1
   - maxWave: 4
     waves:
     - spawnTime: 0
-      normalGoblin: 2
+      normalGoblin: 1
       archerGoblin: 2
-      hobGoblin: 2
+      hobGoblin: 1
       mutiColor: 0
     - spawnTime: 15
       normalGoblin: 2
-      archerGoblin: 2
+      archerGoblin: 1
       hobGoblin: 1
       mutiColor: 1
     - spawnTime: 35
@@ -305,64 +306,64 @@ MonoBehaviour:
       mutiColor: 0
     - spawnTime: 45
       normalGoblin: 2
-      archerGoblin: 3
-      hobGoblin: 2
+      archerGoblin: 2
+      hobGoblin: 1
       mutiColor: 1
   - maxWave: 4
     waves:
     - spawnTime: 0
-      normalGoblin: 6
+      normalGoblin: 4
       archerGoblin: 2
-      hobGoblin: 3
+      hobGoblin: 2
       mutiColor: 1
     - spawnTime: 15
-      normalGoblin: 3
+      normalGoblin: 2
       archerGoblin: 3
-      hobGoblin: 3
+      hobGoblin: 1
       mutiColor: 0
     - spawnTime: 25
       normalGoblin: 4
       archerGoblin: 4
-      hobGoblin: 0
+      hobGoblin: 1
       mutiColor: 1
     - spawnTime: 35
-      normalGoblin: 2
+      normalGoblin: 3
       archerGoblin: 4
-      hobGoblin: 3
+      hobGoblin: 2
       mutiColor: 0
   - maxWave: 5
     waves:
     - spawnTime: 0
-      normalGoblin: 3
+      normalGoblin: 4
       archerGoblin: 3
-      hobGoblin: 6
+      hobGoblin: 3
       mutiColor: 1
     - spawnTime: 15
       normalGoblin: 3
       archerGoblin: 2
-      hobGoblin: 3
+      hobGoblin: 2
       mutiColor: 0
     - spawnTime: 30
-      normalGoblin: 3
+      normalGoblin: 4
       archerGoblin: 3
-      hobGoblin: 3
+      hobGoblin: 2
       mutiColor: 1
     - spawnTime: 40
-      normalGoblin: 7
+      normalGoblin: 5
       archerGoblin: 6
       hobGoblin: 0
       mutiColor: 0
     - spawnTime: 50
       normalGoblin: 2
       archerGoblin: 4
-      hobGoblin: 6
+      hobGoblin: 4
       mutiColor: 1
   - maxWave: 5
     waves:
     - spawnTime: 0
       normalGoblin: 3
       archerGoblin: 3
-      hobGoblin: 8
+      hobGoblin: 4
       mutiColor: 0
     - spawnTime: 15
       normalGoblin: 4
@@ -372,24 +373,24 @@ MonoBehaviour:
     - spawnTime: 30
       normalGoblin: 6
       archerGoblin: 6
-      hobGoblin: 3
+      hobGoblin: 2
       mutiColor: 0
     - spawnTime: 40
       normalGoblin: 6
-      archerGoblin: 10
-      hobGoblin: 2
+      archerGoblin: 8
+      hobGoblin: 0
       mutiColor: 1
     - spawnTime: 50
       normalGoblin: 6
       archerGoblin: 6
-      hobGoblin: 6
+      hobGoblin: 5
       mutiColor: 1
   - maxWave: 6
     waves:
     - spawnTime: 0
       normalGoblin: 4
       archerGoblin: 6
-      hobGoblin: 8
+      hobGoblin: 6
       mutiColor: 0
     - spawnTime: 15
       normalGoblin: 6
@@ -399,12 +400,12 @@ MonoBehaviour:
     - spawnTime: 30
       normalGoblin: 6
       archerGoblin: 4
-      hobGoblin: 5
+      hobGoblin: 4
       mutiColor: 0
     - spawnTime: 40
       normalGoblin: 3
       archerGoblin: 6
-      hobGoblin: 4
+      hobGoblin: 2
       mutiColor: 1
     - spawnTime: 50
       normalGoblin: 6
@@ -424,9 +425,9 @@ MonoBehaviour:
       hobGoblin: 8
       mutiColor: 1
     - spawnTime: 12
-      normalGoblin: 10
+      normalGoblin: 6
       archerGoblin: 6
-      hobGoblin: 6
+      hobGoblin: 2
       mutiColor: 0
     - spawnTime: 25
       normalGoblin: 6
@@ -441,7 +442,7 @@ MonoBehaviour:
     - spawnTime: 45
       normalGoblin: 4
       archerGoblin: 5
-      hobGoblin: 6
+      hobGoblin: 4
       mutiColor: 1
     - spawnTime: 55
       normalGoblin: 8
@@ -451,29 +452,29 @@ MonoBehaviour:
   - maxWave: 6
     waves:
     - spawnTime: 0
-      normalGoblin: 12
+      normalGoblin: 10
       archerGoblin: 6
       hobGoblin: 10
       mutiColor: 1
     - spawnTime: 12
       normalGoblin: 12
       archerGoblin: 10
-      hobGoblin: 10
+      hobGoblin: 6
       mutiColor: 1
     - spawnTime: 24
       normalGoblin: 10
       archerGoblin: 8
-      hobGoblin: 5
+      hobGoblin: 4
       mutiColor: 0
     - spawnTime: 33
       normalGoblin: 8
       archerGoblin: 10
-      hobGoblin: 0
+      hobGoblin: 2
       mutiColor: 1
     - spawnTime: 40
       normalGoblin: 6
       archerGoblin: 6
-      hobGoblin: 7
+      hobGoblin: 6
       mutiColor: 1
     - spawnTime: 50
       normalGoblin: 8
