@@ -5,14 +5,14 @@ using UnityEngine;
 public class GoblinBase
 {
     protected bool firstInState = true, followingPath = false, getAniInfo = false;
-    protected bool startFindPath = false, closingPlayer = false;
+    protected bool startFindPath = false, closingPlayer = false, hurtChase = false;
     protected int hp,maxHp, atkValue, color, pathIndex;
     protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
     protected float blankTime = .0f, closeTime = .0f;
     protected float backSpeed = 10.0f;
     protected float imgScale, whiteScale = -1.0f;
-    protected int minMoney, maxMoney;
+    protected int minMoney, maxMoney, closeNum = 0;
     
 
     public int GetColor
@@ -146,8 +146,10 @@ public class GoblinBase
         blankTime += deltaTime;
         if (blankTime > 10.0f) {
             blankTime = .0f;
-            closingPlayer = true;
-            CalculatePath();
+            closeNum++;
+            if (closeNum < 3) closingPlayer = true;
+            else closingPlayer= false;
+            if (!startFindPath) CalculatePath();
             return;
         }
 
@@ -182,7 +184,15 @@ public class GoblinBase
                 //SetState(GoblinState.idle);   //先進idle或ramble再尋路，以免尋路過久會不知要做啥
             }
         }
-        else SetState();
+        else {
+            if (hurtChase) {
+                if (!startFindPath)
+                {
+                    CalculatePath();
+                }
+            }
+            else SetState();
+        } 
     }
         
 
@@ -346,7 +356,9 @@ public class GoblinBase
                 {
                     pathIndex++;
                     moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
-                    float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                    float scaleX = 1.0f;
+                    if (moveFwdDir.x > 0.3f) scaleX = -1.0f;
+                    else if (moveFwdDir.x < -0.3f) scaleX = 1.0f;
                     image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                 }
             }
@@ -372,6 +384,7 @@ public class GoblinBase
                 moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
                 float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
                 image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
+                hurtChase = false;
                 SetState(GoblinState.chase);
             }     
             //StopCoroutine("FollowPath");
@@ -466,6 +479,7 @@ public class GoblinBase
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.95f) {
                 //if (hp <= 0) SetState(GoblinState.die);
+                hurtChase = true;
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
                 //renderer.material.SetInt("_colorID", color);
@@ -501,6 +515,7 @@ public class GoblinBase
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (inStateTime > 0.3f)
             {
+                hurtChase = true;
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
 
@@ -517,7 +532,7 @@ public class GoblinBase
         if (hp <= 0) return;
         if (col == color)
         {
-            AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
+            AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
             hp -= atkValue;
             targetPlayer = playerID;
             targetPlayer2 = playerID;
@@ -546,7 +561,7 @@ public class GoblinBase
                 hurtDir = dir.normalized;
                 SetState(GoblinState.fakeHurt);
             }
-            AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+            AudioManager.SingletonInScene.PlayRandomWrong(1f);
         }
 
         //if (col == 1 || col == 2 || col == 4)
@@ -628,7 +643,7 @@ public class GoblinBase
             {
                 if ((color == 1 || color == 2 || color == 3))
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
+                    AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
@@ -654,14 +669,14 @@ public class GoblinBase
                         hurtDir = dir.normalized;
                         SetState(GoblinState.fakeHurt);
                     }
-                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                    AudioManager.SingletonInScene.PlayRandomWrong(1f);
                 } 
             }
             else if (col == 5)
             {
                 if ((color == 1 || color == 4 || color == 5))
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
+                    AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
@@ -687,14 +702,14 @@ public class GoblinBase
                         hurtDir = dir.normalized;
                         SetState(GoblinState.fakeHurt);
                     }
-                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                    AudioManager.SingletonInScene.PlayRandomWrong(1f);
                 }
             }
             else if (col == 6)
             {
                 if ((color == 2 || color == 4 || color == 6))
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
+                    AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
@@ -719,7 +734,7 @@ public class GoblinBase
                         hurtDir = dir.normalized;
                         SetState(GoblinState.fakeHurt);
                     }
-                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                    AudioManager.SingletonInScene.PlayRandomWrong(1f);
                 } 
             }
         }

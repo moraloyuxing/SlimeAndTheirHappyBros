@@ -312,6 +312,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void KillGoblin() {
+        if (test) return;
         goblinKills++;
 
         if (goblinKills >= goblinKillsGoal[curRound]) RoundOver();

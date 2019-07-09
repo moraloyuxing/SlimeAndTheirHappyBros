@@ -40098,7 +40098,7 @@ MonoBehaviour:
   mapBorder: {x: 56, y: 68}
   goblinInfo:
   - typeName: normal
-    sighDist: 12
+    sighDist: 16
     atkDist: 6
     hp: 7
     atkValue: 0
@@ -40120,7 +40120,7 @@ MonoBehaviour:
     minMoney: 6
     maxMoney: 10
   - typeName: Hob
-    sighDist: 15
+    sighDist: 18
     atkDist: 5.5
     hp: 25
     atkValue: 0
@@ -75797,11 +75797,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 30651016081294182}
     m_Modifications:
-    - target: {fileID: 2885920708104641707, guid: 2d38ba5f560938542b36df0fc1d7cc2b,
-        type: 3}
-      propertyPath: m_Name
-      value: KingGoblin
-      objectReference: {fileID: 0}
     - target: {fileID: 2885920708104641706, guid: 2d38ba5f560938542b36df0fc1d7cc2b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -75856,6 +75851,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2885920708104641707, guid: 2d38ba5f560938542b36df0fc1d7cc2b,
+        type: 3}
+      propertyPath: m_Name
+      value: KingGoblin
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2d38ba5f560938542b36df0fc1d7cc2b, type: 3}

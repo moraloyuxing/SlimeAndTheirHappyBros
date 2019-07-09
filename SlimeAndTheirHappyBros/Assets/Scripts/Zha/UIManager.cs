@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
 
     Vector2 oringinProgress, targetProgress;
 
+    Transform goblinProgressParent;
     RectTransform goblinHeadTrans, bossHp;
 
     Image tutorialImg; 
@@ -35,8 +36,9 @@ public class UIManager : MonoBehaviour
         tutorialImg = transform.Find("Tutorial").GetChild(0).GetComponent<Image>();
         roundImg = transform.Find("CountDown").GetChild(3).GetComponent<Image>();
 
-        goblinHeadTrans = transform.Find("GoblinProgress").GetChild(0).GetComponent<RectTransform>();
-        roundTxt = transform.Find("GoblinProgress").GetChild(1).GetComponent<Text>();
+        goblinProgressParent = transform.Find("GoblinProgress");
+        goblinHeadTrans = goblinProgressParent.GetChild(0).GetComponent<RectTransform>();
+        roundTxt = goblinProgressParent.GetChild(1).GetComponent<Text>();
         bossHp = transform.Find("KingBlood").GetChild(0).GetComponent<RectTransform>();
 
         animator = GetComponent<Animator>();
@@ -46,6 +48,7 @@ public class UIManager : MonoBehaviour
         //animator.SetTrigger("Tutorial");
         oringinProgress = new Vector2(headStart, 0);
         targetProgress = new Vector2(headEnd,0);
+        goblinProgressParent.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -86,6 +89,7 @@ public class UIManager : MonoBehaviour
 
     public void FirstRound() {
         animator.SetTrigger("FirstRound");
+        animator.Play("PlayerState_In",1);
     }
 
     public void StartRound(int round) {

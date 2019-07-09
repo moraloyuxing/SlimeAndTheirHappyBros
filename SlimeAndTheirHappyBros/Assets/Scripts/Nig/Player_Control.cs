@@ -486,7 +486,7 @@ public class Player_Control : MonoBehaviour{
     public void AttackPriorityOn() {
         AttackPriority = true;
         Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Color_Number,DeathPriority); //移到另外函式呼叫
-        AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.55f);
+        AudioManager.SingletonInScene.PlayRandomShoot(0.55f);
     }
 
     public void AttackPriorityOff(){

@@ -1011,6 +1011,21 @@ MonoBehaviour:
   - clipNmae: SpiritFireBall
     clip: {fileID: 8300000, guid: 43dcc23d1ddee4530a3857edc2153b51, type: 3}
   bossMusic: {fileID: 8300000, guid: eed040debb7d94d41971c902210ae1dc, type: 3}
+  shootClips:
+  - {fileID: 8300000, guid: 1b62d83c514804b88a01bf0089063d89, type: 3}
+  - {fileID: 8300000, guid: 51a169229b3a84ba69c0a3fa475801a4, type: 3}
+  - {fileID: 8300000, guid: 2939e1f6ca330456995c62a21c811daa, type: 3}
+  - {fileID: 8300000, guid: 213d844030a5e40ada8b058e24c69958, type: 3}
+  correctClips:
+  - {fileID: 8300000, guid: cb902837ba28543ffa57e48f91c3a34f, type: 3}
+  - {fileID: 8300000, guid: da2647126d492446f8c3c80b04ee20e9, type: 3}
+  - {fileID: 8300000, guid: 6d9eb5e9c218248bf94987d745a2e06e, type: 3}
+  - {fileID: 8300000, guid: d3540e35681ea48c28b902755230f0dd, type: 3}
+  wrongClips:
+  - {fileID: 8300000, guid: 0834682f818cc40698eead4b9edd3aca, type: 3}
+  - {fileID: 8300000, guid: 651ae9106823442599bf4ff5208e84d6, type: 3}
+  - {fileID: 8300000, guid: a50d5c0c8ac1c4af085cedb3d4d229f8, type: 3}
+  - {fileID: 8300000, guid: 97712aa29833d4cdfb8f4f0870b15002, type: 3}
 --- !u!1 &3318866416261201886
 GameObject:
   m_ObjectHideFlags: 0

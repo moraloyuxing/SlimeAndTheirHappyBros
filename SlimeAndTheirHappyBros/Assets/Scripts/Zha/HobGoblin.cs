@@ -16,7 +16,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     Transform[] atkHint = new Transform[2];
     Transform hurtArea;
     Collider hurtAreaCol;
-
+    Collider[] atkCollider = new Collider[3];
     float[] sightDists = new float[2] { 15.0f, 20.0f };
     float[] atkDists = new float[2] {7.0f,  16.0f};
 
@@ -30,6 +30,9 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         atkCol[0] = t.Find("AtkCollider");
         atkCol[1] = t.Find("AtkCollider (1)");
         atkCol[2] = t.Find("AtkCollider (2)");
+        atkCollider[0] = atkCol[0].GetComponent<Collider>();
+        atkCollider[1] = atkCol[1].GetComponent<Collider>();
+        atkCollider[2] = atkCol[2].GetComponent<Collider>();
         atkHint[0] = t.Find("AttackHint");
         atkHint[1] = t.Find("AttackHint (1)");
         imgScale = image.localScale.x;
@@ -68,6 +71,9 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         atkCol[0] = t.Find("AtkCollider");
         atkCol[1] = t.Find("AtkCollider (1)");
         atkCol[2] = t.Find("AtkCollider (2)");
+        atkCollider[0] = atkCol[0].GetComponent<Collider>();
+        atkCollider[1] = atkCol[1].GetComponent<Collider>();
+        atkCollider[2] = atkCol[2].GetComponent<Collider>();
         atkHint[0] = t.Find("AttackHint");
         atkHint[1] = t.Find("AttackHint (1)");
         imgScale = image.localScale.x;
@@ -257,7 +263,9 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 {
                     pathIndex++;
                     moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
-                    float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
+                    float scaleX = 1.0f;
+                    if (moveFwdDir.x > 0.3f) scaleX = -1.0f;
+                    else if (moveFwdDir.x < -0.3f) scaleX = 1.0f;
                     image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
                     image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
                     hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
@@ -478,8 +486,8 @@ public class HobGoblin : GoblinBase, IEnemyUnit
 
     public override void OnGettingHurt(int col, int atkValue, int playerID,Vector3 dir)
     {
-        if (hp <= 0) return;  
-        AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+        if (hp <= 0) return;
+        AudioManager.SingletonInScene.PlayRandomWrong(1f);
         targetPlayer = playerID;
         targetPlayer2 = playerID;
         if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
@@ -487,7 +495,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             hurtDir = dir.normalized;
             SetState(GoblinState.fakeHurt);
         }
-         
+
         //if (col == 1 || col == 2 || col == 4)
         //{
         //    if (col == color)
@@ -520,7 +528,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
         //            SetState(GoblinState.fakeHurt);
         //        }
         //    }
-            
+
         //}
         //else
         //{
@@ -616,7 +624,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if ((color == 1 || color == 2 || color == 3))
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
+                    AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
@@ -635,7 +643,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 }
                 else
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                    AudioManager.SingletonInScene.PlayRandomWrong(1f);
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
                     if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
@@ -649,7 +657,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if ((color == 1 || color == 4 || color == 5))
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
+                    AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
@@ -668,7 +676,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     }
                 }
                 else {
-                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                    AudioManager.SingletonInScene.PlayRandomWrong(1f);
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
                     if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
@@ -682,7 +690,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             {
                 if ((color == 2 || color == 4 || color == 6))
                 {
-                    AudioManager.SingletonInScene.PlaySound2D("Currect_Color", 0.42f);
+                    AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
@@ -701,7 +709,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     }
                 }
                 else{
-                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
+                    AudioManager.SingletonInScene.PlayRandomWrong(1f);
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
                     if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && !endure)
@@ -725,6 +733,9 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             }
 
             hurtAreaCol.enabled = false;
+            atkCollider[0].enabled = false;
+            atkCollider[1].enabled = false;
+            atkCollider[2].enabled = false;
             AudioManager.SingletonInScene.PlaySound2D("Hob_Death", 0.5f);
             animator.speed = 1.0f;
             animator.SetTrigger("die");
@@ -733,13 +744,19 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
             else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);
             firstInState = false;
-            
+            whiteScale = 1.0f;
         }
         else
         {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (whiteScale > .0f)
+            {
+                whiteScale -= deltaTime * 8.0f;
+                renderer.material.SetFloat("_WhiteScale", whiteScale);
+            }
             if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.95f)
             {
+                whiteScale = -1.0f;
                 ResetUnit();
             }
         }

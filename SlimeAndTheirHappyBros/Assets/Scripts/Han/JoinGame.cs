@@ -51,7 +51,7 @@ public class JoinGame : MonoBehaviour{
                 tranOce = true;
             }
 
-            if (Time.time > Ready_Moment + 4.0f) SceneManager.LoadScene(1);
+            if (Time.time > Ready_Moment + 3.0f) SceneManager.LoadScene(1);
             //BlackPanel.color = new Color(0.0f, 0.0f, 0.0f, BlackPanel.color.a + alpha);
             //if (BlackPanel.color.a >= 1.0f) SceneManager.LoadScene(1);
         }

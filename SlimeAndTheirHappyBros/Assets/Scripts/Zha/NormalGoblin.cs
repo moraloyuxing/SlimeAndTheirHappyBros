@@ -189,8 +189,9 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.95f)
             {
-                if (hp <= 0) SetState(GoblinState.die);
-                else SetState(GoblinState.attackBreak); //OverAttackDetectDist();
+                //if (hp <= 0) SetState(GoblinState.die);
+                hurtChase = true;
+                SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
                 //renderer.material.SetInt("_colorID", color);
                 whiteScale = -1.0f;
@@ -222,12 +223,20 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             if(targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
             else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);
             firstInState = false;
+            whiteScale = 1.0f;
         }
         else
         {
+            if (whiteScale > .0f)
+            {
+                whiteScale -= deltaTime * 8.0f;
+                renderer.material.SetFloat("_WhiteScale", whiteScale);
+            }
+
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
             if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.95f)
             {
+                whiteScale = -1.0f;
                 ResetUnit();
             }
         }

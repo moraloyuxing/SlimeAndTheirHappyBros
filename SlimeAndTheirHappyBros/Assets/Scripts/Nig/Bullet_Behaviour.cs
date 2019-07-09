@@ -148,14 +148,14 @@ public class Bullet_Behaviour : MonoBehaviour{
 
                 if (colliders[i].tag == "Barrier" || c.tag == "Barrier") {
                     NowPenetrate++;
-                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 0.5f);
+                    AudioManager.SingletonInScene.PlayRandomWrong(1f);
                     NowPenetrate = PenetrateMaxCount;//抵達障礙物直接給最大值，取消繼續穿透
                 }
 
                 if (colliders[i].tag == "Border" || c.tag == "Border")
                 {
                     NowPenetrate++;
-                    AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 0.5f);
+                    AudioManager.SingletonInScene.PlayRandomWrong(1f);
                     NowPenetrate = PenetrateMaxCount;//抵達障礙物直接給最大值，取消繼續穿透
                 }
 

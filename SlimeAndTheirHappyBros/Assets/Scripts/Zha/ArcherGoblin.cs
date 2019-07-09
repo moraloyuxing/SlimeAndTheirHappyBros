@@ -196,12 +196,19 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
             if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
             else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);
             firstInState = false;
+            whiteScale = 1.0f;
         }
         else
         {
             aniInfo = animator.GetCurrentAnimatorStateInfo(0);
+            if (whiteScale > .0f)
+            {
+                whiteScale -= deltaTime * 8.0f;
+                renderer.material.SetFloat("_WhiteScale", whiteScale);
+            }
             if (aniInfo.IsName("die") && aniInfo.normalizedTime >= 0.95f)
             {
+                whiteScale = -1.0f;
                 ResetUnit();
             }
         }

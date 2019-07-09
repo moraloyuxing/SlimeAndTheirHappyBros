@@ -578,7 +578,7 @@ public class Merge_Control : MonoBehaviour{
     {
         AttackPriority = true;
         Attack_Arrow.GetComponent<Create_Bullet>().ShootBullet(Attack_Direction, Shader_Number,false);
-        AudioManager.SingletonInScene.PlaySound2D("Slime_Shoot", 0.5f);
+        AudioManager.SingletonInScene.PlayRandomShoot(0.55f);
     }
 
     public void AttackPriorityOff()
