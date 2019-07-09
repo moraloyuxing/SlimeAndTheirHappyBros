@@ -792,13 +792,17 @@ public class Player_Control : MonoBehaviour{
         }
 
         if (musouTime < 0) {
+            Debug.Log("無敵時間結束");
             StopDetect = false;
             CancelInvoke("Musou_Flick");
             Current_Color.a = 1.0f;
             flicker = -0.5f;
             Player_Sprite.color = Current_Color;
+            if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Wash") || anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_JumpinPond")){
+                StopDetect = true;
+                Debug.Log("延長無敵狀態");
+            }
         }
-
     }
 
     //死亡噴裝
