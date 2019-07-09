@@ -17929,6 +17929,9 @@ MonoBehaviour:
   - clipNmae: Revive
     clip: {fileID: 8300000, guid: f386bdc9b2c2c4f009a1576240eb60cd, type: 3}
   bossMusic: {fileID: 0}
+  shootClips: []
+  correctClips: []
+  wrongClips: []
 --- !u!4 &772946246
 Transform:
   m_ObjectHideFlags: 0

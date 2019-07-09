@@ -578,6 +578,7 @@ public class Player_Control : MonoBehaviour{
     public void GetRescued() {
         if (DeathPriority) {
             GetComponent<Animator>().Play("Slime_CureEffect");
+            if (anim.GetCurrentAnimatorStateInfo(1).IsName("Slime_CureEffect")) { anim.SetTrigger("InterruptCure"); }
             rescue_count++;
             AudioManager.SingletonInScene.PlaySound2D("Heal", 0.5f);
             if (rescue_count >= 5){
