@@ -598,6 +598,8 @@ public class HobGoblin : GoblinBase, IEnemyUnit
     public override void OnGettingHurt(int col, int atkValue, int playerID, int playerID2, Vector3 dir)
     {
         if (hp <= 0) return;
+        targetPlayer = playerID;
+        targetPlayer2 = playerID2;
         //if (col == 1 || col == 2 || col == 4)
         //{
         //    if (col == color)

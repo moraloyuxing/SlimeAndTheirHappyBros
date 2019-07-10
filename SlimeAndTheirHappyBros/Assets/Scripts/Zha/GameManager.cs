@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour
             {
                 if (!cameraMotion) {
                     time += Time.deltaTime;
-                    if (time > 11.0f) {
+                    if (time > 9.8f) {
                         cameraAnimator.SetTrigger("over");
                         cameraMotion = true;
                         uiManager.StartTutorial();

@@ -40098,7 +40098,7 @@ MonoBehaviour:
   mapBorder: {x: 56, y: 68}
   goblinInfo:
   - typeName: normal
-    sighDist: 16
+    sighDist: 22
     atkDist: 6
     hp: 7
     atkValue: 0
@@ -40109,7 +40109,7 @@ MonoBehaviour:
     minMoney: 5
     maxMoney: 9
   - typeName: archer
-    sighDist: 20
+    sighDist: 30
     atkDist: 12
     hp: 4
     atkValue: 0
@@ -40120,7 +40120,7 @@ MonoBehaviour:
     minMoney: 6
     maxMoney: 10
   - typeName: Hob
-    sighDist: 18
+    sighDist: 25
     atkDist: 5.5
     hp: 25
     atkValue: 0

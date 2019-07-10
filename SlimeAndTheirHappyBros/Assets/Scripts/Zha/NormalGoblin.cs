@@ -81,21 +81,6 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
 
         deltaTime = dt;
         selfPos = transform.position;
-
-        if (hp > 0) {
-            nearstPlayerDist = 500.0f;
-            for (int i = 0; i < 4; i++)
-            {
-                if (goblinManager.PlayersDie[i]) continue;
-                playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
-                if (playerDist[i] < nearstPlayerDist)
-                {
-                    nearstPlayerDist = playerDist[i];
-                    targetPlayer = i;
-                }
-                //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
-            }
-        }
        
         //if(hp > 0)DetectGethurt();  //傷害判定
         StateMachine();
@@ -190,7 +175,6 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.95f)
             {
                 //if (hp <= 0) SetState(GoblinState.die);
-                hurtChase = true;
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
                 //renderer.material.SetInt("_colorID", color);

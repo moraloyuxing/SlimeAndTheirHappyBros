@@ -5,7 +5,7 @@ using UnityEngine;
 public class GoblinBase
 {
     protected bool firstInState = true, followingPath = false, getAniInfo = false;
-    protected bool startFindPath = false, closingPlayer = false, hurtChase = false;
+    protected bool startFindPath = false, closingPlayer = false;
     protected int hp,maxHp, atkValue, color, pathIndex;
     protected float deltaTime, inStateTime, totalTime;  //calculateDistTime = .0f
     protected float speed, atkDist, sightDist, spawnHeight, turnDist;
@@ -71,6 +71,7 @@ public class GoblinBase
 
     public virtual void SetState()
     {
+        startFindPath = false;
         inStateTime = 0.0f;
         firstInState = true;
         float opp = Random.Range(.0f, 10.0f);
@@ -94,24 +95,29 @@ public class GoblinBase
         switch (curState)
         {
             case GoblinState.moveIn:
+                DecideTargetPlayer();
                 MoveIn();
                 DetectAttack();
                 break;
             case GoblinState.idle:
+                DecideTargetPlayer();
                 Idle();
                 DetectChaseAttack();
                 break;
             case GoblinState.ramble:
+                DecideTargetPlayer();
                 Ramble();
                 DetectChaseAttack();
                 if (OutBorder()) break;
                 break;
             case GoblinState.chase:
+                DecideTargetPlayer();
                 Chase();
                 DetectAttack();
                 if (OutBorder()) break;
                 break;
             case GoblinState.closePlayer:
+                DecideTargetPlayer();
                 ClosePlayer();
                 DetectAttack();
                 break;
@@ -132,6 +138,7 @@ public class GoblinBase
                 Die();
                 break;
             case GoblinState.erroeCatch:
+                DecideTargetPlayer();
                 ErroeCatch();
                 DetectAttack();
                 break;
@@ -139,6 +146,37 @@ public class GoblinBase
         }
 
 
+    }
+
+    public virtual void DecideTargetPlayer() {
+        if (hp <= 0) return;
+        nearstPlayerDist = 500.0f;
+        for (int i = 0; i < 4; i++)
+        {
+            if (goblinManager.PlayersDie[i]) continue;
+            playerDist[i] = Mathf.Abs(goblinManager.PlayerPos[i].x - selfPos.x) + Mathf.Abs(goblinManager.PlayerPos[i].z - selfPos.z);
+            if (playerDist[i] < nearstPlayerDist)
+            {
+                nearstPlayerDist = playerDist[i];
+                targetPlayer = i;
+            }
+            //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
+        }
+    }
+    public virtual void HurtOverDecideTargetPlayer()
+    {
+        if (hp <= 0) return;
+        for (int i = 0; i < 4; i++)
+        {
+            if (goblinManager.PlayersDie[i]) continue;
+            float diff = new Vector2(goblinManager.PlayerPos[i].x - selfPos.x, goblinManager.PlayerPos[i].z - selfPos.z).sqrMagnitude;
+            if (diff <= atkDist * atkDist )
+            {
+                targetPlayer = i;
+                return;
+            }
+            //if (goblinManager.PlayersMove[i]) UpdatePlayerPos(i);
+        }
     }
 
     public virtual void DetectChaseAttack() {
@@ -171,9 +209,9 @@ public class GoblinBase
         } 
     }
     public virtual void AttackBreakDetectDist() {
-        float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
-        if (diff <= sightDist * sightDist)
-        {
+        if (goblinManager.PlayersDie[targetPlayer]) SetState(GoblinState.ramble);
+        else {
+            float diff = new Vector2(goblinManager.PlayerPos[targetPlayer].x - selfPos.x, goblinManager.PlayerPos[targetPlayer].z - selfPos.z).sqrMagnitude;
             if (diff <= atkDist * atkDist) SetState(GoblinState.attack);
             else
             {
@@ -184,15 +222,6 @@ public class GoblinBase
                 //SetState(GoblinState.idle);   //先進idle或ramble再尋路，以免尋路過久會不知要做啥
             }
         }
-        else {
-            if (hurtChase) {
-                if (!startFindPath)
-                {
-                    CalculatePath();
-                }
-            }
-            else SetState();
-        } 
     }
         
 
@@ -279,6 +308,7 @@ public class GoblinBase
             Debug.Log("close player " + inStateTime);
             inStateTime += deltaTime;
             if (inStateTime > 2.0f) {
+                followingPath = false;
                 SetState();
                 return;
             }
@@ -384,7 +414,6 @@ public class GoblinBase
                 moveFwdDir = new Vector3(path.lookPoints[pathIndex].x - selfPos.x, 0, path.lookPoints[pathIndex].z - selfPos.z).normalized;
                 float scaleX = (moveFwdDir.x > .0f) ? -1.0f : 1.0f;
                 image.localScale = new Vector3(scaleX * imgScale, imgScale, imgScale);
-                hurtChase = false;
                 SetState(GoblinState.chase);
             }     
             //StopCoroutine("FollowPath");
@@ -429,6 +458,8 @@ public class GoblinBase
             animator.SetInteger("state", 0);
             animator.SetTrigger("attackOver");
             startFindPath = false;
+            followingPath = false; //需註記尋路結束
+            closingPlayer = false;
         }
     }
 
@@ -479,12 +510,12 @@ public class GoblinBase
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (aniInfo.IsName("hurt") && aniInfo.normalizedTime >= 0.95f) {
                 //if (hp <= 0) SetState(GoblinState.die);
-                hurtChase = true;
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
                 //renderer.material.SetInt("_colorID", color);
                 whiteScale = -1.0f;
                 renderer.material.SetFloat("_WhiteScale", -1);
+                HurtOverDecideTargetPlayer();  //被打完判斷最近玩家
             }
         }
     }
@@ -515,10 +546,10 @@ public class GoblinBase
             //if (aniInfo.IsName("hurt"))Debug.Log(aniInfo.normalizedTime);
             if (inStateTime > 0.3f)
             {
-                hurtChase = true;
+                
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
-
+                Debug.Log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + targetPlayer);
             }
         }
     }
@@ -530,12 +561,14 @@ public class GoblinBase
     public virtual void OnGettingHurt(int col, int atkValue, int playerID, Vector3 dir)
     {
         if (hp <= 0) return;
+        targetPlayer = playerID;
+        targetPlayer2 = playerID;
         if (col == color)
         {
             AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
             hp -= atkValue;
-            targetPlayer = playerID;
-            targetPlayer2 = playerID;
+            //targetPlayer = playerID;
+            //targetPlayer2 = playerID;
 
             if (hp > 0)
             {
@@ -554,8 +587,8 @@ public class GoblinBase
         }
         else
         {
-            targetPlayer = playerID;
-            targetPlayer2 = playerID;
+            //targetPlayer = playerID;
+            //targetPlayer2 = playerID;
             if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt && curState != GoblinState.attack)
             {
                 hurtDir = dir.normalized;
@@ -621,6 +654,8 @@ public class GoblinBase
     public virtual void OnGettingHurt(int col, int atkValue, int playerID,int playerID2, Vector3 dir)
     {
         if (hp <= 0) return;
+        targetPlayer = playerID;
+        targetPlayer2 = playerID2;
         //if (col == 1 || col == 2 || col == 4)
         //{
         //    if (col == color)
@@ -637,7 +672,7 @@ public class GoblinBase
         //    }
         //    else AudioManager.SingletonInScene.PlaySound2D("Mistake_Color", 1f);
         //}
-        if(col == 3 || col == 5 || col == 6)//else
+        if (col == 3 || col == 5 || col == 6)//else
         {
             if (col == 3)
             {
@@ -645,8 +680,8 @@ public class GoblinBase
                 {
                     AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
-                    targetPlayer = playerID;
-                    targetPlayer2 = playerID2;
+                    //targetPlayer = playerID;
+                    //targetPlayer2 = playerID2;
                     if (hp > 0)
                     {
                         if (curState != GoblinState.hurt)
@@ -662,8 +697,8 @@ public class GoblinBase
                     }
                 }
                 else {
-                    targetPlayer = playerID;
-                    targetPlayer2 = playerID2;
+                    //targetPlayer = playerID;
+                    //targetPlayer2 = playerID2;
                     if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt)
                     {
                         hurtDir = dir.normalized;
@@ -678,8 +713,8 @@ public class GoblinBase
                 {
                     AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
-                    targetPlayer = playerID;
-                    targetPlayer2 = playerID2;
+                    //targetPlayer = playerID;
+                    //targetPlayer2 = playerID2;
                     if (hp > 0)
                     {
                         if (curState != GoblinState.hurt)
@@ -695,8 +730,8 @@ public class GoblinBase
                     }
                 }
                 else {
-                    targetPlayer = playerID;
-                    targetPlayer2 = playerID2;
+                    //targetPlayer = playerID;
+                    //targetPlayer2 = playerID2;
                     if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt)
                     {
                         hurtDir = dir.normalized;
@@ -711,8 +746,8 @@ public class GoblinBase
                 {
                     AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
-                    targetPlayer = playerID;
-                    targetPlayer2 = playerID2;
+                    //targetPlayer = playerID;
+                    //targetPlayer2 = playerID2;
                     if (hp > 0)
                     {
                         if (curState != GoblinState.hurt)
@@ -728,8 +763,8 @@ public class GoblinBase
                     }
                 }
                 else {
-                    targetPlayer = playerID;
-                    targetPlayer2 = playerID2;
+                    //targetPlayer = playerID;
+                    //targetPlayer2 = playerID2;
                     if (curState != GoblinState.hurt && curState != GoblinState.fakeHurt) {
                         hurtDir = dir.normalized;
                         SetState(GoblinState.fakeHurt);
