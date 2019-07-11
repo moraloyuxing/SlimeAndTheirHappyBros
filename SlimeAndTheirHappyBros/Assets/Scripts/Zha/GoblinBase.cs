@@ -144,7 +144,12 @@ public class GoblinBase
                 break;
 
         }
-
+        if (whiteScale >= .0f)
+        {
+            whiteScale -= deltaTime * 8.0f;
+            renderer.material.SetFloat("_WhiteScale", whiteScale);
+            if (whiteScale < .0f) whiteScale = -1.0f;
+        }
 
     }
 
@@ -490,18 +495,12 @@ public class GoblinBase
             animator.SetTrigger("hurt");
             //animator.Play("hurt");
             animator.SetInteger("state",3);
-            whiteScale = 1.0f;
             renderer.material.SetFloat("_WhiteScale", 1.0f);
         }
         else {
             if (!Physics.Raycast(selfPos, hurtDir, 2.0f, 1 << LayerMask.NameToLayer("Barrier")))
             {
                 transform.position += (backSpeed) * deltaTime * hurtDir;
-            }
-
-            if (whiteScale > .0f) {
-                whiteScale -= deltaTime * 8.0f;
-                renderer.material.SetFloat("_WhiteScale", whiteScale);
             }
 
             backSpeed -= deltaTime * 15.0f;
@@ -513,7 +512,6 @@ public class GoblinBase
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
                 //renderer.material.SetInt("_colorID", color);
-                whiteScale = -1.0f;
                 renderer.material.SetFloat("_WhiteScale", -1);
                 HurtOverDecideTargetPlayer();  //被打完判斷最近玩家
             }
@@ -567,6 +565,7 @@ public class GoblinBase
         {
             AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
             hp -= atkValue;
+            whiteScale = 1.0f;
             //targetPlayer = playerID;
             //targetPlayer2 = playerID;
 
@@ -680,6 +679,7 @@ public class GoblinBase
                 {
                     AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
+                    whiteScale = 1.0f;
                     //targetPlayer = playerID;
                     //targetPlayer2 = playerID2;
                     if (hp > 0)
@@ -713,6 +713,7 @@ public class GoblinBase
                 {
                     AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
+                    whiteScale = 1.0f;
                     //targetPlayer = playerID;
                     //targetPlayer2 = playerID2;
                     if (hp > 0)
@@ -746,6 +747,7 @@ public class GoblinBase
                 {
                     AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
+                    whiteScale = 1.0f;
                     //targetPlayer = playerID;
                     //targetPlayer2 = playerID2;
                     if (hp > 0)

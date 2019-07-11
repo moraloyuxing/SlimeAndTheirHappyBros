@@ -27121,8 +27121,8 @@ MonoBehaviour:
   - {fileID: 1389888427}
   - {fileID: 1162664904}
   BlackPanel: {fileID: 812114204}
-  Title: {fileID: 2099202471}
   cameraTransEffect: {fileID: 1072998376}
+  titleAni: {fileID: 2075813241}
 --- !u!4 &1338604664
 Transform:
   m_ObjectHideFlags: 0

@@ -15,11 +15,12 @@ public class JoinGame : MonoBehaviour{
     float Ready_Moment;
 
     public Image BlackPanel;
-    public GameObject Title;
-    float alpha = 0.02f;
+    float alpha = 1.0f;
+
 
     bool tranOce = false;
     public CameraTrasnsEffect cameraTransEffect;
+    public Animator titleAni;
 
     void Start(){
         for (int i = 0; i < 4; i++) {
@@ -46,11 +47,10 @@ public class JoinGame : MonoBehaviour{
 
         if (Ready_Count == 4 && Time.time > Ready_Moment + 1.0f) {
             if (!tranOce) {
-                Title.SetActive(false);
                 cameraTransEffect.GoTransOut();
                 tranOce = true;
+                titleAni.SetTrigger("disappear");
             }
-
             if (Time.time > Ready_Moment + 3.0f) SceneManager.LoadScene(1);
             //BlackPanel.color = new Color(0.0f, 0.0f, 0.0f, BlackPanel.color.a + alpha);
             //if (BlackPanel.color.a >= 1.0f) SceneManager.LoadScene(1);

@@ -7,7 +7,7 @@ public class KingGoblin : IEnemyUnit
     bool showEnable = false, crackOnce = false;
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
     bool throwOnce = false, goRoar = false;
-    int totalHp = 1200, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
+    int totalHp = 10, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
     int atkCount = 0, totalAtk = 1;
     float stateTime = .0f, idleTime = 2.0f;
 
@@ -348,6 +348,43 @@ public class KingGoblin : IEnemyUnit
     public void GetHurt(int c, int value) {
         if (color == 1 || color == 2 || color == 4)
         {
+            if (color == 1 && (c == 1 || c == 3 || c == 5)) {
+                hp -= value;
+                Debug.Log("king hp " + hp);
+                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
+                else
+                {
+                    DecreaseHP(0);
+                    GameWin();
+                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
+                }
+            }
+            else if (color == 2 && (c == 2 || c == 3 || c == 6))
+            {
+                hp -= value;
+                Debug.Log("king hp " + hp);
+                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
+                else
+                {
+                    DecreaseHP(0);
+                    GameWin();
+                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
+                }
+            }
+            else if (color == 4 && (c == 4 || c == 5 || c == 6))
+            {
+                hp -= value;
+                Debug.Log("king hp " + hp);
+                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
+                else
+                {
+                    DecreaseHP(0);
+                    GameWin();
+                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
+                }
+            }
+        }
+        else {
             if (color == c)
             {
                 hp -= value;
@@ -360,43 +397,6 @@ public class KingGoblin : IEnemyUnit
                     MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
                 }
 
-            }
-        }
-        else {
-            if (color == 3 && (c == 3 || c == 1 || c == 2)) {
-                hp -= value;
-                Debug.Log("king hp " + hp);
-                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
-                else
-                {
-                    DecreaseHP(0);
-                    GameWin();
-                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
-                }
-            }
-            else if (color == 5 && (c == 5 || c == 1 || c == 4))
-            {
-                hp -= value;
-                Debug.Log("king hp " + hp);
-                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
-                else
-                {
-                    DecreaseHP(0);
-                    GameWin();
-                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
-                }
-            }
-            else if (color == 6 && (c == 6 || c == 2 || c == 4))
-            {
-                hp -= value;
-                Debug.Log("king hp " + hp);
-                if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
-                else
-                {
-                    DecreaseHP(0);
-                    GameWin();
-                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
-                }
             }
         }
 

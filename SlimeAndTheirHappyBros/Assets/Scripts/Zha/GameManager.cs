@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     bool cameraMotion = false;
-    bool roundStart = false, inShopping = false, bossLevel = false, winInput = false;
+    bool roundStart = false, inShopping = false, bossLevel = false, winInput = false, looseInput = false;
     bool gameOver = false, lightChange = true;
     int tutorialProgress = 0, goblinKills = 0, maxLevel = 10;
     int  bossMonsterNum = 0;
@@ -129,34 +129,36 @@ public class GameManager : MonoBehaviour
             }
         }
 
+        if (gameOver) {
+            if ((winInput || looseInput) && Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
+                    || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction")) {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            }
+            return;
+        }
+
         if (!bossLevel)
         {
             if (test || gameOver) return;
             if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
             if (curRound < 0)
             {
-                if (!cameraMotion) {
+                if (!cameraMotion)
+                {
                     time += Time.deltaTime;
-                    if (time > 9.8f) {
+                    if (time > 9.8f || Input.GetButtonDown("Player1_Skip") || Input.GetButtonDown("Player2_Skip")
+                    || Input.GetButtonDown("Player3_Skip") || Input.GetButtonDown("Player4_Skip"))
+                    {
                         cameraAnimator.SetTrigger("over");
                         cameraMotion = true;
                         uiManager.StartTutorial();
                         time = .0f;
                     }
                 }
-                if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
+                else {
+                    if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
                     || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
-                {
-                    if (!cameraMotion)
                     {
-                        cameraAnimator.SetTrigger("over");
-                        //cameraController.gameObject.SetActive(true);
-                        cameraMotion = true;
-                        uiManager.StartTutorial();
-                        time = .0f;
-                    }
-                    else {
-
                         uiManager.NextTutorial();
                         tutorialProgress++;
                         if (tutorialProgress >= 4)
@@ -165,8 +167,8 @@ public class GameManager : MonoBehaviour
                             playerManager.StartPlaying();
                             uiManager.FirstRound();
                         }
-                    }
 
+                    }
                 }
             }
             else
@@ -202,11 +204,11 @@ public class GameManager : MonoBehaviour
             }
         }
         else {
-            if (winInput && (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
-                    || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space) )) {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-            }
-            if (gameOver || bossMonsterNum >= 6) return;
+            //if (winInput && (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
+            //        || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space) )) {
+            //    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            //}
+            if (bossMonsterNum >= 6) return;
             bossTime += Time.deltaTime;
             if (bossTime >= 30.0f) {
                 bossTime = .0f;
@@ -343,7 +345,7 @@ public class GameManager : MonoBehaviour
         }
 
         sceneObjectManager.SetBossBorderOn();
-        playerManager.CheckCrack_Switch();
+        if(!test)playerManager.CheckCrack_Switch();
         uiManager.StartBossRound();
     }
 
@@ -358,12 +360,12 @@ public class GameManager : MonoBehaviour
         gameOver = true;
         goblinManager.GameOver();
         uiManager.GoLose();
-        StartCoroutine(PlayAgain(2.5f));
+        StartCoroutine(PlayAgainLose(2.0f));
     }
-    IEnumerator PlayAgain(float time) {
+    IEnumerator PlayAgainLose(float time) {
         curRound = -1;
         yield return new WaitForSeconds(time);
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        looseInput = true;
     }
     IEnumerator PlayAgainWin(float time)
     {

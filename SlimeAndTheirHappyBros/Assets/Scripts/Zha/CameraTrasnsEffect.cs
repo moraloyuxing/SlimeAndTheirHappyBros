@@ -35,7 +35,7 @@ public class CameraTrasnsEffect : MonoBehaviour
     void Update()
     {
         if (transIn) {
-            maskScale += Time.deltaTime;
+            maskScale += Time.deltaTime*2.0f;
             if (maskScale > 2.5f)
             {
                 transIn = false;

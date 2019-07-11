@@ -628,6 +628,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 {
                     AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
+                    whiteScale = 1.0f;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
                     if (hp > 0)
@@ -661,6 +662,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 {
                     AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
+                    whiteScale = 1.0f;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
                     if (hp > 0)
@@ -694,6 +696,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                 {
                     AudioManager.SingletonInScene.PlayRandomCorrect(0.42f);
                     hp -= atkValue;
+                    whiteScale = 1.0f;
                     targetPlayer = playerID;
                     targetPlayer2 = playerID2;
                     if (hp > 0)
