@@ -105,6 +105,10 @@ public class NPC_Manager : MonoBehaviour{
         }
     }
 
+    public void DoctorDie() {
+        NPCanim[0].SetTrigger("die");
+    }
+
     public void BreakTime_Start() {
         BreakTime = true;
         Trigger_Moment = Time.time;

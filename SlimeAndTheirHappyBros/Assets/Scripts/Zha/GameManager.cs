@@ -147,7 +147,7 @@ public class GameManager : MonoBehaviour
                 {
                     time += Time.deltaTime;
                     if (time > 9.8f || Input.GetButtonDown("Player1_Skip") || Input.GetButtonDown("Player2_Skip")
-                    || Input.GetButtonDown("Player3_Skip") || Input.GetButtonDown("Player4_Skip"))
+                    || Input.GetButtonDown("Player3_Skip") || Input.GetButtonDown("Player4_Skip") || Input.GetKeyDown(KeyCode.Space))
                     {
                         cameraAnimator.SetTrigger("over");
                         cameraMotion = true;
@@ -345,7 +345,8 @@ public class GameManager : MonoBehaviour
         }
 
         sceneObjectManager.SetBossBorderOn();
-        if(!test)playerManager.CheckCrack_Switch();
+        npcManager.Invoke("DoctorDie",10.5f);
+        if (!test)playerManager.CheckCrack_Switch();
         uiManager.StartBossRound();
     }
 
