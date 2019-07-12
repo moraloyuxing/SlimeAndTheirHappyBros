@@ -355,7 +355,7 @@ public class HobGoblin : GoblinBase, IEnemyUnit
                     image.localPosition = new Vector3(scaleX * imgOffset, 0, 0);
                     hurtArea.localPosition = new Vector3(scaleX * hurtAreaOffset, 0, 0);
                     atkCol[2].localPosition = new Vector3(scaleX * atkColOffset[2], atkCol[2].localPosition.y, atkCol[2].localPosition.z);
-                    atkHint[1].localScale = new Vector3(scaleX * 1.54f, atkHint[1].localScale.y, atkHint[1].localScale.z);
+                    atkHint[1].localScale = new Vector3(scaleX * 4f, atkHint[1].localScale.y, atkHint[1].localScale.z);
                     atkHint[1].localPosition = new Vector3(scaleX * hintOffset[1], atkHint[1].localPosition.y, atkHint[1].localPosition.z);
                     launchPos = selfPos + new Vector3(scaleX * shootOffset.x, shootOffset.y, shootOffset.z);
                     shootFace = new Vector3(-scaleX, 0, 0);
