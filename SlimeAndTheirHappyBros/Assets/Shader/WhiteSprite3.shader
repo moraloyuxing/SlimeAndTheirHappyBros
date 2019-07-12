@@ -1,8 +1,8 @@
-﻿Shader "Custom/WhiteSprite"
+﻿Shader "Custom/WhiteSprite3"
 {
 	Properties
 	{
-		
+
 		[PerRendererData] _MainTex("Sprite Texture", 2D) = "white" {}
 		_colorID("Color ID", int) = 0
 		_diffTrans("different gray", Float) = 0
@@ -13,7 +13,7 @@
 		_BlueColor("Blue", Color) = (0,0,1,1)
 		_PurpleColor("Purple", Color) = (1,0,1,1)
 		_GreenColor("Green", Color) = (0,1,0,1)
-		
+
 		[HideInInspector]_WhiteScale("white", Float) = -1
 
 		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
@@ -93,8 +93,8 @@
 
 
 				fixed4 c = SampleSpriteTexture(IN.texcoord)* IN.color;
-			if (abs(c.x - c.y)*255 < _diffTrans && abs(c.z - c.y)*255 < _diffTrans) {
-				if(_colorID == 0)c = c * _WhiteColor;
+			if (abs(c.x - c.y) * 255 < _diffTrans && abs(c.z - c.y) * 255 < _diffTrans) {
+				if (_colorID == 0)c = c * _WhiteColor;
 				else if (_colorID == 1)c = c * _RedColor;
 				else if (_colorID == 2)c = c * _YellowColor;
 				else if (_colorID == 3)c = c * _OrangeColor;

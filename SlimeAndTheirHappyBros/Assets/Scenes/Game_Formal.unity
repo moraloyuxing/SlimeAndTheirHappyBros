@@ -32755,6 +32755,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 30651015374701410, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -22.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 30651015975753869, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -17.43
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1d7bc84968c3f3b4e8d8018ef9b618c1, type: 3}
 --- !u!1 &1228403067
@@ -35740,6 +35750,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   blcakTransShader: {fileID: 4800000, guid: 32ec665abf07d5345a69524dba9584d5, type: 3}
+  mask: {fileID: 2800000, guid: 1aed2bafd038926429e9037a43b064e7, type: 3}
   maskScale: 0
 --- !u!1 &1328360362
 GameObject:

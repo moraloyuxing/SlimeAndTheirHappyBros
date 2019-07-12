@@ -8,6 +8,7 @@ public class CameraTrasnsEffect : MonoBehaviour
 {
     bool transIn = false, transOut = false;
     public Shader blcakTransShader;
+    public Texture2D mask;
     public float maskScale = 2.5f;
 
     Material curMat;
@@ -69,6 +70,7 @@ public class CameraTrasnsEffect : MonoBehaviour
         if (blcakTransShader != null)
         {
             material.SetFloat("_MaskScale", maskScale);
+            material.SetTexture("_MaskTex", mask);
             Graphics.Blit(source, destination, material);
         }
         else {
