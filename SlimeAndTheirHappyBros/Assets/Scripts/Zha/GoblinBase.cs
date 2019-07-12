@@ -74,19 +74,24 @@ public class GoblinBase
         startFindPath = false;
         inStateTime = 0.0f;
         firstInState = true;
-        float opp = Random.Range(.0f, 10.0f);
-        if (opp > 7.0f)
-        {
-            if (curState == GoblinState.idle) curState = GoblinState.ramble;
-            else if (curState == GoblinState.ramble) curState = GoblinState.idle;
-            else curState = GoblinState.idle;
+        if (hp <= 0) curState = GoblinState.die;
+        else {
+            float opp = Random.Range(.0f, 10.0f);
+            if (opp > 7.0f)
+            {
+                if (curState == GoblinState.idle) curState = GoblinState.ramble;
+                else if (curState == GoblinState.ramble) curState = GoblinState.idle;
+                else curState = GoblinState.idle;
+            }
         }
     }
     public virtual void SetState(GoblinState state) {
+
         startFindPath = false;
         inStateTime = 0.0f;
         firstInState = true;
-        curState = state;
+        if (hp <= 0) curState = GoblinState.die;
+       else curState = state;
     }
 
     public virtual void StateMachine()

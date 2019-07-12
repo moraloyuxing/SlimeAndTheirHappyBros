@@ -28,7 +28,7 @@ public class CameraTrasnsEffect : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (blcakTransShader == null) blcakTransShader = Shader.Find("ImageEffect/BlackTrans");
     }
 
     // Update is called once per frame
