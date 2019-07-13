@@ -105,33 +105,33 @@ public class GameManager : MonoBehaviour
             GoBossLevel();
             //goblinManager.SpawnBoss();
         }
-        if (Input.GetKey(KeyCode.Q)) {
-            lightTime += Time.deltaTime;
-            if (!lightChange)
-            {
-                directLight.color = Color.Lerp(shopLight, gameLight, lightTime);
-                if (lightTime >= 1.0f)
-                {
-                    lightChange = true;
-                    lightTime = .0f;
-                    lightChange = true;
-                }
-            }
-            else {
+        //if (Input.GetKey(KeyCode.Q)) {
+        //    lightTime += Time.deltaTime;
+        //    if (!lightChange)
+        //    {
+        //        directLight.color = Color.Lerp(shopLight, gameLight, lightTime);
+        //        if (lightTime >= 1.0f)
+        //        {
+        //            lightChange = true;
+        //            lightTime = .0f;
+        //            lightChange = true;
+        //        }
+        //    }
+        //    else {
 
-                directLight.color = Color.Lerp(gameLight, shopLight, lightTime);
-                if (lightTime >= 1.0f)
-                {
-                    lightChange = false;
-                    lightTime = .0f;
-                    lightChange = false;
-                }
-            }
-        }
+        //        directLight.color = Color.Lerp(gameLight, shopLight, lightTime);
+        //        if (lightTime >= 1.0f)
+        //        {
+        //            lightChange = false;
+        //            lightTime = .0f;
+        //            lightChange = false;
+        //        }
+        //    }
+        //}
 
         if (gameOver) {
             if ((winInput || looseInput) && Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
-                    || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction")) {
+                    || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space)) {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(0);
             }
             return;

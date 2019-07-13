@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GoblinManager : MonoBehaviour
 {
-    bool gameOver = false, bossTime = false;
+    bool gameOver = false, bossTime = false, gamePause = false;
     int index = 0;
     float time;
 
@@ -228,19 +228,20 @@ public class GoblinManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameOver) return;
+        if (Input.GetKeyDown(KeyCode.Q)) gamePause = !gamePause;
+        if (gameOver || gamePause) return;
 
         float dt = Time.deltaTime;
 
         if (Input.GetKeyDown(KeyCode.Z)) {
-            SpawnNormalGoblinBaseColor(0);
+            SpawnNormalGoblinBaseColor(4);
         }
         if (Input.GetKeyDown(KeyCode.X)) {
             //SpawnNormalGoblinRandomPos(-1);
-            SpawnArcherGoblinBaseColor(0);
+            SpawnArcherGoblinBaseColor(4);
         }
         if (Input.GetKeyDown(KeyCode.C)) {
-            SpawnHobGoblinMutiColor(1);
+            SpawnHobGoblinMutiColor(5);
         }
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
@@ -691,7 +692,10 @@ public class GoblinManager : MonoBehaviour
         {
             usedHobGoblins[index].SetGameOver();
         }
-
+        if (bossTime) {
+            kingGoblin.SetGameOver();
+            goblinSpirit.SetGameOver();
+        }
     }
     public void GameOver(bool win)
     {
