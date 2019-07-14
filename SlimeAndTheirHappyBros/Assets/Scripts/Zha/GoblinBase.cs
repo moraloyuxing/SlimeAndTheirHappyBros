@@ -248,11 +248,7 @@ public class GoblinBase
         }
         else {
             transform.position += deltaTime * speed * moveFwdDir;
-            //if (inStateTime > 6.5f) SetState(GoblinState.ramble);
-            if (inStateTime > 6.5f) {
-                CalculatePath();
-                inStateTime = .0f;
-            } 
+            if (inStateTime > 6.5f) SetState(GoblinState.ramble);
         }
     }
 
@@ -319,7 +315,6 @@ public class GoblinBase
         }
         else
         {
-            Debug.Log("close player " + inStateTime);
             inStateTime += deltaTime;
             if (inStateTime > 2.0f) {
                 followingPath = false;
@@ -353,8 +348,8 @@ public class GoblinBase
         //followingPath = false;
 
 
-        if(!closingPlayer)curPathRequest =  PathRequestManager.RequestPath(transform.name, curPathRequest,selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
-        else curPathRequest = PathRequestManager.RequestPath(transform.name, curPathRequest, selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFoundClosePlayer);
+        if(!closingPlayer)curPathRequest =  PathRequestManager.RequestPath( curPathRequest,selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFound);
+        else curPathRequest = PathRequestManager.RequestPath(curPathRequest, selfPos, goblinManager.PlayerPos[targetPlayer], OnPathFoundClosePlayer);
         if (curPathRequest != null)
         {
             goblinManager.CalculatePath = true;
@@ -417,7 +412,6 @@ public class GoblinBase
 
     public virtual void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
     {
-        Debug.Log( transform.name  + "     Find");
         curPathRequest = null;
         if (pathSuccessful)
         {
@@ -435,14 +429,14 @@ public class GoblinBase
         }
         else
         {
-            Debug.Log("Can't Find");
+            //Debug.Log("Can't Find");
             SetState(GoblinState.erroeCatch);
         }
     }
 
     public virtual void OnPathFoundClosePlayer(Vector3[] waypoints, bool pathSuccessful)
     {
-        Debug.Log(transform.name + "     Find");
+        //Debug.Log(transform.name + "     Find");
         curPathRequest = null;
         if (pathSuccessful)
         {
@@ -541,7 +535,6 @@ public class GoblinBase
         }
         else
         {
-            Debug.DrawRay(selfPos, hurtDir, Color.red, 2.0f);
             if (!Physics.Raycast(selfPos, hurtDir, 2.0f, 1 << LayerMask.NameToLayer("Barrier")))
             {
                 transform.position += (backSpeed) * deltaTime * hurtDir;
@@ -556,7 +549,6 @@ public class GoblinBase
                 
                 SetState(GoblinState.attackBreak); //OverAttackDetectDist();
                 backSpeed = 10.0f;
-                Debug.Log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + targetPlayer);
             }
         }
     }

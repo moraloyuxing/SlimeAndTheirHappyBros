@@ -80,9 +80,9 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void Update(float dt) {
-        if (Input.GetKeyDown(KeyCode.J) && curState == KingState.idle) SetState(KingState.waveAtk);
-        if (Input.GetKeyDown(KeyCode.K) && curState == KingState.idle) SetState(KingState.punchAtk);
-        if (Input.GetKeyDown(KeyCode.L) && curState == KingState.idle) SetState(KingState.throwAtk);
+        //if (Input.GetKeyDown(KeyCode.J) && curState == KingState.idle) SetState(KingState.waveAtk);
+        //if (Input.GetKeyDown(KeyCode.K) && curState == KingState.idle) SetState(KingState.punchAtk);
+        //if (Input.GetKeyDown(KeyCode.L) && curState == KingState.idle) SetState(KingState.throwAtk);
         switch (curState) {
             case KingState.showUp:
                 ShowUp();
@@ -158,13 +158,11 @@ public class KingGoblin : IEnemyUnit
             {
                 animator.SetInteger("state", 1);
                 idleTime = Random.Range(3.0f, 6.0f);
-                Debug.Log("first idle  " + idleTime);
             }
             else {
                 animator.SetInteger("state", 5);
                 goRoar = false;
                 SetState(KingState.roar);
-                Debug.Log("go roar");
             }
             animator.SetTrigger("attackOver");
 
@@ -174,7 +172,6 @@ public class KingGoblin : IEnemyUnit
                 animator.SetInteger("state", 5);
                 goRoar = false;
                 SetState(KingState.roar);
-                Debug.Log("go roar");
                 return;
             }
             stateTime += dt;
@@ -186,7 +183,6 @@ public class KingGoblin : IEnemyUnit
                 if (op < 40) SetState(KingState.punchAtk);
                 else if (op < 80) SetState(KingState.waveAtk);
                 else SetState(KingState.throwAtk);
-                Debug.Log("idle end: " + op);
             }
         }
     }
@@ -280,16 +276,8 @@ public class KingGoblin : IEnemyUnit
             if (aniInfo.IsName("throwAtk") && aniInfo.normalizedTime >= (0.79f + atkCount)) {
 
                 throwId = Random.Range(0, 99) % 4;
-                int loopCount = 0;
                 while (goblinManager.PlayersDie[throwId])
                 {
-                    loopCount++;
-                    if (loopCount > 10000)
-                    {
-                        Debug.Break();
-                        Debug.Log("boss 丟小哥布林  " + loopCount);
-                        return;
-                    }
                     throwId++;
                     deathCount++;
                     if (throwId > 3) throwId = 0;
@@ -300,7 +288,6 @@ public class KingGoblin : IEnemyUnit
                 AudioManager.SingletonInScene.PlaySound2D("KingThrow", 0.6f);
 
                 atkCount++;
-                Debug.Log(atkCount + " < " + totalAtk);
                 if (atkCount >= totalAtk) {
                     atkCount = 0;
                     SetState(KingState.idle);
@@ -331,7 +318,6 @@ public class KingGoblin : IEnemyUnit
     void Roar() {
         if (!firstInState)
         {
-            Debug.Log("first roar");
             firstInState = true;
             //animator.SetInteger("state", 5);
             changeColor();
@@ -350,7 +336,6 @@ public class KingGoblin : IEnemyUnit
         {
             if (color == 1 && (c == 1 || c == 3 || c == 5)) {
                 hp -= value;
-                Debug.Log("king hp " + hp);
                 if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
                 else
                 {
@@ -362,7 +347,6 @@ public class KingGoblin : IEnemyUnit
             else if (color == 2 && (c == 2 || c == 3 || c == 6))
             {
                 hp -= value;
-                Debug.Log("king hp " + hp);
                 if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
                 else
                 {
@@ -374,7 +358,6 @@ public class KingGoblin : IEnemyUnit
             else if (color == 4 && (c == 4 || c == 5 || c == 6))
             {
                 hp -= value;
-                Debug.Log("king hp " + hp);
                 if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
                 else
                 {
@@ -388,7 +371,6 @@ public class KingGoblin : IEnemyUnit
             if (color == c)
             {
                 hp -= value;
-                Debug.Log("king hp " + hp);
                 if (hp > 0) DecreaseHP(((float)hp) / ((float)totalHp));
                 else
                 {

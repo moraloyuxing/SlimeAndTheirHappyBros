@@ -37,7 +37,7 @@ public class GoblinArrow : IEnemyObjectPoolUnit
         //transform.localRotation = Quaternion.Euler(25, 0, degree);
 
         degree = (Mathf.Atan2(moveDir.z, moveDir.x)) * Mathf.Rad2Deg + 90.0f;
-        Debug.Log("x: " + moveDir.x + "  z: " + moveDir.z + "  degree: " + degree);
+        //Debug.Log("x: " + moveDir.x + "  z: " + moveDir.z + "  degree: " + degree);
         float down = Mathf.Asin(moveDir.y) * Mathf.Rad2Deg;
         transform.localRotation = Quaternion.Euler(down-8.0f, -degree, 0);
         //transform.localRotation *= Quaternion.Euler(down, 1 ,1);

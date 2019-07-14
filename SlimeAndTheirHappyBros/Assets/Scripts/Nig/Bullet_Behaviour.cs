@@ -88,7 +88,7 @@ public class Bullet_Behaviour : MonoBehaviour{
         _myTransform.localScale = new Vector3(scaleOffset, scaleOffset, scaleOffset);
         PenetrateMaxCount = xMSlime.Base_Penetrate;
         BulletATK = xMSlime.Base_ATK;
-        Debug.Log(transform.eulerAngles.z);
+        //Debug.Log(transform.eulerAngles.z);
         ShadowPivot.transform.localEulerAngles = new Vector3(0, 0, transform.eulerAngles.z * -1.0f);
     }
 
@@ -116,15 +116,7 @@ public class Bullet_Behaviour : MonoBehaviour{
             1 << LayerMask.NameToLayer("GoblinHurtArea") | 1<< LayerMask.NameToLayer("Barrier") | 1 << LayerMask.NameToLayer("PlayerReviveArea") |  1 << LayerMask.NameToLayer("Border") );
         if (colliders == null) return;
         int i = 0;
-        int loopCount = 0;
         while (NowPenetrate < PenetrateMaxCount && i < colliders.Length ){
-            loopCount++;
-            if (loopCount > 10000)
-            {
-                Debug.Break();
-                Debug.Log("子彈碰撞偵測  " + loopCount);
-                return;
-            }
             Transform c = colliders[i].transform.parent;
 
             if (!colliderRecord.Contains(colliders[i])) {
@@ -136,7 +128,7 @@ public class Bullet_Behaviour : MonoBehaviour{
                     else bulletPool._goblinmanager.FindGoblin(c.name).OnGettingHurt(color, BulletATK, WhichPlayer.PlayerID, Attack_Dir);
                 }
                 else if (c.tag == "KingGoblin") {
-                    Debug.Log("hit boss");
+                    //Debug.Log("hit boss");
                     //NowPenetrate++;
                     NowPenetrate = PenetrateMaxCount;//抵達障礙物直接給最大值，取消繼續穿透
                     bulletPool._goblinmanager.HitKingGoblin(color, BulletATK);

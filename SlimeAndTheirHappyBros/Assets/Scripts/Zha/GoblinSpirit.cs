@@ -179,7 +179,7 @@ public class GoblinSpirit:IEnemyUnit
             {
                 if (changeColorTime < 10.0f)
                 {
-                    Debug.Log("change color time  " + changeColorTime);
+                    //Debug.Log("change color time  " + changeColorTime);
                     int op = Random.Range(0, 100);
                     if (op < 10) SetState(SpiritState.idle);
                     else if (op < 40) IdleSetIdle();
@@ -317,15 +317,7 @@ public class GoblinSpirit:IEnemyUnit
             firstInState = true;
             animator.SetInteger("state", 1);
             int t = Random.Range(0, 3);
-            int loopCount = 0;
             while (goblinManager.PlayersDie[t]) {
-                loopCount++;
-                if (loopCount > 10000)
-                {
-                    Debug.Break();
-                    Debug.Log("祖靈 X攻擊    " + loopCount);
-                    return;
-                }
                 t++;
                 deathCount++;
                 if (t > 3) t = 0;

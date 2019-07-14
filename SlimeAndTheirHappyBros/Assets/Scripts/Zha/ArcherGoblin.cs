@@ -73,7 +73,7 @@ public class ArcherGoblin : GoblinBase, IEnemyUnit
     // Update is called once per frame
     public void Update(float dt)
     {
-        if (Input.GetKeyDown(KeyCode.S)) ResetUnit();
+        //if (Input.GetKeyDown(KeyCode.S)) ResetUnit();
 
         deltaTime = Time.deltaTime;
         selfPos = transform.position;

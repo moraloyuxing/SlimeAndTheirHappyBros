@@ -6,7 +6,7 @@ public class GameManager : MonoBehaviour
 {
     bool cameraMotion = false;
     bool roundStart = false, inShopping = false, bossLevel = false, winInput = false, looseInput = false;
-    bool gameOver = false, lightChange = true;
+    bool gameOver = false, lightChange = true, gamePause = false;
     int tutorialProgress = 0, goblinKills = 0, maxLevel = 10;
     int  bossMonsterNum = 0;
     float time = .0f, lightTime = .0f, bossTime = 10.0f;
@@ -97,14 +97,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.F)) {
-            curRound = -1;
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-        }
-        if (Input.GetKeyDown(KeyCode.H)) {
-            GoBossLevel();
-            //goblinManager.SpawnBoss();
-        }
+        //if (Input.GetKeyDown(KeyCode.F)) {
+        //    curRound = -1;
+        //    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        //}
+        //if (Input.GetKeyDown(KeyCode.H))
+        //{
+        //    GoBossLevel();
+        //    //goblinManager.SpawnBoss();
+        //}
         //if (Input.GetKey(KeyCode.Q)) {
         //    lightTime += Time.deltaTime;
         //    if (!lightChange)
@@ -128,8 +129,8 @@ public class GameManager : MonoBehaviour
         //        }
         //    }
         //}
-
-        if (gameOver) {
+        if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
+        if (gameOver && !gamePause) {
             if ((winInput || looseInput) && Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
                     || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space)) {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(0);
@@ -139,8 +140,8 @@ public class GameManager : MonoBehaviour
 
         if (!bossLevel)
         {
-            if (test || gameOver) return;
-            if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
+            if (test || gameOver || gamePause) return;
+            //if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
             if (curRound < 0)
             {
                 if (!cameraMotion)
@@ -208,52 +209,30 @@ public class GameManager : MonoBehaviour
             //        || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space) )) {
             //    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
             //}
-            if (bossMonsterNum >= 6) return;
+
+            if (bossMonsterNum >= 6 || test || gameOver || gamePause) return;
             bossTime += Time.deltaTime;
             if (bossTime >= 30.0f) {
                 bossTime = .0f;
                 int op = Random.Range(1,3);
-                int loopCount = 0;
+
                 while (op > 0) {
-                    loopCount++;
-                    if(loopCount > 10000)
-                    {
-                        Debug.Break();
-                        Debug.Log("boss 生 普通哥布林 " + loopCount);
-                        return;
-                    }
                     goblinManager.BossSpawnNormalGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;
                     if (bossMonsterNum >= 6) return;
                 }
                 op = Random.Range(1, 3);
-                loopCount = 0;
                 while (op > 0)
                 {
-                    loopCount++;
-                    if (loopCount > 10000)
-                    {
-                        Debug.Break();
-                        Debug.Log("boss 生 弓手哥布林 " + loopCount);
-                        return;
-                    }
                     goblinManager.BossSpawnArcherGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;
                     if (bossMonsterNum >= 6) return;
                 }
                 op = Random.Range(0, 1);
-                loopCount = 0;
                 while (op > 0)
                 {
-                    loopCount++;
-                    if (loopCount > 10000)
-                    {
-                        Debug.Break();
-                        Debug.Log("boss 生 霍布哥布林  " + loopCount);
-                        return;
-                    }
                     goblinManager.BossSpawnHobGoblinMutiColor(0);
                     op--;
                     bossMonsterNum++;

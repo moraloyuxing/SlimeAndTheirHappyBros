@@ -817,8 +817,6 @@ public class Player_Control : MonoBehaviour{
             loopCount++;
             if (loopCount > 10000)
             {
-                Debug.Break();
-                Debug.Log("死亡噴裝    " + loopCount);
                 return;
             }
             CanDrop = true;
@@ -832,7 +830,6 @@ public class Player_Control : MonoBehaviour{
 
         //有東西才掉落
         if (_IteminHand.Count > 0 &&DropChance <10) {
-            Debug.Log("Enter");
             HaveItemtoDrop = true;
             Random_Drop = Random.Range(0, _IteminHand.Count);
             Current_BlewOut = Instantiate(Item_BlewOut) as GameObject;
@@ -897,15 +894,7 @@ public class Player_Control : MonoBehaviour{
         Collider[] colliders = Physics.OverlapBox(Expect.transform.position, new Vector3(2.0f, 2.0f, 2.0f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("Barrier") | 1 << LayerMask.NameToLayer("Border"));
         if (colliders == null) return;
         int i = 0;
-        int loopCount = 0;
         while (i < colliders.Length) {
-            loopCount++;
-            if (loopCount > 10000)
-            {
-                Debug.Break();
-                Debug.Log("噴裝偵測   " + loopCount);
-                return;
-            }
             Transform c = colliders[i].transform.parent;
             if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") {
                 CanDrop = false;
@@ -943,7 +932,6 @@ public class Player_Control : MonoBehaviour{
                 PickType = 2;
                 Heart_anim = Personal_HP[Base_HP-1].GetComponent<Animator>();
                 Heart_anim.Play("Heart_Gain");
-                Debug.Log(Base_HP);
                 break;
             case "light":
                 BulletSpeed_Superimposed++;

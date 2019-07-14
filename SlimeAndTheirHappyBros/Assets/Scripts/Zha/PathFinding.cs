@@ -23,7 +23,7 @@ public class PathFinding : MonoBehaviour {
 
     IEnumerator FindPath(Vector3 startPos, Vector3 targetPos)
     {
-        Debug.Log("coroutine  findpath");
+        //Debug.Log("coroutine  findpath");
         Vector3[] waypoints = new Vector3[0];
         bool pathSuccess = false;
 
@@ -57,7 +57,7 @@ public class PathFinding : MonoBehaviour {
                 loopCount++;
                 if (loopCount > 10000)
                 {
-                    Debug.Break();
+                    //Debug.Break();
                     Debug.Log("find path   " + loopCount);
                     break;
                 }
@@ -111,7 +111,7 @@ public class PathFinding : MonoBehaviour {
             requestManager.FinishedProcessingPath(waypoints, pathSuccess);
         }
         else {
-            Debug.Log("find path fail");
+            //Debug.Log("find path fail");
             //Vector3[] temp = new Vector3[1];
             requestManager.FinishedProcessingPath(null, pathSuccess);
         }
@@ -136,7 +136,7 @@ public class PathFinding : MonoBehaviour {
                 loopCount++;
                 if (loopCount > 10000)
                 {
-                    Debug.Break();
+                    //Debug.Break();
                     Debug.Log("pathfinding retracing  " + loopCount);
                     break;
                 }

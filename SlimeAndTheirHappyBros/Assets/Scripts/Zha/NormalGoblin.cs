@@ -77,7 +77,7 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     // Update is called once per frame
     public void Update(float dt)
     {
-        if (Input.GetKeyDown(KeyCode.S)) ResetUnit();
+        //if (Input.GetKeyDown(KeyCode.S)) ResetUnit();
 
         deltaTime = dt;
         selfPos = transform.position;

@@ -228,21 +228,21 @@ public class GoblinManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) gamePause = !gamePause;
+        //if (Input.GetKeyDown(KeyCode.Q)) gamePause = !gamePause;
         if (gameOver || gamePause) return;
 
         float dt = Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Z)) {
-            SpawnNormalGoblinBaseColor(4);
-        }
-        if (Input.GetKeyDown(KeyCode.X)) {
-            //SpawnNormalGoblinRandomPos(-1);
-            SpawnArcherGoblinBaseColor(4);
-        }
-        if (Input.GetKeyDown(KeyCode.C)) {
-            SpawnHobGoblinMutiColor(5);
-        }
+        //if (Input.GetKeyDown(KeyCode.Z)) {
+        //    SpawnNormalGoblinBaseColor(4);
+        //}
+        //if (Input.GetKeyDown(KeyCode.X)) {
+        //    //SpawnNormalGoblinRandomPos(-1);
+        //    SpawnArcherGoblinBaseColor(4);
+        //}
+        //if (Input.GetKeyDown(KeyCode.C)) {
+        //    SpawnHobGoblinMutiColor(5);
+        //}
 
         for (index = 0; index < usedNormalGoblins.Count; index++) {
             usedNormalGoblins[index].Update(dt);
@@ -547,16 +547,8 @@ public class GoblinManager : MonoBehaviour
     IEnumerator DropMoney(int num, Vector3 pos, int target) {
         Four_Player[target].MoneyUI_GoBigger();
         int i = 0;
-        int loopCount = 0;
         while (i < num)
         {
-            loopCount++;
-            if (loopCount > 10000)
-            {
-                Debug.Break();
-                Debug.Log("掉錢   " + loopCount);
-                break;
-            }
             if (freeMoneys.Count <= 0) break;
             Money money = freeMoneys[0];
             usedMoneys.Add(money);
@@ -570,16 +562,8 @@ public class GoblinManager : MonoBehaviour
     {
         Four_Player[target].MoneyUI_GoBigger();
         int i = 0;
-        int loopCount = 0;
         while (i < num)
         {
-            loopCount++;
-            if (loopCount > 10000)
-            {
-                Debug.Break();
-                Debug.Log("掉錢2  " + loopCount);
-                break;
-            }
             if (freeMoneys.Count <= 0) break;
             Money money = freeMoneys[0];
             usedMoneys.Add(money);

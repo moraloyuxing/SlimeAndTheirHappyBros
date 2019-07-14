@@ -34,19 +34,11 @@ public class GameState
     public void Update(float dt)
     {
         if (spawnOver) return;
-        if (Input.GetKeyDown(KeyCode.A)) time = 60000.0f;
+        //if (Input.GetKeyDown(KeyCode.A)) time = 60000.0f;
         time += dt;
         if (time > stateInfo.waves[currentWave].spawnTime) {
             int i = 0;
-            int loopCount = 0;
             while (i < totalGoblinPerWave[currentWave]) {
-                loopCount++;
-                if (loopCount > 10000)
-                {
-                    Debug.Break();
-                    Debug.Log("game state update   " + loopCount);
-                    return;
-                }
                 if (!stateInfo.waves[currentWave].mutiColor) {
                     if (i < stateInfo.waves[currentWave].normalGoblin) goblinManager.SpawnNormalGoblinBaseColor(0);
                     if (i < stateInfo.waves[currentWave].archerGoblin) goblinManager.SpawnArcherGoblinBaseColor(0);

@@ -31,12 +31,12 @@ public class ColorTest : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space)) {
-            Debug.Log("aa Equals bb  " + aa.Equals(bb));
-            Debug.Log("aa Equals cc  " + aa.Equals(cc));
-            Debug.Log("aa Equals dd  " + aa.Equals(dd));
-            Debug.Log("aa Equals dd  " + System.Object.ReferenceEquals(aa, dd));
-        }
+        //if (Input.GetKeyDown(KeyCode.Space)) {
+        //    Debug.Log("aa Equals bb  " + aa.Equals(bb));
+        //    Debug.Log("aa Equals cc  " + aa.Equals(cc));
+        //    Debug.Log("aa Equals dd  " + aa.Equals(dd));
+        //    Debug.Log("aa Equals dd  " + System.Object.ReferenceEquals(aa, dd));
+        //}
     }
 
 }

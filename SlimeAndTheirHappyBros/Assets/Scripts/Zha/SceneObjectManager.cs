@@ -61,6 +61,7 @@ public class SceneObjectManager : MonoBehaviour
         aniTime[0] += dt;
         if (aniTime[0] > 0.06f) {
             if (aniID[0] >= 33) {
+                shopSmogRender.enabled = false;
                 shopBreakdown = false;
                 return;
             }
@@ -81,6 +82,7 @@ public class SceneObjectManager : MonoBehaviour
         {
             if (aniID[1] >= 33)
             {
+                bushSmogRender.enabled = false;
                 bushBreakdown = false;
                 return;
             }

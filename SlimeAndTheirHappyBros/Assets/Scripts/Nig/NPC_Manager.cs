@@ -41,7 +41,7 @@ public class NPC_Manager : MonoBehaviour{
     }
 
     void Update(){
-        if (Input.GetKeyDown(KeyCode.B)) BreakTime_End();
+        //if (Input.GetKeyDown(KeyCode.B)) BreakTime_End();
 
         if (BreakTime) {
             //巫醫部分

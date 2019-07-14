@@ -430,7 +430,7 @@ public class Merge_Control : MonoBehaviour{
         int loopCount = 0;
         while (ChooseSpiltPos == false) {
             loopCount++;
-            Debug.Log("line428的loop次數 = " + loopCount);
+            //Debug.Log("line428的loop次數 = " + loopCount);
             if (loopCount > 10){
                 for (int i = 0; i < 2; i++) {
                     if (CanSpilt[i] == false) {
@@ -440,7 +440,7 @@ public class Merge_Control : MonoBehaviour{
                         AlreadySelectPos[i] = true;
                     }
                 }
-                Debug.Log("超過10次，強行給定合體史萊姆座標");
+                //Debug.Log("超過10次，強行給定合體史萊姆座標");
                 //Debug.Break();
                 //Debug.Log("merge cotrol split oring   " + loopCount);
                 //return;
@@ -495,17 +495,17 @@ public class Merge_Control : MonoBehaviour{
         int loopCount = 0;
         while (i < colliders.Length) {
             loopCount++;
-            Debug.Log("line492的loop次數 = " + loopCount);
+            //Debug.Log("line492的loop次數 = " + loopCount);
             if (loopCount > 100) {
                 //Debug.Break();
-                Debug.Log("merge cotrol split pos detect    " + loopCount);
+                //Debug.Log("merge cotrol split pos detect    " + loopCount);
                 return;
             } 
             Transform c = colliders[i].transform.parent;
             if (colliders[i].tag == "Barrier" || c.tag == "Barrier" || colliders[i].tag == "Border" || c.tag == "Border") {
                 CanSpilt[PID] = false;
                 ChooseSpiltPos = false;
-                Debug.Log(PID + " : Choose_Fail");
+                //Debug.Log(PID + " : Choose_Fail");
             }
         }
     }
@@ -595,14 +595,7 @@ public class Merge_Control : MonoBehaviour{
         Collider[] colliders = Physics.OverlapBox(Merge_Sprite.transform.position, new Vector3(2.3f, 1.7f, 0.1f), Quaternion.Euler(25, 0, 0), 1 << LayerMask.NameToLayer("DamageToPlayer"));
         if (colliders == null) return;
         int i = 0;
-        int loopCount = 0;
         while (i < colliders.Length){
-            loopCount++;
-            if (loopCount > 1000){
-                Debug.Break();
-                Debug.Log("merge get hurt   " + loopCount);
-                return;
-            }
             if (i == 0){
                 GetComponent<Animator>().Play("Slime_Hurt");
                 ExtraPriority = true;

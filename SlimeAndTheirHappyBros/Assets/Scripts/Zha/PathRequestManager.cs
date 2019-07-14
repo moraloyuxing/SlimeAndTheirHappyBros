@@ -27,10 +27,10 @@ public class PathRequestManager : MonoBehaviour {
         //instance.pathRequestQueue.Enqueue(newRequest);
         instance.pathRequestList.Add(newRequest);
         instance.TryProcessNext();
-        Debug.Log("add new finding path request   " + instance.pathRequestList.IndexOf(newRequest));
+        //Debug.Log("add new finding path request   " + instance.pathRequestList.IndexOf(newRequest));
         return newRequest;
     }
-    public static PathRequest RequestPath(string name,PathRequest oldRequest,  Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> _successCbk)
+    public static PathRequest RequestPath(PathRequest oldRequest,  Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> _successCbk)
     {
         PathRequest newRequest = new PathRequest(pathStart, pathEnd, _successCbk);
 
@@ -40,13 +40,11 @@ public class PathRequestManager : MonoBehaviour {
 
         if (oldRequest != null && instance.pathRequestList.Contains(oldRequest))
         {
-            Debug.Log(name + " reeeeeplace request   " + instance.pathRequestList.IndexOf(oldRequest));
             instance.pathRequestList[instance.pathRequestList.IndexOf(oldRequest)] = newRequest;
         }
         else {
             instance.pathRequestList.Add(newRequest);
         }
-        Debug.Log(name + " addddddddddd new finding path request   " + instance.pathRequestList.IndexOf(newRequest));
         instance.TryProcessNext();
 
         return newRequest;
@@ -81,19 +79,19 @@ public class PathRequestManager : MonoBehaviour {
     {
         instance.pathRequestList[instance.pathRequestList.IndexOf(request)] = null;
 
-        Debug.Log(name + " cancle finding path request   " + instance.pathRequestList.IndexOf(request));
+        //Debug.Log(name + " cancle finding path request   " + instance.pathRequestList.IndexOf(request));
         if (instance.pathRequestList.Contains(request)) instance.pathRequestList.Remove(request);
     }
     public static void CancleRequest(PathRequest request)
     {
-        Debug.Log("  cancle finding path request   " +  instance.pathRequestList.IndexOf(request));
+        //Debug.Log("  cancle finding path request   " +  instance.pathRequestList.IndexOf(request));
         if (instance.pathRequestList.Contains(request))instance.pathRequestList.Remove(request);
     }
 
 
     public void FinishedProcessingPath(Vector3[] path, bool success)
     {
-        Debug.Log("finisg find path");
+        //Debug.Log("finisg find path");
         currentPathRequest.callback(path, success);
         isProcessingPath = false;
         TryProcessNext();
