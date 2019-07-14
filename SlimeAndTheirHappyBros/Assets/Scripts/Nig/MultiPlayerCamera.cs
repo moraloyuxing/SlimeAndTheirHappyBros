@@ -49,7 +49,7 @@ public class MultiPlayerCamera : MonoBehaviour{
     void Start(){
         cam = GetComponent<Camera>();
         FirstAlivePlayer = AllPlayers[0];
-        cameraShakingSingleton.Init(transform);
+        CamerashakingSingleton.Init(transform);
     }
 
     void LateUpdate(){
@@ -59,7 +59,7 @@ public class MultiPlayerCamera : MonoBehaviour{
         {
             Move();
             Zoom();
-            cameraShakingSingleton.Update(Time.deltaTime, NewPosition);
+            CamerashakingSingleton.Update(Time.deltaTime, NewPosition);
         }
         else {
 
@@ -74,7 +74,7 @@ public class MultiPlayerCamera : MonoBehaviour{
                 if (bossMoveTime <= 1.5f)
                 {
                     if (!bossShake) {
-                        cameraShakingSingleton.StartShakeEasyOut(1.0f,2.2f,1.5f);
+                        CamerashakingSingleton.StartShakeEasyOut(1.0f,2.2f,1.5f);
                         bossShake = true;
                     } 
                 }
@@ -85,7 +85,7 @@ public class MultiPlayerCamera : MonoBehaviour{
                         _playermanager.Invoke("CheckCrack_Switch",2.5f);
                     }
                 }
-                cameraShakingSingleton.Update(Time.deltaTime, bossView);
+                CamerashakingSingleton.Update(Time.deltaTime, bossView);
             }
         }
 
@@ -183,5 +183,10 @@ public class MultiPlayerCamera : MonoBehaviour{
     public void FinishTouring() {
         _playermanager.StartPlaying();
     }
+
+
+    public static void ClearCameraShakeSingleton() {
+        cameraShakingSingleton = null;
+    } 
 
 }

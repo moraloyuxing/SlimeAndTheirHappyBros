@@ -127,7 +127,12 @@ public class GameManager : MonoBehaviour
         //}
 
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
-        else if(Input.GetKeyDown(KeyCode.Q)) UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        else if (Input.GetKeyDown(KeyCode.Q)) {
+            isBreakTime = false;
+            curRound = -1;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            MultiPlayerCamera.ClearCameraShakeSingleton();
+        } 
 
         if (gameOver && !gamePause) {
             if ((winInput || looseInput) && Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
