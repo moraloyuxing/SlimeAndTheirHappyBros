@@ -637,7 +637,21 @@ public class GoblinManager : MonoBehaviour
             freeHobGoblins[i].GrowMaxHp();
         }
     }
-
+    public void KillAllGoblin()
+    {
+        for (int i = 0; i < usedNormalGoblins.Count;)
+        {
+            usedNormalGoblins[i].ResetUnit();
+        }
+        for (int i = 0; i < usedArcherGoblins.Count;)
+        {
+            usedArcherGoblins[i].ResetUnit();
+        }
+        for (int i = 0; i < usedHobGoblins.Count;)
+        {
+            usedHobGoblins[i].ResetUnit();
+        }
+    }
     public void DisableBushCollider() {
         pathGrid.DisableCollider();
     }

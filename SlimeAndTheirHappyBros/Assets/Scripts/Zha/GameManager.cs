@@ -101,11 +101,7 @@ public class GameManager : MonoBehaviour
         //    curRound = -1;
         //    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         //}
-        //if (Input.GetKeyDown(KeyCode.H))
-        //{
-        //    GoBossLevel();
-        //    //goblinManager.SpawnBoss();
-        //}
+
         //if (Input.GetKey(KeyCode.Q)) {
         //    lightTime += Time.deltaTime;
         //    if (!lightChange)
@@ -129,7 +125,10 @@ public class GameManager : MonoBehaviour
         //        }
         //    }
         //}
+
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
+        else if(Input.GetKeyDown(KeyCode.Q)) UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+
         if (gameOver && !gamePause) {
             if ((winInput || looseInput) && Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
                     || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space)) {
@@ -141,7 +140,6 @@ public class GameManager : MonoBehaviour
         if (!bossLevel)
         {
             if (test || gameOver || gamePause) return;
-            //if (Input.GetKeyDown(KeyCode.D)) GoNextRound();
             if (curRound < 0)
             {
                 if (!cameraMotion)
@@ -186,6 +184,13 @@ public class GameManager : MonoBehaviour
                             lightChange = true;
                         }
                     }
+
+                    if (Input.GetKeyDown(KeyCode.R)) GoNextRound();
+                    if (Input.GetKeyDown(KeyCode.T))
+                    {
+                        GoBossLevel();
+                        //goblinManager.SpawnBoss();
+                    }
                 }
                 else
                 {
@@ -200,6 +205,10 @@ public class GameManager : MonoBehaviour
                         }
                     }
                     if (roundStart) gameStates[curRound].Update(Time.deltaTime);
+                    if (Input.GetKeyDown(KeyCode.E)) {
+                        RoundOver();
+                        goblinManager.KillAllGoblin();
+                    }
                 }
 
             }

@@ -99,7 +99,7 @@ public class NPC_Manager : MonoBehaviour{
             if (GoBossStage) {
                 bossLevelCBK();
                 Shop.State_Switch();
-                BreakTime_End();
+                //BreakTime_End();
             }
 
         }

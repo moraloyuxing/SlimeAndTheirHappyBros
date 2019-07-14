@@ -123,6 +123,7 @@ public class Item_Manager : MonoBehaviour {
             npcManager.BreakTime_Start();
         }
         else {
+            npcManager.BreakTime_End();
             for (int i = 0; i < 6; i++) Item_InBox[i].enabled = false;
             //npcManager.BreakTime_End();
         }

@@ -34,7 +34,7 @@ public class JoinGame : MonoBehaviour{
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
         for (int i = 0; i < 4; i++) {
             Four_Player[i].transform.LookAt(Four_Player[i].position + m_camera.transform.rotation * Vector3.forward, m_camera.transform.rotation * Vector3.up);
-            a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");//|| Input.GetKeyDown(KeyCode.J)
+            a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction") || Input.GetKeyDown(KeyCode.W);//|| Input.GetKeyDown(KeyCode.J)
 
             if (a_button[i] && Already_Player[i] == false) {
                 Already_Player[i] = true;
