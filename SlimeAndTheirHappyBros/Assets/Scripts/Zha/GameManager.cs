@@ -344,6 +344,7 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoWin() {
+        MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 1f, 1.0f);
         gameOver = true;
         goblinManager.GameOver(true);
         uiManager.GoWin();

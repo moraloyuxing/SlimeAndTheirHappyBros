@@ -50,6 +50,7 @@ public class Bullet_Manager : MonoBehaviour{
             reuse.SetActive(true);
             Player_Control Current_Player = Four_Player[xSlime];
             Player_Control Current_Player2 = Four_Player[xSlime2];
+            reuse.transform.GetChild(0).GetComponent<SpriteRenderer>().sprite = BulletType[0];
             reuse.GetComponent<Bullet_Behaviour>().SetAttackDir(current_angle, Current_Player,Current_Player2, Shader_Number,xMSlime);
             //Debug.Log("line 54");
         }

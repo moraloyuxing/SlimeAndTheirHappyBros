@@ -7,7 +7,7 @@ public class KingGoblin : IEnemyUnit
     bool showEnable = false, crackOnce = false;
     bool firstInState = false, waveOnce = false, punchShopOnce = false, punchBushOnce = false;
     bool throwOnce = false, goRoar = false;
-    int totalHp = 1200, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
+    int totalHp = 50, hp, punchStep = -1, throwId = 0, deathCount = 0, color = 0;
     int atkCount = 0, totalAtk = 1;
     float stateTime = .0f, idleTime = 2.0f;
 
@@ -80,9 +80,9 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void Update(float dt) {
-        //if (Input.GetKeyDown(KeyCode.J) && curState == KingState.idle) SetState(KingState.waveAtk);
-        //if (Input.GetKeyDown(KeyCode.K) && curState == KingState.idle) SetState(KingState.punchAtk);
-        //if (Input.GetKeyDown(KeyCode.L) && curState == KingState.idle) SetState(KingState.throwAtk);
+        if (Input.GetKeyDown(KeyCode.J) && curState == KingState.idle) SetState(KingState.waveAtk);
+        if (Input.GetKeyDown(KeyCode.K) && curState == KingState.idle) SetState(KingState.punchAtk);
+        if (Input.GetKeyDown(KeyCode.L) && curState == KingState.idle) SetState(KingState.throwAtk);
         switch (curState) {
             case KingState.showUp:
                 ShowUp();
@@ -341,7 +341,6 @@ public class KingGoblin : IEnemyUnit
                 {
                     DecreaseHP(0);
                     GameWin();
-                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
                 }
             }
             else if (color == 2 && (c == 2 || c == 3 || c == 6))
@@ -352,7 +351,6 @@ public class KingGoblin : IEnemyUnit
                 {
                     DecreaseHP(0);
                     GameWin();
-                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
                 }
             }
             else if (color == 4 && (c == 4 || c == 5 || c == 6))
@@ -363,7 +361,6 @@ public class KingGoblin : IEnemyUnit
                 {
                     DecreaseHP(0);
                     GameWin();
-                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
                 }
             }
         }
@@ -376,7 +373,6 @@ public class KingGoblin : IEnemyUnit
                 {
                     DecreaseHP(0);
                     GameWin();
-                    MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 0.7f, 1.0f);
                 }
 
             }

@@ -31,7 +31,7 @@ public class NPC_Manager : MonoBehaviour{
     public Sprite[] WaitBossState = new Sprite[4];
     public Sprite[] ReadyBossState = new Sprite[4];
     public SpriteRenderer[] PIDReadyIcon = new SpriteRenderer[4];
-    bool GoBossStage = false;
+    bool GoBossStage = false, inBossLevel = false;
     bool[] PIDReady = new bool[4] { false, false, false, false };
     public bool Angel_Ready = false;
 
@@ -98,7 +98,8 @@ public class NPC_Manager : MonoBehaviour{
 
             if (GoBossStage) {
                 bossLevelCBK();
-                Shop.State_Switch();
+                DocterTalkHint.enabled = false;
+                //Shop.State_Switch();
                 //BreakTime_End();
             }
 

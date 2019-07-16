@@ -134,7 +134,7 @@ public class UIManager : MonoBehaviour
     }
 
     public void DecreaseBossHp(float percent) {
-        bossHp.sizeDelta = new Vector2(117f, 675.0f*percent);
+        bossHp.sizeDelta = new Vector2(117f, 620.0f*percent);
     }
 
     public void GoWin() {

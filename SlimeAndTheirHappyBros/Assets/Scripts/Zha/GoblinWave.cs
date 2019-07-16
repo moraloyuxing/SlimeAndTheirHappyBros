@@ -51,7 +51,7 @@ public class GoblinWave : IEnemyObjectPoolUnit
             //    Debug.Log("radius " + radius);
             //}
 
-            if (Mathf.Abs(length.magnitude - radius) < 1.5f) {
+            if (Mathf.Abs(length.magnitude - radius) < 2.0f) {
                 goblinManager.Four_Player[j].SlimeGetBossCircusHurt();
             }
         }
