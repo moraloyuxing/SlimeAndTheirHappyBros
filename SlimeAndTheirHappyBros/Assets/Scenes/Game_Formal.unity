@@ -18592,6 +18592,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 356022416}
+  - component: {fileID: 356022419}
   - component: {fileID: 356022418}
   - component: {fileID: 356022417}
   m_Layer: 0
@@ -18707,6 +18708,26 @@ MonoBehaviour:
   - {x: -21, y: 1, z: -39.5}
   - {x: -25.7, y: 1, z: -41.1}
   - {x: -22.6, y: 1, z: -43}
+--- !u!114 &356022419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 356022415}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d04d61ebd561c3f41bfb6a83734f3bea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Player_StateUI:
+  - {fileID: 150651005}
+  - {fileID: 763653337}
+  - {fileID: 1890597933}
+  - {fileID: 467676862}
+  _playermanager: {fileID: 356022418}
+  _npcmanager: {fileID: 412872803}
+  _camfollow: {fileID: 412872801}
 --- !u!1001 &356088092
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -21724,7 +21745,6 @@ GameObject:
   - component: {fileID: 412872800}
   - component: {fileID: 412872801}
   - component: {fileID: 412872797}
-  - component: {fileID: 412872802}
   - component: {fileID: 412872803}
   m_Layer: 0
   m_Name: Main Camera
@@ -21838,30 +21858,6 @@ MonoBehaviour:
   minZoom: 15
   zoomLimiter: 35
   FirstAlivePlayer: {fileID: 0}
---- !u!114 &412872802
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 412872796}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0670d0f024743204fb0f815727928f58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ItemSprite:
-  - {fileID: 21300000, guid: 7ad2f22ea4e044af692c7e045a65712e, type: 3}
-  - {fileID: 21300000, guid: 975a2ac12d3064af98efe09947bcdc03, type: 3}
-  - {fileID: 21300000, guid: 47dceec2ce70540cdac23e177d58036b, type: 3}
-  - {fileID: 21300000, guid: 36dbbb228fa584d91a21795514fe335a, type: 3}
-  - {fileID: 21300000, guid: 883b8c5ad14534ddf963d4996d8530e7, type: 3}
-  - {fileID: 21300000, guid: 48c73b301b0154ce8846a9d2cdf10713, type: 3}
-  FourPlayer:
-  - {fileID: 1930958718}
-  - {fileID: 1517294621}
-  - {fileID: 351806365}
-  - {fileID: 1050854433}
 --- !u!114 &412872803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21910,6 +21906,7 @@ MonoBehaviour:
   - {fileID: 1452606724}
   - {fileID: 45780102}
   Angel_Ready: 0
+  TotalPlayerCount: 0
 --- !u!1001 &415044950
 PrefabInstance:
   m_ObjectHideFlags: 0

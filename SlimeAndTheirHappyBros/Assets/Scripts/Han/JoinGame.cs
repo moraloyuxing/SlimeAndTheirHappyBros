@@ -22,6 +22,8 @@ public class JoinGame : MonoBehaviour{
     public CameraTrasnsEffect cameraTransEffect;
     public Animator titleAni;
 
+    public CheckPlayer _checkplayer;
+
     void Start(){
         for (int i = 0; i < 4; i++) {
             Which_Player[i] = Four_Player[i].name;
@@ -42,6 +44,7 @@ public class JoinGame : MonoBehaviour{
                 AudioManager.SingletonInScene.PlaySound2D("Revive", 1f);
                 Ready_Count++;
                 Ready_Moment = Time.time;
+                _checkplayer.PlayerCount++;//總人數+1，新增by辰0803
             }
         }
 
@@ -51,7 +54,11 @@ public class JoinGame : MonoBehaviour{
                 tranOce = true;
                 titleAni.SetTrigger("disappear");
             }
-            if (Time.time > Ready_Moment + 3.0f) SceneManager.LoadScene(1);
+            if (Time.time > Ready_Moment + 3.0f) {
+                SceneManager.LoadScene(1);
+                DontDestroyOnLoad(_checkplayer);//保留給遊戲場景做人數設定後刪除，新增by辰0803
+            }
+
             //BlackPanel.color = new Color(0.0f, 0.0f, 0.0f, BlackPanel.color.a + alpha);
             //if (BlackPanel.color.a >= 1.0f) SceneManager.LoadScene(1);
         }

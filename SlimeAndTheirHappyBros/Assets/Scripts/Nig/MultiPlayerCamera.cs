@@ -26,6 +26,7 @@ public class MultiPlayerCamera : MonoBehaviour{
     Vector3 oringinPos;
     bool[] PlayeratShopArea = new bool[4];
     int inShopCount = 0;
+    int TotalPlayerCount = 4;
 
     System.Action callGoblinKing;
 
@@ -135,7 +136,7 @@ public class MultiPlayerCamera : MonoBehaviour{
 
         var bounds = new Bounds(FirstAlivePlayer.position, Vector3.zero);
         for (int p = 0; p < AllPlayers.Count; p++) {
-            if(p<4 && AllPlayers[p].GetComponent<Player_Control>().DeathPriority == false) bounds.Encapsulate(AllPlayers[p].position);
+            if (p < 4 && AllPlayers[p].GetComponent<Player_Control>().DeathPriority == false) {bounds.Encapsulate(AllPlayers[p].position);} 
             else if(p >= 4 && AllPlayers[p].gameObject.activeSelf == true)bounds.Encapsulate(AllPlayers[p].position);
         }
 
@@ -159,7 +160,7 @@ public class MultiPlayerCamera : MonoBehaviour{
         inShopCount = 0;
         for (int p = 0; p < 4; p++) {
             if (PlayeratShopArea[p] == true) inShopCount++;
-            if (inShopCount >= 3) isShopArea = true;
+            if (inShopCount >= TotalPlayerCount-1) isShopArea = true;
         }
     }
 
@@ -169,7 +170,7 @@ public class MultiPlayerCamera : MonoBehaviour{
         inShopCount = 0;
         for (int p = 0; p < 4; p++){
             if (PlayeratShopArea[p] == true) inShopCount++;
-            if (inShopCount >= 3) isShopArea = true;
+            if (inShopCount >= TotalPlayerCount - 1) isShopArea = true;
         }
     }
 
@@ -187,6 +188,10 @@ public class MultiPlayerCamera : MonoBehaviour{
 
     public static void ClearCameraShakeSingleton() {
         cameraShakingSingleton = null;
-    } 
+    }
+
+    public void GetTotalPlayer(int Total) {
+        TotalPlayerCount = Total;
+    }
 
 }

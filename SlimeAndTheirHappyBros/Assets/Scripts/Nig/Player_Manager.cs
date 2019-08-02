@@ -60,12 +60,16 @@ public class Player_Manager : MonoBehaviour
     public Vector3[] Altar_SendBackPos = new Vector3[4];    //四個回送點
     //Boss登場，史萊姆踩地縫傳回祭壇預設位置等相關設定---End
 
+    int TotalPlayer;
+
     void Awake(){
         pigmentManager = GetComponent<Pigment_Manager>();
     }
 
     void Update(){
-        for (int i = 0; i < 4; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
+        //迴圈條件從4更改適用成目前最大人數
+        for (int i = 0; i < TotalPlayer; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
+        
         if (Game_State && OnBossDebut == false){
             //玩家1啟用融合
             if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true && Weak_State[0] == false && Player_Hurt[0] == false){
@@ -160,8 +164,8 @@ public class Player_Manager : MonoBehaviour
         }
 
         if (!Game_State) {
-            //到商店
-            for (int p = 0; p < 4; p++) {
+            //到商店(迴圈條件從4更改適用成目前最大人數)
+            for (int p = 0; p < TotalPlayer; p++) {
                 ShopDis_x = ShopPlace.position.x - FourPlayer[p].transform.position.x;
                 ShopDis_z = ShopPlace.position.z - FourPlayer[p].transform.position.z;
 
@@ -169,9 +173,9 @@ public class Player_Manager : MonoBehaviour
                 else cameraatshop.Player_LeaveShop(p);
             }
 
-            //到祭壇
+            //到祭壇(迴圈條件從4更改適用成目前最大人數)
             bool onit = true;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < TotalPlayer; i++) {
                 if (Mathf.Abs(FourPlayer[i].transform.position.x - Altar.position.x) > 10.0f || Mathf.Abs(FourPlayer[i].transform.position.z - Altar.position.z) > 10.0f) {
                     onit = false;
                     break;
@@ -195,9 +199,10 @@ public class Player_Manager : MonoBehaviour
         DeathCBK = cbk;
     }
 
+    //迴圈條件從4更改適用成目前最大人數
     public void InitPlayerPos() {
         for (int i = 0; i < 6; i++) Can_Merge[i] = false;
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 4/*TotalPlayer*/; i++)
         {
             Which_Player[i] = FourPlayer[i].gameObject.name;
             FourPlayer[i].SetUp_Number(i);
@@ -206,10 +211,10 @@ public class Player_Manager : MonoBehaviour
             Playeranim[i] = FourPlayer[i].gameObject.GetComponent<Animator>();
             TraceIcon[i] = TracePID[i].GetComponent<RectTransform>();
         }
-        Player1_rePos(FourPlayer[0].transform.position);
-        Player2_rePos(FourPlayer[1].transform.position);
-        Player3_rePos(FourPlayer[2].transform.position);
-        Player4_rePos(FourPlayer[3].transform.position);
+        if (Player_Death[0] == false || FourPlayer[0].gameObject.activeSelf == true) Player1_rePos(FourPlayer[0].transform.position);
+        if (Player_Death[1] == false || FourPlayer[0].gameObject.activeSelf == true) Player2_rePos(FourPlayer[1].transform.position);
+        if (Player_Death[2] == false || FourPlayer[0].gameObject.activeSelf == true) Player3_rePos(FourPlayer[2].transform.position);
+        if (Player_Death[3] == false || FourPlayer[0].gameObject.activeSelf == true) Player4_rePos(FourPlayer[3].transform.position);
     }
 
     void Player1_rePos(Vector3 pos)
@@ -504,17 +509,25 @@ public class Player_Manager : MonoBehaviour
         else Can_Merge[5] = false;
 
         //根據bool回傳秀出混合提示給玩家
-        if ((Can_Merge[0] == true || Can_Merge[1] == true || Can_Merge[2] == true) && WashPriority[0] == false && Weak_State[0] == false && FourPlayer[0].gameObject.activeSelf == true) {SetHintType(0, 1);} 
-        else if ((Can_Merge[0] == false && Can_Merge[1] == false && Can_Merge[2] == false && WashPriority[0] == false)/*|| FourPlayer[0].gameObject.activeSelf == false*/) FourPlayer[0].SendMessage("Hide_Hint");
+        if (FourPlayer[0].gameObject.activeSelf == true) {
+            if ((Can_Merge[0] == true || Can_Merge[1] == true || Can_Merge[2] == true) && WashPriority[0] == false && Weak_State[0] == false/* && FourPlayer[0].gameObject.activeSelf == true*/) { SetHintType(0, 1); }
+            else if ((Can_Merge[0] == false && Can_Merge[1] == false && Can_Merge[2] == false && WashPriority[0] == false)/*|| FourPlayer[0].gameObject.activeSelf == false*/) FourPlayer[0].SendMessage("Hide_Hint");
+        }
 
-        if ((Can_Merge[0] == true || Can_Merge[3] == true || Can_Merge[4] == true) && WashPriority[1] == false && Weak_State[1] == false && FourPlayer[1].gameObject.activeSelf == true) SetHintType(1, 1);
-        else if ((Can_Merge[0] == false && Can_Merge[3] == false && Can_Merge[4] == false && WashPriority[1] == false)/*|| FourPlayer[1].gameObject.activeSelf == false*/) FourPlayer[1].SendMessage("Hide_Hint");
+        if (FourPlayer[1].gameObject.activeSelf == true) {
+            if ((Can_Merge[0] == true || Can_Merge[3] == true || Can_Merge[4] == true) && WashPriority[1] == false && Weak_State[1] == false /*&& FourPlayer[1].gameObject.activeSelf == true*/) SetHintType(1, 1);
+            else if ((Can_Merge[0] == false && Can_Merge[3] == false && Can_Merge[4] == false && WashPriority[1] == false)/*|| FourPlayer[1].gameObject.activeSelf == false*/) FourPlayer[1].SendMessage("Hide_Hint");
+        }
 
-        if ((Can_Merge[1] == true || Can_Merge[3] == true || Can_Merge[5] == true) && WashPriority[2] == false && Weak_State[2] == false && FourPlayer[2].gameObject.activeSelf == true) SetHintType(2, 1);
-        else if ((Can_Merge[1] == false && Can_Merge[3] == false && Can_Merge[5] == false && WashPriority[2] == false)/* || FourPlayer[2].gameObject.activeSelf == false*/) FourPlayer[2].SendMessage("Hide_Hint");
+        if (FourPlayer[2].gameObject.activeSelf == true) {
+            if ((Can_Merge[1] == true || Can_Merge[3] == true || Can_Merge[5] == true) && WashPriority[2] == false && Weak_State[2] == false /*&& FourPlayer[2].gameObject.activeSelf == true*/) SetHintType(2, 1);
+            else if ((Can_Merge[1] == false && Can_Merge[3] == false && Can_Merge[5] == false && WashPriority[2] == false)/* || FourPlayer[2].gameObject.activeSelf == false*/) FourPlayer[2].SendMessage("Hide_Hint");
+        }
 
-        if ((Can_Merge[2] == true || Can_Merge[4] == true || Can_Merge[5] == true) && WashPriority[3] == false && Weak_State[3] == false && FourPlayer[3].gameObject.activeSelf == true) SetHintType(3, 1);
-        else if ((Can_Merge[2] == false && Can_Merge[4] == false && Can_Merge[5] == false && WashPriority[3] == false)/* || FourPlayer[3].gameObject.activeSelf == false*/) FourPlayer[3].SendMessage("Hide_Hint");
+        if (FourPlayer[3].gameObject.activeSelf == true) {
+            if ((Can_Merge[2] == true || Can_Merge[4] == true || Can_Merge[5] == true) && WashPriority[3] == false && Weak_State[3] == false /*&& FourPlayer[3].gameObject.activeSelf == true*/) SetHintType(3, 1);
+            else if ((Can_Merge[2] == false && Can_Merge[4] == false && Can_Merge[5] == false && WashPriority[3] == false)/* || FourPlayer[3].gameObject.activeSelf == false*/) FourPlayer[3].SendMessage("Hide_Hint");
+        }
     }
 
     public void SetPlayerColor(int pCnt, int pColor)
@@ -580,7 +593,8 @@ public class Player_Manager : MonoBehaviour
     }
 
     public void DocterRound() {
-        for (int i = 0; i < 4; i++) {
+        //(迴圈條件從4更改適用成目前最大人數)
+        for (int i = 0; i < TotalPlayer; i++) {
             FourPlayer[i].GetDocterHelp();
         }
     }
@@ -600,10 +614,10 @@ public class Player_Manager : MonoBehaviour
 
     void PlayerTraceSystem() {
 
-        Player1_rePos(FourPlayer[0].transform.position);
-        Player2_rePos(FourPlayer[1].transform.position);
-        Player3_rePos(FourPlayer[2].transform.position);
-        Player4_rePos(FourPlayer[3].transform.position);
+        if (Player_Death[0] == false || FourPlayer[0].gameObject.activeSelf == true) Player1_rePos(FourPlayer[0].transform.position);
+        if (Player_Death[1] == false || FourPlayer[0].gameObject.activeSelf == true) Player2_rePos(FourPlayer[1].transform.position);
+        if (Player_Death[2] == false || FourPlayer[0].gameObject.activeSelf == true) Player3_rePos(FourPlayer[2].transform.position);
+        if (Player_Death[3] == false || FourPlayer[0].gameObject.activeSelf == true) Player4_rePos(FourPlayer[3].transform.position);
 
         for (int p = 0; p < 4; p++) {
             if (TracePID[p].activeSelf == true) {
@@ -686,24 +700,39 @@ public class Player_Manager : MonoBehaviour
         }
     }
 
+    //迴圈條件從4更改適用成目前最大人數
     public void StartPlaying() {
         CanTrace = true;
-        for (int p = 0; p < 4; p++) {
+        for (int p = 0; p < TotalPlayer; p++) {
             FourPlayer[p].StartPlaying();
         }
     }
 
     //Boss登場，開啟相關bool以確認玩家位置
+    //迴圈條件從4更改適用成目前最大人數
     public void CheckCrack_Switch() {
         OnBossDebut = !OnBossDebut; //關閉or開放融合&洗白等操作
         CheckCrack = !CheckCrack;   //偵測or不偵測角色是否在地縫
         //暫停or重啟玩家剩餘可能操作，並確認玩家位置，超過z軸就丟回祭壇
-        for (int p = 0; p < 4; p++) {FourPlayer[p].OnBossDebut_Switch(); }
-        Player1_rePos(FourPlayer[0].transform.position);
-        Player2_rePos(FourPlayer[1].transform.position);
-        Player3_rePos(FourPlayer[2].transform.position);
-        Player4_rePos(FourPlayer[3].transform.position);
+        for (int p = 0; p < TotalPlayer; p++) {FourPlayer[p].OnBossDebut_Switch(); }
+        if(Player_Death[0] == false || FourPlayer[0].gameObject.activeSelf == true)Player1_rePos(FourPlayer[0].transform.position);
+        if (Player_Death[1] == false || FourPlayer[0].gameObject.activeSelf == true) Player2_rePos(FourPlayer[1].transform.position);
+        if (Player_Death[2] == false || FourPlayer[0].gameObject.activeSelf == true) Player3_rePos(FourPlayer[2].transform.position);
+        if (Player_Death[3] == false || FourPlayer[0].gameObject.activeSelf == true) Player4_rePos(FourPlayer[3].transform.position);
 
+    }
+
+    //接收總人數，給定假死並排除於遊戲外--0803新增
+    //此函式執行順序在InitPlayerPos之後
+    public void ExcludePlayer(int Total) {
+        TotalPlayer = Total;
+        for (int p = 0; p < 4; p++) {
+            if (p >= Total) {
+                FourPlayer[p].DeathPriority = true;
+                FourPlayer[p].gameObject.SetActive(false);
+                DeathCountPlus(p);
+            }
+        }
     }
 
 }
