@@ -10,8 +10,9 @@ public class CheckPlayer : MonoBehaviour{
 
     void Update(){
         if (SceneManager.GetActiveScene().buildIndex == 1) {
+            //Debug.Log("PlayerCount = " + PlayerCount);
             TotalPlayerManager = GameObject.Find("Player_Manager").GetComponent<PlayerCountManager>();
-            TotalPlayerManager.TotalPlayerSetting(PlayerCount-2);
+            TotalPlayerManager.TotalPlayerSetting(PlayerCount);
             Destroy(gameObject);
         }
     }

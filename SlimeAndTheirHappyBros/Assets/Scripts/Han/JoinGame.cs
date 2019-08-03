@@ -17,12 +17,14 @@ public class JoinGame : MonoBehaviour{
     public Image BlackPanel;
     float alpha = 1.0f;
 
-
     bool tranOce = false;
     public CameraTrasnsEffect cameraTransEffect;
     public Animator titleAni;
 
+    //彈性玩家人數設定--Start
     public CheckPlayer _checkplayer;
+    public JoinCountDown _CountDownUI;
+    bool CanJoin = true;
 
     void Start(){
         for (int i = 0; i < 4; i++) {
@@ -38,13 +40,21 @@ public class JoinGame : MonoBehaviour{
             Four_Player[i].transform.LookAt(Four_Player[i].position + m_camera.transform.rotation * Vector3.forward, m_camera.transform.rotation * Vector3.up);
             a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction") || Input.GetKeyDown(KeyCode.W);//|| Input.GetKeyDown(KeyCode.J)
 
-            if (a_button[i] && Already_Player[i] == false) {
+            //測試
+            a_button[0] = Input.GetButtonDown(Which_Player[0] + "MultiFunction") || Input.GetKeyDown(KeyCode.U);
+            a_button[1] = Input.GetButtonDown(Which_Player[1] + "MultiFunction") || Input.GetKeyDown(KeyCode.I);
+            a_button[2] = Input.GetButtonDown(Which_Player[2] + "MultiFunction") || Input.GetKeyDown(KeyCode.O);
+            a_button[3] = Input.GetButtonDown(Which_Player[3] + "MultiFunction") || Input.GetKeyDown(KeyCode.P);
+
+            if (a_button[i] && Already_Player[i] == false &&CanJoin == true) {
                 Already_Player[i] = true;
                 animator[i].SetBool("join", true);
                 AudioManager.SingletonInScene.PlaySound2D("Revive", 1f);
                 Ready_Count++;
                 Ready_Moment = Time.time;
                 _checkplayer.PlayerCount++;//總人數+1，新增by辰0803
+                if (Ready_Count == 2) _CountDownUI.Start_CountDown();
+                if (Ready_Count == 4) _CountDownUI.ForceCancelCD();
             }
         }
 
@@ -63,6 +73,12 @@ public class JoinGame : MonoBehaviour{
             //if (BlackPanel.color.a >= 1.0f) SceneManager.LoadScene(1);
         }
 
+    }
+
+    public void Fake_Ready() {
+        Ready_Count = 4;//假性4人都ready，真正人數取決於_checkplayer.PlayerCount
+        Ready_Moment = Time.time;
+        CanJoin = false;
     }
 
 }
