@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Rewired;
 
 public class JoinGame : MonoBehaviour{
     public Camera m_camera;
@@ -26,11 +27,19 @@ public class JoinGame : MonoBehaviour{
     public JoinCountDown _CountDownUI;
     bool CanJoin = true;
 
+    Player[] playerInput = new Player[4];
+
+
     void Start(){
         for (int i = 0; i < 4; i++) {
             Which_Player[i] = Four_Player[i].name;
             animator[i] = Four_Player[i].gameObject.GetComponent<Animator>();
         }
+
+        playerInput[0] = ReInput.players.GetPlayer(0);
+        playerInput[1] = ReInput.players.GetPlayer(1);
+        playerInput[2] = ReInput.players.GetPlayer(2);
+        playerInput[3] = ReInput.players.GetPlayer(3);
     }
 
 
@@ -38,13 +47,15 @@ public class JoinGame : MonoBehaviour{
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
         for (int i = 0; i < 4; i++) {
             Four_Player[i].transform.LookAt(Four_Player[i].position + m_camera.transform.rotation * Vector3.forward, m_camera.transform.rotation * Vector3.up);
-            a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction") || Input.GetKeyDown(KeyCode.W);//|| Input.GetKeyDown(KeyCode.J)
+
+            //舊輸入 a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction") || Input.GetKeyDown(KeyCode.W);//|| Input.GetKeyDown(KeyCode.J)
+            a_button[i] = playerInput[i].GetButtonDown("MultiFunction");
 
             //測試
-            a_button[0] = Input.GetButtonDown(Which_Player[0] + "MultiFunction") || Input.GetKeyDown(KeyCode.U);
-            a_button[1] = Input.GetButtonDown(Which_Player[1] + "MultiFunction") || Input.GetKeyDown(KeyCode.I);
-            a_button[2] = Input.GetButtonDown(Which_Player[2] + "MultiFunction") || Input.GetKeyDown(KeyCode.O);
-            a_button[3] = Input.GetButtonDown(Which_Player[3] + "MultiFunction") || Input.GetKeyDown(KeyCode.P);
+            a_button[0] = playerInput[0].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.U);
+            a_button[1] = playerInput[1].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.I);
+            a_button[2] = playerInput[2].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.O);
+            a_button[3] = playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.P);
 
             if (a_button[i] && Already_Player[i] == false &&CanJoin == true) {
                 Already_Player[i] = true;

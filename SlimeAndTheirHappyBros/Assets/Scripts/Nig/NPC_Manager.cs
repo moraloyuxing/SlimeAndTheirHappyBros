@@ -65,7 +65,8 @@ public class NPC_Manager : MonoBehaviour{
             //天使部分
             //迴圈條件從4更改適用成目前最大人數
             for (int p = 0; p < TotalPlayerCount; p++) {
-                if(PlayerPos[p].gameObject.activeSelf == true)a_button[p] = Input.GetButtonDown(Which_Player[p] + "MultiFunction");
+                //舊輸入if(PlayerPos[p].gameObject.activeSelf == true)a_button[p] = Input.GetButtonDown(Which_Player[p] + "MultiFunction");
+                if (PlayerPos[p].gameObject.activeSelf == true) a_button[p] = _playermanager.playerInput[p].GetButtonDown("MultiFunction");
                 if (a_button[p] && NearAngel[p]) {
                     PIDReadyIcon[p].sprite = ReadyBossState[p];
                     PIDReady[p] = true;

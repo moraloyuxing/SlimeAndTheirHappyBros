@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Rewired;
 
 public class GameManager : MonoBehaviour
 {
@@ -33,6 +34,13 @@ public class GameManager : MonoBehaviour
     public Color gameLight, shopLight;
     GameObject DawnHint;
 
+    float playerCount = 0;
+    public float PlayerCount {
+        set { playerCount = value; }
+    }
+
+    Player[] playerInput = new Player[4];
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -57,6 +65,20 @@ public class GameManager : MonoBehaviour
 
         cameraAnimator = GameObject.Find("CameraController").GetComponent<Animator>();
 
+        float goblinNumOffset = 1.0f;
+        if (playerCount < 4) {
+            if (playerCount == 2) goblinNumOffset = 0.5f;
+            else goblinNumOffset = 0.7f;
+            for (int i = 0; i < roundInfos.Length; i++) {
+                for (int j = 0; j < roundInfos[i].waves.Length; j++) {
+                    roundInfos[i].waves[j].normalGoblin = Mathf.RoundToInt(roundInfos[i].waves[j].normalGoblin*goblinNumOffset);
+                    roundInfos[i].waves[j].archerGoblin = Mathf.RoundToInt(roundInfos[i].waves[j].archerGoblin * goblinNumOffset);
+                    roundInfos[i].waves[j].hobGoblin= Mathf.RoundToInt(roundInfos[i].waves[j].hobGoblin * goblinNumOffset);
+                    //Debug.Log("offfffffffset   " + roundInfos[i].waves[j].normalGoblin + "    " + roundInfos[i].waves[j].archerGoblin + "   " + roundInfos[i].waves[j].hobGoblin); ;
+                }
+            }
+        }
+        
         goblinKillsGoal = new int[roundInfos.Length];
         gameStates = new GameState[roundInfos.Length];
         for (int i = 0; i < gameStates.Length; i++) {
@@ -92,6 +114,11 @@ public class GameManager : MonoBehaviour
             playerManager.Invoke("StartPlaying", 0.1f);
         }
         cameraTransEfect.GoTransIn();
+
+        playerInput[0] = ReInput.players.GetPlayer(0);
+        playerInput[1] = ReInput.players.GetPlayer(1);
+        playerInput[2] = ReInput.players.GetPlayer(2);
+        playerInput[3] = ReInput.players.GetPlayer(3);
     }
 
     // Update is called once per frame
@@ -135,8 +162,13 @@ public class GameManager : MonoBehaviour
         } 
 
         if (gameOver && !gamePause) {
-            if ((winInput || looseInput) && Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
-                    || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space)) {
+            //舊輸入/if ((winInput || looseInput) && Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
+            //舊輸入        || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space)) {
+            //舊輸入    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            //舊輸入}
+            if ((winInput || looseInput) && playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
+            || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.Space))
+            {
                 UnityEngine.SceneManagement.SceneManager.LoadScene(0);
             }
             return;
@@ -150,8 +182,11 @@ public class GameManager : MonoBehaviour
                 if (!cameraMotion)
                 {
                     time += Time.deltaTime;
-                    if (time > 9.8f || Input.GetButtonDown("Player1_Skip") || Input.GetButtonDown("Player2_Skip")
-                    || Input.GetButtonDown("Player3_Skip") || Input.GetButtonDown("Player4_Skip") || Input.GetKeyDown(KeyCode.Space))
+
+                    //舊輸入if (time > 9.8f || Input.GetButtonDown("Player1_Skip") || Input.GetButtonDown("Player2_Skip")
+                    //舊輸入|| Input.GetButtonDown("Player3_Skip") || Input.GetButtonDown("Player4_Skip") || Input.GetKeyDown(KeyCode.Space))
+                    if (time > 9.8f || playerInput[0].GetButtonDown("Skip") || playerInput[1].GetButtonDown("Skip")
+                    || playerInput[2].GetButtonDown("Skip") || playerInput[3].GetButtonDown("Skip") || Input.GetKeyDown(KeyCode.Space))
                     {
                         cameraAnimator.SetTrigger("over");
                         cameraMotion = true;
@@ -160,8 +195,10 @@ public class GameManager : MonoBehaviour
                     }
                 }
                 else {
-                    if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
-                    || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
+                    //舊輸入if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
+                    //舊輸入|| Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
+                    if (playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
+                    || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.Space))
                     {
                         uiManager.NextTutorial();
                         tutorialProgress++;

@@ -13,6 +13,9 @@ public class CheckPlayer : MonoBehaviour{
             //Debug.Log("PlayerCount = " + PlayerCount);
             TotalPlayerManager = GameObject.Find("Player_Manager").GetComponent<PlayerCountManager>();
             TotalPlayerManager.TotalPlayerSetting(PlayerCount);
+
+            GameObject.Find("GameManager").GetComponent<GameManager>().PlayerCount = PlayerCount;
+
             Destroy(gameObject);
         }
     }

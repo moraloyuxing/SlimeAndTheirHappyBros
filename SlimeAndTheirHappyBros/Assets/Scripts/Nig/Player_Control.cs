@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Rewired;
 
 public class Player_Control : MonoBehaviour{
 
@@ -153,9 +154,17 @@ public class Player_Control : MonoBehaviour{
     int DropChance = 0;
     bool HaveItemtoDrop = false;
 
+    public Player playerInput;
+
     void Start(){
         PlayerID2 = PlayerID;
         WhichPlayer = gameObject.name;
+
+        if(WhichPlayer == "Player1_")playerInput = ReInput.players.GetPlayer(0);
+        else if (WhichPlayer == "Player2_") playerInput = ReInput.players.GetPlayer(1);
+        else if (WhichPlayer == "Player3_") playerInput = ReInput.players.GetPlayer(2);
+        else if (WhichPlayer == "Player4_") playerInput = ReInput.players.GetPlayer(3);
+
         ray_horizontal = new Ray(transform.position, new Vector3(3.0f, 0.0f, 0.0f));
         ray_vertical = new Ray(transform.position, new Vector3(0.0f, 0.0f, 3.0f));
         GetItem_x = new Ray(transform.position, new Vector3(2.0f, 0.0f, 0.0f));
@@ -183,9 +192,14 @@ public class Player_Control : MonoBehaviour{
             if (StopDetect == false) SlimeGetHurt();
             //移動&短衝刺
             if (OnBossDebut == false) {
-                xAix = Input.GetAxis(WhichPlayer + "Horizontal");
-                zAix = Input.GetAxis(WhichPlayer + "Vertical");
-                left_trigger = Input.GetAxis(WhichPlayer + "Dash");
+                //舊輸入xAix = Input.GetAxis(WhichPlayer + "Horizontal");
+                //舊輸入zAix = Input.GetAxis(WhichPlayer + "Vertical");
+                //舊輸入left_trigger = Input.GetAxis(WhichPlayer + "Dash");
+
+                xAix = playerInput.GetAxis("MoveHorizontal");
+                zAix = playerInput.GetAxis("MoveVertical");
+                left_trigger = playerInput.GetAxis("Dash");
+                
             }
             if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f)
             {
@@ -337,8 +351,12 @@ public class Player_Control : MonoBehaviour{
 
             //攻擊方向旋轉
             if (OnBossDebut == false) {
-                xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
-                zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
+                //舊輸入xAtk = Input.GetAxis(WhichPlayer + "AtkHorizontal");
+                //舊輸入zAtk = Input.GetAxis(WhichPlayer + "AtkVertical");
+
+                xAtk = playerInput.GetAxis("AtkHorizontal");
+                zAtk = playerInput.GetAxis("AtkVertical");
+
                 current_angle = Attack_Arrow.transform.eulerAngles;
             }
             if (xAtk != 0.0f || zAtk != 0.0f)
@@ -355,7 +373,10 @@ public class Player_Control : MonoBehaviour{
             else if (xAtk == 0.0f && zAtk == 0.0f) AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 
             //攻擊
-            if (OnBossDebut == false)right_trigger = Input.GetAxis(WhichPlayer + "Attack");
+
+            //舊輸入if (OnBossDebut == false)right_trigger = Input.GetAxis(WhichPlayer + "Attack");
+            if (OnBossDebut == false) right_trigger = playerInput.GetAxis("Attack");
+
             if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false)
             {
                 if (DeathPriority == false) GetComponent<Animator>().Play("Slime_Attack");

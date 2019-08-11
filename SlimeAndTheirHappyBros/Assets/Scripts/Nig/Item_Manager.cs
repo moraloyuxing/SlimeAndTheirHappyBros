@@ -44,7 +44,9 @@ public class Item_Manager : MonoBehaviour {
 
     void Update(){
         if (Purchase_State) {
-            for (int p = 0; p < 4; p++) a_button[p] = Input.GetButtonDown(Which_Player[p] + "MultiFunction");
+
+            //舊輸入for (int p = 0; p < 4; p++) a_button[p] = Input.GetButtonDown(Which_Player[p] + "MultiFunction");
+            for (int p = 0; p < 4; p++) a_button[p] = Player_BaseAbility[p].playerInput.GetButtonDown("MultiFunction");
 
             //計算6道具*4玩家的位置
             for (int p = 0; p < 4; p++){

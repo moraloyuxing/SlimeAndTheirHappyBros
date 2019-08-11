@@ -113,6 +113,8 @@ public class Merge_Control : MonoBehaviour{
     public int Bullet_Superimposed = 0;
     //int Timer_Superimposed = 0;
 
+    Rewired.Player playerMoveInput, playerAtkInput;
+
     void Start()
     {
         Player_Manager = GameObject.Find("Player_Manager");
@@ -178,9 +180,13 @@ public class Merge_Control : MonoBehaviour{
         if (StopDetect == false) SlimeGetHurt();
 
         //移動&短衝刺
-        xAix = Input.GetAxis(WhichPlayer_Moving + "Horizontal");
-        zAix = Input.GetAxis(WhichPlayer_Moving + "Vertical");
-        left_trigger = Input.GetAxis(WhichPlayer_Moving + "Dash");
+
+        //舊輸入xAix = Input.GetAxis(WhichPlayer_Moving + "Horizontal");
+        //舊輸入zAix = Input.GetAxis(WhichPlayer_Moving + "Vertical");
+        //舊輸入left_trigger = Input.GetAxis(WhichPlayer_Moving + "Dash");
+        xAix = playerMoveInput.GetAxis("MoveHorizontal");
+        zAix = playerMoveInput.GetAxis("MoveVertical");
+        left_trigger = playerMoveInput.GetAxis("Dash");
 
         if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f)
         {
@@ -327,8 +333,11 @@ public class Merge_Control : MonoBehaviour{
         }
 
         //攻擊方向旋轉
-        xAtk = Input.GetAxis(WhichPlayer_Shooting + "AtkHorizontal");
-        zAtk = Input.GetAxis(WhichPlayer_Shooting + "AtkVertical");
+        //舊輸入xAtk = Input.GetAxis(WhichPlayer_Shooting + "AtkHorizontal");
+        //舊輸入zAtk = Input.GetAxis(WhichPlayer_Shooting + "AtkVertical");
+        xAtk = playerAtkInput.GetAxis("AtkHorizontal");
+        zAtk = playerAtkInput.GetAxis("AtkVertical");
+
         current_angle = Attack_Arrow.transform.eulerAngles;
 
         if (xAtk != 0.0f || zAtk != 0.0f)
@@ -342,7 +351,9 @@ public class Merge_Control : MonoBehaviour{
         else if (xAtk == 0.0f && zAtk == 0.0f) AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 0.0f);
 
         //攻擊
-        right_trigger = Input.GetAxis(WhichPlayer_Shooting + "Attack");
+        //舊輸入right_trigger = Input.GetAxis(WhichPlayer_Shooting + "Attack");
+        right_trigger = playerAtkInput.GetAxis("Attack");
+
         if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false)
         {
             GetComponent<Animator>().Play("Slime_Attack");
@@ -350,8 +361,11 @@ public class Merge_Control : MonoBehaviour{
         }
 
         //分裂
-        PMb_button = Input.GetButtonDown(WhichPlayer_Moving + "Spilt");
-        PSb_button = Input.GetButtonDown(WhichPlayer_Shooting + "Spilt");
+        //舊輸入PMb_button = Input.GetButtonDown(WhichPlayer_Moving + "Spilt");
+        //舊輸入PSb_button = Input.GetButtonDown(WhichPlayer_Shooting + "Spilt");
+        PMb_button = playerMoveInput.GetButtonDown("Spilt");
+        PSb_button = playerAtkInput.GetButtonDown("Spilt");
+
         if (PMb_button || PSb_button) {
             CancelInvoke("Merge_Timer");
             Base_Timer = 0.0f;
@@ -396,7 +410,17 @@ public class Merge_Control : MonoBehaviour{
         if (chance == 0)
         {
             WhichPlayer_Moving = PlayerA.name;
+            if (WhichPlayer_Moving == "Player1_") playerMoveInput = Rewired.ReInput.players.GetPlayer(0);
+            else if (WhichPlayer_Moving == "Player2_") playerMoveInput = Rewired.ReInput.players.GetPlayer(1);
+            else if (WhichPlayer_Moving == "Player3_") playerMoveInput = Rewired.ReInput.players.GetPlayer(2);
+            else if (WhichPlayer_Moving == "Player4_") playerMoveInput = Rewired.ReInput.players.GetPlayer(3);
+
             WhichPlayer_Shooting = PlayerB.name;
+            if (WhichPlayer_Shooting == "Player1_") playerAtkInput = Rewired.ReInput.players.GetPlayer(0);
+            else if (WhichPlayer_Shooting == "Player2_") playerAtkInput = Rewired.ReInput.players.GetPlayer(1);
+            else if (WhichPlayer_Shooting == "Player3_") playerAtkInput = Rewired.ReInput.players.GetPlayer(2);
+            else if (WhichPlayer_Shooting == "Player4_") playerAtkInput = Rewired.ReInput.players.GetPlayer(3);
+
             Moving_ID = PlayerA.GetComponent<Player_Control>().PlayerID;
             Shooting_ID = PlayerB.GetComponent<Player_Control>().PlayerID;
             Player_Move.GetComponent<SpriteRenderer>().sprite = Control_Icon[0];
@@ -409,7 +433,17 @@ public class Merge_Control : MonoBehaviour{
         else if (chance == 1)
         {
             WhichPlayer_Moving = PlayerB.name;
+            if (WhichPlayer_Moving == "Player1_") playerMoveInput = Rewired.ReInput.players.GetPlayer(0);
+            else if (WhichPlayer_Moving == "Player2_") playerMoveInput = Rewired.ReInput.players.GetPlayer(1);
+            else if (WhichPlayer_Moving == "Player3_") playerMoveInput = Rewired.ReInput.players.GetPlayer(2);
+            else if (WhichPlayer_Moving == "Player4_") playerMoveInput = Rewired.ReInput.players.GetPlayer(3);
+
             WhichPlayer_Shooting = PlayerA.name;
+            if (WhichPlayer_Shooting == "Player1_") playerAtkInput = Rewired.ReInput.players.GetPlayer(0);
+            else if (WhichPlayer_Shooting == "Player2_") playerAtkInput = Rewired.ReInput.players.GetPlayer(1);
+            else if (WhichPlayer_Shooting == "Player3_") playerAtkInput = Rewired.ReInput.players.GetPlayer(2);
+            else if (WhichPlayer_Shooting == "Player4_") playerAtkInput = Rewired.ReInput.players.GetPlayer(3);
+
             Moving_ID = PlayerB.GetComponent<Player_Control>().PlayerID;
             Shooting_ID = PlayerA.GetComponent<Player_Control>().PlayerID;
             Player_Move.GetComponent<SpriteRenderer>().sprite = Control_Icon[1];

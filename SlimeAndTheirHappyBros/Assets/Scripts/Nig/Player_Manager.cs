@@ -62,14 +62,24 @@ public class Player_Manager : MonoBehaviour
 
     int TotalPlayer;
 
+    public Rewired.Player[] playerInput = new Rewired.Player[4];
+
     void Awake(){
         pigmentManager = GetComponent<Pigment_Manager>();
+    }
+    private void Start()
+    {
+        playerInput[0] = Rewired.ReInput.players.GetPlayer(0);
+        playerInput[1] = Rewired.ReInput.players.GetPlayer(1);
+        playerInput[2] = Rewired.ReInput.players.GetPlayer(2);
+        playerInput[3] = Rewired.ReInput.players.GetPlayer(3);
     }
 
     void Update(){
         //迴圈條件從4更改適用成目前最大人數
-        for (int i = 0; i < TotalPlayer; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
-        
+        //舊輸入for (int i = 0; i < TotalPlayer; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
+        for (int i = 0; i < TotalPlayer; i++) a_button[i] = playerInput[i].GetButtonDown("MultiFunction");
+
         if (Game_State && OnBossDebut == false){
             //玩家1啟用融合
             if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true && Weak_State[0] == false && Player_Hurt[0] == false){
