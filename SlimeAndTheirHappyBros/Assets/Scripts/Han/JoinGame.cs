@@ -34,6 +34,7 @@ public class JoinGame : MonoBehaviour{
         for (int i = 0; i < 4; i++) {
             Which_Player[i] = Four_Player[i].name;
             animator[i] = Four_Player[i].gameObject.GetComponent<Animator>();
+            G_PlayerSetting.JoinPlayer[i] = false;
         }
 
         playerInput[0] = ReInput.players.GetPlayer(0);
@@ -64,6 +65,7 @@ public class JoinGame : MonoBehaviour{
                 Ready_Count++;
                 Ready_Moment = Time.time;
                 _checkplayer.PlayerCount++;//總人數+1，新增by辰0803
+                G_PlayerSetting.JoinPlayer[i] = true;
                 if (Ready_Count == 2) _CountDownUI.Start_CountDown();
                 if (Ready_Count == 4) _CountDownUI.ForceCancelCD();
             }

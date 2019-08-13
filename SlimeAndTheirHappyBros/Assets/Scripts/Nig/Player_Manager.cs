@@ -78,7 +78,7 @@ public class Player_Manager : MonoBehaviour
     void Update(){
         //迴圈條件從4更改適用成目前最大人數
         //舊輸入for (int i = 0; i < TotalPlayer; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
-        for (int i = 0; i < TotalPlayer; i++) a_button[i] = playerInput[i].GetButtonDown("MultiFunction");
+        for (int i = 0; i < 4; i++) if(G_PlayerSetting.JoinPlayer[i] == true)a_button[i] = playerInput[i].GetButtonDown("MultiFunction");
 
         if (Game_State && OnBossDebut == false){
             //玩家1啟用融合
@@ -175,18 +175,19 @@ public class Player_Manager : MonoBehaviour
 
         if (!Game_State) {
             //到商店(迴圈條件從4更改適用成目前最大人數)
-            for (int p = 0; p < TotalPlayer; p++) {
-                ShopDis_x = ShopPlace.position.x - FourPlayer[p].transform.position.x;
-                ShopDis_z = ShopPlace.position.z - FourPlayer[p].transform.position.z;
-
-                if (ShopDis_x >= -25.0f && ShopDis_x <= 12.0f && ShopDis_z >= -20.0f && ShopDis_z <= 25.5f) cameraatshop.Player_GoShop(p);
-                else cameraatshop.Player_LeaveShop(p);
+            for (int p = 0; p < 4; p++) {
+                if (G_PlayerSetting.JoinPlayer[p] == true) {
+                    ShopDis_x = ShopPlace.position.x - FourPlayer[p].transform.position.x;
+                    ShopDis_z = ShopPlace.position.z - FourPlayer[p].transform.position.z;
+                    if (ShopDis_x >= -25.0f && ShopDis_x <= 12.0f && ShopDis_z >= -20.0f && ShopDis_z <= 25.5f) cameraatshop.Player_GoShop(p);
+                    else cameraatshop.Player_LeaveShop(p);
+                }
             }
 
             //到祭壇(迴圈條件從4更改適用成目前最大人數)
             bool onit = true;
-            for (int i = 0; i < TotalPlayer; i++) {
-                if (Mathf.Abs(FourPlayer[i].transform.position.x - Altar.position.x) > 10.0f || Mathf.Abs(FourPlayer[i].transform.position.z - Altar.position.z) > 10.0f) {
+            for (int i = 0; i < 4; i++) {
+                if (Mathf.Abs(FourPlayer[i].transform.position.x - Altar.position.x) > 10.0f || Mathf.Abs(FourPlayer[i].transform.position.z - Altar.position.z) > 10.0f && G_PlayerSetting.JoinPlayer[i] == true) {
                     onit = false;
                     break;
                 }
@@ -212,7 +213,7 @@ public class Player_Manager : MonoBehaviour
     //迴圈條件從4更改適用成目前最大人數
     public void InitPlayerPos() {
         for (int i = 0; i < 6; i++) Can_Merge[i] = false;
-        for (int i = 0; i < 4/*TotalPlayer*/; i++)
+        for (int i = 0; i < 4; i++)
         {
             Which_Player[i] = FourPlayer[i].gameObject.name;
             FourPlayer[i].SetUp_Number(i);
@@ -604,8 +605,8 @@ public class Player_Manager : MonoBehaviour
 
     public void DocterRound() {
         //(迴圈條件從4更改適用成目前最大人數)
-        for (int i = 0; i < TotalPlayer; i++) {
-            FourPlayer[i].GetDocterHelp();
+        for (int i = 0; i < 4; i++) {
+            if (G_PlayerSetting.JoinPlayer[i] == true) FourPlayer[i].GetDocterHelp();
         }
     }
 
@@ -713,8 +714,8 @@ public class Player_Manager : MonoBehaviour
     //迴圈條件從4更改適用成目前最大人數
     public void StartPlaying() {
         CanTrace = true;
-        for (int p = 0; p < TotalPlayer; p++) {
-            FourPlayer[p].StartPlaying();
+        for (int p = 0; p < 4; p++) {
+            if (G_PlayerSetting.JoinPlayer[p] == true) FourPlayer[p].StartPlaying();
         }
     }
 
@@ -724,7 +725,9 @@ public class Player_Manager : MonoBehaviour
         OnBossDebut = !OnBossDebut; //關閉or開放融合&洗白等操作
         CheckCrack = !CheckCrack;   //偵測or不偵測角色是否在地縫
         //暫停or重啟玩家剩餘可能操作，並確認玩家位置，超過z軸就丟回祭壇
-        for (int p = 0; p < TotalPlayer; p++) {FourPlayer[p].OnBossDebut_Switch(); }
+        for (int p = 0; p < 4; p++) {
+            if(G_PlayerSetting.JoinPlayer[p] == true)FourPlayer[p].OnBossDebut_Switch();
+        }
         if(Player_Death[0] == false || FourPlayer[0].gameObject.activeSelf == true)Player1_rePos(FourPlayer[0].transform.position);
         if (Player_Death[1] == false || FourPlayer[0].gameObject.activeSelf == true) Player2_rePos(FourPlayer[1].transform.position);
         if (Player_Death[2] == false || FourPlayer[0].gameObject.activeSelf == true) Player3_rePos(FourPlayer[2].transform.position);
@@ -736,13 +739,21 @@ public class Player_Manager : MonoBehaviour
     //此函式執行順序在InitPlayerPos之後
     public void ExcludePlayer(int Total) {
         TotalPlayer = Total;
+
         for (int p = 0; p < 4; p++) {
-            if (p >= Total) {
+            if (G_PlayerSetting.JoinPlayer[p] == false) {
                 FourPlayer[p].DeathPriority = true;
                 FourPlayer[p].gameObject.SetActive(false);
                 DeathCountPlus(p);
             }
         }
-    }
 
+        //for (int p = 0; p < 4; p++) {
+        //    if (p >= Total) {
+        //        FourPlayer[p].DeathPriority = true;
+        //        FourPlayer[p].gameObject.SetActive(false);
+        //        DeathCountPlus(p);
+        //    }
+        //}
+    }
 }

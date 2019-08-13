@@ -23,18 +23,18 @@ public class PlayerCountManager : MonoBehaviour{
     public void TotalPlayerSetting(int Total) {
 
         _playermanager.ExcludePlayer(Total);
-        _camfollow.GetTotalPlayer(Total);
+        _camfollow.GetTotalPlayer(Total);//done
         _npcmanager.GetTotalPlayer(Total);
 
+
         for (int p = 0; p < 4; p++) {
-            if (p < Total){
-                Player_StateUI[p].SetActive(true);
-            }
-
-            else {
-                Player_StateUI[p].SetActive(false);
-            }
+            if (G_PlayerSetting.JoinPlayer[p] == true) Player_StateUI[p].SetActive(true);
+            else Player_StateUI[p].SetActive(false);
         }
-    }
 
+        //for (int p = 0; p < 4; p++) {
+        //    if (p < Total)Player_StateUI[p].SetActive(true);
+        //    else Player_StateUI[p].SetActive(false);
+        //}
+    }
 }
