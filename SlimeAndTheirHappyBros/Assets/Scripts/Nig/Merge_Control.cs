@@ -363,8 +363,8 @@ public class Merge_Control : MonoBehaviour{
         //分裂
         //舊輸入PMb_button = Input.GetButtonDown(WhichPlayer_Moving + "Spilt");
         //舊輸入PSb_button = Input.GetButtonDown(WhichPlayer_Shooting + "Spilt");
-        PMb_button = playerMoveInput.GetButtonDown("Spilt");
-        PSb_button = playerAtkInput.GetButtonDown("Spilt");
+        PMb_button = playerMoveInput.GetButtonDown("Split");
+        PSb_button = playerAtkInput.GetButtonDown("Split");
 
         if (PMb_button || PSb_button) {
             CancelInvoke("Merge_Timer");

@@ -8,7 +8,7 @@ public class JoinCountDown : MonoBehaviour {
     public Sprite[] CountSprite = new Sprite[10];
     public Image CountDown_Img;
     Animator anim;
-    int Base_Timer = 10;
+    int Base_Timer = 5;
 
     void Start() {
         anim = GetComponent<Animator>();
