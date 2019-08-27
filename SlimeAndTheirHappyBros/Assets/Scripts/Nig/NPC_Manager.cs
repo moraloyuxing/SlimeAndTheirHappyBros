@@ -82,7 +82,8 @@ public class NPC_Manager : MonoBehaviour{
                 if (NearAngel[p] && Angel_Ready == true){
                     AngelTalkHint.enabled = true;
                     for (int i = 0; i < 4; i++) {
-                        if(G_PlayerSetting.JoinPlayer[p] == true)PIDReadyIcon[i].enabled = true;
+                        if(G_PlayerSetting.JoinPlayer[i] == true)PIDReadyIcon[i].enabled = true;
+                        else PIDReadyIcon[i].enabled = false;
                     }
                     break;
                 }

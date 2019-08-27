@@ -187,9 +187,11 @@ public class Player_Manager : MonoBehaviour
             //到祭壇(迴圈條件從4更改適用成目前最大人數)
             bool onit = true;
             for (int i = 0; i < 4; i++) {
-                if (Mathf.Abs(FourPlayer[i].transform.position.x - Altar.position.x) > 10.0f || Mathf.Abs(FourPlayer[i].transform.position.z - Altar.position.z) > 10.0f && G_PlayerSetting.JoinPlayer[i] == true) {
-                    onit = false;
-                    break;
+                if (G_PlayerSetting.JoinPlayer[i] == true) {
+                    if (Mathf.Abs(FourPlayer[i].transform.position.x - Altar.position.x) > 10.0f || Mathf.Abs(FourPlayer[i].transform.position.z - Altar.position.z) > 10.0f) {
+                        onit = false;
+                        break;
+                    }
                 }
             }
             if (onit) {
@@ -288,9 +290,12 @@ public class Player_Manager : MonoBehaviour
             Check_distance();
         }
         //出畫面時啟用Trace
-        PIDScreenPos[0] = Camera.main.WorldToScreenPoint(pos);
-        if (PIDScreenPos[0].x <= 0.0f || PIDScreenPos[0].x >= Screen.width || PIDScreenPos[0].y <= 0.0f || PIDScreenPos[0].y >= Screen.height) TracePID[0].SetActive(true);
-        else TracePID[0].SetActive(false);
+        if (G_PlayerSetting.JoinPlayer[0] == true) {
+            PIDScreenPos[0] = Camera.main.WorldToScreenPoint(pos);
+            if (PIDScreenPos[0].x <= 0.0f || PIDScreenPos[0].x >= Screen.width || PIDScreenPos[0].y <= 0.0f || PIDScreenPos[0].y >= Screen.height) TracePID[0].SetActive(true);
+            else TracePID[0].SetActive(false);
+        }
+
     }
 
     void Player2_rePos(Vector3 pos)
@@ -355,9 +360,12 @@ public class Player_Manager : MonoBehaviour
             Check_distance();
         }
         //出畫面時啟用Trace
-        PIDScreenPos[1] = Camera.main.WorldToScreenPoint(pos);
-        if (PIDScreenPos[1].x <= 0.0f || PIDScreenPos[1].x >= Screen.width || PIDScreenPos[1].y <= 0.0f || PIDScreenPos[1].y >= Screen.height) TracePID[1].SetActive(true);
-        else TracePID[1].SetActive(false);
+        if (G_PlayerSetting.JoinPlayer[1] == true) {
+            PIDScreenPos[1] = Camera.main.WorldToScreenPoint(pos);
+            if (PIDScreenPos[1].x <= 0.0f || PIDScreenPos[1].x >= Screen.width || PIDScreenPos[1].y <= 0.0f || PIDScreenPos[1].y >= Screen.height) TracePID[1].SetActive(true);
+            else TracePID[1].SetActive(false);
+        }
+
     }
 
     void Player3_rePos(Vector3 pos)
@@ -425,9 +433,12 @@ public class Player_Manager : MonoBehaviour
         }
 
         //出畫面時啟用Trace
-        PIDScreenPos[2] = Camera.main.WorldToScreenPoint(pos);
-        if (PIDScreenPos[2].x <= 0.0f || PIDScreenPos[2].x >= Screen.width || PIDScreenPos[2].y <= 0.0f || PIDScreenPos[2].y >= Screen.height) TracePID[2].SetActive(true);
-        else TracePID[2].SetActive(false);
+        if (G_PlayerSetting.JoinPlayer[2] == true) {
+            PIDScreenPos[2] = Camera.main.WorldToScreenPoint(pos);
+            if (PIDScreenPos[2].x <= 0.0f || PIDScreenPos[2].x >= Screen.width || PIDScreenPos[2].y <= 0.0f || PIDScreenPos[2].y >= Screen.height) TracePID[2].SetActive(true);
+            else TracePID[2].SetActive(false);
+        }
+
     }
 
     void Player4_rePos(Vector3 pos)
@@ -494,9 +505,11 @@ public class Player_Manager : MonoBehaviour
             Check_distance();
         }
         //出畫面時啟用Trace
-        PIDScreenPos[3] = Camera.main.WorldToScreenPoint(pos);
-        if (PIDScreenPos[3].x <= 0.0f || PIDScreenPos[3].x >= Screen.width || PIDScreenPos[3].y <= 0.0f || PIDScreenPos[3].y >= Screen.height) TracePID[3].SetActive(true);
-        else TracePID[3].SetActive(false);
+        if (G_PlayerSetting.JoinPlayer[3] == true) {
+            PIDScreenPos[3] = Camera.main.WorldToScreenPoint(pos);
+            if (PIDScreenPos[3].x <= 0.0f || PIDScreenPos[3].x >= Screen.width || PIDScreenPos[3].y <= 0.0f || PIDScreenPos[3].y >= Screen.height) TracePID[3].SetActive(true);
+            else TracePID[3].SetActive(false);
+        }
     }
 
     void Check_distance()
@@ -743,6 +756,7 @@ public class Player_Manager : MonoBehaviour
         for (int p = 0; p < 4; p++) {
             if (G_PlayerSetting.JoinPlayer[p] == false) {
                 FourPlayer[p].DeathPriority = true;
+                _goblinmanager.SetPlayerDie(p);
                 FourPlayer[p].gameObject.SetActive(false);
                 DeathCountPlus(p);
             }
