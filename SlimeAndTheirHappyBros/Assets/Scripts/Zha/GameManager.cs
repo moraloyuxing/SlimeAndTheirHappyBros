@@ -202,7 +202,7 @@ public class GameManager : MonoBehaviour
                     {
                         uiManager.NextTutorial();
                         tutorialProgress++;
-                        if (tutorialProgress >= 4)
+                        if (tutorialProgress >= 5)
                         {
                             curRound++;
                             playerManager.StartPlaying();
