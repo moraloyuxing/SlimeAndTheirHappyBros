@@ -53,10 +53,10 @@ public class JoinGame : MonoBehaviour{
             a_button[i] = playerInput[i].GetButtonDown("MultiFunction");
 
             //測試
-            a_button[0] = playerInput[0].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.U);
-            a_button[1] = playerInput[1].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.I);
-            a_button[2] = playerInput[2].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.O);
-            a_button[3] = playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.P);
+            // a_button[0] = playerInput[0].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.U);
+            // a_button[1] = playerInput[1].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.I);
+            // a_button[2] = playerInput[2].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.O);
+            // a_button[3] = playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.P);
 
             if (a_button[i] && Already_Player[i] == false &&CanJoin == true) {
                 Already_Player[i] = true;

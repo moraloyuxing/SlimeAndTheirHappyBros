@@ -80,9 +80,9 @@ public class KingGoblin : IEnemyUnit
     }
 
     public void Update(float dt) {
-        if (Input.GetKeyDown(KeyCode.J) && curState == KingState.idle) SetState(KingState.waveAtk);
-        if (Input.GetKeyDown(KeyCode.K) && curState == KingState.idle) SetState(KingState.punchAtk);
-        if (Input.GetKeyDown(KeyCode.L) && curState == KingState.idle) SetState(KingState.throwAtk);
+        // if (Input.GetKeyDown(KeyCode.J) && curState == KingState.idle) SetState(KingState.waveAtk);
+        // if (Input.GetKeyDown(KeyCode.K) && curState == KingState.idle) SetState(KingState.punchAtk);
+        // if (Input.GetKeyDown(KeyCode.L) && curState == KingState.idle) SetState(KingState.throwAtk);
         switch (curState) {
             case KingState.showUp:
                 ShowUp();

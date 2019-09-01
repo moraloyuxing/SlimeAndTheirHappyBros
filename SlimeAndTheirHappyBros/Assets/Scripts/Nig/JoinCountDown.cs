@@ -15,7 +15,7 @@ public class JoinCountDown : MonoBehaviour {
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.M)) Start_CountDown();
+        // if (Input.GetKeyDown(KeyCode.M)) Start_CountDown();
     }
 
     public void Start_CountDown() {

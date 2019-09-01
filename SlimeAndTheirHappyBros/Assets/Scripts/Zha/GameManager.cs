@@ -227,12 +227,12 @@ public class GameManager : MonoBehaviour
                         }
                     }
 
-                    if (Input.GetKeyDown(KeyCode.R)) GoNextRound();
-                    if (Input.GetKeyDown(KeyCode.T))
-                    {
-                        GoBossLevel();
-                        //goblinManager.SpawnBoss();
-                    }
+                    // if (Input.GetKeyDown(KeyCode.R)) GoNextRound();
+                    // if (Input.GetKeyDown(KeyCode.T))
+                    // {
+                    //     GoBossLevel();
+                    //     //goblinManager.SpawnBoss();
+                    // }
                 }
                 else
                 {
@@ -247,10 +247,10 @@ public class GameManager : MonoBehaviour
                         }
                     }
                     if (roundStart) gameStates[curRound].Update(Time.deltaTime);
-                    if (Input.GetKeyDown(KeyCode.E)) {
-                        RoundOver();
-                        goblinManager.KillAllGoblin();
-                    }
+                    // if (Input.GetKeyDown(KeyCode.E)) {
+                    //     RoundOver();
+                    //     goblinManager.KillAllGoblin();
+                    // }
                 }
 
             }
