@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     SceneObjectManager sceneObjectManager;
     NPC_Manager npcManager;
     MultiPlayerCamera cameraController;
-    public CameraTrasnsEffect cameraTransEfect;
+    public CameraTrasnsEffect startCameraTransEfect, endCameraTransEffect;
     Animator cameraAnimator;
 
     public static bool isBreakTime = false;
@@ -40,6 +40,8 @@ public class GameManager : MonoBehaviour
     }
 
     Player[] playerInput = new Player[4];
+
+    bool endTrans = false;
 
     // Start is called before the first frame update
     private void Awake()
@@ -113,7 +115,7 @@ public class GameManager : MonoBehaviour
             cameraMotion = true;
             playerManager.Invoke("StartPlaying", 0.1f);
         }
-        cameraTransEfect.GoTransIn();
+        startCameraTransEfect.GoTransIn();
 
         playerInput[0] = ReInput.players.GetPlayer(0);
         playerInput[1] = ReInput.players.GetPlayer(1);
@@ -166,11 +168,26 @@ public class GameManager : MonoBehaviour
             //舊輸入        || Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space)) {
             //舊輸入    UnityEngine.SceneManagement.SceneManager.LoadScene(0);
             //舊輸入}
-            if ((winInput || looseInput) && playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
-            || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.Space))
-            {
-                UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-            }
+            if (winInput || looseInput) {
+                time += Time.deltaTime;
+                if (time >= 2.0f)
+                {
+                    if (!endTrans)
+                    {
+                        endTrans = true;
+                        endCameraTransEffect.GoTransOut();
+                        time = .0f;
+                    }
+                    else
+                    {
+                        if (winInput) UnityEngine.SceneManagement.SceneManager.LoadScene(2);
+                        else UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+                    }
+                }
+            }    
+            //if ((winInput || looseInput) && playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
+            //|| playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.Space))
+            //{}
             return;
         }
 
