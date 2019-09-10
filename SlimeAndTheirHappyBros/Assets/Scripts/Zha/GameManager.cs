@@ -101,6 +101,8 @@ public class GameManager : MonoBehaviour
 
         DawnHint = GameObject.Find("NextLevel");
         DawnHint.SetActive(false);
+
+        endCameraTransEffect.enabled = false;
     }
     void Start()
     {
@@ -154,6 +156,8 @@ public class GameManager : MonoBehaviour
         //        }
         //    }
         //}
+
+        if (Input.GetKeyDown(KeyCode.Z)) GoWin();
 
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
         else if (Input.GetKeyDown(KeyCode.Q)) {
@@ -398,18 +402,20 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoWin() {
+        endCameraTransEffect.enabled = true;
         MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 1f, 1.0f);
         gameOver = true;
         goblinManager.GameOver(true);
         uiManager.GoWin();
-        StartCoroutine(PlayAgainWin(4.5f));
+        StartCoroutine(PlayAgainWin(4.2f));
     }
 
     public void GoLose() {
+        endCameraTransEffect.enabled = true;
         gameOver = true;
         goblinManager.GameOver();
         uiManager.GoLose();
-        StartCoroutine(PlayAgainLose(2.0f));
+        StartCoroutine(PlayAgainLose(1.8f));
     }
     IEnumerator PlayAgainLose(float time) {
         curRound = -1;
