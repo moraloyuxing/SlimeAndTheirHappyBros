@@ -26,10 +26,11 @@ public class CreditManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (playerInput[0].GetButtonDown("Skip") || playerInput[1].GetButtonDown("Skip")
-           || playerInput[2].GetButtonDown("Skip") || playerInput[3].GetButtonDown("Skip") || Input.GetKeyDown(KeyCode.Space))
+        if (!transEffect && (playerInput[0].GetButtonDown("Skip") || playerInput[1].GetButtonDown("Skip")
+           || playerInput[2].GetButtonDown("Skip") || playerInput[3].GetButtonDown("Skip") || Input.GetKeyDown(KeyCode.Space)))
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            transEffect = true;
+            animator.SetTrigger("BlackOut");
         }
         
     }

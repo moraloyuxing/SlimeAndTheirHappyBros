@@ -160,11 +160,16 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z)) GoWin();
 
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
-        else if (Input.GetKeyDown(KeyCode.Q)) {
+        else if (Input.GetKeyDown(KeyCode.Keypad1)) {
             isBreakTime = false;
             curRound = -1;
-            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
             MultiPlayerCamera.ClearCameraShakeSingleton();
+            gameOver = true;
+            looseInput = true;
+            endCameraTransEffect.enabled = true;
+            goblinManager.GameOver();
+            //UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+            
         } 
 
         if (gameOver && !gamePause) {
