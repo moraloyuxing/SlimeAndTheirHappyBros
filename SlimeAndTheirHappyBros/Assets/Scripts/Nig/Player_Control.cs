@@ -182,6 +182,7 @@ public class Player_Control : MonoBehaviour{
     }
 
     void Update(){
+
         if (CanMove == true) {
             anim.SetBool("Walking", Walking);
             anim.SetBool("Shooting", Shooting);
@@ -507,6 +508,7 @@ public class Player_Control : MonoBehaviour{
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
                 Heart_anim = Personal_HP[Base_HP].GetComponent<Animator>();
                 Heart_anim.Play("Heart_Disappear");
+                playerInput.SetVibration(0,1.0f,0.2f);
 
                 if (Base_HP == 0){
                     DeathPriority = true;
@@ -535,6 +537,7 @@ public class Player_Control : MonoBehaviour{
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
                 Heart_anim = Personal_HP[Base_HP].GetComponent<Animator>();
                 Heart_anim.Play("Heart_Disappear");
+                playerInput.SetVibration(0, 1.0f, 0.2f);
 
                 if (Base_HP == 0)
                 {

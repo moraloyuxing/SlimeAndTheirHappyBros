@@ -638,6 +638,8 @@ public class Merge_Control : MonoBehaviour{
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
                 Base_HP--;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
+                playerMoveInput.SetVibration(0, 1.0f, 0.2f);
+                playerAtkInput.SetVibration(0, 1.0f, 0.2f);
                 for (int k = 0; k < Max_HP; k++) {
                     if (k < Base_HP) Merge_HP[k].SetActive(true);
                     else if (k == Base_HP){
@@ -678,7 +680,8 @@ public class Merge_Control : MonoBehaviour{
             InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
             Base_HP--;
             AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
-
+            playerMoveInput.SetVibration(0, 1.0f, 0.2f);
+            playerAtkInput.SetVibration(0, 1.0f, 0.2f);
             for (int k = 0; k < Max_HP; k++){
                 if (k < Base_HP) Merge_HP[k].SetActive(true);
                 else if (k == Base_HP){

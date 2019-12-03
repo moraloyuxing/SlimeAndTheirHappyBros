@@ -637,6 +637,10 @@ public class GoblinManager : MonoBehaviour
             freeHobGoblins[i].GrowMaxHp();
         }
     }
+    public void ChangeKingGoblinHP(int round) {
+        int hp = 300 + 100 * (round - 1);
+        kingGoblin.ChangeHp(hp);
+    }
     public void KillAllGoblin()
     {
         for (int i = 0; i < usedNormalGoblins.Count;)

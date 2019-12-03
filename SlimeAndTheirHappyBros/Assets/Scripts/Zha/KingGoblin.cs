@@ -409,4 +409,8 @@ public class KingGoblin : IEnemyUnit
     {
         animator.speed = .0f;
     }
+    public void ChangeHp(int value) {
+        totalHp = value;
+        hp = value;
+    }
 }

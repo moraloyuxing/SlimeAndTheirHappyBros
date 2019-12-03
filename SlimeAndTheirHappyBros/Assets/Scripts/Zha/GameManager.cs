@@ -351,7 +351,7 @@ public class GameManager : MonoBehaviour
         curRound++;
         if (curRound > maxLevel) curRound = maxLevel;
         if (curRound > 1 && ((curRound - 3) % 2) == 0) goblinManager.GrowGoblinHP();
-
+        goblinManager.ChangeKingGoblinHP(curRound);
 
         roundStart = false;
         inShopping = true;
