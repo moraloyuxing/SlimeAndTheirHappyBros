@@ -157,7 +157,7 @@ public class GameManager : MonoBehaviour
         //    }
         //}
 
-        if (Input.GetKeyDown(KeyCode.Z)) GoWin();
+        //if (Input.GetKeyDown(KeyCode.Z)) GoWin();
 
         if (Input.GetKeyDown(KeyCode.Escape)) Application.Quit();
         else if (Input.GetKeyDown(KeyCode.Keypad1)) {
@@ -169,8 +169,11 @@ public class GameManager : MonoBehaviour
             endCameraTransEffect.enabled = true;
             goblinManager.GameOver();
             //UnityEngine.SceneManagement.SceneManager.LoadScene(0);
-            
-        } 
+
+        }
+        else if (Input.GetKeyDown(KeyCode.Keypad2)){
+            playerManager.DocterRound();
+        }
 
         if (gameOver && !gamePause) {
             //舊輸入/if ((winInput || looseInput) && Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
@@ -253,12 +256,12 @@ public class GameManager : MonoBehaviour
                         }
                     }
 
-                    // if (Input.GetKeyDown(KeyCode.R)) GoNextRound();
-                    // if (Input.GetKeyDown(KeyCode.T))
-                    // {
-                    //     GoBossLevel();
-                    //     //goblinManager.SpawnBoss();
-                    // }
+                    //// if (Input.GetKeyDown(KeyCode.R)) GoNextRound();
+                    //if (Input.GetKeyDown(KeyCode.T))
+                    //{
+                    //    GoBossLevel();
+                    //    //goblinManager.SpawnBoss();
+                    //}
                 }
                 else
                 {
@@ -273,10 +276,11 @@ public class GameManager : MonoBehaviour
                         }
                     }
                     if (roundStart) gameStates[curRound].Update(Time.deltaTime);
-                    // if (Input.GetKeyDown(KeyCode.E)) {
-                    //     RoundOver();
-                    //     goblinManager.KillAllGoblin();
-                    // }
+                    if (Input.GetKeyDown(KeyCode.E))
+                    {
+                        RoundOver();
+                        goblinManager.KillAllGoblin();
+                    }
                 }
 
             }
@@ -383,11 +387,17 @@ public class GameManager : MonoBehaviour
     }
 
     public void KillGoblin() {
-        if (test) return;
+        if (test ) return;
         goblinKills++;
 
-        if (goblinKills >= goblinKillsGoal[curRound]) RoundOver();
-        if(bossLevel && bossMonsterNum > 0) bossMonsterNum--;
+        if (!bossLevel)
+        {
+            if (goblinKills >= goblinKillsGoal[curRound]) RoundOver();
+        }
+        else {
+            if (bossMonsterNum > 0) bossMonsterNum--;
+        }
+
         //Debug.Log("kill goblin  " + goblinKills +"    in   " +  curRound);
     }
 
@@ -407,20 +417,27 @@ public class GameManager : MonoBehaviour
     }
 
     public void GoWin() {
-        endCameraTransEffect.enabled = true;
-        MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 1f, 1.0f);
-        gameOver = true;
-        goblinManager.GameOver(true);
-        uiManager.GoWin();
-        StartCoroutine(PlayAgainWin(4.2f));
+        if (!gameOver) {
+            endCameraTransEffect.enabled = true;
+            MultiPlayerCamera.CamerashakingSingleton.StartShakeEasyOut(0.5f, 1f, 1.0f);
+            gameOver = true;
+            goblinManager.GameOver(true);
+            uiManager.GoWin();
+            StartCoroutine(PlayAgainWin(4.2f));
+        }
+
     }
 
     public void GoLose() {
-        endCameraTransEffect.enabled = true;
-        gameOver = true;
-        goblinManager.GameOver();
-        uiManager.GoLose();
-        StartCoroutine(PlayAgainLose(1.8f));
+
+        if (!gameOver) {
+            endCameraTransEffect.enabled = true;
+            gameOver = true;
+            goblinManager.GameOver();
+            uiManager.GoLose();
+            StartCoroutine(PlayAgainLose(1.8f));
+        }
+
     }
     IEnumerator PlayAgainLose(float time) {
         curRound = -1;

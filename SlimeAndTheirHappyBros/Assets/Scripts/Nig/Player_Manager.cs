@@ -196,6 +196,7 @@ public class Player_Manager : MonoBehaviour
             }
             if (onit) {
                 //天使&巫醫退場
+                //Debug.Log("nexxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxtt");
                 npcmanager.BreakTime_End();
                 OnAltarCBK();
             }

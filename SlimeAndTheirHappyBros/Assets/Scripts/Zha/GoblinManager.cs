@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class GoblinManager : MonoBehaviour
 {
+    float moneyFix = 2.0f;
+
     bool gameOver = false, bossTime = false, gamePause = false;
     int index = 0;
     float time;
@@ -533,14 +535,14 @@ public class GoblinManager : MonoBehaviour
     }
     public void UseMoney(int num, Vector3 pos, int target)
     {
-        Four_Player[target].MoneyUpdate(num);//UI更新num
+        Four_Player[target].MoneyUpdate(Mathf.FloorToInt(moneyFix * num));//UI更新num
         StartCoroutine(DropMoney(num, pos, target));
 
     }
     public void UseMoney(int num, Vector3 pos, int target1, int target2)
     {
-        Four_Player[target1].MoneyUpdate(num);//UI更新num
-        Four_Player[target2].MoneyUpdate(num);//UI更新num
+        Four_Player[target1].MoneyUpdate(Mathf.FloorToInt(moneyFix * num));//UI更新num
+        Four_Player[target2].MoneyUpdate(Mathf.FloorToInt(moneyFix * num));//UI更新num
         StartCoroutine(DropMoney(num, pos, target1));
 
     }
@@ -638,7 +640,9 @@ public class GoblinManager : MonoBehaviour
         }
     }
     public void ChangeKingGoblinHP(int round) {
-        int hp = 300 + 100 * (round - 1);
+        if (round == 2) moneyFix = 1.5f;
+        else if(round > 2) moneyFix = 1.0f;
+        int hp = 150 + 100 * (round - 1);
         kingGoblin.ChangeHp(hp);
     }
     public void KillAllGoblin()

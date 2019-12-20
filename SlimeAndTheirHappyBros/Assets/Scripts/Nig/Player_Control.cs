@@ -607,7 +607,7 @@ public class Player_Control : MonoBehaviour{
             AudioManager.SingletonInScene.PlaySound2D("Heal", 0.5f);
             if (rescue_count >= 5){
                 rescue_count = 0;
-                Base_HP = 1 + Extra_HP;
+                Base_HP = Mathf.CeilToInt((3 + Extra_HP)*0.5f);
                 for (int k = 0; k < Personal_HP.Length; k++){
                     if (k < Base_HP) {
                         Heart_anim = Personal_HP[k].GetComponent<Animator>();
