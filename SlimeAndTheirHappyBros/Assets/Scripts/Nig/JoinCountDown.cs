@@ -30,6 +30,7 @@ public class JoinCountDown : MonoBehaviour {
         }
         else {
             CountDown_Img.sprite = CountSprite[Base_Timer];
+            AudioManager.SingletonInScene.PlaySound2D("Count", 1f);
             anim.Play("TitleCountDown");
         }
     }
