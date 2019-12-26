@@ -43,6 +43,9 @@ public class GameManager : MonoBehaviour
 
     bool endTrans = false;
 
+    //lin新增_變數區
+    bool NeedTutorial = false;
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -219,25 +222,48 @@ public class GameManager : MonoBehaviour
                     {
                         cameraAnimator.SetTrigger("over");
                         cameraMotion = true;
-                        uiManager.StartTutorial();
+                        //uiManager.StartTutorial();//lin_以是否進行教學模式取代這行，這行遷移
+                        uiManager.AskTutorial();//lin新增_先進入詢問教學動畫
                         time = .0f;
                     }
                 }
                 else {
-                    //舊輸入if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
-                    //舊輸入|| Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
-                    if (playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
-                    || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.Space))
+                    //lin新增_不進入教學
+                    if (NeedTutorial == false)
                     {
-                        uiManager.NextTutorial();
-                        tutorialProgress++;
-                        if (tutorialProgress >= 5)
+                        if (playerInput[0].GetButtonDown("Split") || playerInput[1].GetButtonDown("Split")
+                        || playerInput[2].GetButtonDown("Split") || playerInput[3].GetButtonDown("Split"))
                         {
+                            uiManager.TutorialAskResult(2);
                             curRound++;
                             playerManager.StartPlaying();
                             uiManager.FirstRound();
                         }
 
+                        else if (playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
+                        || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction"))
+                        {
+                            NeedTutorial = true;
+                            uiManager.TutorialAskResult(1);
+                            uiManager.StartTutorial();
+                        }
+                    }
+
+                    else {
+                        //舊輸入if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
+                        //舊輸入|| Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
+                        if (playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
+                        || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.Space))
+                        {
+                            uiManager.NextTutorial();
+                            tutorialProgress++;
+                            if (tutorialProgress >= 6)
+                            {
+                                curRound++;
+                                playerManager.StartPlaying();
+                                uiManager.FirstRound();
+                            }
+                        }
                     }
                 }
             }

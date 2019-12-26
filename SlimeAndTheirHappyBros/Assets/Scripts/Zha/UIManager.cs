@@ -76,6 +76,14 @@ public class UIManager : MonoBehaviour
         BossCountDownCBK = cbk;
     }
 
+    public void AskTutorial() {
+        animator.SetTrigger("Ask");
+    }
+
+    public void TutorialAskResult(int r) {
+        animator.SetInteger("AskResult", r);
+    }
+
     public void StartTutorial() {
         animator.SetTrigger("Tutorial");
     }
@@ -84,7 +92,7 @@ public class UIManager : MonoBehaviour
         tutorialProgres++;
         animator.SetInteger("TutorialProgress", tutorialProgres);
         AudioManager.SingletonInScene.PlaySound2D("Teach_Enter",0.7f);
-        if (tutorialProgres >= 4) tutorialImg.enabled = false;
+        if (tutorialProgres >= 5) tutorialImg.enabled = false;
     }
 
     public void FirstRound() {
