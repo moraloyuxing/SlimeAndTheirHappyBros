@@ -20,21 +20,21 @@ public class FlashIcon : MonoBehaviour
     }
     void Flash()
     {
-        if (color.a <= 0.3f)
+        if (color.a <= 0.7f)
         {
             changeA = false;
         }
-        if (color.a >= 0.7)
+        if (color.a >= 1)
         {
             changeA = true;
         }
-        if (color.a >= 0.3f && changeA)
+        if (color.a >= 0.7f && changeA)
         {
-            color.a -= 0.015f;
+            color.a -= 0.0068f;
         }
-        if (color.a <= 0.7f && !changeA)
+        if (color.a <= 1 && !changeA)
         {
-            color.a += 0.015f;
+            color.a += 0.0068f;
         }
         GetComponent<Image>().color = color;
     }
