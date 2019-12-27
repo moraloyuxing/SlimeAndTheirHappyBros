@@ -115,6 +115,8 @@ public class Merge_Control : MonoBehaviour{
 
     Rewired.Player playerMoveInput, playerAtkInput;
 
+    TutorialStep _tutorialstep;
+
     void Start()
     {
         Player_Manager = GameObject.Find("Player_Manager");
@@ -125,6 +127,7 @@ public class Merge_Control : MonoBehaviour{
         anim = GetComponent<Animator>();
         anim.SetInteger("MergeNumber", MergeNumber);
         _mergectrl = GetComponent<Merge_Control>();
+        _tutorialstep = GameObject.Find("GameManager").GetComponent<TutorialStep>();
     }
 
     public void SetMSlimePool(Bullet_Manager _bulletpool, Object_Pool pool)
@@ -370,6 +373,7 @@ public class Merge_Control : MonoBehaviour{
             CancelInvoke("Merge_Timer");
             Base_Timer = 0.0f;
             Merge_Timer();
+            if (G_Tutorial.During_Tutorial == true) _tutorialstep.T_Words[4].SetActive(false);
         }
 
         //計算無敵時間(可攻擊、移動，但取消raycast偵測被二次攻擊)
@@ -636,18 +640,23 @@ public class Merge_Control : MonoBehaviour{
                 StopDetect = true;
                 musouTime = 1.8f;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
-                Base_HP--;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.5f);
                 playerMoveInput.SetVibration(0, 1.0f, 0.2f);
                 playerAtkInput.SetVibration(0, 1.0f, 0.2f);
-                for (int k = 0; k < Max_HP; k++) {
-                    if (k < Base_HP) Merge_HP[k].SetActive(true);
-                    else if (k == Base_HP){
-                        Heart_anim = Merge_HP[k].GetComponent<Animator>();
-                        Heart_anim.Play("Heart_Disappear");
+
+                //lin新增_教學關不扣血
+                if (G_Tutorial.During_Tutorial == false) {
+                    Base_HP--;
+                    for (int k = 0; k < Max_HP; k++){
+                        if (k < Base_HP) Merge_HP[k].SetActive(true);
+                        else if (k == Base_HP){
+                            Heart_anim = Merge_HP[k].GetComponent<Animator>();
+                            Heart_anim.Play("Heart_Disappear");
+                        }
+                        else Merge_HP[k].SetActive(false);
                     }
-                    else Merge_HP[k].SetActive(false);
                 }
+
                 if (Base_HP == 0){
                     DeathPriority = true;
                     ExtraPriority = false;//沒必要true受傷優先，也有利之後復活初始化

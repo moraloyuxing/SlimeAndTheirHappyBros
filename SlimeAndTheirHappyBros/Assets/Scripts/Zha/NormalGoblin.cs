@@ -8,7 +8,6 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
     float atkColOffset, atkSpeedOffset = 1.0f;
     Transform atkColTrans;
     Collider atkCol, hurtAreaCol;
-
     //TestPlayerManager playerManager;
     //Player_Manager playerManager;
 
@@ -72,6 +71,21 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
         renderer.material.SetInt("_colorID", col);
         color = col;
         //SetState(GoblinState.moveIn);
+    }
+
+    //lin新增_專屬教學模式產生的
+    public void Spawn_forTutorial(Vector3 pos, int col,Sprite s){
+        if (col <= 0){
+            col = Random.Range(1, 6);
+        }
+        transform.gameObject.SetActive(true);
+        transform.position = new Vector3(pos.x, spawnHeight, pos.z);
+        selfPos = transform.position;
+        renderer.material.SetInt("_colorID", col);
+        color = col;
+
+        SpriteRenderer _SR = transform.Find("ColorHint").GetComponent<SpriteRenderer>();
+        _SR.sprite = s;
     }
 
     // Update is called once per frame
@@ -194,6 +208,11 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
                 curPathRequest = null;
             }
 
+            if (G_Tutorial.During_Tutorial == true) {
+                SpriteRenderer _SR = transform.Find("ColorHint").GetComponent<SpriteRenderer>();
+                _SR.sprite = null;
+            }
+
             AudioManager.SingletonInScene.PlaySound2D("Goblin_Death", 0.26f);
             atkCol.enabled = false;
             atkSpeedOffset = 1.0f;
@@ -202,10 +221,14 @@ public class NormalGoblin: GoblinBase, IEnemyUnit
             animator.SetTrigger("die");
             //animator.Play("die");
             animator.SetInteger("state", 4);
-            AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
-            
-            if(targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
-            else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);
+
+            //lin新增_教學階段不掉錢
+            if (G_Tutorial.During_Tutorial == false) {
+                AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.6f);
+                if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
+                else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);
+            }
+
             firstInState = false;
             whiteScale = 1.0f;
         }

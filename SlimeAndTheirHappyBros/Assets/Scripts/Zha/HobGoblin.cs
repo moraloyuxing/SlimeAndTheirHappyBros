@@ -745,9 +745,14 @@ public class HobGoblin : GoblinBase, IEnemyUnit
             animator.speed = 1.0f;
             animator.SetTrigger("die");
             animator.SetInteger("state", 4);
-            AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.5f);
-            if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
-            else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);
+
+            //lin新增_教學階段不掉錢
+            if (G_Tutorial.During_Tutorial == false) {
+                AudioManager.SingletonInScene.PlaySound2D("Drop_Money", 0.5f);
+                if (targetPlayer == targetPlayer2) goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer);
+                else goblinManager.UseMoney(Random.Range(minMoney, maxMoney), selfPos, targetPlayer, targetPlayer2);
+            }
+
             firstInState = false;
             whiteScale = 1.0f;
         }

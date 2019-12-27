@@ -88,6 +88,10 @@ public class GoblinManager : MonoBehaviour
 
     System.Action KillGoblin;
 
+    //lin新增
+    int color_ensure = 0;
+    public Sprite[] ColorHint = new Sprite[7];
+
     // Start is called before the first frame update
     private void Awake()
     {
@@ -387,7 +391,6 @@ public class GoblinManager : MonoBehaviour
         goblin.UpdateAllPlayerPos();
         freeArcherGoblins.RemoveAt(0);
     }
-
     public void SpawnHobGoblinMutiColor(int col)
     {
         if (col == 0)
@@ -728,6 +731,55 @@ public class GoblinManager : MonoBehaviour
         yield return new WaitForSeconds(1.35f);
         kingGoblin.ResetUnit();
         goblinSpirit.ResetUnit();
+    }
+
+    //lin新增_教學用Goblin之生成
+    public void SpawnNormalGoblin_BaseforTutorial(int col,Vector3 v){
+        //不用隨機
+        if (col == 0) col = 4;
+        if (freeNormalGoblins.Count <= 0) return;
+        NormalGoblin goblin = freeNormalGoblins[0];
+        usedNormalGoblins.Add(goblin);
+        Vector3 pos = v;//固定給三處
+
+        //提示UI開啟
+        goblin.Spawn_forTutorial(pos, col,ColorHint[col]);
+        goblin.UpdateAllPlayerPos();
+        freeNormalGoblins.RemoveAt(0);
+    }
+
+    public void SpawnNormalGoblin_MultiforTutorial(int col,Vector3 v){
+        if (col == 0){
+            float o = Random.Range(0, 90);
+            if (o < 30) col = 3;
+            else if (o < 60) col = 5;
+            else col = 6;
+        }
+
+        //確保兩隻絕對不同色
+        if (col == color_ensure) {
+            switch(col){
+                case 3:
+                    col = 5;
+                    break;
+                case 5:
+                    col = 6;
+                    break;
+                case 6:
+                    col = 3;
+                    break;
+            }
+        }
+        color_ensure = col;
+        if (freeNormalGoblins.Count <= 0) return;
+        NormalGoblin goblin = freeNormalGoblins[0];
+        usedNormalGoblins.Add(goblin);
+        Vector3 pos = v;//固定給兩處
+
+        //提示UI開啟，內容看隨機出來的col
+        goblin.Spawn_forTutorial(pos, col, ColorHint[col]);
+        goblin.UpdateAllPlayerPos();
+        freeNormalGoblins.RemoveAt(0);
     }
 
 }

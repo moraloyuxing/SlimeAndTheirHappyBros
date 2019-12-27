@@ -156,6 +156,9 @@ public class Player_Control : MonoBehaviour{
 
     public Player playerInput;
 
+    //lin新增_教學階段控管
+    public TutorialStep _tutorialstep;
+
     void Start(){
         PlayerID2 = PlayerID;
         WhichPlayer = gameObject.name;
@@ -408,6 +411,13 @@ public class Player_Control : MonoBehaviour{
                             StopDetect = true;
                             GetComponent<Animator>().Play("Slime_JumpinPond");
                             DashEnd();
+
+                            //lin新增_教學階段flag開啟
+                            if (_tutorialstep.CurrentStep == 1) {
+                                _tutorialstep.DyeFlag[PlayerID] = true;
+                                _tutorialstep.CheckStepProgress();
+                            }
+
                         }
                     }
                 }
@@ -504,11 +514,15 @@ public class Player_Control : MonoBehaviour{
                 if(musouTime >0.0f)CancelInvoke("Musou_Flick");
                 musouTime = 1.8f;
                 InvokeRepeating("Musou_Flick", 0.3f, 0.3f);
-                Base_HP--;
                 AudioManager.SingletonInScene.PlaySound2D("Slime_Hurt", 0.7f);
-                Heart_anim = Personal_HP[Base_HP].GetComponent<Animator>();
-                Heart_anim.Play("Heart_Disappear");
-                playerInput.SetVibration(0,1.0f,0.2f);
+                playerInput.SetVibration(0, 1.0f, 0.2f);
+
+                //lin新增_教學關不扣血
+                if (G_Tutorial.During_Tutorial == false) {
+                    Base_HP--;
+                    Heart_anim = Personal_HP[Base_HP].GetComponent<Animator>();
+                    Heart_anim.Play("Heart_Disappear");
+                }
 
                 if (Base_HP == 0){
                     DeathPriority = true;
@@ -1014,6 +1028,10 @@ public class Player_Control : MonoBehaviour{
 
     public void StartPlaying() {
         CanMove = true;
+    }
+
+    public void StopPlaying() {
+        CanMove = false;
     }
 
     public void OnBossDebut_Switch() {

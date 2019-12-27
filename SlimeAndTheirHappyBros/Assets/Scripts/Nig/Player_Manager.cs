@@ -64,11 +64,15 @@ public class Player_Manager : MonoBehaviour
 
     public Rewired.Player[] playerInput = new Rewired.Player[4];
 
+    TutorialStep _tutorialStep;
+
     void Awake(){
         pigmentManager = GetComponent<Pigment_Manager>();
+
     }
     private void Start()
     {
+        _tutorialStep = GameObject.Find("GameManager").GetComponent<TutorialStep>();
         playerInput[0] = Rewired.ReInput.players.GetPlayer(0);
         playerInput[1] = Rewired.ReInput.players.GetPlayer(1);
         playerInput[2] = Rewired.ReInput.players.GetPlayer(2);
@@ -80,7 +84,7 @@ public class Player_Manager : MonoBehaviour
         //舊輸入for (int i = 0; i < TotalPlayer; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
         for (int i = 0; i < 4; i++) if(G_PlayerSetting.JoinPlayer[i] == true)a_button[i] = playerInput[i].GetButtonDown("MultiFunction");
 
-        if (Game_State && OnBossDebut == false){
+        if (Game_State && OnBossDebut == false && _tutorialStep.CurrentStep >=4 ){
             //玩家1啟用融合
             if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true && Weak_State[0] == false && Player_Hurt[0] == false){
                 if (shortest_toPlayer[0] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[0].gameObject && Can_Merge[0] == true && Weak_State[1] == false && Player_Hurt[1] == false) {pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[1].gameObject, Color_Number[0] + Color_Number[1]);}
@@ -123,6 +127,10 @@ public class Player_Manager : MonoBehaviour
             WashBoard_OnUse = true;
             WashMoment = Time.time;
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+            if (_tutorialStep.CurrentStep == 2){
+                _tutorialStep.WashFlag[0] = true;
+                _tutorialStep.CheckStepProgress();
+            }
         }
         //玩家2啟用洗白
         if (a_button[1] && WashPriority[1] && FourPlayer[1].gameObject.activeSelf == true && Player_Death[1] == false && OnBossDebut == false){
@@ -137,6 +145,10 @@ public class Player_Manager : MonoBehaviour
             WashBoard_OnUse = true;
             WashMoment = Time.time;
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+            if (_tutorialStep.CurrentStep == 2) {
+                _tutorialStep.WashFlag[1] = true;
+                _tutorialStep.CheckStepProgress();
+            }
         }
         //玩家3啟用洗白
         if (a_button[2] && WashPriority[2] && FourPlayer[2].gameObject.activeSelf == true && Player_Death[2] == false && OnBossDebut == false){
@@ -151,6 +163,10 @@ public class Player_Manager : MonoBehaviour
             WashBoard_OnUse = true;
             WashMoment = Time.time;
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+            if (_tutorialStep.CurrentStep == 2){
+                _tutorialStep.WashFlag[2] = true;
+                _tutorialStep.CheckStepProgress();
+            }
         }
 
         //玩家4啟用洗白
@@ -166,6 +182,10 @@ public class Player_Manager : MonoBehaviour
             WashBoard_OnUse = true;
             WashMoment = Time.time;
             AudioManager.SingletonInScene.PlaySound2D("Washing", 0.7f);
+            if (_tutorialStep.CurrentStep == 2){
+                _tutorialStep.WashFlag[3] = true;
+                _tutorialStep.CheckStepProgress();
+            }
         }
 
         if (WashBoard_OnUse == true && Time.time > WashMoment + 5.0f) {
@@ -250,7 +270,7 @@ public class Player_Manager : MonoBehaviour
             if (Mathf.Abs(FourPlayer[0].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[0].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 &&Player_Death[0] == false)
             {
-                if (Color_Number[0] != 0){
+                if (Color_Number[0] != 0 && _tutorialStep.CurrentStep !=1){
                     WashPriority[0] = true;
                     if (Playeranim[0].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")) {
                         WashPriority[0] = false;
@@ -317,7 +337,7 @@ public class Player_Manager : MonoBehaviour
             if (Mathf.Abs(FourPlayer[1].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[1].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 && Player_Death[1] == false)
             {
-                if (Color_Number[1] != 0){
+                if (Color_Number[1] != 0 && _tutorialStep.CurrentStep != 1){
                     WashPriority[1] = true;
                     if (Playeranim[1].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")){
                         WashPriority[1] = false;
@@ -388,7 +408,7 @@ public class Player_Manager : MonoBehaviour
             if (Mathf.Abs(FourPlayer[2].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[2].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 && Player_Death[2] == false)
             {
-                if (Color_Number[2] != 0)
+                if (Color_Number[2] != 0 && _tutorialStep.CurrentStep != 1)
                 {
                     WashPriority[2] = true;
                     if (Playeranim[2].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")){
@@ -461,7 +481,7 @@ public class Player_Manager : MonoBehaviour
             if (Mathf.Abs(FourPlayer[3].transform.position.x - WashingPlace.position.x) < 6.0f && Mathf.Abs(FourPlayer[3].transform.position.z - WashingPlace.position.z) < 6.0f && HaveBoard
                 && Player_Death[3] == false)
             {
-                if (Color_Number[3] != 0)
+                if (Color_Number[3] != 0 && _tutorialStep.CurrentStep != 1)
                 {
                     WashPriority[3] = true;
                     if (Playeranim[3].GetCurrentAnimatorStateInfo(0).IsName("Slime_Hurt")){
@@ -535,22 +555,22 @@ public class Player_Manager : MonoBehaviour
 
         //根據bool回傳秀出混合提示給玩家
         if (FourPlayer[0].gameObject.activeSelf == true) {
-            if ((Can_Merge[0] == true || Can_Merge[1] == true || Can_Merge[2] == true) && WashPriority[0] == false && Weak_State[0] == false/* && FourPlayer[0].gameObject.activeSelf == true*/) { SetHintType(0, 1); }
+            if ((Can_Merge[0] == true || Can_Merge[1] == true || Can_Merge[2] == true) && WashPriority[0] == false && Weak_State[0] == false/* && FourPlayer[0].gameObject.activeSelf == true*/ && _tutorialStep.CurrentStep>=4) { SetHintType(0, 1); }
             else if ((Can_Merge[0] == false && Can_Merge[1] == false && Can_Merge[2] == false && WashPriority[0] == false)/*|| FourPlayer[0].gameObject.activeSelf == false*/) FourPlayer[0].SendMessage("Hide_Hint");
         }
 
         if (FourPlayer[1].gameObject.activeSelf == true) {
-            if ((Can_Merge[0] == true || Can_Merge[3] == true || Can_Merge[4] == true) && WashPriority[1] == false && Weak_State[1] == false /*&& FourPlayer[1].gameObject.activeSelf == true*/) SetHintType(1, 1);
+            if ((Can_Merge[0] == true || Can_Merge[3] == true || Can_Merge[4] == true) && WashPriority[1] == false && Weak_State[1] == false /*&& FourPlayer[1].gameObject.activeSelf == true*/&& _tutorialStep.CurrentStep >= 4) SetHintType(1, 1);
             else if ((Can_Merge[0] == false && Can_Merge[3] == false && Can_Merge[4] == false && WashPriority[1] == false)/*|| FourPlayer[1].gameObject.activeSelf == false*/) FourPlayer[1].SendMessage("Hide_Hint");
         }
 
         if (FourPlayer[2].gameObject.activeSelf == true) {
-            if ((Can_Merge[1] == true || Can_Merge[3] == true || Can_Merge[5] == true) && WashPriority[2] == false && Weak_State[2] == false /*&& FourPlayer[2].gameObject.activeSelf == true*/) SetHintType(2, 1);
+            if ((Can_Merge[1] == true || Can_Merge[3] == true || Can_Merge[5] == true) && WashPriority[2] == false && Weak_State[2] == false /*&& FourPlayer[2].gameObject.activeSelf == true*/&& _tutorialStep.CurrentStep >= 4) SetHintType(2, 1);
             else if ((Can_Merge[1] == false && Can_Merge[3] == false && Can_Merge[5] == false && WashPriority[2] == false)/* || FourPlayer[2].gameObject.activeSelf == false*/) FourPlayer[2].SendMessage("Hide_Hint");
         }
 
         if (FourPlayer[3].gameObject.activeSelf == true) {
-            if ((Can_Merge[2] == true || Can_Merge[4] == true || Can_Merge[5] == true) && WashPriority[3] == false && Weak_State[3] == false /*&& FourPlayer[3].gameObject.activeSelf == true*/) SetHintType(3, 1);
+            if ((Can_Merge[2] == true || Can_Merge[4] == true || Can_Merge[5] == true) && WashPriority[3] == false && Weak_State[3] == false /*&& FourPlayer[3].gameObject.activeSelf == true*/&& _tutorialStep.CurrentStep >= 4) SetHintType(3, 1);
             else if ((Can_Merge[2] == false && Can_Merge[4] == false && Can_Merge[5] == false && WashPriority[3] == false)/* || FourPlayer[3].gameObject.activeSelf == false*/) FourPlayer[3].SendMessage("Hide_Hint");
         }
     }
@@ -730,6 +750,14 @@ public class Player_Manager : MonoBehaviour
         CanTrace = true;
         for (int p = 0; p < 4; p++) {
             if (G_PlayerSetting.JoinPlayer[p] == true) FourPlayer[p].StartPlaying();
+        }
+    }
+
+    public void StopPlaying(){
+        CanTrace = true;
+        for (int p = 0; p < 4; p++)
+        {
+            if (G_PlayerSetting.JoinPlayer[p] == true) FourPlayer[p].StopPlaying();
         }
     }
 

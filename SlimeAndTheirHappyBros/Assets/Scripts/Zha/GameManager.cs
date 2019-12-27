@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     MultiPlayerCamera cameraController;
     public CameraTrasnsEffect startCameraTransEfect, endCameraTransEffect;
     Animator cameraAnimator;
+    TutorialStep tutorialstep;
 
     public static bool isBreakTime = false;
     public static int curRound = -1;
@@ -45,6 +46,8 @@ public class GameManager : MonoBehaviour
 
     //lin新增_變數區
     bool NeedTutorial = false;
+    public bool CanNextTut = false;
+    public GameObject TutorialPanel;
 
     // Start is called before the first frame update
     private void Awake()
@@ -69,6 +72,8 @@ public class GameManager : MonoBehaviour
         cameraController.SubKingShowUpCBK(goblinManager.SpawnBoss);//註冊
 
         cameraAnimator = GameObject.Find("CameraController").GetComponent<Animator>();
+
+        tutorialstep = GetComponent<TutorialStep>(); //lin新增_抓取教學流程控管程式碼
 
         float goblinNumOffset = 1.0f;
         if (playerCount < 4) {
@@ -234,6 +239,7 @@ public class GameManager : MonoBehaviour
                         if (playerInput[0].GetButtonDown("Split") || playerInput[1].GetButtonDown("Split")
                         || playerInput[2].GetButtonDown("Split") || playerInput[3].GetButtonDown("Split"))
                         {
+                            G_Tutorial.During_Tutorial = false;
                             uiManager.TutorialAskResult(2);
                             curRound++;
                             playerManager.StartPlaying();
@@ -244,26 +250,39 @@ public class GameManager : MonoBehaviour
                         || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction"))
                         {
                             NeedTutorial = true;
+                            G_Tutorial.During_Tutorial = true;
                             uiManager.TutorialAskResult(1);
-                            uiManager.StartTutorial();
+                            uiManager.StartTutorial();//第一個ctrl出現
+                            tutorialstep.SetTutorialStep(0);
                         }
                     }
 
                     else {
                         //舊輸入if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
                         //舊輸入|| Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
-                        if (playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
-                        || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.Space))
+                        if ((playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
+                        || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.Space)) && CanNextTut == true)
                         {
-                            uiManager.NextTutorial();
-                            tutorialProgress++;
-                            if (tutorialProgress >= 6)
-                            {
-                                curRound++;
-                                playerManager.StartPlaying();
-                                uiManager.FirstRound();
+                            CanNextTut = false;
+                            tutorialstep.CheckHint.SetActive(false);
+                            if (tutorialProgress == 0) NextTutorial();
+                            else{
+                                TutorialPanel.SetActive(false);
+                                tutorialstep.ShowTutorialUI();
+                                playerManager.StartPlaying();  //玩家可操作的bool
                             }
-                        }
+
+                                //uiManager.NextTutorial();
+                                //tutorialProgress++;
+                                //tutorialstep.SetTutorialStep(tutorialProgress);
+                                //if (tutorialProgress >= 6)
+                                //{
+                                //    G_Tutorial.During_Tutorial = false;
+                                //    curRound++;
+                                //    playerManager.StartPlaying();
+                                //    uiManager.FirstRound();
+                                //}
+                            }
                     }
                 }
             }
@@ -418,6 +437,10 @@ public class GameManager : MonoBehaviour
 
         if (!bossLevel)
         {
+            if (G_Tutorial.During_Tutorial) {
+                tutorialstep.CheckStepProgress();
+                return;
+            }
             if (goblinKills >= goblinKillsGoal[curRound]) RoundOver();
         }
         else {
@@ -476,6 +499,22 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(time);
         winInput = true;
     }
+
+    //lin新增_教學階段控管
+    public void NextTutorial() {
+        TutorialPanel.SetActive(true);
+        uiManager.NextTutorial();
+        tutorialProgress++;
+        tutorialstep.SetTutorialStep(tutorialProgress);
+        playerManager.StopPlaying();  //玩家暫停操作的bool
+        if (tutorialProgress >= 6){
+            G_Tutorial.During_Tutorial = false;
+            curRound++;
+            playerManager.StartPlaying();
+            uiManager.FirstRound();
+        }
+    }
+
 
 }
 
