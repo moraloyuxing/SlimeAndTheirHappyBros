@@ -31,6 +31,7 @@ public class JoinGame : MonoBehaviour{
 
 
     void Start(){
+        G_Tutorial.During_Tutorial = true;
         for (int i = 0; i < 4; i++) {
             Which_Player[i] = Four_Player[i].name;
             animator[i] = Four_Player[i].gameObject.GetComponent<Animator>();

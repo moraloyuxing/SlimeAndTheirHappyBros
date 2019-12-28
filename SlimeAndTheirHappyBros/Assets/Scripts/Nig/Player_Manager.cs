@@ -84,7 +84,7 @@ public class Player_Manager : MonoBehaviour
         //舊輸入for (int i = 0; i < TotalPlayer; i++) a_button[i] = Input.GetButtonDown(Which_Player[i] + "MultiFunction");
         for (int i = 0; i < 4; i++) if(G_PlayerSetting.JoinPlayer[i] == true)a_button[i] = playerInput[i].GetButtonDown("MultiFunction");
 
-        if (Game_State && OnBossDebut == false && _tutorialStep.CurrentStep >=4 ){
+        if (Game_State && OnBossDebut == false && (_tutorialStep.CurrentStep >= 4 || G_Tutorial.During_Tutorial == false)){
             //玩家1啟用融合
             if (a_button[0] && WashPriority[0] == false && FourPlayer[0].gameObject.activeSelf == true && Weak_State[0] == false && Player_Hurt[0] == false){
                 if (shortest_toPlayer[0] == FourPlayer[1].gameObject && shortest_toPlayer[1] == FourPlayer[0].gameObject && Can_Merge[0] == true && Weak_State[1] == false && Player_Hurt[1] == false) {pigmentManager.Change_Advanced_Color(FourPlayer[0].gameObject, FourPlayer[1].gameObject, Color_Number[0] + Color_Number[1]);}
@@ -555,23 +555,23 @@ public class Player_Manager : MonoBehaviour
 
         //根據bool回傳秀出混合提示給玩家
         if (FourPlayer[0].gameObject.activeSelf == true) {
-            if ((Can_Merge[0] == true || Can_Merge[1] == true || Can_Merge[2] == true) && WashPriority[0] == false && Weak_State[0] == false/* && FourPlayer[0].gameObject.activeSelf == true*/ && _tutorialStep.CurrentStep>=4) { SetHintType(0, 1); }
-            else if ((Can_Merge[0] == false && Can_Merge[1] == false && Can_Merge[2] == false && WashPriority[0] == false)/*|| FourPlayer[0].gameObject.activeSelf == false*/) FourPlayer[0].SendMessage("Hide_Hint");
+            if ((Can_Merge[0] == true || Can_Merge[1] == true || Can_Merge[2] == true) && WashPriority[0] == false && Weak_State[0] == false && (_tutorialStep.CurrentStep >= 4 || G_Tutorial.During_Tutorial == false)) { SetHintType(0, 1); }
+            else if ((Can_Merge[0] == false && Can_Merge[1] == false && Can_Merge[2] == false && WashPriority[0] == false)) FourPlayer[0].SendMessage("Hide_Hint");
         }
 
         if (FourPlayer[1].gameObject.activeSelf == true) {
-            if ((Can_Merge[0] == true || Can_Merge[3] == true || Can_Merge[4] == true) && WashPriority[1] == false && Weak_State[1] == false /*&& FourPlayer[1].gameObject.activeSelf == true*/&& _tutorialStep.CurrentStep >= 4) SetHintType(1, 1);
-            else if ((Can_Merge[0] == false && Can_Merge[3] == false && Can_Merge[4] == false && WashPriority[1] == false)/*|| FourPlayer[1].gameObject.activeSelf == false*/) FourPlayer[1].SendMessage("Hide_Hint");
+            if ((Can_Merge[0] == true || Can_Merge[3] == true || Can_Merge[4] == true) && WashPriority[1] == false && Weak_State[1] == false && (_tutorialStep.CurrentStep >= 4 || G_Tutorial.During_Tutorial == false)) SetHintType(1, 1);
+            else if ((Can_Merge[0] == false && Can_Merge[3] == false && Can_Merge[4] == false && WashPriority[1] == false)) FourPlayer[1].SendMessage("Hide_Hint");
         }
 
         if (FourPlayer[2].gameObject.activeSelf == true) {
-            if ((Can_Merge[1] == true || Can_Merge[3] == true || Can_Merge[5] == true) && WashPriority[2] == false && Weak_State[2] == false /*&& FourPlayer[2].gameObject.activeSelf == true*/&& _tutorialStep.CurrentStep >= 4) SetHintType(2, 1);
-            else if ((Can_Merge[1] == false && Can_Merge[3] == false && Can_Merge[5] == false && WashPriority[2] == false)/* || FourPlayer[2].gameObject.activeSelf == false*/) FourPlayer[2].SendMessage("Hide_Hint");
+            if ((Can_Merge[1] == true || Can_Merge[3] == true || Can_Merge[5] == true) && WashPriority[2] == false && Weak_State[2] == false && (_tutorialStep.CurrentStep >= 4 || G_Tutorial.During_Tutorial == false)) SetHintType(2, 1);
+            else if ((Can_Merge[1] == false && Can_Merge[3] == false && Can_Merge[5] == false && WashPriority[2] == false)) FourPlayer[2].SendMessage("Hide_Hint");
         }
 
         if (FourPlayer[3].gameObject.activeSelf == true) {
-            if ((Can_Merge[2] == true || Can_Merge[4] == true || Can_Merge[5] == true) && WashPriority[3] == false && Weak_State[3] == false /*&& FourPlayer[3].gameObject.activeSelf == true*/&& _tutorialStep.CurrentStep >= 4) SetHintType(3, 1);
-            else if ((Can_Merge[2] == false && Can_Merge[4] == false && Can_Merge[5] == false && WashPriority[3] == false)/* || FourPlayer[3].gameObject.activeSelf == false*/) FourPlayer[3].SendMessage("Hide_Hint");
+            if ((Can_Merge[2] == true || Can_Merge[4] == true || Can_Merge[5] == true) && WashPriority[3] == false && Weak_State[3] == false&& (_tutorialStep.CurrentStep >= 4 || G_Tutorial.During_Tutorial == false)) SetHintType(3, 1);
+            else if ((Can_Merge[2] == false && Can_Merge[4] == false && Can_Merge[5] == false && WashPriority[3] == false)) FourPlayer[3].SendMessage("Hide_Hint");
         }
     }
 

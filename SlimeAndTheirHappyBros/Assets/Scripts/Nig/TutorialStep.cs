@@ -6,6 +6,7 @@ public class TutorialStep : MonoBehaviour {
 
     public int CurrentStep = -1;
     public GameObject CheckHint;
+    public GameObject RescueSlimeGroup;
     public float ReadingTime = 3.0f;
     float Trigger_Moment;
     int OlderStep = -1;
@@ -25,9 +26,9 @@ public class TutorialStep : MonoBehaviour {
     public int RescueCount;    //教學階段5_救人
 
     //各種提示
-    public GameObject[] T_Words = new GameObject[5];
+    public GameObject[] T_Words = new GameObject[6];
     public GameObject[] HintElement = new GameObject[7];//0~2：顏料池提示；3：澡盆提示；5~7：基礎色哥布林提示；8~10：進階色哥布林提示
-    public Vector3[] TutorialSpawnPos = new Vector3[8];//0~2：基礎色出生處；3~4進階色出生處；5~7：死亡史萊姆出生處
+    public Vector3[] TutorialSpawnPos = new Vector3[5];//0~2：基礎色出生處；3~4進階色出生處
 
     void Awake() {
         _gamemanager = GetComponent<GameManager>();
@@ -52,7 +53,7 @@ public class TutorialStep : MonoBehaviour {
 
         if (AchieveFlag == true) {
             if (Time.time > Achieve_Moment + RestTime) {
-                for (int T = 0; T < 5; T++) T_Words[T].SetActive(false);
+                for (int T = 0; T < 6; T++) T_Words[T].SetActive(false);
                 for (int E = 0; E < 4; E++) HintElement[E].SetActive(false);
                 _gamemanager.NextTutorial();
                 AchieveFlag = false;
@@ -94,6 +95,11 @@ public class TutorialStep : MonoBehaviour {
                 for (int h = 3; h < 5; h++) _goblinmanager.SpawnNormalGoblin_MultiforTutorial(0, TutorialSpawnPos[h]);
                 T_Words[3].SetActive(true);
                 break;
+            case 5:
+                RescueCount = 3;
+                T_Words[5].SetActive(true);
+                RescueSlimeGroup.SetActive(true);
+                break;
         }
     }
 
@@ -134,6 +140,12 @@ public class TutorialStep : MonoBehaviour {
                 break;
 
             case 5:
+                RescueCount--;
+                if (RescueCount <= 0) {
+                    AchieveFlag = true;
+                    Achieve_Moment = Time.time;
+                    RescueSlimeGroup.SetActive(false);
+                }
                 break;
         }
     }

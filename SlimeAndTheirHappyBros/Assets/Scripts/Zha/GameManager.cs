@@ -239,6 +239,7 @@ public class GameManager : MonoBehaviour
                         if (playerInput[0].GetButtonDown("Split") || playerInput[1].GetButtonDown("Split")
                         || playerInput[2].GetButtonDown("Split") || playerInput[3].GetButtonDown("Split"))
                         {
+                            AudioManager.SingletonInScene.PlaySound2D("WarHorn", 0.8f);
                             G_Tutorial.During_Tutorial = false;
                             uiManager.TutorialAskResult(2);
                             curRound++;
@@ -433,7 +434,7 @@ public class GameManager : MonoBehaviour
 
     public void KillGoblin() {
         if (test ) return;
-        goblinKills++;
+        if(G_Tutorial.During_Tutorial == false)goblinKills++;
 
         if (!bossLevel)
         {
@@ -502,20 +503,18 @@ public class GameManager : MonoBehaviour
 
     //lin新增_教學階段控管
     public void NextTutorial() {
-        TutorialPanel.SetActive(true);
         uiManager.NextTutorial();
         tutorialProgress++;
+        if (tutorialProgress < 6) TutorialPanel.SetActive(true);
         tutorialstep.SetTutorialStep(tutorialProgress);
         playerManager.StopPlaying();  //玩家暫停操作的bool
         if (tutorialProgress >= 6){
+            AudioManager.SingletonInScene.PlaySound2D("WarHorn", 0.8f);
             G_Tutorial.During_Tutorial = false;
             curRound++;
             playerManager.StartPlaying();
-            uiManager.FirstRound();
         }
     }
-
-
 }
 
 [System.Serializable]

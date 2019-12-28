@@ -757,17 +757,19 @@ public class Merge_Control : MonoBehaviour{
         Player_Control B = PlayerB.GetComponent<Player_Control>();
 
         //設定HP
-        Base_HP = 3 + A.Timer_Superimposed + B.Timer_Superimposed;//至少3，至多15
-        if (Base_HP > Max_HP) Base_HP = Max_HP;
-        for (int k = 0; k < Max_HP; k++){
-            if (k < Base_HP){
-                Merge_HP[k].SetActive(true);
-                Heart_anim = Merge_HP[k].GetComponent<Animator>();
-                Heart_anim.Play("Heart_Gain");
+        if (G_Tutorial.During_Tutorial == false) {
+            Base_HP = 3 + A.Timer_Superimposed + B.Timer_Superimposed;//至少3，至多15
+            if (Base_HP > Max_HP) Base_HP = Max_HP;
+            for (int k = 0; k < Max_HP; k++){
+                if (k < Base_HP){
+                    Merge_HP[k].SetActive(true);
+                    Heart_anim = Merge_HP[k].GetComponent<Animator>();
+                    Heart_anim.Play("Heart_Gain");
+                }
+                else Merge_HP[k].SetActive(false);
             }
-            else Merge_HP[k].SetActive(false);
-
         }
+
         //設定ATK
         Base_ATK = 5 + A.Extra_ATK + B.Extra_ATK;
         //設定合體時間

@@ -15,6 +15,7 @@ TagManager:
   - DropItem
   - disappearBarrier
   - KingGoblin
+  - Tutorial
   layers:
   - Default
   - TransparentFX

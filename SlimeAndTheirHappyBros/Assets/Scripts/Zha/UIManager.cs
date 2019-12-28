@@ -90,14 +90,18 @@ public class UIManager : MonoBehaviour
 
     public void NextTutorial() {
         tutorialProgres++;
+        if (tutorialProgres < 6)AudioManager.SingletonInScene.PlaySound2D("Teach_Enter", 0.7f);
+        if (tutorialProgres >= 6) {
+            tutorialImg.enabled = false;
+            FirstRound();
+        }
         animator.SetInteger("TutorialProgress", tutorialProgres);
-        AudioManager.SingletonInScene.PlaySound2D("Teach_Enter",0.7f);
-        if (tutorialProgres >= 5) tutorialImg.enabled = false;
     }
 
     public void FirstRound() {
         animator.SetTrigger("FirstRound");
         animator.Play("PlayerState_In",1);
+        Debug.Log("line103");
     }
 
     public void StartRound(int round) {
@@ -108,6 +112,8 @@ public class UIManager : MonoBehaviour
         animator.SetTrigger("Round");
 
     }
+
+    //應無作用
     public void StartBreak() {
         animator.SetTrigger("BreakTime");
     }

@@ -619,7 +619,7 @@ public class Player_Control : MonoBehaviour{
             GetComponent<Animator>().Play("Slime_CureEffect");
             rescue_count++;
             AudioManager.SingletonInScene.PlaySound2D("Heal", 0.5f);
-            if (rescue_count >= 5){
+            if (rescue_count >= 3){
                 rescue_count = 0;
                 Base_HP = Mathf.CeilToInt((3 + Extra_HP)*0.5f);
                 for (int k = 0; k < Personal_HP.Length; k++){

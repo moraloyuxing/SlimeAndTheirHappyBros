@@ -25,6 +25,8 @@ public class Bullet_Behaviour : MonoBehaviour{
     List<Collider> colliderRecord = new List<Collider>();
     public Transform ShadowPivot;
 
+    public RescuedSlime _tutorialSlime;
+
     void Awake(){
         _myTransform = transform;
         BulletAlpha = BulletSprite.GetComponent<SpriteRenderer>().color;
@@ -136,6 +138,11 @@ public class Bullet_Behaviour : MonoBehaviour{
                 if (c.tag == "Player" && isLeaf == false) {
                     Rescue_Which = c.GetComponent<Player_Control>();
                     Rescue_Which.GetRescued();
+                }
+
+                if (c.tag == "Tutorial") {
+                    _tutorialSlime = c.GetComponent<RescuedSlime>();
+                    _tutorialSlime.GetRescued();
                 }
 
                 if (colliders[i].tag == "Barrier" || c.tag == "Barrier") {
