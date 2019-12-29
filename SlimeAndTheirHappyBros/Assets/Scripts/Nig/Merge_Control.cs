@@ -116,6 +116,7 @@ public class Merge_Control : MonoBehaviour{
     Rewired.Player playerMoveInput, playerAtkInput;
 
     TutorialStep _tutorialstep;
+    public bool During_Merge = false;
 
     void Start()
     {
@@ -166,11 +167,10 @@ public class Merge_Control : MonoBehaviour{
         }
     }
 
-    void Update()
-    {
+    void Update(){
+        Debug.Log("DuringMerge = " + During_Merge);
         //操作提示
-        if (Time.time > Hint_Moment + 7.0f && Hint_Activate == true)
-        {
+        if (Time.time > Hint_Moment + 7.0f && Hint_Activate == true){
             Merge_Control_Hint.SetActive(false);
             Hint_Activate = false;
         }
@@ -180,7 +180,7 @@ public class Merge_Control : MonoBehaviour{
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Slime_Attack")) anim.speed = Base_AttackSpeed;
         else anim.speed = 1.0f;
         //受傷判定
-        if (StopDetect == false) SlimeGetHurt();
+        if (StopDetect == false && During_Merge == false) SlimeGetHurt();
 
         //移動&短衝刺
 
@@ -191,7 +191,7 @@ public class Merge_Control : MonoBehaviour{
         zAix = playerMoveInput.GetAxis("MoveVertical");
         left_trigger = playerMoveInput.GetAxis("Dash");
 
-        if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f)
+        if (left_trigger > 0.3f && OnDash == false && Time.time > DashCD + 1.0f && During_Merge == false)
         {
             StopDetect = true;
             AttackPriority = true;
@@ -201,7 +201,7 @@ public class Merge_Control : MonoBehaviour{
             DashCD = Time.time;
         }
 
-        if (ExtraPriority == false && DeathPriority == false)
+        if (ExtraPriority == false && DeathPriority == false && During_Merge == false)
         {
             if (Mathf.Abs(xAix) > 0.03f || Mathf.Abs(zAix) > 0.03f)
             {
@@ -223,7 +223,7 @@ public class Merge_Control : MonoBehaviour{
             else if (Mathf.Abs(xAix) <= 0.03f && Mathf.Abs(zAix) <= 0.03f && OnDash == false) Walking = false;
         }
 
-        if (xAix > 0.0f)
+        if (xAix > 0.0f && During_Merge == false)
         {
             if (ArrowRot == -1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
             ArrowRot = 1.0f;
@@ -247,7 +247,7 @@ public class Merge_Control : MonoBehaviour{
             else { Right_CanMove = true; }
         }
 
-        if (xAix < 0.0f)
+        if (xAix < 0.0f && During_Merge == false)
         {
             if (ArrowRot == 1.0f) Attack_Arrow.transform.eulerAngles = new Vector3(60.0f, 0.0f, Attack_Arrow.transform.eulerAngles.z * -1.0f);
             ArrowRot = -1.0f;
@@ -271,7 +271,7 @@ public class Merge_Control : MonoBehaviour{
             else { Left_CanMove = true; }
         }
 
-        if (zAix > 0.0f)
+        if (zAix > 0.0f && During_Merge == false)
         {
             Down_CanMove = true;
             ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, 3.8f));
@@ -285,7 +285,7 @@ public class Merge_Control : MonoBehaviour{
             else { Up_CanMove = true; }
         }
 
-        if (zAix < 0.0f)
+        if (zAix < 0.0f && During_Merge == false)
         {
             Up_CanMove = true;
             ray_vertical = new Ray(transform.position + new Vector3(0.0f, -1.8f, 0.0f), new Vector3(0.0f, 0.0f, -3.0f));
@@ -319,7 +319,7 @@ public class Merge_Control : MonoBehaviour{
         }
 
 
-        if (ExtraPriority == false && DeathPriority == false)
+        if (ExtraPriority == false && DeathPriority == false && During_Merge == false)
         {
             if (!Up_CanMove || !Down_CanMove) zAix = .0f;
             if (!Left_CanMove || !Right_CanMove) xAix = .0f;
@@ -343,7 +343,7 @@ public class Merge_Control : MonoBehaviour{
 
         current_angle = Attack_Arrow.transform.eulerAngles;
 
-        if (xAtk != 0.0f || zAtk != 0.0f)
+        if (xAtk != 0.0f || zAtk != 0.0f && During_Merge == false)
         {
             AtkDirSprite.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
             Attack_Direction = new Vector3(xAtk, 0.0f, zAtk);
@@ -357,7 +357,7 @@ public class Merge_Control : MonoBehaviour{
         //舊輸入right_trigger = Input.GetAxis(WhichPlayer_Shooting + "Attack");
         right_trigger = playerAtkInput.GetAxis("Attack");
 
-        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false)
+        if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false && DeathPriority == false && During_Merge == false)
         {
             GetComponent<Animator>().Play("Slime_Attack");
             Shooting = true;
@@ -369,7 +369,7 @@ public class Merge_Control : MonoBehaviour{
         PMb_button = playerMoveInput.GetButtonDown("Split");
         PSb_button = playerAtkInput.GetButtonDown("Split");
 
-        if (PMb_button || PSb_button) {
+        if ((PMb_button || PSb_button) && During_Merge == false) {
             CancelInvoke("Merge_Timer");
             Base_Timer = 0.0f;
             Merge_Timer();
@@ -388,6 +388,7 @@ public class Merge_Control : MonoBehaviour{
         Storage_Player[0] = PlayerA;
         Storage_Player[1] = PlayerB;
 
+        During_Merge = true;
         //設定加成數值
         Ability_Modify(PlayerA, PlayerB);
 
@@ -720,12 +721,12 @@ public class Merge_Control : MonoBehaviour{
         }
     }
 
-
     public void HurtPriorityOff()
     {
         ExtraPriority = false;
         AttackPriority = false;
         transform.localScale = new Vector3(2.0f, 2.0f, 2.0f);
+        During_Merge = false;
     }
 
     //短衝刺設定
