@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialStep : MonoBehaviour {
 
@@ -30,6 +31,14 @@ public class TutorialStep : MonoBehaviour {
     public GameObject[] HintElement = new GameObject[7];//0~2：顏料池提示；3：澡盆提示；5~7：基礎色哥布林提示；8~10：進階色哥布林提示
     public Vector3[] TutorialSpawnPos = new Vector3[5];//0~2：基礎色出生處；3~4進階色出生處
 
+    //教學詢問按鈕
+    public Image[] TutorialAskBtn = new Image[2];
+    bool During_Ask = false;
+
+    //確認環
+    public Image PressTorus;
+    public float PressTime = 1.5f;
+
     void Awake() {
         _gamemanager = GetComponent<GameManager>();
         _goblinmanager = GameObject.Find("GoblinManager").GetComponent<GoblinManager>();
@@ -43,6 +52,9 @@ public class TutorialStep : MonoBehaviour {
     }
 
     void Update() {
+
+        if (During_Ask == true && Time.time > Trigger_Moment + ReadingTime) AskTimeFunc(true);
+
         if (OlderStep != CurrentStep) {
             if (Time.time > Trigger_Moment + ReadingTime) {
                 CheckHint.SetActive(true);
@@ -62,14 +74,43 @@ public class TutorialStep : MonoBehaviour {
 
     }
 
+    //啟動詢問是否需要新手教學的計時(3sec)
+    public void AskTimeFunc(bool state) {
+
+        if (state == true){
+            for (int i = 0; i < 2; i++) TutorialAskBtn[i].enabled = true;
+            During_Ask = false;
+            _gamemanager.CanDecideAsk = true;
+        }
+
+        else {
+            During_Ask = true;
+            Trigger_Moment = Time.time;
+        }
+
+    }
+
     //開啟下一階段教學階段之示範，準備計時3秒跳出確認鍵
     public void SetTutorialStep(int _step) {
         if (_step < 6) {
             CurrentStep = _step;
+            PressTorus.fillAmount = 0.0f;
             CheckHint.SetActive(false);
             Trigger_Moment = Time.time;
         }
     }
+
+    //持續按住A確認時，確認環的fillAmount
+    public void FillPressTorus(bool pressed) {
+        if (pressed == true){
+            PressTorus.fillAmount += 1.0f / PressTime * Time.deltaTime;
+            if(PressTorus.fillAmount >=1.0f)_gamemanager.TorusCheck();
+        }
+        else {
+            PressTorus.fillAmount = 0.0f;
+        }
+    }
+
 
     //關閉此教學階段之示範，進入演練並開啟對應UI
     public void ShowTutorialUI(){

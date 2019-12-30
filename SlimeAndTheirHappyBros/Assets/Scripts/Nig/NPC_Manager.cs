@@ -36,8 +36,10 @@ public class NPC_Manager : MonoBehaviour{
     public bool Angel_Ready = false;
 
     public int TotalPlayerCount;
+    GameManager _gamemanager;
 
     void Start(){
+        _gamemanager = GameObject.Find("GameManager").GetComponent<GameManager>();
         for (int p = 0; p < 4; p++) {Which_Player[p] = PlayerPos[p].gameObject.name;}
         Interval = Random.Range(4.0f, 8.0f);
     }
@@ -62,48 +64,50 @@ public class NPC_Manager : MonoBehaviour{
                 Trigger_Moment = Time.time;
             }
 
-            //天使部分
-            //迴圈條件從4更改適用成目前最大人數
-            for (int p = 0; p < 4; p++) {
-                //舊輸入if(PlayerPos[p].gameObject.activeSelf == true)a_button[p] = Input.GetButtonDown(Which_Player[p] + "MultiFunction");
-                if (PlayerPos[p].gameObject.activeSelf == true && G_PlayerSetting.JoinPlayer[p] == true) a_button[p] = _playermanager.playerInput[p].GetButtonDown("MultiFunction");
-                if (a_button[p] && NearAngel[p]) {
-                    PIDReadyIcon[p].sprite = ReadyBossState[p];
-                    PIDReady[p] = true;
-                }
-            }
-
-            //迴圈條件從4更改適用成目前最大人數
-            for (int p = 0; p < 4; p++){
-                //先將對話窗&四狀態全關
-                AngelTalkHint.enabled = false;
-                for (int i = 0; i < 4; i++) { PIDReadyIcon[i].enabled = false; }
-                //任一玩家靠近就全開
-                if (NearAngel[p] && Angel_Ready == true){
-                    AngelTalkHint.enabled = true;
-                    for (int i = 0; i < 4; i++) {
-                        if(G_PlayerSetting.JoinPlayer[i] == true)PIDReadyIcon[i].enabled = true;
-                        else PIDReadyIcon[i].enabled = false;
+            //天使部分(第三天開始方可出現)
+            if (GameManager.curRound >= 3) {
+                //迴圈條件從4更改適用成目前最大人數
+                for (int p = 0; p < 4; p++){
+                    //舊輸入if(PlayerPos[p].gameObject.activeSelf == true)a_button[p] = Input.GetButtonDown(Which_Player[p] + "MultiFunction");
+                    if (PlayerPos[p].gameObject.activeSelf == true && G_PlayerSetting.JoinPlayer[p] == true) a_button[p] = _playermanager.playerInput[p].GetButtonDown("MultiFunction");
+                    if (a_button[p] && NearAngel[p]){
+                        PIDReadyIcon[p].sprite = ReadyBossState[p];
+                        PIDReady[p] = true;
                     }
-                    break;
                 }
-            }
 
-            //迴圈條件從4更改適用成目前最大人數
-            for (int p = 0; p < 4; p++) {
-                if (G_PlayerSetting.JoinPlayer[p] == true) {
-                    AngelDistance[p] = Mathf.Pow(PlayerPos[p].position.x - AngelPos.position.x, 2) + Mathf.Pow(PlayerPos[p].position.z - AngelPos.position.z, 2);
-                    if (AngelDistance[p] <= 16.0f) NearAngel[p] = true;
-                    else NearAngel[p] = false;
+                //迴圈條件從4更改適用成目前最大人數
+                for (int p = 0; p < 4; p++){
+                    //先將對話窗&四狀態全關
+                    AngelTalkHint.enabled = false;
+                    for (int i = 0; i < 4; i++) { PIDReadyIcon[i].enabled = false; }
+                    //任一玩家靠近就全開
+                    if (NearAngel[p] && Angel_Ready == true){
+                        AngelTalkHint.enabled = true;
+                        for (int i = 0; i < 4; i++){
+                            if (G_PlayerSetting.JoinPlayer[i] == true) PIDReadyIcon[i].enabled = true;
+                            else PIDReadyIcon[i].enabled = false;
+                        }
+                        break;
+                    }
                 }
-            }
 
-            //迴圈條件從4更改適用成目前最大人數
-            for (int p = 0; p < 4; p++) {
-                GoBossStage = true;
-                if (PIDReady[p] == false && G_PlayerSetting.JoinPlayer[p] == true) {
-                    GoBossStage = false;
-                    break;
+                //迴圈條件從4更改適用成目前最大人數
+                for (int p = 0; p < 4; p++){
+                    if (G_PlayerSetting.JoinPlayer[p] == true){
+                        AngelDistance[p] = Mathf.Pow(PlayerPos[p].position.x - AngelPos.position.x, 2) + Mathf.Pow(PlayerPos[p].position.z - AngelPos.position.z, 2);
+                        if (AngelDistance[p] <= 16.0f) NearAngel[p] = true;
+                        else NearAngel[p] = false;
+                    }
+                }
+
+                //迴圈條件從4更改適用成目前最大人數
+                for (int p = 0; p < 4; p++){
+                    GoBossStage = true;
+                    if (PIDReady[p] == false && G_PlayerSetting.JoinPlayer[p] == true){
+                        GoBossStage = false;
+                        break;
+                    }
                 }
             }
 
@@ -125,7 +129,7 @@ public class NPC_Manager : MonoBehaviour{
         BreakTime = true;
         Trigger_Moment = Time.time;
         NPCanim[0].Play("Doctor_In");
-        NPCanim[1].Play("Angel_In");
+        if(GameManager.curRound >= 3)NPCanim[1].Play("Angel_In");//這行追加if條件
     }
 
     public void BreakTime_End(){

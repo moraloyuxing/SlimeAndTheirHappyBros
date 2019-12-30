@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
     public float headStart, headEnd;
     public Sprite[] RoundSprite;
     public Sprite bossRoundSpirte;
+    TutorialStep _tutorialstep;
 
     // Start is called before the first frame update
     private void Awake()
@@ -49,6 +50,7 @@ public class UIManager : MonoBehaviour
         oringinProgress = new Vector2(headStart, 0);
         targetProgress = new Vector2(headEnd,0);
         goblinProgressParent.gameObject.SetActive(false);
+        _tutorialstep = GameObject.Find("GameManager").GetComponent<TutorialStep>();
     }
 
     // Update is called once per frame
@@ -78,6 +80,7 @@ public class UIManager : MonoBehaviour
 
     public void AskTutorial() {
         animator.SetTrigger("Ask");
+        _tutorialstep.AskTimeFunc(false);
     }
 
     public void TutorialAskResult(int r) {

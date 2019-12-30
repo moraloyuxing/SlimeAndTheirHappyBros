@@ -47,6 +47,7 @@ public class GameManager : MonoBehaviour
     //lin新增_變數區
     bool NeedTutorial = false;
     public bool CanNextTut = false;
+    public bool CanDecideAsk = false;
     public GameObject TutorialPanel;
 
     // Start is called before the first frame update
@@ -234,7 +235,7 @@ public class GameManager : MonoBehaviour
                 }
                 else {
                     //lin新增_不進入教學
-                    if (NeedTutorial == false)
+                    if (NeedTutorial == false && CanDecideAsk == true)
                     {
                         if (playerInput[0].GetButtonDown("Split") || playerInput[1].GetButtonDown("Split")
                         || playerInput[2].GetButtonDown("Split") || playerInput[3].GetButtonDown("Split"))
@@ -261,17 +262,19 @@ public class GameManager : MonoBehaviour
                     else {
                         //舊輸入if (Input.GetButtonDown("Player1_MultiFunction") || Input.GetButtonDown("Player2_MultiFunction")
                         //舊輸入|| Input.GetButtonDown("Player3_MultiFunction") || Input.GetButtonDown("Player4_MultiFunction") || Input.GetKeyDown(KeyCode.Space))
-                        if ((playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
-                        || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction") || Input.GetKeyDown(KeyCode.Space)) && CanNextTut == true)
+                        if ((playerInput[0].GetButton("MultiFunction") || playerInput[1].GetButton("MultiFunction")
+                        || playerInput[2].GetButton("MultiFunction") || playerInput[3].GetButton("MultiFunction") || Input.GetKeyDown(KeyCode.Space)) && CanNextTut == true)
                         {
-                            CanNextTut = false;
-                            tutorialstep.CheckHint.SetActive(false);
-                            if (tutorialProgress == 0) NextTutorial();
-                            else{
-                                TutorialPanel.SetActive(false);
-                                tutorialstep.ShowTutorialUI();
-                                playerManager.StartPlaying();  //玩家可操作的bool
-                            }
+                            tutorialstep.FillPressTorus(true);
+
+                            //CanNextTut = false;
+                            //tutorialstep.CheckHint.SetActive(false);
+                            //if (tutorialProgress == 0) NextTutorial();
+                            //else{
+                            //    TutorialPanel.SetActive(false);
+                            //    tutorialstep.ShowTutorialUI();
+                            //    playerManager.StartPlaying();  //玩家可操作的bool
+                            //}
 
                                 //uiManager.NextTutorial();
                                 //tutorialProgress++;
@@ -502,6 +505,17 @@ public class GameManager : MonoBehaviour
     }
 
     //lin新增_教學階段控管
+    public void TorusCheck() {
+        CanNextTut = false;
+        tutorialstep.CheckHint.SetActive(false);
+        if (tutorialProgress == 0) NextTutorial();
+        else{
+            TutorialPanel.SetActive(false);
+            tutorialstep.ShowTutorialUI();
+            playerManager.StartPlaying();  //玩家可操作的bool
+        }
+    }
+
     public void NextTutorial() {
         uiManager.NextTutorial();
         tutorialProgress++;
