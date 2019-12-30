@@ -80,7 +80,6 @@ public class UIManager : MonoBehaviour
 
     public void AskTutorial() {
         animator.SetTrigger("Ask");
-        _tutorialstep.AskTimeFunc(false);
     }
 
     public void TutorialAskResult(int r) {

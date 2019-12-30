@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
     //lin新增_變數區
     bool NeedTutorial = false;
     public bool CanNextTut = false;
-    public bool CanDecideAsk = false;
     public GameObject TutorialPanel;
 
     // Start is called before the first frame update
@@ -228,35 +227,45 @@ public class GameManager : MonoBehaviour
                     {
                         cameraAnimator.SetTrigger("over");
                         cameraMotion = true;
-                        //uiManager.StartTutorial();//lin_以是否進行教學模式取代這行，這行遷移
                         uiManager.AskTutorial();//lin新增_先進入詢問教學動畫
                         time = .0f;
                     }
                 }
                 else {
                     //lin新增_不進入教學
-                    if (NeedTutorial == false && CanDecideAsk == true)
-                    {
-                        if (playerInput[0].GetButtonDown("Split") || playerInput[1].GetButtonDown("Split")
-                        || playerInput[2].GetButtonDown("Split") || playerInput[3].GetButtonDown("Split"))
-                        {
-                            AudioManager.SingletonInScene.PlaySound2D("WarHorn", 0.8f);
-                            G_Tutorial.During_Tutorial = false;
-                            uiManager.TutorialAskResult(2);
-                            curRound++;
-                            playerManager.StartPlaying();
-                            uiManager.FirstRound();
+                    if (NeedTutorial == false){
+                        if (playerInput[0].GetButton("Split") || playerInput[1].GetButton("Split")
+                        || playerInput[2].GetButton("Split") || playerInput[3].GetButton("Split")){
+                            tutorialstep.FillAskTorus(2, true);
+                            //AudioManager.SingletonInScene.PlaySound2D("WarHorn", 0.8f);
+                            //G_Tutorial.During_Tutorial = false;
+                            //uiManager.TutorialAskResult(2);
+                            //curRound++;
+                            //playerManager.StartPlaying();
+                            //uiManager.FirstRound();
                         }
 
-                        else if (playerInput[0].GetButtonDown("MultiFunction") || playerInput[1].GetButtonDown("MultiFunction")
-                        || playerInput[2].GetButtonDown("MultiFunction") || playerInput[3].GetButtonDown("MultiFunction"))
-                        {
-                            NeedTutorial = true;
-                            G_Tutorial.During_Tutorial = true;
-                            uiManager.TutorialAskResult(1);
-                            uiManager.StartTutorial();//第一個ctrl出現
-                            tutorialstep.SetTutorialStep(0);
+                        else if (!playerInput[0].GetButton("Split") && !playerInput[1].GetButton("Split")
+                        && !playerInput[2].GetButton("Split") && !playerInput[3].GetButton("Split")){
+                            tutorialstep.FillAskTorus(2, false);
                         }
+
+
+                        if (playerInput[0].GetButton("MultiFunction") || playerInput[1].GetButton("MultiFunction")
+                        || playerInput[2].GetButton("MultiFunction") || playerInput[3].GetButton("MultiFunction")){
+                            tutorialstep.FillAskTorus(1, true);
+                            //NeedTutorial = true;
+                            //G_Tutorial.During_Tutorial = true;
+                            //uiManager.TutorialAskResult(1);
+                            //uiManager.StartTutorial();//第一個ctrl出現
+                            //tutorialstep.SetTutorialStep(0);
+                        }
+
+                        else if (!playerInput[0].GetButton("MultiFunction") && !playerInput[1].GetButton("MultiFunction")
+                        && !playerInput[2].GetButton("MultiFunction") && !playerInput[3].GetButton("MultiFunction")) {
+                            tutorialstep.FillAskTorus(1, false);
+                        }
+
                     }
 
                     else {
@@ -276,17 +285,21 @@ public class GameManager : MonoBehaviour
                             //    playerManager.StartPlaying();  //玩家可操作的bool
                             //}
 
-                                //uiManager.NextTutorial();
-                                //tutorialProgress++;
-                                //tutorialstep.SetTutorialStep(tutorialProgress);
-                                //if (tutorialProgress >= 6)
-                                //{
-                                //    G_Tutorial.During_Tutorial = false;
-                                //    curRound++;
-                                //    playerManager.StartPlaying();
-                                //    uiManager.FirstRound();
-                                //}
-                            }
+                            //uiManager.NextTutorial();
+                            //tutorialProgress++;
+                            //tutorialstep.SetTutorialStep(tutorialProgress);
+                            //if (tutorialProgress >= 6)
+                            //{
+                            //    G_Tutorial.During_Tutorial = false;
+                            //    curRound++;
+                            //    playerManager.StartPlaying();
+                            //    uiManager.FirstRound();
+                            //}
+                        }
+                        else if (!playerInput[0].GetButton("MultiFunction") && !playerInput[1].GetButton("MultiFunction")
+                        && !playerInput[2].GetButton("MultiFunction") && !playerInput[3].GetButton("MultiFunction") && CanNextTut == true) {
+                            tutorialstep.FillPressTorus(false);
+                        }
                     }
                 }
             }
@@ -505,6 +518,26 @@ public class GameManager : MonoBehaviour
     }
 
     //lin新增_教學階段控管
+    public void AskTorusCheck(int btn) {
+        if (btn == 1) {
+            NeedTutorial = true;
+            G_Tutorial.During_Tutorial = true;
+            uiManager.TutorialAskResult(1);
+            uiManager.StartTutorial();//第一個ctrl出現
+            tutorialstep.SetTutorialStep(0);
+        }
+
+        else{
+            AudioManager.SingletonInScene.PlaySound2D("WarHorn", 0.8f);
+            G_Tutorial.During_Tutorial = false;
+            uiManager.TutorialAskResult(2);
+            curRound++;
+            playerManager.StartPlaying();
+            uiManager.FirstRound();
+        }
+    }
+
+
     public void TorusCheck() {
         CanNextTut = false;
         tutorialstep.CheckHint.SetActive(false);

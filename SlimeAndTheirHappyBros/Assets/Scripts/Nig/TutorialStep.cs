@@ -31,11 +31,12 @@ public class TutorialStep : MonoBehaviour {
     public GameObject[] HintElement = new GameObject[7];//0~2：顏料池提示；3：澡盆提示；5~7：基礎色哥布林提示；8~10：進階色哥布林提示
     public Vector3[] TutorialSpawnPos = new Vector3[5];//0~2：基礎色出生處；3~4進階色出生處
 
-    //教學詢問按鈕
-    public Image[] TutorialAskBtn = new Image[2];
-    bool During_Ask = false;
+    //教學詢問確認環(時間同下面1.5f)
+    public Image AskTorus_A;
+    public Image AskTorus_B;
+    int OriginalChoice = 0;
 
-    //確認環
+    //教學階段確認環
     public Image PressTorus;
     public float PressTime = 1.5f;
 
@@ -52,9 +53,6 @@ public class TutorialStep : MonoBehaviour {
     }
 
     void Update() {
-
-        if (During_Ask == true && Time.time > Trigger_Moment + ReadingTime) AskTimeFunc(true);
-
         if (OlderStep != CurrentStep) {
             if (Time.time > Trigger_Moment + ReadingTime) {
                 CheckHint.SetActive(true);
@@ -74,18 +72,33 @@ public class TutorialStep : MonoBehaviour {
 
     }
 
-    //啟動詢問是否需要新手教學的計時(3sec)
-    public void AskTimeFunc(bool state) {
+    //教學詢問長按A確認時，確認環的fillAmount，同時輸入時以第一訊號為主
+    public void FillAskTorus(int btn, bool pressed) {
+        //btn狀態 ：0→初始、選到一半放開；1→選A要教學；2→選B跳過
+        if (OriginalChoice == 0) { OriginalChoice = btn; }
 
-        if (state == true){
-            for (int i = 0; i < 2; i++) TutorialAskBtn[i].enabled = true;
-            During_Ask = false;
-            _gamemanager.CanDecideAsk = true;
+        if (pressed == true){
+            if (btn == 1 && OriginalChoice == 1){
+                AskTorus_A.fillAmount += 1.0f / PressTime * Time.deltaTime;
+                if (AskTorus_A.fillAmount >= 1.0f) _gamemanager.AskTorusCheck(1);
+            }
+
+            else if (btn == 2 && OriginalChoice == 2){
+                AskTorus_B.fillAmount += 1.0f / PressTime * Time.deltaTime;
+                if (AskTorus_B.fillAmount >= 1.0f) _gamemanager.AskTorusCheck(2);
+            }
         }
 
         else {
-            During_Ask = true;
-            Trigger_Moment = Time.time;
+            if (btn == 1 && OriginalChoice == 1) {
+                AskTorus_A.fillAmount = 0.0f;
+                OriginalChoice = 0;
+            }
+            else if(btn==2 && OriginalChoice == 2){
+                AskTorus_B.fillAmount = 0.0f;
+                OriginalChoice = 0;
+            }
+
         }
 
     }

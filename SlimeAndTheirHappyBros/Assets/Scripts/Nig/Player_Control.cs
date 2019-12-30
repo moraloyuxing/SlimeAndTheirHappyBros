@@ -383,7 +383,9 @@ public class Player_Control : MonoBehaviour{
 
             if (right_trigger > 0.3f && AttackPriority == false && ExtraPriority == false)
             {
-                if (DeathPriority == false) GetComponent<Animator>().Play("Slime_Attack");
+                if (DeathPriority == false) {
+                    GetComponent<Animator>().Play("Slime_Attack");
+                }
                 else
                 {
                     AttackPriorityOn();//跳過動畫，直接射擊
@@ -783,6 +785,7 @@ public class Player_Control : MonoBehaviour{
         WeakEffect.enabled = true;
         _playermanager.StartWeak(Player_Number);
         _playermanager._goblinmanager.SetPlayerRevive(Player_Number);
+        DeathPriority = false;
     }
 
     public void forceoutweak(){

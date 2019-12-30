@@ -168,7 +168,6 @@ public class Merge_Control : MonoBehaviour{
     }
 
     void Update(){
-        Debug.Log("DuringMerge = " + During_Merge);
         //操作提示
         if (Time.time > Hint_Moment + 7.0f && Hint_Activate == true){
             Merge_Control_Hint.SetActive(false);
@@ -381,8 +380,7 @@ public class Merge_Control : MonoBehaviour{
 
     }
 
-    public void Decide_TwoPlayer_Control(GameObject PlayerA, GameObject PlayerB)
-    {
+    public void Decide_TwoPlayer_Control(GameObject PlayerA, GameObject PlayerB){
         AudioManager.SingletonInScene.PlaySound2D("Mix", 1f);
 
         Storage_Player[0] = PlayerA;
