@@ -144,7 +144,7 @@ public class NPC_Manager : MonoBehaviour{
         DocterTalkHint.enabled = false;
         Angel_Ready = false;
         NPCanim[0].Play("Doctor_Out");
-        NPCanim[1].Play("Angel_Out");
+        if(GameManager.curRound>= 3)NPCanim[1].Play("Angel_Out");
     }
 
     public void SubBossLevelCBK(System.Action cbk) {
